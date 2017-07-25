@@ -101,7 +101,7 @@
 								for ( var i = 0; i < ids.length; i++) {
 									var id = ids[i];
 									var rowData = $('#list').jqGrid('getRowData', id);
-									operateClick = '<a href="#" style="color:blue" data-toggle="modal" data-target="#updateModal">编辑</a> <a href="#" style="color:blue" onclick="deleteById('+ id + ')" >删除</a>';
+									operateClick = '<a href="${ctx}/user/toUserInfoPage?type=edit&id='+id+'" style="color:blue">编辑</a> <a href="#" style="color:blue" onclick="deleteById('+ id + ')" >删除</a>';
 									jQuery("#list").jqGrid('setRowData', id, {
 										operate : operateClick
 									});
@@ -294,7 +294,7 @@
 					</button>
 				</div>
 				<div class="col-md-2">
-					<a type='button' class="btn btn-primary btn-sm" href="${ctx}/user/toUserEditPage?type=1">
+					<a type='button' class="btn btn-primary btn-sm" href="${ctx}/user/toUserInfoPage?type=add">
 						添加新用户
 					</a>
 				</div>

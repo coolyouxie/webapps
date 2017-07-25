@@ -31,14 +31,29 @@ public class UserController {
 		return mv;
 	}
 	
-	@RequestMapping("/toUserEditPage")
-	public String toUserEditPage(Model model,Integer type,HttpServletRequest request){
+	@RequestMapping("/toUserInfoPage")
+	public String toUserEditPage(Model model,String type,Integer id,HttpServletRequest request){
 		model.addAttribute("type", type);
+		if("add".equals(type)){
+			return "/user/adduser";
+		}
+		try {
+			User user = iUserService.getById(id);
+			model.addAttribute("user", user);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		if("edit".equals(type)){
+			return "/user/edituser";
+		}
+		if("show".equals(type)){
+			return "/user/showuser";
+		}
 		return "/user/useredit";
 	}
 
-	@RequestMapping("/loadUserList")
 	@ResponseBody
+	@RequestMapping("/loadUserList")
 	public Page loadUserList(Page page,UserRequestForm user,HttpSession session){
 		try {
 			page = iUserService.loadUserList(page, user);
@@ -81,4 +96,15 @@ public class UserController {
 		dto.setResult("fail");
 		return dto;
 	}
+	
+	/**
+	 * 新增或修改用户信息
+	 * @param user
+	 * @return
+	 */
+	@RequestMapping("addOrEdit")
+	public ResultDto<User> addOrEdit(User user){
+		return null;
+	}
+	
 }

@@ -11,20 +11,17 @@
         <property name="globalRollbackOnParticipationFailure" value="false" /> 
     </bean>
     
-	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
-		<property name="driverClassName"><value>${jdbc.driverClassName}</value></property>
-		<property name="url"><value>${jdbc.url}</value></property>
-		<property name="username"><value>${jdbc.username}</value></property>
-		<property name="password"><value>${jdbc.password}</value></property>
-		<property name="maxActive"><value>${jdbc.maxActive}</value></property>
-		<property name="maxWait"><value>${jdbc.maxWait}</value></property>
-		<property name="maxIdle"><value>${jdbc.maxIdle}</value></property>
-		<property name="initialSize"><value>${jdbc.initSize}</value></property>
-		<property name="removeAbandoned"><value>true</value></property>
-		<property name="testWhileIdle"><value>true</value></property>
-		<property name="testOnBorrow"><value>false</value></property>
-		<property name="validationQuery"><value>SELECT 1 FROM DUAL</value></property>
-		<property name="validationQueryTimeout"><value>10</value></property>
+	<bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource" destroy-method="close">
+		<property name="driverClassName" value="${hikaricp.driverClassName}"/>
+        <property name="jdbcUrl" value="${hikaricp.url}"/>
+        <property name="username" value="${hikaricp.username}"/>
+		<property name="password" value="${hikaricp.password}"/>
+		<property name="connectionTestQuery" value="${hikaricp.connectionTestQuery}"/>
+		<property name="connectionTimeout" value="${hikaricp.connectionTimeout}"/>
+		<property name="idleTimeout" value="${hikaricp.idleTimeout}"/>
+		<property name="maxLifetime" value="${hikaricp.maxLifetime}"/>
+		<property name="maximumPoolSize" value="${hikaricp.maximumPoolSize}"/>
+		<property name="minimumIdle" value="${hikaricp.minimumIdle}"/>
 	</bean>
 
 </beans>
