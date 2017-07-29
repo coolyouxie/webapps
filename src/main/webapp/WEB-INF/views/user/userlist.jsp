@@ -63,15 +63,15 @@
 								align : 'center',
 								sortable : false
 							}, {
-								label : 'type',
-								name : 'type',
+								label : 'userType',
+								name : 'userType',
 								align : 'center',
 								sortable : false,
 								formatter:function(cellValue,options,rowObject){
 									if(cellValue==1){
 										return '超级管理员';
 									}else if(cellValue==2){
-										return '管理员';
+										return '普通管理员';
 									}else if(cellValue==3){
 										return '个人用户';
 									}else if(cellValue==4){

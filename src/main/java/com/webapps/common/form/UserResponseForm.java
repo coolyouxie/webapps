@@ -12,6 +12,11 @@ public class UserResponseForm extends User implements Serializable {
 	Page page = new Page();
 	
 	private String keyWords;
+	
+	/**
+	 * 操作类型（查询，新增，更新，删除）
+	 */
+	private String handleType;
 
 	public String getKeyWords() {
 		return keyWords;
@@ -27,6 +32,14 @@ public class UserResponseForm extends User implements Serializable {
 
 	public void setPage(Page page) {
 		this.page = page;
+	}
+
+	public String getHandleType() {
+		return handleType;
+	}
+
+	public void setHandleType(String handleType) {
+		this.handleType = handleType;
 	}
 
 }

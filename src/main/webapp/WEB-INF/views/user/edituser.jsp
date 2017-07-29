@@ -20,7 +20,11 @@
 </style>
 
 <script type="text/javascript">
-	
+	$(function(){
+		if("${result}"){
+			alert("result");
+		}
+	})
 </script>
 </head>
 <body>
@@ -33,7 +37,6 @@
 			</div>
 		</div>
 		<form id="saveForm" class="form-horizontal" action="${pageContext.request.contextPath}/user/saveUser" method="post">
-			<input type="hidden" id="type" name="type" value="${type}">
 			<input type="hidden" id="id" name="id" value="${user.id}">
 			<div class="form-group">
 				<label class="col-md-2 control-label" for="account">
@@ -61,7 +64,7 @@
 			<div class="form-group">
 				<label class="col-md-2 control-label" for="mobile">手机号：</label>
 				<div class="col-md-3" >
-					<input type="mobile" id="mobile" name="mobile" class="form-control" placeholder="请输入手机号" value="${mobile}">
+					<input type="mobile" id="mobile" name="mobile" class="form-control" placeholder="请输入手机号" value="${user.mobile}">
 				</div>
 			</div>
 			
@@ -73,7 +76,7 @@
 						<option value="1" <c:if test="${user.gender==1}">selected</c:if>>男</option>
 					</select>
 				</div>
-			</div>	
+			</div>
 			
 			<div class="form-group">
 				<label class="col-md-2 control-label" for="age">年龄：</label>
@@ -83,11 +86,29 @@
 			</div>
 			
 			<div class="form-group">
+				<label class="col-md-2 control-label" for="age">学历：</label>
+				<select id="eductionId" name="educationId" >
+					<option value="" selected>-请选择-</option>
+					<option value="1" <c:if test="${user.educationId==1}">selected</c:if>>小学</option>
+					<option value="2" <c:if test="${user.educationId==2}">selected</c:if>>初中</option>
+					<option value="3" <c:if test="${user.educationId==3}">selected</c:if>>高中</option>
+					<option value="4" <c:if test="${user.educationId==4}">selected</c:if>>中专</option>
+					<option value="5" <c:if test="${user.educationId==5}">selected</c:if>>职高</option>
+					<option value="6" <c:if test="${user.educationId==6}">selected</c:if>>大专</option>
+					<option value="7" <c:if test="${user.educationId==7}">selected</c:if>>本科</option>
+					<option value="8" <c:if test="${user.educationId==8}">selected</c:if>>硕士</option>
+					<option value="9" <c:if test="${user.educationId==9}">selected</c:if>>博士</option>
+					<option value="10" <c:if test="${user.educationId==10}">selected</c:if>>博士后</option>
+				</select>
+			</div>
+			
+			<div class="form-group">
 				<label class="col-md-2 control-label" for="email">email：</label>
 				<div class="col-md-3" >
 					<input type="email" id="email" name="email" class="form-control" placeholder="请输入email" value="${user.email}">
 				</div>
 			</div>
+			
 			
 			<div class="form-group">
 				<label class="col-md-2 control-label" for="address">居住地址：</label>
@@ -102,14 +123,12 @@
 					<input type="text" id="homeAddress" name="homeAddress" class="form-control" placeholder="请输入户籍所在地址" value="${user.homeAddress}">
 				</div>
 			</div>
-		</form>
-		<div class="row">
-			<div class="col-md-3 col-md-offset-3">
+			<div class="form-group">
 				<button type="submit" class="btn btn-primary">
 					保存
 				</button>
 			</div>
-		</div>
+		</form>
 	</div>
 </body>
 </html>
