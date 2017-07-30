@@ -47,7 +47,7 @@
 			<div class="row">
 				<div class="col-sm-3 col-md-2 sidebar">
 					<ul class="nav nav-sidebar">
-						<li><a href="${ctx}/company/toComppanyListPage" target="mainContainer">公司管理</a></li>
+						<li><a href="${ctx}/company/toCompanyListPage" target="mainContainer">公司管理</a></li>
 						<li><a href="${ctx}/user/toUserListPage" target="mainContainer">用户管理</a></li>
 						<li><a href="#">Analytics</a></li>
 						<li><a href="#">Export</a></li>

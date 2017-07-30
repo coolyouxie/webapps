@@ -82,7 +82,32 @@
 								label : 'educationId',
 								name : 'educationId',
 								align : 'center',
-								sortable : false
+								sortable : false,
+								formatter:function(cellValue,options,rowObject){
+									if(cellValue==1){
+										return '小学';
+									}else if(cellValue==2){
+										return '初中';
+									}else if(cellValue==3){
+										return '高中';
+									}else if(cellValue==4){
+										return '中专';
+									}else if(cellValue==5){
+										return '职高';
+									}else if(cellValue==6){
+										return '大专';
+									}else if(cellValue==7){
+										return '本科';
+									}else if(cellValue==8){
+										return '硕士';
+									}else if(cellValue==9){
+										return '博士';
+									}else if(cellValue==10){
+										return '博士后';
+									}else if(!cellValue){
+										return "未填写";
+									}
+								}
 							},{
 								label : 'operate',
 								name : 'operate',

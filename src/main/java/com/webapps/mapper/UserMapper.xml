@@ -98,11 +98,11 @@
 			data_state = 1 
 			<if test="user.keyWords !=null and user.keyWords != ''">
 				AND (
-					name like "%||"#{user.keyWords,jdbcType=VARCHAR}||"%"
+					name like concat('%', #{user.keyWords}, '%')
 					or
-					account like "%||"#{user.keyWords,jdbcType=VARCHAR}||"%"
+					account like concat('%', #{user.keyWords}, '%')
 					or
-					id_card_no like "%||"#{user.keyWords,jdbcType=VARCHAR}||"%"
+					id_card_no like concat('%', #{user.keyWords}, '%')
 					)
 				
 			</if>
@@ -129,6 +129,16 @@
 		FROM t_user
 		<trim prefix="WHERE" prefixOverrides="AND">
 			data_state = 1 
+			<if test="user.keyWords !=null and user.keyWords != ''">
+				AND (
+					name like concat('%', #{user.keyWords}, '%')
+					or
+					account like concat('%', #{user.keyWords}, '%')
+					or
+					id_card_no like concat('%', #{user.keyWords}, '%')
+					)
+				
+			</if>
 			<if test="user.name !=null and user.name != ''">
 				AND name = #{user.name,jdbcType=VARCHAR}
 			</if>

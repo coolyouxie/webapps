@@ -156,7 +156,7 @@
 				</div>
 			</div>
 			<div class="form-group">
-				<label class="col-md-2 control-label"></label>
+				<label class="col-md-3 control-label"></label>
 				<div class="col-md-3">
 					<button type="submit" class="btn btn-primary">
 						保存

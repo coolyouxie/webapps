@@ -17,5 +17,7 @@ public interface IUserService {
 	
 	public User getById(Integer id)throws Exception;
 	
+	public ResultDto<User> deleteUserById(Integer id) throws Exception;
+	
 
 }

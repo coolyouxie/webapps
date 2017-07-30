@@ -91,9 +91,9 @@ public class UserController {
 	}
 	
 	@ResponseBody
-	@RequestMapping("getById")
+	@RequestMapping("/getById")
 	public ResultDto<User> getById(Integer id,HttpServletRequest request,HttpSession session){
-		ResultDto<User> dto = new ResultDto<User>();
+		ResultDto<User> dto = null;
 		if(id!=null){
 			try {
 				User user = iUserService.getById(id);
@@ -106,6 +106,20 @@ public class UserController {
 		}
 		dto.setResult("fail");
 		return dto;
+	}
+	
+	@ResponseBody
+	@RequestMapping("/deleteUserById")
+	public String deleteUserById(Integer id,HttpServletRequest request,HttpSession session){
+		ResultDto<User> dto = null;
+		try {
+			dto = iUserService.deleteUserById(id);
+		} catch (Exception e) {
+			e.printStackTrace();
+			dto = new ResultDto<User>();
+			dto.setResult("fail");
+		}
+		return JSONUtils.valueToString(dto);
 	}
 	
 }

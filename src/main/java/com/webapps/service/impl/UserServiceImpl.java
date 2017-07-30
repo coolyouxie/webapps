@@ -96,6 +96,14 @@ public class UserServiceImpl implements IUserService {
 		User user = iUserMapper.getById(id);
 		return user;
 	}
+
+	@Override
+	public ResultDto<User> deleteUserById(Integer id) throws Exception {
+		iUserMapper.deleteById(id);
+		ResultDto<User> dto = new ResultDto<User>();
+		dto.setResult("success");
+		return dto;
+	}
 	
 	
 	
