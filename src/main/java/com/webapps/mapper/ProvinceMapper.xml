@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.webapps.mapper.IProvinceMapper">
+	<resultMap id="resultMap" type="com.webapps.common.entity.Province">
+		<id column="ID" jdbcType="DECIMAL" property="id" />
+		<result column="NAME" jdbcType="VARCHAR" property="name" />
+		<result column="code" jdbcType="VARCHAR" property="code" />
+		<result column="parent_id" jdbcType="VARCHAR" property="parentId" />
+		<result column="longitude" jdbcType="DECIMAL" property="longitude" />
+		<result column="latitude" jdbcType="DECIMAL" property="latitude" />
+		<result column="level" jdbcType="DECIMAL" property="level" />
+		<result column="data_state" jdbcType="DECIMAL" property="dataState" />
+		<result column="create_time" jdbcType="VARCHAR" property="createTime" />
+		<result column="UPDATE_TIME" jdbcType="VARCHAR" property="updateTime" />
+	</resultMap>
+
+	<sql id="select_columns">
+		ID,level,code,parentId,name, longitude, latitude,data_state,CREATE_TIME,UPDATE_TIME
+	</sql>
+
+	<sql id="insert_columns">
+		level,code,parentId,name, longitude, latitude,data_state,CREATE_TIME
+	</sql>
+	
+	<sql id="update_columns">
+		level,code,parentId,name, longitude, latitude,data_state,update_time
+	</sql>
+
+	<select id="getById" resultMap="resultMap">
+		select * from t_province where id = #{id}
+	</select>
+	
+	<update id="batchUpdate">
+		<foreach collection="list" item="item" index="index" open="" close="" separator=";">
+			update t_province
+			<set>
+				parent_id=#{item.parentId},
+				level = #{item.level}
+			</set>
+			where id = #{item.id}
+         </foreach>
+	</update>
+
+	<update id="updateById">
+		UPDATE T_User
+		<set>
+			<if test="i.name != null and i.name != ''">
+				name = #{i.name,jdbcType=VARCHAR},
+			</if>
+			<if test="i.telephone != null and i.telephone != null and i.telephone != ''">
+				telephone = #{i.telephone,jdbcType=VARCHAR},
+			</if>
+			<if test="i.idCardNo != null and i.idCardNo != ''">
+				id_card_no = #{i.idCardNo,jdbcType=VARCHAR},
+			</if>
+			<if test="i.gender != null and i.gender != ''">
+				gender = #{i.gender,jdbcType=DECIMAL},
+			</if>
+			<if test="i.password != null and i.password != '' ">
+				password = #{i.password,jdbcType=VARCHAR},
+			</if>
+			<if test="i.age != null and i.age != ''">
+				age = #{i.age,jdbcType=DECIMAL},
+			</if>
+			weiXin = #{i.weiXin,jdbcType=VARCHAR},
+			email = #{i.email,jdbcType=VARCHAR},
+			home_Address=#{i.homeAddress,jdbcType=VARCHAR},
+			address = #{i.address,jdbcType=VARCHAR},
+			login_State =
+			#{i.loginState,jdbcType=DECIMAL},
+			education_Id =
+			#{i.educationId,jdbcType=DECIMAL},
+			qq = #{i.qq,jdbcType=VARCHAR},
+			mobile = #{i.mobile,jdbcType=VARCHAR},
+			update_time = sysdate
+		</set>
+		WHERE ID = #{id,jdbcType=DECIMAL}
+	</update>
+	
+	<select id="queryAll" resultMap="resultMap">
+		select * from t_province
+	</select>
+	
+	<select id="getProvinceByCode" resultMap="resultMap">
+		select * from t_province where code = #{code}
+	</select>
+
+	<select id="queryCount" resultType="java.lang.Integer">
+		SELECT count(1) FROM t_province
+		<trim prefix="WHERE" prefixOverrides="AND">
+			data_state = 1 
+			<if test="user.keyWords !=null and user.keyWords != ''">
+				AND (
+					name like "%||"#{user.keyWords,jdbcType=VARCHAR}||"%"
+					or
+					account like "%||"#{user.keyWords,jdbcType=VARCHAR}||"%"
+					or
+					id_card_no like "%||"#{user.keyWords,jdbcType=VARCHAR}||"%"
+					)
+				
+			</if>
+			<if test="user.age != null and user.age != ''">
+				and age = #{user.age,jdbcType=DECIMAL}
+			</if>
+			<if test="user.gender != null and user.gender != ''">
+				and gender = #{user.gender,jdbcType=DECIMAL}
+			</if>
+			<if test="user.educationId != null and user.educationId != ''">
+				and education_Id = #{user.educationId,jdbcType=DECIMAL}
+			</if>
+			<if test="user.type != null and user.type != ''">
+				and type = #{user.type,jdbcType=DECIMAL}
+			</if>
+		</trim>
+	</select>
+
+	<!-- 根据productId获取product -->
+	<select id="queryUserList" resultMap="resultMap">
+		<include refid="ORACLE.paginationStart" />
+		SELECT
+		<include refid="select_columns" />
+		FROM t_province
+		<trim prefix="WHERE" prefixOverrides="AND">
+			data_state = 1 
+			<if test="user.name !=null and user.name != ''">
+				AND name = #{user.name,jdbcType=VARCHAR}
+			</if>
+			<if test="user.age != null and user.age != ''">
+				and age = #{user.age,jdbcType=DECIMAL}
+			</if>
+			<if test="user.gender != null and user.gender != ''">
+				and gender = #{user.gender,jdbcType=VARCHAR}
+			</if>
+			<if test="user.educationId != null and user.educationId != ''">
+				and education_Id = #{user.educationId,jdbcType=DECIMAL}
+			</if>
+			<if test="user.type != null and user.type != ''">
+				and type = #{user.type,jdbcType=VARCHAR}
+			</if>
+		</trim>
+		order by name
+		<include refid="ORACLE.paginationEnd" />
+	</select>
+	
+	<select id="queryUserByAccount" resultMap="resultMap">
+		select * from t_province where data_state = 1 and account = #{account}
+	</select>
+
+	<select id="deleteById" resultType="java.lang.Integer">
+		DELETE T_user where id = #{id,jdbcType=DECIMAL}
+	</select>
+	
+	<update id="deleteByIdInLogic">
+		update t_province set data_state = 0 where id = #{id,jdbcType=DECIMAL}
+	</update>
+
+
+	<insert id="insert">
+		insert into T_user (
+			<include refid="insert_columns" />
+		)
+		values
+		(
+			#{obj.account},
+			#{obj.password},
+			#{obj.token},
+			#{obj.name},
+			#{obj.gender},
+			#{obj.age},
+			#{obj.telephone},
+			#{obj.mobile},
+			#{obj.qq},
+			#{obj.weiXin},
+			#{obj.email},
+			#{obj.homeAddress},
+			#{obj.address},
+			#{obj.idCardNo},
+			#{obj.type},
+			#{obj.loginState},
+			#{obj.educationId},
+			#{obj.dataState},
+			#{obj.createTime}
+		)
+	</insert>
+</mapper>
