@@ -63,26 +63,37 @@ public class UserController {
 		return page;
 	}
 	
-	@ResponseBody
 	@RequestMapping("/saveUser")
-	public String saveUser(User user,HttpServletRequest request){
+	public String saveUser(Model model,User user,HttpServletRequest request){
 		if(null != user){
 			try {
-				iUserService.saveUser(user);
+				ResultDto<User> dto = iUserService.saveUser(user);
+				if(null!=dto&&"success".equals(dto.getResult())){
+					return "/user/userlist";
+				}
+				if(null!=dto&&"fail".equals(dto.getResult())){
+					model.addAttribute("user", user);
+					model.addAttribute("result", dto.getErrorMsg());
+					return "/user/adduser";
+				}
 			} catch (Exception e) {
 				e.printStackTrace();
-				return "failed";
+				if(user.getId()!=null){
+					model.addAttribute("result", "更新用户信息异常，请稍后重试");
+					return "/user/edituser";
+				}else{
+					model.addAttribute("result", "新增用户信息异常，请稍后重试");
+					return "/user/adduser";
+				}
 			}
 		}
-		ResultDto<String> dto = new ResultDto<String>();
-		dto.setResult("success");
-		return JSONUtils.valueToString(dto);
+		return "/user/userlist";
 	}
 	
 	@ResponseBody
-	@RequestMapping("getById")
+	@RequestMapping("/getById")
 	public ResultDto<User> getById(Integer id,HttpServletRequest request,HttpSession session){
-		ResultDto<User> dto = new ResultDto<User>();
+		ResultDto<User> dto = null;
 		if(id!=null){
 			try {
 				User user = iUserService.getById(id);
@@ -97,14 +108,18 @@ public class UserController {
 		return dto;
 	}
 	
-	/**
-	 * 新增或修改用户信息
-	 * @param user
-	 * @return
-	 */
-	@RequestMapping("addOrEdit")
-	public ResultDto<User> addOrEdit(User user){
-		return null;
+	@ResponseBody
+	@RequestMapping("/deleteUserById")
+	public String deleteUserById(Integer id,HttpServletRequest request,HttpSession session){
+		ResultDto<User> dto = null;
+		try {
+			dto = iUserService.deleteUserById(id);
+		} catch (Exception e) {
+			e.printStackTrace();
+			dto = new ResultDto<User>();
+			dto.setResult("fail");
+		}
+		return JSONUtils.valueToString(dto);
 	}
 	
 }

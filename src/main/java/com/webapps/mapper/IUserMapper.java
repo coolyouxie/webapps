@@ -17,5 +17,7 @@ public interface IUserMapper extends IBaseMapper<User>{
 	public List<User> queryUserList(@Param("startRow")int startRow,@Param("endRow")int endRow,@Param("user")UserRequestForm user);
 	
 	public User queryUserByAccount(String account);
+	
+	public int deleteByIdInLogic(Integer id);
 
 }

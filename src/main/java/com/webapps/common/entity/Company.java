@@ -1,5 +1,7 @@
 package com.webapps.common.entity;
 
+import java.math.BigDecimal;
+
 /**
  * Created by xieshuai on 2017-6-27.
  */
@@ -12,6 +14,8 @@ public class Company extends Entity{
     private String email;
     private int industryId;
     private String enterpriseLegalPerson;
+    private BigDecimal longitude;
+    private BigDecimal latitude;
 
     public String getName() {
         return name;
@@ -68,5 +72,21 @@ public class Company extends Entity{
     public void setEnterpriseLegalPerson(String enterpriseLegalPerson) {
         this.enterpriseLegalPerson = enterpriseLegalPerson;
     }
+
+	public BigDecimal getLongitude() {
+		return longitude;
+	}
+
+	public void setLongitude(BigDecimal longitude) {
+		this.longitude = longitude;
+	}
+
+	public BigDecimal getLatitude() {
+		return latitude;
+	}
+
+	public void setLatitude(BigDecimal latitude) {
+		this.latitude = latitude;
+	}
 
 }

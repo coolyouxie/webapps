@@ -19,6 +19,22 @@
 </style>
 
 <script type="text/javascript">
+	$(function(){
+		if("${result}"){
+			alert("${result}");
+		}
+	});
+	function saveUser(){
+		$.ajax({
+			url:"${pageContext.request.contextPath}/user/saveUser",
+			type:"POST",
+			dataType:"JSON",
+			data:$("#saveForm").serialize(),
+			success:function(response){
+				alert(response);
+			}
+		})
+	}
 	
 </script>
 </head>
@@ -31,13 +47,13 @@
 				</h4>
 			</div>
 		</div>
-		<form id="saveForm" class="form-horizontal" action="${pageContext.request.contextPath}/user/addOrEdit?type=${type}">
+		<form id="saveForm" class="form-horizontal" action="${pageContext.request.contextPath}/user/saveUser"  method="post">
 			<div class="form-group">
 				<label class="col-md-2 control-label" for="account">
 					账号：
 				</label>
 				<div class="col-md-3">
-					<input type="text" id="account" name="account" class="form-control" placeholder="请输入账号名" >
+					<input type="text" id="account" name="account" class="form-control" value="${user.account}" placeholder="请输入账号名" >
 				</div>
 			</div>
 			
@@ -79,7 +95,10 @@
 			<div class="form-group">
 				<label class="col-md-2 control-label" for="gender">性别：</label>
 				<div class="col-md-3" >
-					<input type="text" id="gender" name="gender" class="form-control" placeholder="请输入性别" >
+					<select id="gender" name="gender" class="form-control">
+						<option value="0">女</option>
+						<option value="1">男</option>
+					</select>
 				</div>
 			</div>	
 			
@@ -98,6 +117,32 @@
 			</div>
 			
 			<div class="form-group">
+				<label class="col-md-2 control-label" for="userType">用户类型：</label>
+				<div class="col-md-3" >
+					<jsp:include page="../common/usertype.jsp" flush="true" />
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label class="col-md-2 control-label" for="age">学历：</label>
+				<div class="col-md-3">
+					<select id="eductionId" name="educationId">
+						<option value="" selected>-请选择-</option>
+						<option value="1">小学</option>
+						<option value="2">初中</option>
+						<option value="3">高中</option>
+						<option value="4">中专</option>
+						<option value="5">职高</option>
+						<option value="6">大专</option>
+						<option value="7">本科</option>
+						<option value="8">硕士</option>
+						<option value="9">博士</option>
+						<option value="10">博士后</option>
+					</select>
+				</div>
+			</div>
+			
+			<div class="form-group">
 				<label class="col-md-2 control-label" for="address">居住地址：</label>
 				<div class="col-md-3" >
 					<input type="text" id="address" name="address" class="form-control" placeholder="请输入现在的居住地址" >
@@ -110,14 +155,15 @@
 					<input type="text" id="homeAddress" name="homeAddress" class="form-control" placeholder="请输入户籍所在地址" >
 				</div>
 			</div>
-		</form>
-		<div class="row">
-			<div class="col-md-3 col-md-offset-3">
-				<button type="button" class="btn btn-primary" onclick="save()">
-					保存
-				</button>
+			<div class="form-group">
+				<label class="col-md-3 control-label"></label>
+				<div class="col-md-3">
+					<button type="submit" class="btn btn-primary">
+						保存
+					</button>
+				</div>
 			</div>
-		</div>
+		</form>
 	</div>
 </body>
 </html>

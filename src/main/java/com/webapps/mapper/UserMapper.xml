@@ -18,7 +18,7 @@
 		<result column="email" jdbcType="VARCHAR" property="email" />
 		<result column="home_Address" jdbcType="VARCHAR" property="homeAddress" />
 		<result column="address" jdbcType="VARCHAR" property="address" />
-		<result column="type" jdbcType="DECIMAL" property="type" />
+		<result column="user_type" jdbcType="DECIMAL" property="userType" />
 		<result column="login_State" jdbcType="VARCHAR" property="loginState" />
 		<result column="education_Id" jdbcType="VARCHAR" property="educationId" />
 		<result column="data_state" jdbcType="DECIMAL" property="dataState" />
@@ -29,7 +29,7 @@
 	<sql id="select_columns">
 		ID,account,password,token,name, gender, age, telephone, mobile,
 		qq,weiXin,email,home_Address,address,id_card_no,
-		type,login_State,education_Id,data_state,CREATE_TIME,UPDATE_TIME
+		user_type,login_State,education_Id,data_state,CREATE_TIME,UPDATE_TIME
 	</sql>
 
 	<sql id="insert_columns">
@@ -47,7 +47,7 @@
 		home_Address,
 		address,
 		id_card_no,
-		type,
+		user_type,
 		login_State,
 		education_Id,
 		data_state,
@@ -61,35 +61,33 @@
 	<update id="updateById">
 		UPDATE T_User
 		<set>
-			<if test="i.name != null and i.name != ''">
-				name = #{i.name,jdbcType=VARCHAR},
+			<if test="obj.name != null and obj.name != ''">
+				name = #{obj.name,jdbcType=VARCHAR},
 			</if>
-			<if test="i.telephone != null and i.telephone != null and i.telephone != ''">
-				telephone = #{i.telephone,jdbcType=VARCHAR},
+			<if test="obj.telephone != null and obj.telephone != null and obj.telephone != ''">
+				telephone = #{obj.telephone,jdbcType=VARCHAR},
 			</if>
-			<if test="i.idCardNo != null and i.idCardNo != ''">
-				id_card_no = #{i.idCardNo,jdbcType=VARCHAR},
+			<if test="obj.idCardNo != null and obj.idCardNo != ''">
+				id_card_no = #{obj.idCardNo,jdbcType=VARCHAR},
 			</if>
-			<if test="i.gender != null and i.gender != ''">
-				gender = #{i.gender,jdbcType=DECIMAL},
+			<if test="obj.gender != null and obj.gender != ''">
+				gender = #{obj.gender,jdbcType=DECIMAL},
 			</if>
-			<if test="i.password != null and i.password != '' ">
-				password = #{i.password,jdbcType=VARCHAR},
+			<if test="obj.password != null and obj.password != '' ">
+				password = #{obj.password,jdbcType=VARCHAR},
 			</if>
-			<if test="i.age != null and i.age != ''">
-				age = #{i.age,jdbcType=DECIMAL},
+			<if test="obj.age != null and obj.age != ''">
+				age = #{obj.age,jdbcType=DECIMAL},
 			</if>
-			weiXin = #{i.weiXin,jdbcType=VARCHAR},
-			email = #{i.email,jdbcType=VARCHAR},
-			home_Address=#{i.homeAddress,jdbcType=VARCHAR},
-			address = #{i.address,jdbcType=VARCHAR},
-			login_State =
-			#{i.loginState,jdbcType=DECIMAL},
-			education_Id =
-			#{i.educationId,jdbcType=DECIMAL},
-			qq = #{i.qq,jdbcType=VARCHAR},
-			mobile = #{i.mobile,jdbcType=VARCHAR},
-			update_time = sysdate
+			weiXin = #{obj.weiXin,jdbcType=VARCHAR},
+			email = #{obj.email,jdbcType=VARCHAR},
+			home_Address = #{obj.homeAddress,jdbcType=VARCHAR},
+			address = #{obj.address,jdbcType=VARCHAR},
+			login_State = #{obj.loginState,jdbcType=DECIMAL},
+			education_Id = #{obj.educationId,jdbcType=DECIMAL},
+			qq = #{obj.qq,jdbcType=VARCHAR},
+			mobile = #{obj.mobile,jdbcType=VARCHAR},
+			update_time = now()
 		</set>
 		WHERE ID = #{id,jdbcType=DECIMAL}
 	</update>
@@ -100,11 +98,11 @@
 			data_state = 1 
 			<if test="user.keyWords !=null and user.keyWords != ''">
 				AND (
-					name like "%||"#{user.keyWords,jdbcType=VARCHAR}||"%"
+					name like concat('%', #{user.keyWords}, '%')
 					or
-					account like "%||"#{user.keyWords,jdbcType=VARCHAR}||"%"
+					account like concat('%', #{user.keyWords}, '%')
 					or
-					id_card_no like "%||"#{user.keyWords,jdbcType=VARCHAR}||"%"
+					id_card_no like concat('%', #{user.keyWords}, '%')
 					)
 				
 			</if>
@@ -117,8 +115,8 @@
 			<if test="user.educationId != null and user.educationId != ''">
 				and education_Id = #{user.educationId,jdbcType=DECIMAL}
 			</if>
-			<if test="user.type != null and user.type != ''">
-				and type = #{user.type,jdbcType=DECIMAL}
+			<if test="user.userType != null and user.userType != ''">
+				and user_type = #{user.userType,jdbcType=DECIMAL}
 			</if>
 		</trim>
 	</select>
@@ -131,6 +129,16 @@
 		FROM t_user
 		<trim prefix="WHERE" prefixOverrides="AND">
 			data_state = 1 
+			<if test="user.keyWords !=null and user.keyWords != ''">
+				AND (
+					name like concat('%', #{user.keyWords}, '%')
+					or
+					account like concat('%', #{user.keyWords}, '%')
+					or
+					id_card_no like concat('%', #{user.keyWords}, '%')
+					)
+				
+			</if>
 			<if test="user.name !=null and user.name != ''">
 				AND name = #{user.name,jdbcType=VARCHAR}
 			</if>
@@ -143,8 +151,8 @@
 			<if test="user.educationId != null and user.educationId != ''">
 				and education_Id = #{user.educationId,jdbcType=DECIMAL}
 			</if>
-			<if test="user.type != null and user.type != ''">
-				and type = #{user.type,jdbcType=VARCHAR}
+			<if test="user.userType != null and user.userType != ''">
+				and user_type = #{user.userType,jdbcType=VARCHAR}
 			</if>
 		</trim>
 		order by name
@@ -184,7 +192,7 @@
 			#{obj.homeAddress},
 			#{obj.address},
 			#{obj.idCardNo},
-			#{obj.type},
+			#{obj.userType},
 			#{obj.loginState},
 			#{obj.educationId},
 			#{obj.dataState},

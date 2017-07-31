@@ -31,7 +31,7 @@ public class User extends Entity{
 
     private String address;
 
-    private Integer type;
+    private Integer userType;
 
     private Integer loginState;
 
@@ -143,12 +143,12 @@ public class User extends Entity{
         this.address = address;
     }
 
-    public Integer getType() {
-        return type;
+    public Integer getUserType() {
+        return userType;
     }
 
-    public void setType(Integer type) {
-        this.type = type;
+    public void setUserType(Integer userType) {
+        this.userType = userType;
     }
 
     public Integer getLoginState() {

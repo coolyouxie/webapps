@@ -2,11 +2,14 @@ package com.webapps.common.form;
 
 import java.io.Serializable;
 
-import com.webapps.common.entity.User;
+import com.webapps.common.bean.Page;
+import com.webapps.common.entity.Company;
 
-public class UserRequestForm extends User implements Serializable{
+public class CompanyResponseForm extends Company implements Serializable {
 
-	private static final long serialVersionUID = -7915557175531200072L;
+	private static final long serialVersionUID = -8076189914016566968L;
+	
+	Page page = new Page();
 	
 	private String keyWords;
 	
@@ -21,6 +24,14 @@ public class UserRequestForm extends User implements Serializable{
 
 	public void setKeyWords(String keyWords) {
 		this.keyWords = keyWords;
+	}
+
+	public Page getPage() {
+		return page;
+	}
+
+	public void setPage(Page page) {
+		this.page = page;
 	}
 
 	public String getHandleType() {

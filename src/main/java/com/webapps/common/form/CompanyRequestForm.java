@@ -2,9 +2,9 @@ package com.webapps.common.form;
 
 import java.io.Serializable;
 
-import com.webapps.common.entity.User;
+import com.webapps.common.entity.Company;
 
-public class UserRequestForm extends User implements Serializable{
+public class CompanyRequestForm extends Company implements Serializable{
 
 	private static final long serialVersionUID = -7915557175531200072L;
 	
