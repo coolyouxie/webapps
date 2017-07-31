@@ -21,33 +21,9 @@ public class ProvinceServiceImpl implements IProvinceService {
 	private IProvinceMapper iProvinceMapper;
 
 	@Override
-	public Page loadUserList(Page page, UserRequestForm user) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public User login(User user) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public User insert(User user) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public User saveUser(User user) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public User getById(Integer id) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+	public Province getById(Integer id) throws Exception {
+		Province p = iProvinceMapper.getById(id);
+		return p;
 	}
 
 	@Override
@@ -58,18 +34,30 @@ public class ProvinceServiceImpl implements IProvinceService {
 				p.setLevel(1);
 			}else if(p.getCode().contains("00")){
 				String tempCode = p.getCode().substring(0, 2)+"0000";
-				Province province = iProvinceMapper.getProvinceByCode(tempCode);
+				Province province = iProvinceMapper.getByCode(tempCode);
 				p.setParentId(province.getId());
 				p.setLevel(2);
 			}else{
 				String tempCode = p.getCode().substring(0, 4)+"00";
-				Province province = iProvinceMapper.getProvinceByCode(tempCode);
+				Province province = iProvinceMapper.getByCode(tempCode);
 				p.setParentId(province.getId());
 				p.setLevel(3);
 			}
 		}
 		iProvinceMapper.batchUpdate(list);
 		return null;
+	}
+
+	@Override
+	public List<Province> queryProvinceByParentId(Integer parentId) throws Exception {
+		List<Province> list = iProvinceMapper.queryByParentId(parentId);
+		return list;
+	}
+
+	@Override
+	public List<Province> queryProvinceByLevel(Integer level) throws Exception {
+		List<Province> list = iProvinceMapper.queryByLevel(level);
+		return list;
 	}
 
 }

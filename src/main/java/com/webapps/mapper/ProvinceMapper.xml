@@ -27,10 +27,77 @@
 		level,code,parentId,name, longitude, latitude,data_state,update_time
 	</sql>
 
+	
 	<select id="getById" resultMap="resultMap">
-		select * from t_province where id = #{id}
+		select <include refid="select_columns" /> from t_province where id = #{id}
 	</select>
 	
+	<!-- 查询所有 -->
+	<select id="queryAll" resultMap="resultMap">
+		select <include refid="select_columns" /> from t_province
+	</select>
+	
+	<!-- 根据行政区号查询 -->
+	<select id="getByCode" resultMap="resultMap">
+		select <include refid="select_columns" /> from t_province where code = #{code}
+	</select>
+	
+	<!-- 根据父级行政区号查询 -->
+	<select id="queryByParentId" resultMap="resultMap">
+		select <include refid="select_columns" /> from t_province where parent_id = #{parentId}
+	</select>
+	
+	<!-- 根据行政区等查询 -->
+	<select id="queryByLevel" resultMap="resultMap">
+		select <include refid="select_columns" /> from t_province where level = #{level}
+	</select>
+	
+	<!-- 查询行政区总数 -->
+	<select id="queryCount" resultType="java.lang.Integer">
+		SELECT count(1) FROM t_province
+		<trim prefix="WHERE" prefixOverrides="AND">
+			data_state = 1 
+			<if test="province.keyWords !=null and province.keyWords != ''">
+				AND name like concat('%',#{province.keyWords},'%')
+			</if>
+			<if test="province.level != null and province.level != ''">
+				and level = #{province.level,jdbcType=DECIMAL}
+			</if>
+			<if test="province.code != null and province.code != ''">
+				and code = #{province.code,jdbcType=VARCHAR}
+			</if>
+			<if test="province.parentId != null and province.parentId != ''">
+				and parent_id = #{province.parentId,jdbcType=DECIMAL}
+			</if>
+		</trim>
+	</select>
+
+	<!-- 分页查询行政区信息 -->
+	<select id="queryProvinceList" resultMap="resultMap">
+		<include refid="ORACLE.paginationStart" />
+		SELECT
+		<include refid="select_columns" />
+		FROM t_province
+		<trim prefix="WHERE" prefixOverrides="AND">
+			data_state = 1 
+			<if test="province.keyWords !=null and province.keyWords != ''">
+				AND name like concat('%',#{province.keyWords},'%')
+			</if>
+			<if test="province.level != null and province.level != ''">
+				and level = #{province.level,jdbcType=DECIMAL}
+			</if>
+			<if test="province.code != null and province.code != ''">
+				and code = #{province.code,jdbcType=VARCHAR}
+			</if>
+			<if test="province.parentId != null and province.parentId != ''">
+				and parent_id = #{province.parentId,jdbcType=DECIMAL}
+			</if>
+		</trim>
+		order by name
+		<include refid="ORACLE.paginationEnd" />
+	</select>
+	
+	<!-- 用于初始化数据时使用 -->
 	<update id="batchUpdate">
 		<foreach collection="list" item="item" index="index" open="" close="" separator=";">
 			update t_province
@@ -41,146 +108,4 @@
 			where id = #{item.id}
          </foreach>
 	</update>
-
-	<update id="updateById">
-		UPDATE T_User
-		<set>
-			<if test="i.name != null and i.name != ''">
-				name = #{i.name,jdbcType=VARCHAR},
-			</if>
-			<if test="i.telephone != null and i.telephone != null and i.telephone != ''">
-				telephone = #{i.telephone,jdbcType=VARCHAR},
-			</if>
-			<if test="i.idCardNo != null and i.idCardNo != ''">
-				id_card_no = #{i.idCardNo,jdbcType=VARCHAR},
-			</if>
-			<if test="i.gender != null and i.gender != ''">
-				gender = #{i.gender,jdbcType=DECIMAL},
-			</if>
-			<if test="i.password != null and i.password != '' ">
-				password = #{i.password,jdbcType=VARCHAR},
-			</if>
-			<if test="i.age != null and i.age != ''">
-				age = #{i.age,jdbcType=DECIMAL},
-			</if>
-			weiXin = #{i.weiXin,jdbcType=VARCHAR},
-			email = #{i.email,jdbcType=VARCHAR},
-			home_Address=#{i.homeAddress,jdbcType=VARCHAR},
-			address = #{i.address,jdbcType=VARCHAR},
-			login_State =
-			#{i.loginState,jdbcType=DECIMAL},
-			education_Id =
-			#{i.educationId,jdbcType=DECIMAL},
-			qq = #{i.qq,jdbcType=VARCHAR},
-			mobile = #{i.mobile,jdbcType=VARCHAR},
-			update_time = sysdate
-		</set>
-		WHERE ID = #{id,jdbcType=DECIMAL}
-	</update>
-	
-	<select id="queryAll" resultMap="resultMap">
-		select * from t_province
-	</select>
-	
-	<select id="getProvinceByCode" resultMap="resultMap">
-		select * from t_province where code = #{code}
-	</select>
-
-	<select id="queryCount" resultType="java.lang.Integer">
-		SELECT count(1) FROM t_province
-		<trim prefix="WHERE" prefixOverrides="AND">
-			data_state = 1 
-			<if test="user.keyWords !=null and user.keyWords != ''">
-				AND (
-					name like "%||"#{user.keyWords,jdbcType=VARCHAR}||"%"
-					or
-					account like "%||"#{user.keyWords,jdbcType=VARCHAR}||"%"
-					or
-					id_card_no like "%||"#{user.keyWords,jdbcType=VARCHAR}||"%"
-					)
-				
-			</if>
-			<if test="user.age != null and user.age != ''">
-				and age = #{user.age,jdbcType=DECIMAL}
-			</if>
-			<if test="user.gender != null and user.gender != ''">
-				and gender = #{user.gender,jdbcType=DECIMAL}
-			</if>
-			<if test="user.educationId != null and user.educationId != ''">
-				and education_Id = #{user.educationId,jdbcType=DECIMAL}
-			</if>
-			<if test="user.type != null and user.type != ''">
-				and type = #{user.type,jdbcType=DECIMAL}
-			</if>
-		</trim>
-	</select>
-
-	<!-- 根据productId获取product -->
-	<select id="queryUserList" resultMap="resultMap">
-		<include refid="ORACLE.paginationStart" />
-		SELECT
-		<include refid="select_columns" />
-		FROM t_province
-		<trim prefix="WHERE" prefixOverrides="AND">
-			data_state = 1 
-			<if test="user.name !=null and user.name != ''">
-				AND name = #{user.name,jdbcType=VARCHAR}
-			</if>
-			<if test="user.age != null and user.age != ''">
-				and age = #{user.age,jdbcType=DECIMAL}
-			</if>
-			<if test="user.gender != null and user.gender != ''">
-				and gender = #{user.gender,jdbcType=VARCHAR}
-			</if>
-			<if test="user.educationId != null and user.educationId != ''">
-				and education_Id = #{user.educationId,jdbcType=DECIMAL}
-			</if>
-			<if test="user.type != null and user.type != ''">
-				and type = #{user.type,jdbcType=VARCHAR}
-			</if>
-		</trim>
-		order by name
-		<include refid="ORACLE.paginationEnd" />
-	</select>
-	
-	<select id="queryUserByAccount" resultMap="resultMap">
-		select * from t_province where data_state = 1 and account = #{account}
-	</select>
-
-	<select id="deleteById" resultType="java.lang.Integer">
-		DELETE T_user where id = #{id,jdbcType=DECIMAL}
-	</select>
-	
-	<update id="deleteByIdInLogic">
-		update t_province set data_state = 0 where id = #{id,jdbcType=DECIMAL}
-	</update>
-
-
-	<insert id="insert">
-		insert into T_user (
-			<include refid="insert_columns" />
-		)
-		values
-		(
-			#{obj.account},
-			#{obj.password},
-			#{obj.token},
-			#{obj.name},
-			#{obj.gender},
-			#{obj.age},
-			#{obj.telephone},
-			#{obj.mobile},
-			#{obj.qq},
-			#{obj.weiXin},
-			#{obj.email},
-			#{obj.homeAddress},
-			#{obj.address},
-			#{obj.idCardNo},
-			#{obj.type},
-			#{obj.loginState},
-			#{obj.educationId},
-			#{obj.dataState},
-			#{obj.createTime}
-		)
-	</insert>
 </mapper>
