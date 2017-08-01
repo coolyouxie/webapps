@@ -114,7 +114,7 @@
 		select * from t_company where data_state = 1 and name = #{name}
 	</select>
 
-	<delete id="deleteById" resultType="java.lang.Integer">
+	<delete id="deleteById">
 		DELETE t_company where id = #{id,jdbcType=DECIMAL}
 	</delete>
 
