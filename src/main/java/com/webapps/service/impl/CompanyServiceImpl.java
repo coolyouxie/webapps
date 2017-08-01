@@ -29,7 +29,7 @@ public class CompanyServiceImpl implements ICompanyService {
 		int startRow = page.getStartRow();
 		int endRow = page.getEndRow();
 		int count = iCompanyMapper.queryCount(company);
-		List<Company> list = iCompanyMapper.queryCompanyList(startRow, endRow, company);
+		List<Company> list = iCompanyMapper.queryPage(startRow, endRow, company);
 		page.setResultList(list);
 		page.setRecords(count);
 		return page;

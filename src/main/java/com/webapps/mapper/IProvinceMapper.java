@@ -11,11 +11,7 @@ import com.webapps.common.form.ProvinceRequestForm;
 /**
  * Created by xieshuai on 2017-6-28.
  */
-public interface IProvinceMapper extends IBaseMapper<Province>{
-	
-	public int queryCount(@Param("province")ProvinceRequestForm province);
-	
-	public List<Province> queryProvinceList(@Param("startRow")int startRow,@Param("endRow")int endRow,@Param("Province")ProvinceRequestForm province);
+public interface IProvinceMapper extends IBaseMapper<Province,ProvinceRequestForm>{
 	
 	public Province getByCode(String code);
 	

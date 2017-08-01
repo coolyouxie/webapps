@@ -49,28 +49,28 @@
 		left join t_company tc on tc.id = tre.company_id
 		<trim prefix="WHERE" prefixOverrides="AND">
 			data_state = 1 
-			<if test="recommend.keyWords !=null and recommend.keyWords != ''">
+			<if test="obj.keyWords !=null and obj.keyWords != ''">
 				AND (
-					tu.name like concat('%',#{recommend.keyWords},'%') 
+					tu.name like concat('%',#{obj.keyWords},'%') 
 					or
-					tr.name like concat('%',#{recommend.keyWords},'%')
+					tr.name like concat('%',#{obj.keyWords},'%')
 					or
-					tre.title like concat('%',#{recommend.keyWords},'%')
+					tre.title like concat('%',#{obj.keyWords},'%')
 					or
-					tc.name like concat('%',#{recommend.keyWords},'%')
+					tc.name like concat('%',#{obj.keyWords},'%')
 				)
 			</if>
-			<if test="recommend.mobile != null and recommend.mobile != ''">
-				and mobile = #{recommend.mobile,jdbcType=VARCHAR}
+			<if test="obj.mobile != null and obj.mobile != ''">
+				and mobile = #{obj.mobile,jdbcType=VARCHAR}
 			</if>
-			<if test="recommend.type != null and recommend.type != ''">
-				and type = #{recommend.type,jdbcType=DECIMAL}
+			<if test="obj.type != null and obj.type != ''">
+				and type = #{obj.type,jdbcType=DECIMAL}
 			</if>
 		</trim>
 	</select>
 
 	<!-- 分页查询行政区信息 -->
-	<select id="queryRecommendList" resultMap="resultMap">
+	<select id="queryPage" resultMap="resultMap">
 		<include refid="ORACLE.paginationStart" />
 		SELECT
 		<include refid="select_columns" />
@@ -80,39 +80,27 @@
 		left join t_company tc on tc.id = tre.company_id
 		<trim prefix="WHERE" prefixOverrides="AND">
 			data_state = 1 
-			<if test="recommend.keyWords !=null and recommend.keyWords != ''">
+			<if test="obj.keyWords !=null and obj.keyWords != ''">
 				AND (
-					tu.name like concat('%',#{recommend.keyWords},'%') 
+					tu.name like concat('%',#{obj.keyWords},'%') 
 					or
-					tr.name like concat('%',#{recommend.keyWords},'%')
+					tr.name like concat('%',#{obj.keyWords},'%')
 					or
-					tre.title like concat('%',#{recommend.keyWords},'%')
+					tre.title like concat('%',#{obj.keyWords},'%')
 					or
-					tc.name like concat('%',#{recommend.keyWords},'%')
+					tc.name like concat('%',#{obj.keyWords},'%')
 				)
 			</if>
-			<if test="recommend.mobile != null and recommend.mobile != ''">
-				and mobile = #{recommend.mobile,jdbcType=VARCHAR}
+			<if test="obj.mobile != null and obj.mobile != ''">
+				and mobile = #{obj.mobile,jdbcType=VARCHAR}
 			</if>
-			<if test="recommend.type != null and recommend.type != ''">
-				and type = #{recommend.type,jdbcType=DECIMAL}
+			<if test="obj.type != null and obj.type != ''">
+				and type = #{obj.type,jdbcType=DECIMAL}
 			</if>
 		</trim>
 		order by name
 		<include refid="ORACLE.paginationEnd" />
 	</select>
-	
-	<!-- 用于初始化数据时使用 -->
-	<update id="batchUpdate">
-		<foreach collection="list" item="item" index="index" open="" close="" separator=";">
-			update t_recommend
-			<set>
-				parent_id=#{item.parentId},
-				level = #{item.level}
-			</set>
-			where id = #{item.id}
-         </foreach>
-	</update>
 	
 	<insert id="insert">
 		insert into t_recommend 

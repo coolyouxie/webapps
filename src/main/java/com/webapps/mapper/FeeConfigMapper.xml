@@ -34,19 +34,9 @@
 		select <include refid="select_columns" /> from t_fee_config where data_state = 1
 	</select>
 	
-	<!-- 根据行政区号查询 -->
-	<select id="getByCode" resultMap="resultMap">
-		select <include refid="select_columns" /> from t_fee_config where code = #{code}
-	</select>
-	
-	<!-- 根据父级行政区号查询 -->
-	<select id="queryByParentId" resultMap="resultMap">
-		select <include refid="select_columns" /> from t_fee_config where parent_id = #{parentId}
-	</select>
-	
 	<!-- 根据行政区等查询 -->
-	<select id="queryByLevel" resultMap="resultMap">
-		select <include refid="select_columns" /> from t_fee_config where level = #{level}
+	<select id="queryByType" resultMap="resultMap">
+		select <include refid="select_columns" /> from t_fee_config where type = #{type}
 	</select>
 	
 	<!-- 查询行政区总数 -->
@@ -54,40 +44,28 @@
 		SELECT count(1) FROM t_fee_config
 		<trim prefix="WHERE" prefixOverrides="AND">
 			data_state = 1 
-			<if test="province.keyWords !=null and province.keyWords != ''">
-				AND name like concat('%',#{province.keyWords},'%')
+			<if test="feeConfig.keyWords !=null and feeConfig.keyWords != ''">
+				AND title like concat('%',#{feeConfig.keyWords},'%')
 			</if>
-			<if test="province.level != null and province.level != ''">
-				and level = #{province.level,jdbcType=DECIMAL}
-			</if>
-			<if test="province.code != null and province.code != ''">
-				and code = #{province.code,jdbcType=VARCHAR}
-			</if>
-			<if test="province.parentId != null and province.parentId != ''">
-				and parent_id = #{province.parentId,jdbcType=DECIMAL}
+			<if test="feeConfig.type != null and feeConfig.type != ''">
+				and type = #{feeConfig.type,jdbcType=DECIMAL}
 			</if>
 		</trim>
 	</select>
 
 	<!-- 分页查询行政区信息 -->
-	<select id="queryProvinceList" resultMap="resultMap">
+	<select id="queryPage" resultMap="resultMap">
 		<include refid="ORACLE.paginationStart" />
 		SELECT
 		<include refid="select_columns" />
 		FROM t_fee_config
 		<trim prefix="WHERE" prefixOverrides="AND">
 			data_state = 1 
-			<if test="province.keyWords !=null and province.keyWords != ''">
-				AND name like concat('%',#{province.keyWords},'%')
+			<if test="feeConfig.keyWords !=null and feeConfig.keyWords != ''">
+				AND title like concat('%',#{feeConfig.keyWords},'%')
 			</if>
-			<if test="province.level != null and province.level != ''">
-				and level = #{province.level,jdbcType=DECIMAL}
-			</if>
-			<if test="province.code != null and province.code != ''">
-				and code = #{province.code,jdbcType=VARCHAR}
-			</if>
-			<if test="province.parentId != null and province.parentId != ''">
-				and parent_id = #{province.parentId,jdbcType=DECIMAL}
+			<if test="feeConfig.type != null and feeConfig.type != ''">
+				and type = #{feeConfig.type,jdbcType=DECIMAL}
 			</if>
 		</trim>
 		order by name
@@ -95,12 +73,12 @@
 	</select>
 	
 	<!-- 用于初始化数据时使用 -->
-	<update id="batchUpdate">
+	<update id="batchUpdateToDelete">
 		<foreach collection="list" item="item" index="index" open="" close="" separator=";">
 			update t_fee_config
 			<set>
-				parent_id=#{item.parentId},
-				level = #{item.level}
+				data_state=#{item.dataState},
+				update_time = now()
 			</set>
 			where id = #{item.id}
          </foreach>

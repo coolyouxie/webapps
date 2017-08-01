@@ -96,63 +96,63 @@
 		SELECT count(1) FROM t_user
 		<trim prefix="WHERE" prefixOverrides="AND">
 			data_state = 1 
-			<if test="user.keyWords !=null and user.keyWords != ''">
+			<if test="obj.keyWords !=null and obj.keyWords != ''">
 				AND (
-					name like concat('%', #{user.keyWords}, '%')
+					name like concat('%', #{obj.keyWords}, '%')
 					or
-					account like concat('%', #{user.keyWords}, '%')
+					account like concat('%', #{obj.keyWords}, '%')
 					or
-					id_card_no like concat('%', #{user.keyWords}, '%')
+					id_card_no like concat('%', #{obj.keyWords}, '%')
 					)
 				
 			</if>
-			<if test="user.age != null and user.age != ''">
-				and age = #{user.age,jdbcType=DECIMAL}
+			<if test="obj.age != null and obj.age != ''">
+				and age = #{obj.age,jdbcType=DECIMAL}
 			</if>
-			<if test="user.gender != null and user.gender != ''">
-				and gender = #{user.gender,jdbcType=DECIMAL}
+			<if test="obj.gender != null and obj.gender != ''">
+				and gender = #{obj.gender,jdbcType=DECIMAL}
 			</if>
-			<if test="user.educationId != null and user.educationId != ''">
-				and education_Id = #{user.educationId,jdbcType=DECIMAL}
+			<if test="obj.educationId != null and obj.educationId != ''">
+				and education_Id = #{obj.educationId,jdbcType=DECIMAL}
 			</if>
-			<if test="user.userType != null and user.userType != ''">
-				and user_type = #{user.userType,jdbcType=DECIMAL}
+			<if test="obj.userType != null and obj.userType != ''">
+				and user_type = #{obj.userType,jdbcType=DECIMAL}
 			</if>
 		</trim>
 	</select>
 
 	<!-- 根据productId获取product -->
-	<select id="queryUserList" resultMap="resultMap">
+	<select id="queryPage" resultMap="resultMap">
 		<include refid="ORACLE.paginationStart" />
 		SELECT
 		<include refid="select_columns" />
 		FROM t_user
 		<trim prefix="WHERE" prefixOverrides="AND">
 			data_state = 1 
-			<if test="user.keyWords !=null and user.keyWords != ''">
+			<if test="obj.keyWords !=null and obj.keyWords != ''">
 				AND (
-					name like concat('%', #{user.keyWords}, '%')
+					name like concat('%', #{obj.keyWords}, '%')
 					or
-					account like concat('%', #{user.keyWords}, '%')
+					account like concat('%', #{obj.keyWords}, '%')
 					or
-					id_card_no like concat('%', #{user.keyWords}, '%')
+					id_card_no like concat('%', #{obj.keyWords}, '%')
 					)
 				
 			</if>
-			<if test="user.name !=null and user.name != ''">
-				AND name = #{user.name,jdbcType=VARCHAR}
+			<if test="obj.name !=null and obj.name != ''">
+				AND name = #{obj.name,jdbcType=VARCHAR}
 			</if>
-			<if test="user.age != null and user.age != ''">
-				and age = #{user.age,jdbcType=DECIMAL}
+			<if test="obj.age != null and obj.age != ''">
+				and age = #{obj.age,jdbcType=DECIMAL}
 			</if>
-			<if test="user.gender != null and user.gender != ''">
-				and gender = #{user.gender,jdbcType=VARCHAR}
+			<if test="obj.gender != null and obj.gender != ''">
+				and gender = #{obj.gender,jdbcType=VARCHAR}
 			</if>
-			<if test="user.educationId != null and user.educationId != ''">
-				and education_Id = #{user.educationId,jdbcType=DECIMAL}
+			<if test="obj.educationId != null and obj.educationId != ''">
+				and education_Id = #{obj.educationId,jdbcType=DECIMAL}
 			</if>
-			<if test="user.userType != null and user.userType != ''">
-				and user_type = #{user.userType,jdbcType=VARCHAR}
+			<if test="obj.userType != null and obj.userType != ''">
+				and user_type = #{obj.userType,jdbcType=VARCHAR}
 			</if>
 		</trim>
 		order by name

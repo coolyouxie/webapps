@@ -82,28 +82,28 @@
 		SELECT count(1) FROM t_company
 		<trim prefix="WHERE" prefixOverrides="AND">
 			data_state = 1
-			<if test="company.keyWords !=null and company.keyWords != ''">
-				AND name like concat('%',#{company.keyWords},'%')
+			<if test="obj.keyWords !=null and obj.keyWords != ''">
+				AND name like concat('%',#{obj.keyWords},'%')
 			</if>
-			<if test="company.industryId != null and company.industryId != ''">
-				and industry_id = #{company.industryId,jdbcType=DECIMAL}
+			<if test="obj.industryId != null and obj.industryId != ''">
+				and industry_id = #{obj.industryId,jdbcType=DECIMAL}
 			</if>
 		</trim>
 	</select>
 
 	<!-- 根据productId获取product -->
-	<select id="queryCompanyList" resultMap="resultMap">
+	<select id="queryPage" resultMap="resultMap">
 		<include refid="ORACLE.paginationStart" />
 		SELECT
 		<include refid="select_columns" />
 		FROM t_company
 		<trim prefix="WHERE" prefixOverrides="AND">
 			data_state = 1
-			<if test="company.keyWords !=null and company.keyWords != ''">
-				AND name like concat('%',#{company.keyWords},'%')
+			<if test="obj.keyWords !=null and obj.keyWords != ''">
+				AND name like concat('%',#{obj.keyWords},'%')
 			</if>
-			<if test="company.industryId != null and company.industryId != ''">
-				and industry_id = #{company.industryId,jdbcType=DECIMAL}
+			<if test="obj.industryId != null and obj.industryId != ''">
+				and industry_id = #{obj.industryId,jdbcType=DECIMAL}
 			</if>
 		</trim>
 		order by name
@@ -114,9 +114,9 @@
 		select * from t_company where data_state = 1 and name = #{name}
 	</select>
 
-	<select id="deleteById" resultType="java.lang.Integer">
+	<delete id="deleteById" resultType="java.lang.Integer">
 		DELETE t_company where id = #{id,jdbcType=DECIMAL}
-	</select>
+	</delete>
 
 	<update id="deleteByIdInLogic">
 		update t_company set data_state = 0 where id = #{id,jdbcType=DECIMAL}

@@ -5,13 +5,11 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.dao.DuplicateKeyException;
 
-import com.webapps.common.entity.Recommend;
-
 
 /**
  * Created by xieshuai on 2017-6-28.
  */
-public interface IBaseMapper<T> {
+public interface IBaseMapper<T,t extends T> {
 
     public T getById(Integer id);
 
@@ -22,5 +20,11 @@ public interface IBaseMapper<T> {
     public int insert(@Param("obj")T t) throws DuplicateKeyException;
     
     public List<T> queryAll();
+    
+	public int deleteByIdInLogic(Integer id);
+	
+	public int queryCount(@Param("obj")T obj);
+
+    public List<T> queryPage(@Param("startRow")int startRow,@Param("endRow")int endRow,@Param("obj")t obj);
 
 }

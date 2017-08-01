@@ -57,40 +57,40 @@
 		SELECT count(1) FROM t_province
 		<trim prefix="WHERE" prefixOverrides="AND">
 			data_state = 1 
-			<if test="province.keyWords !=null and province.keyWords != ''">
-				AND name like concat('%',#{province.keyWords},'%')
+			<if test="obj.keyWords !=null and obj.keyWords != ''">
+				AND name like concat('%',#{obj.keyWords},'%')
 			</if>
-			<if test="province.level != null and province.level != ''">
-				and level = #{province.level,jdbcType=DECIMAL}
+			<if test="obj.level != null and obj.level != ''">
+				and level = #{obj.level,jdbcType=DECIMAL}
 			</if>
-			<if test="province.code != null and province.code != ''">
-				and code = #{province.code,jdbcType=VARCHAR}
+			<if test="obj.code != null and obj.code != ''">
+				and code = #{obj.code,jdbcType=VARCHAR}
 			</if>
-			<if test="province.parentId != null and province.parentId != ''">
-				and parent_id = #{province.parentId,jdbcType=DECIMAL}
+			<if test="obj.parentId != null and obj.parentId != ''">
+				and parent_id = #{obj.parentId,jdbcType=DECIMAL}
 			</if>
 		</trim>
 	</select>
 
 	<!-- 分页查询行政区信息 -->
-	<select id="queryProvinceList" resultMap="resultMap">
+	<select id="queryPage" resultMap="resultMap">
 		<include refid="ORACLE.paginationStart" />
 		SELECT
 		<include refid="select_columns" />
 		FROM t_province
 		<trim prefix="WHERE" prefixOverrides="AND">
 			data_state = 1 
-			<if test="province.keyWords !=null and province.keyWords != ''">
-				AND name like concat('%',#{province.keyWords},'%')
+			<if test="obj.keyWords !=null and obj.keyWords != ''">
+				AND name like concat('%',#{obj.keyWords},'%')
 			</if>
-			<if test="province.level != null and province.level != ''">
-				and level = #{province.level,jdbcType=DECIMAL}
+			<if test="obj.level != null and obj.level != ''">
+				and level = #{obj.level,jdbcType=DECIMAL}
 			</if>
-			<if test="province.code != null and province.code != ''">
-				and code = #{province.code,jdbcType=VARCHAR}
+			<if test="obj.code != null and obj.code != ''">
+				and code = #{obj.code,jdbcType=VARCHAR}
 			</if>
-			<if test="province.parentId != null and province.parentId != ''">
-				and parent_id = #{province.parentId,jdbcType=DECIMAL}
+			<if test="obj.parentId != null and obj.parentId != ''">
+				and parent_id = #{obj.parentId,jdbcType=DECIMAL}
 			</if>
 		</trim>
 		order by name

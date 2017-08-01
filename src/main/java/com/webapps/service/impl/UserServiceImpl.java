@@ -31,7 +31,7 @@ public class UserServiceImpl implements IUserService {
 		int startRow = page.getStartRow();
 		int endRow = page.getEndRow();
 		int count = iUserMapper.queryCount(user);
-		List<User> list = iUserMapper.queryUserList(startRow, endRow, user);
+		List<User> list = iUserMapper.queryPage(startRow, endRow, user);
 		page.setResultList(list);
 		page.setRecords(count);
 		return page;
