@@ -6,7 +6,7 @@ import com.webapps.common.form.UserRequestForm;
 /**
  * Created by xieshuai on 2017-6-28.
  */
-public interface IUserMapper extends IBaseMapper<User,UserRequestForm>{
+public interface IUserMapper extends IBaseMapper<User>,IPageMapper<User,UserRequestForm>{
 	
 	public User queryUserByAccount(String account);
 	

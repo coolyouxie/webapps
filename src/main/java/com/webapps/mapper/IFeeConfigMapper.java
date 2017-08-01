@@ -6,6 +6,6 @@ import com.webapps.common.form.FeeConfigRequestForm;
 /**
  * Created by xieshuai on 2017-6-28.
  */
-public interface IFeeConfigMapper extends IBaseMapper<FeeConfig,FeeConfigRequestForm>{
+public interface IFeeConfigMapper extends IBaseMapper<FeeConfig>,IPageMapper<FeeConfig,FeeConfigRequestForm>{
 	
 }

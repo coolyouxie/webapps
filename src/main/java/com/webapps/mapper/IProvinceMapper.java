@@ -11,7 +11,7 @@ import com.webapps.common.form.ProvinceRequestForm;
 /**
  * Created by xieshuai on 2017-6-28.
  */
-public interface IProvinceMapper extends IBaseMapper<Province,ProvinceRequestForm>{
+public interface IProvinceMapper extends IBaseMapper<Province>{
 	
 	public Province getByCode(String code);
 	

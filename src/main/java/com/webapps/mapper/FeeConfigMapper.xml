@@ -44,11 +44,11 @@
 		SELECT count(1) FROM t_fee_config
 		<trim prefix="WHERE" prefixOverrides="AND">
 			data_state = 1 
-			<if test="feeConfig.keyWords !=null and feeConfig.keyWords != ''">
-				AND title like concat('%',#{feeConfig.keyWords},'%')
+			<if test="obj.keyWords !=null and obj.keyWords != ''">
+				AND title like concat('%',#{obj.keyWords},'%')
 			</if>
-			<if test="feeConfig.type != null and feeConfig.type != ''">
-				and type = #{feeConfig.type,jdbcType=DECIMAL}
+			<if test="obj.type != null and obj.type != ''">
+				and type = #{obj.type,jdbcType=DECIMAL}
 			</if>
 		</trim>
 	</select>
@@ -61,11 +61,11 @@
 		FROM t_fee_config
 		<trim prefix="WHERE" prefixOverrides="AND">
 			data_state = 1 
-			<if test="feeConfig.keyWords !=null and feeConfig.keyWords != ''">
-				AND title like concat('%',#{feeConfig.keyWords},'%')
+			<if test="obj.keyWords !=null and obj.keyWords != ''">
+				AND title like concat('%',#{obj.keyWords},'%')
 			</if>
-			<if test="feeConfig.type != null and feeConfig.type != ''">
-				and type = #{feeConfig.type,jdbcType=DECIMAL}
+			<if test="obj.type != null and obj.type != ''">
+				and type = #{obj.type,jdbcType=DECIMAL}
 			</if>
 		</trim>
 		order by name

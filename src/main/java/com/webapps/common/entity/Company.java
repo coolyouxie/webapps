@@ -100,4 +100,12 @@ public class Company extends Entity{
 		this.brief = brief;
 	}
 
+	public List<Picture> getPictures() {
+		return pictures;
+	}
+
+	public void setPictures(List<Picture> pictures) {
+		this.pictures = pictures;
+	}
+
 }

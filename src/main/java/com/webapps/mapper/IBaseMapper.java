@@ -9,7 +9,7 @@ import org.springframework.dao.DuplicateKeyException;
 /**
  * Created by xieshuai on 2017-6-28.
  */
-public interface IBaseMapper<T,t extends T> {
+public interface IBaseMapper<T> {
 
     public T getById(Integer id);
 
@@ -22,9 +22,5 @@ public interface IBaseMapper<T,t extends T> {
     public List<T> queryAll();
     
 	public int deleteByIdInLogic(Integer id);
-	
-	public int queryCount(@Param("obj")T obj);
-
-    public List<T> queryPage(@Param("startRow")int startRow,@Param("endRow")int endRow,@Param("obj")t obj);
 
 }
