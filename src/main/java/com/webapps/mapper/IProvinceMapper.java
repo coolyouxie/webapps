@@ -17,8 +17,6 @@ public interface IProvinceMapper extends IBaseMapper<Province>{
 	
 	public List<Province> queryProvinceList(@Param("startRow")int startRow,@Param("endRow")int endRow,@Param("Province")ProvinceRequestForm province);
 	
-	public List<Province> queryAll();
-	
 	public Province getByCode(String code);
 	
 	public int batchUpdate(List<Province> list);

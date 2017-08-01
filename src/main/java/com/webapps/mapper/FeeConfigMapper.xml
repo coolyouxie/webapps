@@ -1,60 +1,57 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.webapps.mapper.IProvinceMapper">
-	<resultMap id="resultMap" type="com.webapps.common.entity.Province">
+<mapper namespace="com.webapps.mapper.IFeeConfigMapper">
+	<resultMap id="resultMap" type="com.webapps.common.entity.FeeConfig">
 		<id column="ID" jdbcType="DECIMAL" property="id" />
-		<result column="NAME" jdbcType="VARCHAR" property="name" />
-		<result column="code" jdbcType="VARCHAR" property="code" />
-		<result column="parent_id" jdbcType="DECIMAL" property="parentId" />
-		<result column="longitude" jdbcType="DECIMAL" property="longitude" />
-		<result column="latitude" jdbcType="DECIMAL" property="latitude" />
-		<result column="level" jdbcType="DECIMAL" property="level" />
+		<result column="title" jdbcType="VARCHAR" property="title" />
+		<result column="remark" jdbcType="VARCHAR" property="remark" />
+		<result column="type" jdbcType="DECIMAL" property="type" />
+		<result column="fee" jdbcType="DECIMAL" property="fee" />
 		<result column="data_state" jdbcType="DECIMAL" property="dataState" />
 		<result column="create_time" jdbcType="VARCHAR" property="createTime" />
 		<result column="UPDATE_TIME" jdbcType="VARCHAR" property="updateTime" />
 	</resultMap>
 
 	<sql id="select_columns">
-		ID,level,code,parentId,name, longitude, latitude,data_state,CREATE_TIME,UPDATE_TIME
+		ID,title,remark,type,fee, data_state,CREATE_TIME,UPDATE_TIME
 	</sql>
 
 	<sql id="insert_columns">
-		level,code,parentId,name, longitude, latitude,data_state,CREATE_TIME
+		title,remark,type,fee, data_state,CREATE_TIME,UPDATE_TIME
 	</sql>
 	
 	<sql id="update_columns">
-		level,code,parentId,name, longitude, latitude,data_state,update_time
+		title,remark,type,fee, data_state,CREATE_TIME,UPDATE_TIME
 	</sql>
-
 	
 	<select id="getById" resultMap="resultMap">
-		select <include refid="select_columns" /> from t_province where id = #{id}
+		select <include refid="select_columns" /> from t_fee_config where id = #{id}
 	</select>
 	
 	<!-- 查询所有 -->
 	<select id="queryAll" resultMap="resultMap">
-		select <include refid="select_columns" /> from t_province
+		select <include refid="select_columns" /> from t_fee_config where data_state = 1
 	</select>
 	
 	<!-- 根据行政区号查询 -->
 	<select id="getByCode" resultMap="resultMap">
-		select <include refid="select_columns" /> from t_province where code = #{code}
+		select <include refid="select_columns" /> from t_fee_config where code = #{code}
 	</select>
 	
 	<!-- 根据父级行政区号查询 -->
 	<select id="queryByParentId" resultMap="resultMap">
-		select <include refid="select_columns" /> from t_province where parent_id = #{parentId}
+		select <include refid="select_columns" /> from t_fee_config where parent_id = #{parentId}
 	</select>
 	
 	<!-- 根据行政区等查询 -->
 	<select id="queryByLevel" resultMap="resultMap">
-		select <include refid="select_columns" /> from t_province where level = #{level}
+		select <include refid="select_columns" /> from t_fee_config where level = #{level}
 	</select>
 	
 	<!-- 查询行政区总数 -->
 	<select id="queryCount" resultType="java.lang.Integer">
-		SELECT count(1) FROM t_province
+		SELECT count(1) FROM t_fee_config
 		<trim prefix="WHERE" prefixOverrides="AND">
 			data_state = 1 
 			<if test="province.keyWords !=null and province.keyWords != ''">
@@ -77,7 +74,7 @@
 		<include refid="ORACLE.paginationStart" />
 		SELECT
 		<include refid="select_columns" />
-		FROM t_province
+		FROM t_fee_config
 		<trim prefix="WHERE" prefixOverrides="AND">
 			data_state = 1 
 			<if test="province.keyWords !=null and province.keyWords != ''">
@@ -100,7 +97,7 @@
 	<!-- 用于初始化数据时使用 -->
 	<update id="batchUpdate">
 		<foreach collection="list" item="item" index="index" open="" close="" separator=";">
-			update t_province
+			update t_fee_config
 			<set>
 				parent_id=#{item.parentId},
 				level = #{item.level}
