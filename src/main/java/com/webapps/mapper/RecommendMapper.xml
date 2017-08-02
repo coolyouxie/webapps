@@ -9,17 +9,19 @@
 		<result column="name" jdbcType="VARCHAR" property="name" />
 		<result column="mobile" jdbcType="VARCHAR" property="fee" />
 		<result column="state" jdbcType="DECIMAL" property="state" />
+		<result column="age" jdbcType="DECIMAL" property="age" />
+		<result column="gender" jdbcType="DECIMAL" property="gender" />
 		<result column="data_state" jdbcType="DECIMAL" property="dataState" />
 		<result column="create_time" jdbcType="VARCHAR" property="createTime" />
 		<result column="UPDATE_TIME" jdbcType="VARCHAR" property="updateTime" />
 	</resultMap>
 
 	<sql id="select_columns">
-		ID,user_id,recruitment_Id,name,mobile,state, data_state,CREATE_TIME,UPDATE_TIME
+		ID,user_id,recruitment_Id,name,mobile,age,gender,state, data_state,CREATE_TIME,UPDATE_TIME
 	</sql>
 
 	<sql id="insert_columns">
-		user_id,recruitment_Id,name,mobile,state, data_state,CREATE_TIME,UPDATE_TIME
+		user_id,recruitment_Id,name,mobile,age,gender,state, data_state,CREATE_TIME,UPDATE_TIME
 	</sql>
 	
 	<select id="getById" resultMap="resultMap">
@@ -113,6 +115,8 @@
 			#{obj.recruitmentId},
 			#{obj.name},
 			#{obj.mobile},
+			#{obj.age},
+			#{obj.gender},
 			#{obj.state},
 			#{obj.dataState},
 			#{obj.createTime}
@@ -127,6 +131,8 @@
 			mobile = #{obj.mobile},
 			state = #{obj.state},
 			data_state = #{obj.dataState},
+			age = #{obj.age},
+			gender = #{obj.gender},
 			update_time = now()
 		where id = #{id}
 	</update>

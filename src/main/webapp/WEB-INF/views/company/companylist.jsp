@@ -157,6 +157,9 @@
 					<a type='button' class="btn btn-primary btn-sm" href="${ctx}/company/toCompanyInfoPage?type=add">
 						添加公司
 					</a>
+					<a type='button' class="btn btn-primary btn-sm" href="${ctx}/company/toCompanyInfoPage?type=addPicture">
+						添加图片
+					</a>
 				</div>
 			</div>
 		</form>

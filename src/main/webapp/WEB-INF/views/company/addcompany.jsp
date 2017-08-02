@@ -56,6 +56,13 @@
 			</div>
 			
 			<div class="form-group">
+				<label class="col-md-2 control-label" for="contactName">联系人：</label>
+				<div class="col-md-3" >
+					<input type="text" id="contactName" name="contactName" class="form-control" placeholder="联系人" >
+				</div>
+			</div>
+			
+			<div class="form-group">
 				<label class="col-md-2 control-label" for="telephone">联系电话：</label>
 				<div class="col-md-3" >
 					<input type="text" id="telephone" name="telephone" class="form-control" placeholder="请输入联系电话" >
@@ -87,6 +94,13 @@
 				<label class="col-md-2 control-label" for="address">地址：</label>
 				<div class="col-md-3" >
 					<input type="text" id="address" name="address" class="form-control" placeholder="请输入公司地址" >
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label class="col-md-2 control-label" for="briefs">公司简介：</label>
+				<div class="col-md-3" >
+					<input type="textarea" id="briefs" name="briefs" placeholder="请输入公司简介" >
 				</div>
 			</div>
 			

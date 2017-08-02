@@ -17,8 +17,10 @@ public class Company extends Entity{
     private String enterpriseLegalPerson;
     private BigDecimal longitude;
     private BigDecimal latitude;
-    private String brief;
+    private String briefs;
     private List<Picture> pictures;
+    
+    private String contactName;
 
     public String getName() {
         return name;
@@ -92,12 +94,12 @@ public class Company extends Entity{
 		this.latitude = latitude;
 	}
 
-	public String getBrief() {
-		return brief;
+	public String getBriefs() {
+		return briefs;
 	}
 
-	public void setBrief(String brief) {
-		this.brief = brief;
+	public void setBriefs(String briefs) {
+		this.briefs = briefs;
 	}
 
 	public List<Picture> getPictures() {
@@ -106,6 +108,14 @@ public class Company extends Entity{
 
 	public void setPictures(List<Picture> pictures) {
 		this.pictures = pictures;
+	}
+
+	public String getContactName() {
+		return contactName;
+	}
+
+	public void setContactName(String contactName) {
+		this.contactName = contactName;
 	}
 
 }

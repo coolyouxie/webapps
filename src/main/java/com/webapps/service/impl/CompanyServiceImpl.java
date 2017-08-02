@@ -72,7 +72,7 @@ public class CompanyServiceImpl implements ICompanyService {
 	@Override
 	public ResultDto<Company> deleteCompanyById(Integer id) throws Exception {
 		ResultDto<Company> dto = new ResultDto<Company>();
-		iCompanyMapper.deleteById(id);
+		iCompanyMapper.deleteByIdInLogic(id);
 		dto.setResult("success");
 		return dto;
 	}

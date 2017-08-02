@@ -47,6 +47,9 @@ public class CompanyController {
 		if("add".equals(type)){
 			return "/company/addcompany";
 		}
+		if("addPicture".equals(type)){
+			return "/company/addcompanypicture";
+		}
 		//如果不是新增，则先根据ID查询出公司信息后再跳转页面
 		try {
 			Company company = iCompanyService.getById(id);
@@ -63,7 +66,7 @@ public class CompanyController {
 	}
 	
 	@RequestMapping("/saveCompany")
-	public String saveCompany(Model model,Company company,HttpServletRequest request,HttpServletResponse response){
+	public String saveCompany(Model model,CompanyRequestForm company,HttpServletRequest request,HttpServletResponse response){
 		if(null!=company){
 			ResultDto<Company> dto = null;
 			try {

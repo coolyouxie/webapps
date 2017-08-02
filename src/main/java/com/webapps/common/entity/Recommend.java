@@ -11,6 +11,10 @@ public class Recommend extends Entity {
 	private String mobile;
 	
 	private Integer state;
+	
+	private int gender;
+	
+	private int age;
 
 	public Integer getUserId() {
 		return userId;
@@ -50,6 +54,22 @@ public class Recommend extends Entity {
 
 	public void setState(Integer state) {
 		this.state = state;
+	}
+
+	public int getGender() {
+		return gender;
+	}
+
+	public void setGender(int gender) {
+		this.gender = gender;
+	}
+
+	public int getAge() {
+		return age;
+	}
+
+	public void setAge(int age) {
+		this.age = age;
 	}
 	
 	

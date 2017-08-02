@@ -6,13 +6,15 @@
 		<id column="ID" jdbcType="DECIMAL" property="id" />
 		<result column="NAME" jdbcType="VARCHAR" property="name" />
 		<result column="telephone" jdbcType="VARCHAR" property="telephone" />
+		<result column="contact_Name" jdbcType="VARCHAR" property="contactName" />
 		<result column="mobile" jdbcType="VARCHAR" property="mobile" />
 		<result column="enterprise_legal_person" jdbcType="VARCHAR" property="enterpriseLegalPerson" />
 		<result column="email" jdbcType="VARCHAR" property="email" />
 		<result column="address" jdbcType="VARCHAR" property="address" />
 		<result column="data_state" jdbcType="DECIMAL" property="dataState" />
-		<result column="breif" jdbcType="VARCHAR" property="breif" />
+		<result column="briefs" jdbcType="VARCHAR" property="briefs" />
 		<result column="industry_id" jdbcType="DECIMAL" property="industryId" />
+		<result column="environment" jdbcType="VARCHAR" property="environment" />
 		<result column="latitude" jdbcType="DECIMAL" property="latitude" />
 		<result column="longitude" jdbcType="DECIMAL" property="longitude" />
 		<result column="create_time" jdbcType="VARCHAR" property="createTime" />
@@ -25,6 +27,7 @@
 		name ,
 		address,
 		telephone,
+		contact_Name
 		mobile,
 		email,
 		industry_id,
@@ -34,13 +37,15 @@
 		data_state,
 		longitude,
 		latitude,
-		breif
+		briefs,
+		environment
 	</sql>
 
 	<sql id="insert_columns">
 		name,
 		address,
 		telephone,
+		contact_Name
 		mobile,
 		email,
 		industry_id,
@@ -49,11 +54,12 @@
 		data_state,
 		longitude,
 		latitude,
-		breif
+		briefs,
+		environment
 	</sql>
 
 	<select id="getById" resultMap="resultMap">
-		select * from t_company where id = #{id}
+		select <include refid="select_columns" /> from t_company where id = #{id}
 	</select>
 
 	<update id="updateById">
@@ -61,6 +67,9 @@
 		<set>
 			<if test="obj.name != null and obj.name != ''">
 				name = #{obj.name,jdbcType=VARCHAR},
+			</if>
+			<if test="obj.contactName != null and obj.contactName != ''">
+				contact_name = #{obj.contactName}
 			</if>
 			<if test="obj.telephone != null and obj.telephone != null and obj.telephone != ''">
 				telephone = #{obj.telephone,jdbcType=VARCHAR},
@@ -76,7 +85,8 @@
 			latitude = #{obj.latitude,jdbcType=DECIMAL},
 			longitude = #{obj.longitude,jdbcType=DECIMAL},
 			mobile = #{obj.mobile,jdbcType=VARCHAR},
-			breif = #{obj.breif,jdbcType=VARCHAR},
+			briefs = #{obj.briefs,jdbcType=VARCHAR},
+			enviroment = #{obj.environment},
 			update_time = now()
 		</set>
 		WHERE ID = #{id,jdbcType=DECIMAL}
@@ -103,8 +113,11 @@
 		FROM t_company
 		<trim prefix="WHERE" prefixOverrides="AND">
 			data_state = 1
-			<if test="obj.keyWords !=null and obj.keyWords != ''">
-				AND name like concat('%',#{obj.keyWords},'%')
+			<if test="obj.name !=null and obj.name != ''">
+				AND (name like concat('%',#{obj.name},'%')
+			</if>
+			<if test="obj.contactName !=null and obj.contactName != ''">
+				AND (contact_Name like concat('%',#{obj.contactName},'%')
 			</if>
 			<if test="obj.industryId != null and obj.industryId != ''">
 				and industry_id = #{obj.industryId,jdbcType=DECIMAL}
@@ -136,6 +149,7 @@
 			#{obj.name},
 			#{obj.address},
 			#{obj.telephone},
+			#{obj.contactName},
 			#{obj.mobile},
 			#{obj.email},
 			#{obj.industryId},
@@ -144,7 +158,8 @@
 			#{obj.dataState},
 			#{obj.longitude},
 			#{obj.latitude},
-			#{obj.breif}
+			#{obj.briefs},
+			#{obj.environment}
 		)
 	</insert>
 </mapper>
