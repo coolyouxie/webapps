@@ -42,6 +42,7 @@ public class PictureServiceImpl implements IPictureService {
 		String type = request.getParameter("type");
 		Integer id = Integer.valueOf(request.getParameter("id"));
 		int picType = 0;
+		Picture file = null;
 		if("company".equals(type)){
 			picType = 1;
 		}
@@ -53,30 +54,26 @@ public class PictureServiceImpl implements IPictureService {
         Iterator<String> fileIterator = multipartRequest.getFileNames();
 
         // 获取项目的相对路径（http://localhost:8080/file）
-        String requestURL = request.getRequestURL().toString();
-        String prePath = requestURL.substring(0, requestURL.indexOf("http://localhost:8080/webapps/"));
         while (fileIterator.hasNext()) {
             String fileKey = fileIterator.next();
             logger.debug("文件名为：" + fileKey);
-
             // 获取对应文件
             MultipartFile multipartFile = fileMap.get(fileKey);
             if (multipartFile.getSize() != 0L) {
                 validateImage(multipartFile);
                 // 调用saveImage方法保存
-                Picture file = saveImage(multipartFile);
-                file.setPicUrl(prePath);
+                file = saveImage(multipartFile);
                 file.setType(picType);
                 file.setFkId(id);
             }
         }
         
-		if(obj!=null){
-			if(obj.getId()==null){
-				int count = iPictureMapper.insert(obj);
+		if(file!=null){
+			if(file.getId()==null){
+				int count = iPictureMapper.insert(file);
 				return count ;
 			}else{
-				int count = iPictureMapper.updateById(obj.getId(), obj);
+				int count = iPictureMapper.updateById(obj.getId(), file);
 				return count ;
 			}
 		}
@@ -95,7 +92,9 @@ public class PictureServiceImpl implements IPictureService {
         picture.setType(1);
         logger.debug("文件保存路径：" + "d:/test");
         // 通过org.apache.commons.io.FileUtils的writeByteArrayToFile对图片进行保存
-        FileUtils.writeByteArrayToFile(new File("D:/test"+File.separator+fileName), image.getBytes());
+        FileUtils.writeByteArrayToFile(new File("fileupload/test"+File.separator+fileName), image.getBytes());
+        picture.setPicUrl("fileupload/test"+File.separator+fileName);
+        picture.setDataState(1);
         return picture;
     }
 

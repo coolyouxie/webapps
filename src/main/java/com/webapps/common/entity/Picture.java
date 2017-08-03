@@ -6,6 +6,8 @@ public class Picture extends Entity {
 	
 	private String picUrl;
 	
+	private String remark;
+	
 	private Integer type;
 	
 	public Integer getFkId() {
@@ -25,6 +27,12 @@ public class Picture extends Entity {
 	}
 	public void setType(Integer type) {
 		this.type = type;
+	}
+	public String getRemark() {
+		return remark;
+	}
+	public void setRemark(String remark) {
+		this.remark = remark;
 	}
 	
 

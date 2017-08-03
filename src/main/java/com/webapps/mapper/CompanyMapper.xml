@@ -140,7 +140,7 @@
 	</update>
 
 
-	<insert id="insert" useGeneratedKeys="true" keyProperty="id">
+	<insert id="insert" useGeneratedKeys="true" keyProperty="obj.id" parameterType="com.webapps.common.entity.Company">
 		insert into t_company (
 			<include refid="insert_columns" />
 		)

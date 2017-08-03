@@ -71,17 +71,19 @@ public class CompanyController {
 			ResultDto<Company> dto = null;
 			try {
 				dto = iCompanyService.saveCompany(company);
-				if("success".equals(dto.getResult())){
-					if(company.getId()==null){
-						model.addAttribute("id", dto.getData().getId());
-						return "/company/addcompanypicture";
-					}
-					return "/company/companylist";
+				if("insert_success".equals(dto.getResult())){
+					model.addAttribute("id", dto.getData().getId());
+					return "/company/addcompanypicture";
 				}
-				if("failed".equals(dto.getResult())){
+				if("insert_failed".equals(dto.getResult())){
 					model.addAttribute("company", company);
 					model.addAttribute("result",dto.getErrorMsg());
 					return "/company/addcompany";
+				}
+				if("update_success".equals(dto.getResult())){
+					model.addAttribute("company", company);
+					model.addAttribute("result",dto.getErrorMsg());
+					return "/company/companylist";
 				}
 			} catch (Exception e) {
 				e.printStackTrace();

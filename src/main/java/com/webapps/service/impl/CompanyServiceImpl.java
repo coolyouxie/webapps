@@ -44,9 +44,9 @@ public class CompanyServiceImpl implements ICompanyService {
 	@Override
 	public ResultDto<Company> saveCompany(Company company) throws Exception {
 		ResultDto<Company> dto = new ResultDto<Company>();
-		dto.setResult("success");
 		if(company.getId()!=null){
 			iCompanyMapper.updateById(company.getId(), company);
+			dto.setResult("update_success");
 			dto.setData(company);
 			return dto;
 		}else{
@@ -54,14 +54,15 @@ public class CompanyServiceImpl implements ICompanyService {
 				int result = iCompanyMapper.insert(company);
 				dto.setData(company);
 				if(result==0){
-					dto.setResult("fail");
+					dto.setResult("insert_fail");
 					dto.setErrorMsg("新增失败");
 					return dto;
 				}
+				dto.setResult("insert_success");
 			} catch (DuplicateKeyException e) {
 				logger.error(e.getMessage());
 				dto.setData(company);
-				dto.setResult("fail");
+				dto.setResult("insert_fail");
 				dto.setErrorMsg("该公司已被注册，请更换重试");
 				return dto;
 			}

@@ -17,7 +17,7 @@ public interface IBaseMapper<T> {
 
     public int updateById(@Param("id")Integer id,@Param("obj")T t);
 
-    public int insert(@Param("obj")T t) throws DuplicateKeyException;
+    public int insert(@Param("obj")T obj) throws DuplicateKeyException;
     
     public List<T> queryAll();
     
