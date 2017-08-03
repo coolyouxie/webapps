@@ -72,6 +72,10 @@ public class CompanyController {
 			try {
 				dto = iCompanyService.saveCompany(company);
 				if("success".equals(dto.getResult())){
+					if(company.getId()==null){
+						model.addAttribute("id", dto.getData().getId());
+						return "/company/addcompanypicture";
+					}
 					return "/company/companylist";
 				}
 				if("failed".equals(dto.getResult())){

@@ -52,8 +52,8 @@ public class CompanyServiceImpl implements ICompanyService {
 		}else{
 			try {
 				int result = iCompanyMapper.insert(company);
+				dto.setData(company);
 				if(result==0){
-					dto.setData(company);
 					dto.setResult("fail");
 					dto.setErrorMsg("新增失败");
 					return dto;

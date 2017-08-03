@@ -1,6 +1,5 @@
 package com.webapps.common.form;
 
-import java.io.File;
 import java.io.Serializable;
 
 import com.webapps.common.entity.Company;
@@ -16,7 +15,7 @@ public class CompanyRequestForm extends Company implements RequestForm,Serializa
 	 */
 	private String handleType;
 	
-	private File picture;
+	private Integer step;
 
 	public String getKeyWords() {
 		return keyWords;
@@ -34,12 +33,12 @@ public class CompanyRequestForm extends Company implements RequestForm,Serializa
 		this.handleType = handleType;
 	}
 
-	public File getPicture() {
-		return picture;
+	public Integer getStep() {
+		return step;
 	}
 
-	public void setPicture(File picture) {
-		this.picture = picture;
+	public void setStep(Integer step) {
+		this.step = step;
 	}
 
 }

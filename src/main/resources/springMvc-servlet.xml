@@ -29,41 +29,6 @@
 		<property name="order" value="1" />
 	</bean>
 
-	<!-- <bean id="freemarkerResolver"
-		class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">
-		<property name="order" value="0" />
-		<property name="prefix" value=""></property>
-		<property name="suffix" value=".ftl" />
-		页面上用于获取${request.contextPath}的值
-		<property name="requestContextAttribute" value="request" />
-		<property name="contentType" value="text/html;charset=utf-8" />
-		<property name="viewClass">
-			<value>org.springframework.web.servlet.view.freemarker.FreeMarkerView
-			</value>
-		</property>
-	</bean> -->
-
-	<!-- <bean id="freemarkerConfig"
-		class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
-		<property name="templateLoaderPath">
-			<value>/WEB-INF/ftl/</value>
-		</property>
-		<property name="freemarkerSettings">设置FreeMarker环境属性
-			<props>
-				<prop key="template_update_delay">5</prop>刷新模板的周期，单位为秒
-				<prop key="default_encoding">UTF-8</prop>模板的编码格式
-				<prop key="locale">UTF-8</prop>本地化设置
-				<prop key="datetime_format">yyyy-MM-dd HH:mm:ss</prop>
-				<prop key="time_format">HH:mm:ss</prop>
-				<prop key="number_format">0.####</prop>
-				<prop key="boolean_format">true,false</prop>
-				<prop key="whitespace_stripping">true</prop>
-				<prop key="tag_syntax">auto_detect</prop>
-				<prop key="url_escaping_charset">UTF-8</prop>
-			</props>
-		</property>
-	</bean> -->
-
 	<mvc:interceptors>
 		<!-- 使用bean定义一个Interceptor，直接定义在mvc:interceptors根下面的Interceptor将拦截所有的请求 -->
 		<mvc:interceptor>
@@ -90,4 +55,8 @@
 			<bean class="com.webapps.controller.interceptor.UserSessionVerifyInterceptor" />
 		</mvc:interceptor>
 	</mvc:interceptors>
+	
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="maxUploadSize" value="1024000000"></property>
+    </bean>
 </beans>

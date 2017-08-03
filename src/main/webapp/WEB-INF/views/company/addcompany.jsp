@@ -41,7 +41,7 @@
 <body>
 	<div class="container-fluid">
 		<div class="row">
-			<div class="col-md-3 col-md-offset-2">
+			<div class="col-md-4 col-md-offset-2">
 				<h4>
 					添加公司信息
 				</h4>
@@ -50,65 +50,72 @@
 		<form id="saveForm" class="form-horizontal" action="${pageContext.request.contextPath}/company/saveCompany"  method="post">
 			<div class="form-group">
 				<label class="col-md-2 control-label" for="name">公司名称：</label>
-				<div class="col-md-3" >
+				<div class="col-md-4" >
 					<input type="text" id="name" name="name" class="form-control" placeholder="请输入姓名" >
 				</div>
 			</div>
 			
 			<div class="form-group">
 				<label class="col-md-2 control-label" for="contactName">联系人：</label>
-				<div class="col-md-3" >
+				<div class="col-md-4" >
 					<input type="text" id="contactName" name="contactName" class="form-control" placeholder="联系人" >
 				</div>
 			</div>
 			
 			<div class="form-group">
 				<label class="col-md-2 control-label" for="telephone">联系电话：</label>
-				<div class="col-md-3" >
+				<div class="col-md-4" >
 					<input type="text" id="telephone" name="telephone" class="form-control" placeholder="请输入联系电话" >
 				</div>
 			</div>
 			
 			<div class="form-group">
 				<label class="col-md-2 control-label" for="mobile">手机号：</label>
-				<div class="col-md-3" >
+				<div class="col-md-4" >
 					<input type="mobile" id="mobile" name="mobile" class="form-control" placeholder="请输入手机号" >
 				</div>
 			</div>
 			
 			<div class="form-group">
 				<label class="col-md-2 control-label" for="email">email：</label>
-				<div class="col-md-3" >
+				<div class="col-md-4" >
 					<input type="email" id="email" name="email" class="form-control" placeholder="请输入email" >
 				</div>
 			</div>
 			
 			<div class="form-group">
 				<label class="col-md-2 control-label" for="enterpriseLegalPerson" >法人代表：</label>
-				<div class="col-md-3" >
+				<div class="col-md-4" >
 					<input type="text" id="enterpriseLegalPerson" name="enterpriseLegalPerson" class="form-control" placeholder="请输入法人代表">
 				</div>
 			</div>
 			
 			<div class="form-group">
 				<label class="col-md-2 control-label" for="address">地址：</label>
-				<div class="col-md-3" >
+				<div class="col-md-4" >
 					<input type="text" id="address" name="address" class="form-control" placeholder="请输入公司地址" >
 				</div>
 			</div>
 			
 			<div class="form-group">
 				<label class="col-md-2 control-label" for="briefs">公司简介：</label>
-				<div class="col-md-3" >
-					<input type="textarea" id="briefs" name="briefs" placeholder="请输入公司简介" >
+				<div class="col-md-4" >
+					<textarea class ="form-control" id="briefs" name="briefs" rows="5" ></textarea>
 				</div>
 			</div>
 			
 			<div class="form-group">
-				<label class="col-md-3 control-label"></label>
-				<div class="col-md-3">
+				<label class="col-md-2 control-label" for="briefs">公司环境：</label>
+				<div class="col-md-4" >
+					<textarea class ="form-control" id="environment" name=""environment"" rows="5" ></textarea>
+				</div>
+			</div>
+			
+			<div class="">
+				<label class="col-md-4 control-label"></label>
+				<div class="col-md-4">
 					<button type="submit" class="btn btn-primary">
-						保存
+						下一步
 					</button>
 				</div>
 			</div>

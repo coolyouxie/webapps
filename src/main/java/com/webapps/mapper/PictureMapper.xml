@@ -30,9 +30,12 @@
 		select <include refid="select_columns" /> from t_picture where data_state = 1
 	</select>
 	
-	<!-- 根据行政区等查询 -->
 	<select id="queryByType" resultMap="resultMap">
 		select <include refid="select_columns" /> from t_picture where type = #{type}
+	</select>
+	
+	<select id="queryListByFkId" resultMap="resultMap">
+		select <include refid="select_columns" /> from t_picture where fk_id = #{fk_id}
 	</select>
 	
 	<!-- 查询行政区总数 -->

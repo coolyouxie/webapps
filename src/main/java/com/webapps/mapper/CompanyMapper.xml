@@ -27,7 +27,7 @@
 		name ,
 		address,
 		telephone,
-		contact_Name
+		contact_Name,
 		mobile,
 		email,
 		industry_id,
@@ -45,7 +45,7 @@
 		name,
 		address,
 		telephone,
-		contact_Name
+		contact_Name,
 		mobile,
 		email,
 		industry_id,
@@ -140,7 +140,7 @@
 	</update>
 
 
-	<insert id="insert">
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id">
 		insert into t_company (
 			<include refid="insert_columns" />
 		)

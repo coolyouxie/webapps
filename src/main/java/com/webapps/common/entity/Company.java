@@ -19,7 +19,7 @@ public class Company extends Entity{
     private BigDecimal latitude;
     private String briefs;
     private List<Picture> pictures;
-    
+    private String environment;
     private String contactName;
 
     public String getName() {
@@ -116,6 +116,14 @@ public class Company extends Entity{
 
 	public void setContactName(String contactName) {
 		this.contactName = contactName;
+	}
+
+	public String getEnvironment() {
+		return environment;
+	}
+
+	public void setEnvironment(String environment) {
+		this.environment = environment;
 	}
 
 }

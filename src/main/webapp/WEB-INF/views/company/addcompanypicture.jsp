@@ -26,16 +26,16 @@
 
 <script type="text/javascript">
 	$(function(){
-		
 		var projectfileoptions = {
-			    uploadUrl: "/file-upload-batch/2",
+			    uploadUrl: "${ctx}/fileUpload/pictureUpload",
 			    language:'zh',
 			    maxFileCount: 4,
 			    maxFileSize:2000,
 			    autoReplace:false,
 			    validateInitialCount: true,
 			    overwriteInitial: false,
-			    allowedFileExtensions: ["jpg", "png", "gif"]
+			    allowedFileExtensions: ["jpg", "png", "gif"],
+			    uploadExtraData:{"type":"company","id":$("#companyId").val()}
 			};
 		// 文件上传框
 		$('input[class=projectfile]').each(function() {
@@ -48,19 +48,94 @@
 	
 		        $(this).fileinput(op);
 		    } else {
-		        $(this).fileinput(projectfileoptions);
+		        $(this).fileinput(projectfileoptions).on("fileuploaded", function (event, data, previewId, index){
+					alert(data.result);
+		        });;
 		    }
 		});
-		if("${result}"){
-			alert("${result}");
-		}
 	});
 	
+	function pageAjaxDone(json) {
+	    YUNM.debug(json);
+	    YUNM.ajaxDone(json);
+
+	    if (json[YUNM.keys.statusCode] == YUNM.statusCode.ok) {
+	        var msg = json[YUNM.keys.message];
+	        // 弹出消息提示
+	        YUNM.debug(msg);
+
+	        if (YUNM.callbackType.confirmTimeoutForward == json.callbackType) {
+	            $.showSuccessTimeout(msg, function() {
+	                window.location = json.forwardUrl;
+	            });
+	        }
+	    }
+	}
+	
+	function iframeCallback(form, callback) {
+	    YUNM.debug("带文件上传处理");
+	    var $form = $(form), $iframe = $("#callbackframe");
+	    var data = $form.data('bootstrapValidator');
+	    if (data) {
+	        if (!data.isValid()) {
+	            return false;
+	        }
+	    }
+
+	    if ($iframe.size() == 0) {
+	        $iframe = $("<iframe id='callbackframe' name='callbackframe' src='about:blank' style='display:none'></iframe>").appendTo("body");
+	    }
+	    if (!form.ajax) {
+	        $form.append('<input type="hidden" name="ajax" value="1" />');
+	    }
+	    form.target = "callbackframe";
+	    _iframeResponse($iframe[0], callback || YUNM.ajaxDone);
+	}
+	
+	function _iframeResponse(iframe, callback) {
+	    var $iframe = $(iframe), $document = $(document);
+	    $document.trigger("ajaxStart");
+	    $iframe.bind("load", function(event) {
+	        $iframe.unbind("load");
+	        $document.trigger("ajaxStop");
+
+	        if (iframe.src == "javascript:'%3Chtml%3E%3C/html%3E';" || // For Safari
+	        iframe.src == "javascript:'<html></html>';") { // For FF, IE
+	            return;
+	        }
+
+	        var doc = iframe.contentDocument || iframe.document;
+
+	        // fixing Opera 9.26,10.00
+	        if (doc.readyState && doc.readyState != 'complete')
+	            return;
+	        // fixing Opera 9.64
+	        if (doc.body && doc.body.innerHTML == "false")
+	            return;
+
+	        var response;
+
+	        if (doc.XMLDocument) {
+	            // response is a xml document Internet Explorer property
+	            response = doc.XMLDocument;
+	        } else if (doc.body) {
+	            try {
+	                response = $iframe.contents().find("body").text();
+	                response = jQuery.parseJSON(response);
+	            } catch (e) { // response is html document or plain text
+	                response = doc.body.innerHTML;
+	            }
+	        } else {
+	            // response is a xml document
+	            response = doc;
+	        }
+	        callback(response);
+	    });
+	}
 </script>
 </head>
 <body>
 	<div class="container-fluid" style="height:480px;">
-	
 		<div class="row">
 			<div class="col-md-3 col-md-offset-2">
 				<h4>
@@ -69,6 +144,7 @@
 			</div>
 		</div>
 		<form class="form-horizontal required-validate" action="${ctx}/save?callbackType=confirmTimeoutForward" enctype="multipart/form-data" method="post" onsubmit="return iframeCallback(this, pageAjaxDone)">
+			<input id="companyId" name="companyId" value="${id}" >
 			<div class="form-group">
 				<div class="col-md-1"></div>
 		        <div class="col-md-8 tl th">
@@ -76,8 +152,7 @@
 		            <p class="help-block">支持jpg、jpeg、png、gif格式，大小不超过2.0M</p>
 		        </div>
 		    </div>
-		</form> 
+		</form>
 	</div>
-	
 </body>
 </html>
