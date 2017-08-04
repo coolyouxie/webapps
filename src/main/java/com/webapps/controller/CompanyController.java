@@ -116,6 +116,18 @@ public class CompanyController {
 		}
 	}
 	
+	@RequestMapping("/getById")
+	public String getById(Model model,Integer id,HttpServletRequest request,HttpServletResponse response){
+		try {
+			Company company = iCompanyService.getById(id);
+			model.addAttribute("company", company);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return "/company/showcompany";
+	}
+	
 	
 
 }

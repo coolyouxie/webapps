@@ -11,8 +11,10 @@ import org.springframework.transaction.annotation.Transactional;
 import com.webapps.common.bean.Page;
 import com.webapps.common.bean.ResultDto;
 import com.webapps.common.entity.Company;
+import com.webapps.common.entity.Picture;
 import com.webapps.common.form.CompanyRequestForm;
 import com.webapps.mapper.ICompanyMapper;
+import com.webapps.mapper.IPictureMapper;
 import com.webapps.service.ICompanyService;
 
 @Service
@@ -23,6 +25,9 @@ public class CompanyServiceImpl implements ICompanyService {
 	
 	@Autowired
 	private ICompanyMapper iCompanyMapper;
+	
+	@Autowired
+	private IPictureMapper iPictureMapper;
 
 	@Override
 	public Page loadCompanyList(Page page, CompanyRequestForm company) throws Exception {
@@ -38,6 +43,10 @@ public class CompanyServiceImpl implements ICompanyService {
 	@Override
 	public Company getById(Integer id) throws Exception {
 		Company company = iCompanyMapper.getById(id);
+		if(company!=null){
+			List<Picture> pics = iPictureMapper.queryListByFkId(company.getId());
+			company.setPictures(pics);
+		}
 		return company;
 	}
 

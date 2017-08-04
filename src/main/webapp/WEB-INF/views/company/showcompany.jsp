@@ -1,4 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<c:set var="ctx" value="${pageContext.request.contextPath}" />
 <!DOCTYPE html">
 <html>
 <head>
@@ -19,22 +22,7 @@
 </style>
 
 <script type="text/javascript">
-	$(function(){
-		if("${result}"){
-			alert("${result}");
-		}
-	});
-	function saveCompany(){
-		$.ajax({
-			url:"${pageContext.request.contextPath}/company/saveCompany",
-			type:"POST",
-			dataType:"JSON",
-			data:$("#saveForm").serialize(),
-			success:function(response){
-				alert(response);
-			}
-		})
-	}
+	
 	
 </script>
 </head>
@@ -43,83 +31,82 @@
 		<div class="row">
 			<div class="col-md-4 col-md-offset-2">
 				<h4>
-					添加公司信息
+					查看公司信息
 				</h4>
 			</div>
 		</div>
-		<form id="saveForm" class="form-horizontal" action="${pageContext.request.contextPath}/company/saveCompany"  method="post">
-			<div class="form-group">
+			<div class="row">
 				<label class="col-md-2 control-label" for="name">公司名称：</label>
 				<div class="col-md-4" >
-					<input type="text" id="name" name="name" class="form-control" placeholder="请输入姓名" >
+					${company.name}
 				</div>
 			</div>
 			
-			<div class="form-group">
+			<div class="row">
 				<label class="col-md-2 control-label" for="contactName">联系人：</label>
 				<div class="col-md-4" >
-					<input type="text" id="contactName" name="contactName" class="form-control" placeholder="联系人" >
+					${company.contactName }
 				</div>
 			</div>
 			
-			<div class="form-group">
+			<div class="row">
 				<label class="col-md-2 control-label" for="telephone">联系电话：</label>
 				<div class="col-md-4" >
-					<input type="text" id="telephone" name="telephone" class="form-control" placeholder="请输入联系电话" >
+					${company.telephone}
 				</div>
 			</div>
 			
-			<div class="form-group">
+			<div class="row">
 				<label class="col-md-2 control-label" for="mobile">手机号：</label>
 				<div class="col-md-4" >
-					<input type="mobile" id="mobile" name="mobile" class="form-control" placeholder="请输入手机号" >
+					${company.mobile }
 				</div>
 			</div>
 			
-			<div class="form-group">
+			<div class="row">
 				<label class="col-md-2 control-label" for="email">email：</label>
 				<div class="col-md-4" >
-					<input type="email" id="email" name="email" class="form-control" placeholder="请输入email" >
+					${company.email }
 				</div>
 			</div>
 			
-			<div class="form-group">
+			<div class="row">
 				<label class="col-md-2 control-label" for="enterpriseLegalPerson" >法人代表：</label>
 				<div class="col-md-4" >
-					<input type="text" id="enterpriseLegalPerson" name="enterpriseLegalPerson" class="form-control" placeholder="请输入法人代表">
+					${company.enterpriseLegalPerson }
 				</div>
 			</div>
 			
-			<div class="form-group">
+			<div class="row">
 				<label class="col-md-2 control-label" for="address">地址：</label>
 				<div class="col-md-4" >
-					<input type="text" id="address" name="address" class="form-control" placeholder="请输入公司地址" >
+					${company.address }
 				</div>
 			</div>
 			
-			<div class="form-group">
+			<div class="row">
 				<label class="col-md-2 control-label" for="briefs">公司简介：</label>
 				<div class="col-md-4" >
-					<textarea class ="form-control" id="briefs" name="briefs" rows="5" ></textarea>
+					${company.briefs }
 				</div>
 			</div>
 			
-			<div class="form-group">
+			<div class="row">
 				<label class="col-md-2 control-label" for="environment">公司环境：</label>
 				<div class="col-md-4" >
-					<textarea class ="form-control" id="environment" name=""environment"" rows="5" ></textarea>
+					${company.environment }
 				</div>
 			</div>
 			
-			<div class="">
-				<label class="col-md-4 control-label"></label>
-				<div class="col-md-4">
-					<button type="submit" class="btn btn-primary">
-						下一步
-					</button>
+			<c:forEach items="${company.pictures}" var="item" varStatus="status">
+				<div class="row">
+					<label class="col-md-2 control-label" for="">公司图片：</label>
+					<div class="col-md-4" >
+						<img src="${item.picUrl}" width="120" height="240"/>
+					</div>
 				</div>
-			</div>
-		</form>
+			</c:forEach>
+			
 	</div>
 </body>
 </html>

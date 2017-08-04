@@ -42,7 +42,8 @@ public class PictureServiceImpl implements IPictureService {
 		String type = request.getParameter("type");
 		Integer id = Integer.valueOf(request.getParameter("id"));
 		int picType = 0;
-		Picture file = null;
+		File destFile = null;
+		Picture file = new Picture();
 		if("company".equals(type)){
 			picType = 1;
 		}
@@ -52,54 +53,35 @@ public class PictureServiceImpl implements IPictureService {
         // 获取对应file对象
         Map<String, MultipartFile> fileMap = multipartRequest.getFileMap();
         Iterator<String> fileIterator = multipartRequest.getFileNames();
-
-        // 获取项目的相对路径（http://localhost:8080/file）
+        String requestURL = request.getRequestURL().toString();
+        String projectPath = requestURL.replace("/fileUpload/pictureUpload","");
+        String path="/Users/xieshuai/fileupload/company"+File.separator;
+        File dir = new File(path+"company_"+id);
+        if(!dir.exists()){
+        	dir.mkdirs();
+        }
         while (fileIterator.hasNext()) {
             String fileKey = fileIterator.next();
             logger.debug("文件名为：" + fileKey);
             // 获取对应文件
             MultipartFile multipartFile = fileMap.get(fileKey);
-            if (multipartFile.getSize() != 0L) {
-                validateImage(multipartFile);
-                // 调用saveImage方法保存
-                file = saveImage(multipartFile);
-                file.setType(picType);
-                file.setFkId(id);
-            }
+            String contentType = multipartFile.getContentType();
+            String fileType = contentType.substring(contentType.indexOf("/") + 1);
+            String fileName = new Date().getTime() + "." + fileType;
+            destFile = new File(dir.getAbsolutePath()+File.separator+fileName);
+            multipartFile.transferTo(destFile);
         }
-        
-		if(file!=null){
-			if(file.getId()==null){
-				int count = iPictureMapper.insert(file);
-				return count ;
-			}else{
-				int count = iPictureMapper.updateById(obj.getId(), file);
-				return count ;
-			}
+        file.setDataState(1);
+        file.setType(picType);
+        file.setPicUrl(projectPath+File.separator+"fileupload/company_"+id+File.separator+destFile.getName());
+        file.setFkId(id);
+		if(file.getId()==null){
+			int count = iPictureMapper.insert(file);
+			return count ;
+		}else{
+			int count = iPictureMapper.updateById(obj.getId(), file);
+			return count ;
 		}
-		return 0;
 	}
-	
-	private Picture saveImage(MultipartFile image) throws IOException {
-        String originalFilename = image.getOriginalFilename();
-        logger.debug("文件原始名称为:" + originalFilename);
-
-        String contentType = image.getContentType();
-        String type = contentType.substring(contentType.indexOf("/") + 1);
-        String fileName = new Date().getTime() + new Random().nextInt(100) + "." + type;
-        // 封装了一个简单的file对象，增加了几个属性
-        Picture picture = new Picture();
-        picture.setType(1);
-        logger.debug("文件保存路径：" + "d:/test");
-        // 通过org.apache.commons.io.FileUtils的writeByteArrayToFile对图片进行保存
-        FileUtils.writeByteArrayToFile(new File("fileupload/test"+File.separator+fileName), image.getBytes());
-        picture.setPicUrl("fileupload/test"+File.separator+fileName);
-        picture.setDataState(1);
-        return picture;
-    }
-
-    private void validateImage(MultipartFile image) {
-    	
-    }
 
 }

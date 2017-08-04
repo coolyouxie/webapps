@@ -39,7 +39,10 @@
 								label : 'name',
 								name : 'name',
 								align : 'center',
-								sortable : false
+								sortable : false,
+								formatter:function(cellvalue,options,rowObject){
+									return '<a href="${ctx}/company/getById?id='+rowObject.id+'" style="color:blue">'+cellvalue+'</a>';
+								}
 							}, {
 								label : 'enterpriseLegalPerson',
 								name : 'enterpriseLegalPerson',
@@ -83,7 +86,7 @@
 								for ( var i = 0; i < ids.length; i++) {
 									var id = ids[i];
 									var rowData = $('#list').jqGrid('getRowData', id);
-									operateClick = '<a href="${ctx}/user/toCompanyInfoPage?type=edit&id='+id+'" style="color:blue">编辑</a> <a href="#" style="color:blue" onclick="deleteById('+ id + ')" >删除</a>';
+									operateClick = '<a href="${ctx}/company/toCompanyInfoPage?type=edit&id='+id+'" style="color:blue">编辑</a> <a href="#" style="color:blue" onclick="deleteById('+ id + ')" >删除</a>';
 									jQuery("#list").jqGrid('setRowData', id, {
 										operate : operateClick
 									});
@@ -106,7 +109,7 @@
 	
 	function deleteById(id){
 		$.ajax({
-			url:"${ctx}/user/deleteCompanyById",
+			url:"${ctx}/company/deleteCompanyById",
 			type:"POST",
 			dataType:"JSON",
 			data:{
