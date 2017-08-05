@@ -2,6 +2,7 @@ package com.webapps.common.form;
 
 import java.io.Serializable;
 
+import com.webapps.common.bean.Page;
 import com.webapps.common.entity.Company;
 
 public class CompanyRequestForm extends Company implements RequestForm,Serializable{

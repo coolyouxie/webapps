@@ -27,6 +27,8 @@
 		    url:"${ctx}/user/loadUserList",
 		    datatype: "json",
 		    mtype : "POST",
+		    height:650,
+		    width:950,
 		    jsonReader : {
 								root : "resultList", // json中代表实际模型数据的入口
 								page : "page.page", // json中代表当前页码的数据   
@@ -115,8 +117,8 @@
 								sortable : false
 							} ],
 		    pager: '#pager',
-		    rowNum:10,
-		    rowList:[10,20,30],
+		    rowNum:50,
+		    rowList:[50,100,200],
 		    sortname: 'id',
 		    viewrecords: true,
 		    sortorder: "desc",
@@ -150,8 +152,8 @@
 			params.educationId=educationId;
 		}
 		dataGrid.jqGrid("setGridParam",{
-		    postData:$("#searchForm").serialize()
-		    //postData:params
+		    postData:$("#searchForm").serialize(),
+		    page:1
 		}).trigger("reloadGrid");
 	}
 	
@@ -252,10 +254,6 @@
 		});
 	}
 	
-	function toAddPage(){
-	}
-	
-	
 </script>
 <style>
 	.input-group-sm {
@@ -278,11 +276,11 @@
 <body>
 	<div class="container-fluid">
 		<form id="searchForm">
-			<div class="row" style="margin-bottom:10px">
-				<div class="col-md-4">
+			<div class="row" style="margin-bottom:5px">
+				<div class="col-md-3">
 					<label>
 						<span>姓名/账号/身份证:</span>
-						<input type="text id="keyWords" name="keyWords" >
+						<input type="text" id="keyWords" name="keyWords" >
 					</label>
 				</div>
 				<div class="col-md-2">
@@ -315,8 +313,16 @@
 				</div>
 				<div class="col-md-2">
 					<button type='button' class="btn btn-primary btn-sm" data-toggle="modal" onclick="search()">
-						查询
+							查询
 					</button>
+				</div>
+			</div>
+			<div class="row" style="margin-bottom:5px">
+				<div class="col-md-3">
+				</div>
+				<div class="col-md-2">
+				</div>
+				<div class="col-md-2">
 				</div>
 				<div class="col-md-2">
 					<a type='button' class="btn btn-primary btn-sm" href="${ctx}/user/toUserInfoPage?type=add">
@@ -325,199 +331,12 @@
 				</div>
 			</div>
 		</form>
-	</div>
-	<table id="list"></table>
-	<div id="pager"></div>
-	<!-- 创建新用户模态框（Modal） 开始-->
-	<div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-						&times;
-					</button>
-					<h4 class="modal-title" id="myModalLabel">
-						添加新用户
-					</h4>
-				</div>
-				<div class="modal-body">
-					<form id="saveForm" >
-						<div class="input-group-sm" >
-							<label>
-								<span>
-									账号：
-								</span>
-								<input type="text" name="account" class="form-control" placeholder="请输入账号名" aria-describedby="basic-addon1">
-							</label>
-						</div>
-						
-						<div class="input-group-sm" >
-							<label>
-								<span >密码</span>
-								<input type="password" id="password" name="password" class="form-control" placeholder="请输入密码" aria-describedby="basic-addon1">
-							</label>
-						</div>
-						
-						<div class="input-group-sm" >
-							<label>
-								<span >确认密码</span>
-								<input type="password" id="confirmPassword" name="confirmPassword" class="form-control" placeholder="请输入密码" aria-describedby="basic-addon1">
-							</label>
-						</div>
-						
-						<div class="input-group-sm" >
-							<label>
-								<span >姓名</span>
-								<input type="text" name="name" class="form-control" placeholder="请输入姓名" aria-describedby="basic-addon1">
-							</label>
-						</div>
-						
-						<div class="input-group-sm" >
-							<label>
-								<span >身份证</span>
-								<input type="text" name="idCardNo" class="form-control" placeholder="请输入身份证号" aria-describedby="basic-addon1">
-							</label>
-						</div>
-						
-						<div class="input-group-sm" >
-							<label>
-								<span >手机号</span>
-								<input type="mobile" name="mobile" class="form-control" placeholder="请输入手机号" aria-describedby="basic-addon1">
-							</label>
-						</div>
-						
-						<div class="input-group-sm" >
-							<label>
-								<span >性别</span>
-								<input type="text" name="gender" class="form-control" placeholder="请输入性别" aria-describedby="basic-addon1">
-							</label>
-						</div>
-						
-						<div class="input-group-sm" >
-							<label>
-								<span >年龄</span>
-								<input type="number" name="age" class="form-control" placeholder="请输入年龄" aria-describedby="basic-addon1">
-							</label>
-						</div>
-						
-						<div class="input-group-sm" >
-							<label>
-								<span >email</span>
-								<input type="email" name="email" class="form-control" placeholder="请输入email" aria-describedby="basic-addon1">
-							</label>
-						</div>
-						
-						<div class="input-group-sm" >
-							<label>
-								<span>居住地址</span>
-								<input type="text" name="address" class="form-control" placeholder="请输入现在的居住地址" aria-describedby="basic-addon1">
-							</label>
-						</div>
-						
-						<div class="input-group-sm" >
-							<label>
-								<span>家庭住址</span>
-								<input type="text" name="homeAddress" class="form-control" placeholder="请输入户籍所在地址" aria-describedby="basic-addon1">
-							</label>
-						</div>
-					</form>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-default" data-dismiss="modal">关闭
-					</button>
-					<button type="button" class="btn btn-primary" onclick="save()">
-						保存
-					</button>
-				</div>
+		<div class="row">
+			<div class="col-md-9">
+				<table id="list"></table>
+				<div id="pager"></div>
 			</div>
 		</div>
 	</div>
-	<!--创建新用户模态框 结束-->
-	<!--更新用户模态框 开始-->
-	<div class="modal fade" id="updateModal" tabindex="-1" role="dialog" aria-labelledby="updateMyModalLabel" aria-hidden="true">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-						&times;
-					</button>
-					<h4 class="modal-title" id="updateModalLabel">
-						更新用户信息
-					</h4>
-				</div>
-				<div class="modal-body">
-					<form id="updateForm" >
-						<input type="hidden" name="id" id="id" value="" />
-						<div class="input-group-sm" >
-							<label>
-								<span >姓名</span>
-								<input type="text" name="name" id="name" value="${user.name}" class="form-control" placeholder="请输入姓名" aria-describedby="basic-addon1">
-							</label>
-						</div>
-						
-						<div class="input-group-sm" >
-							<label>
-								<span >身份证</span>
-								<input type="text" name="idCardNo" id="idCardNo" value="${user.idCardNo}" class="form-control" placeholder="请输入身份证号" aria-describedby="basic-addon1">
-							</label>
-						</div>
-						
-						<div class="input-group-sm" >
-							<label>
-								<span >手机号</span>
-								<input type="mobile" name="mobile" id="mobile" value="${user.mobile}" class="form-control" placeholder="请输入手机号" aria-describedby="basic-addon1">
-							</label>
-						</div>
-						
-						<div class="input-group-sm" >
-							<label>
-								<span >性别</span>
-								<select id="gender" name="gender">
-									<option value='0' <#if user.gender==0>selected</#if>>女</option>
-									<option value='0' <#if user.gender==1>selected</#if>>男</option>
-								</select>
-							</label>
-						</div>
-						
-						<div class="input-group-sm" >
-							<label>
-								<span >年龄</span>
-								<input type="number" name="age" id="age" value="${user.age}" class="form-control" placeholder="请输入年龄" aria-describedby="basic-addon1">
-							</label>
-						</div>
-						
-						<div class="input-group-sm" >
-							<label>
-								<span >email</span>
-								<input type="email" name="email" id="email" value="${user.email}" class="form-control" placeholder="请输入email" aria-describedby="basic-addon1">
-							</label>
-						</div>
-						
-						<div class="input-group-sm" >
-							<label>
-								<span>居住地址</span>
-								<input type="text" name="address" id="address" value="${user.address}" class="form-control" placeholder="请输入现在的居住地址" aria-describedby="basic-addon1">
-							</label>
-						</div>
-						
-						<div class="input-group-sm" >
-							<label>
-								<span>家庭住址</span>
-								<input type="text" name="homeAddress" id="homeAddress" value="${user.homeAddress}" class="form-control" placeholder="请输入户籍所在地址" aria-describedby="basic-addon1">
-							</label>
-						</div>
-					</form>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-default" data-dismiss="modal">关闭
-					</button>
-					<button type="button" class="btn btn-primary" onclick="update()">
-						保存
-					</button>
-				</div>
-			</div>
-		</div>
-	</div>
-	<!--更新用户模态框 结束-->
 </body>
 </html>

@@ -15,7 +15,7 @@ public class Recruitment extends Entity{
     private int recruitmentNumber;
     private BigDecimal commision;
     private String workType;
-    private String work_address;
+    private String workAddress;
     private BigDecimal salaryLow;
     private BigDecimal salaryHigh;
     private String requirement;
@@ -83,14 +83,6 @@ public class Recruitment extends Entity{
 
     public void setWorkType(String workType) {
         this.workType = workType;
-    }
-
-    public String getWork_address() {
-        return work_address;
-    }
-
-    public void setWork_address(String work_address) {
-        this.work_address = work_address;
     }
 
     public BigDecimal getSalaryLow() {
@@ -163,6 +155,14 @@ public class Recruitment extends Entity{
 
 	public void setUserId(Integer userId) {
 		this.userId = userId;
+	}
+
+	public String getWorkAddress() {
+		return workAddress;
+	}
+
+	public void setWorkAddress(String workAddress) {
+		this.workAddress = workAddress;
 	}
 
 }

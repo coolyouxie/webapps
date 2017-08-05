@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.webapps.common.bean.Page;
@@ -71,19 +72,49 @@ public class CompanyController {
 			ResultDto<Company> dto = null;
 			try {
 				dto = iCompanyService.saveCompany(company);
-				if("insert_success".equals(dto.getResult())){
-					model.addAttribute("id", dto.getData().getId());
-					return "/company/addcompanypicture";
+				if("add_next".equals(company.getHandleType())){
+					if("insert_success".equals(dto.getResult())){
+						model.addAttribute("company", dto.getData());
+						model.addAttribute("result", "success");
+						return "/company/addcompanypicture";
+					}
+					if("insert_failed".equals(dto.getResult())){
+						model.addAttribute("company", company);
+						model.addAttribute("result",dto.getErrorMsg());
+						return "/company/addcompany";
+					}
 				}
-				if("insert_failed".equals(dto.getResult())){
-					model.addAttribute("company", company);
-					model.addAttribute("result",dto.getErrorMsg());
-					return "/company/addcompany";
+				if("add_save".equals(company.getHandleType())){
+					if("insert_success".equals(dto.getResult())){
+						return "/company/companylist";
+					}
+					if("insert_failed".equals(dto.getResult())){
+						model.addAttribute("company", company);
+						model.addAttribute("result",dto.getErrorMsg());
+						return "/company/addcompany";
+					}
 				}
-				if("update_success".equals(dto.getResult())){
-					model.addAttribute("company", company);
-					model.addAttribute("result",dto.getErrorMsg());
-					return "/company/companylist";
+				if("edit_next".equals(company.getHandleType())){
+					if("update_success".equals(dto.getResult())){
+						model.addAttribute("company", dto.getData());
+						model.addAttribute("result","success");
+						return "/company/editcompanypicture";
+					}
+					if("update_fail".equals(dto.getResult())){
+						model.addAttribute("company", dto.getData());
+						model.addAttribute("result",dto.getErrorMsg());
+						return "/company/editcompany";
+					}
+				}
+				if("edit_save".equals(company.getHandleType())){
+					if("update_success".equals(dto.getResult())){
+						return "/company/companylist";
+					}
+					if("update_fail".equals(dto.getResult())){
+						model.addAttribute("company", dto.getData());
+						model.addAttribute("result",dto.getErrorMsg());
+						return "/company/editcompany";
+					}
 				}
 			} catch (Exception e) {
 				e.printStackTrace();

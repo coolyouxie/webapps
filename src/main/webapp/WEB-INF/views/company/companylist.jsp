@@ -27,6 +27,8 @@
 		    url:"${ctx}/company/loadCompanyList",
 		    datatype: "json",
 		    mtype : "POST",
+		    height : 650,
+		    width : 950,
 		    jsonReader : {
 								root : "resultList", // json中代表实际模型数据的入口
 								page : "page.page", // json中代表当前页码的数据   
@@ -75,8 +77,8 @@
 								sortable : false
 							} ],
 		    pager: '#pager',
-		    rowNum:10,
-		    rowList:[10,20,30],
+		    rowNum:50,
+		    rowList:[50,100,200],
 		    sortname: 'id',
 		    viewrecords: true,
 		    sortorder: "desc",
@@ -102,8 +104,8 @@
 			params.keyWords=keyWords;
 		}
 		dataGrid.jqGrid("setGridParam",{
-		    postData:$("#searchForm").serialize()
-		    //postData:params
+		    postData:{"keyWords":$("#keyWords").val()},
+		    page:1
 		}).trigger("reloadGrid");
 	}
 	
@@ -148,7 +150,7 @@
 				<div class="col-md-4">
 					<label>
 						<span>公司名称:</span>
-						<input type="text id="keyWords" name="keyWords" >
+						<input type="text" id="keyWords" name="keyWords" value="">
 					</label>
 				</div>
 				<div class="col-md-2">
@@ -159,9 +161,6 @@
 				<div class="col-md-2">
 					<a type='button' class="btn btn-primary btn-sm" href="${ctx}/company/toCompanyInfoPage?type=add">
 						添加公司
-					</a>
-					<a type='button' class="btn btn-primary btn-sm" href="${ctx}/company/toCompanyInfoPage?type=addPicture">
-						添加图片
 					</a>
 				</div>
 			</div>

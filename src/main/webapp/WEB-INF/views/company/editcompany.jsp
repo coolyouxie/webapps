@@ -1,10 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<c:set var="ctx" value="${pageContext.request.contextPath}" />
 <!DOCTYPE html">
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>新增或修改用户信息</title>
+<title>新增或修改公司信息</title>
 <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
 <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.js"></script>
@@ -24,7 +25,11 @@
 		if("${result}"){
 			alert("result");
 		}
-	})
+	});
+	function next(){
+		$(#"handleType").val("edit_next");
+		$("#.saveForm").submit();
+	}
 </script>
 </head>
 <body>
@@ -32,102 +37,81 @@
 		<div class="row">
 			<div class="col-md-3 col-md-offset-2">
 				<h4>
-					编辑用户
+					编辑公司信息
 				</h4>
 			</div>
 		</div>
-		<form id="saveForm" class="form-horizontal" action="${pageContext.request.contextPath}/user/saveUser" method="post">
-			<input type="hidden" id="id" name="id" value="${user.id}">
+		<form id="saveForm" class="form-horizontal" action="${ctx}/company/saveCompany" method="post">
+			<input type="hidden" id="id" name="id" value="${company.id}">
+			<input type="hidden" id="handleType" name="handleType" value="edit_save">
 			<div class="form-group">
-				<label class="col-md-2 control-label" for="account">
-					账号：
-				</label>
-				<div class="col-md-3">
-					<input type="text" id="account" name="account" class="form-control" placeholder="请输入账号名" value="${user.account}" readonly="readonly">
+				<label class="col-md-2 control-label" for="name">公司名称：</label>
+				<div class="col-md-4" >
+					<input type="text" id="name" name="name" class="form-control" placeholder="请输入姓名" value="${company.name }">
 				</div>
 			</div>
 			
 			<div class="form-group">
-				<label class="col-md-2 control-label" for="name">姓名：</label>
-				<div class="col-md-3" >
-					<input type="text" id="name" name="name" class="form-control" placeholder="请输入姓名" value="${user.name}">
+				<label class="col-md-2 control-label" for="contactName">联系人：</label>
+				<div class="col-md-4" >
+					<input type="text" id="contactName" name="contactName" class="form-control" placeholder="联系人" value="${company.contactName }">
 				</div>
-			</div>	
+			</div>
 			
 			<div class="form-group">
-				<label class="col-md-2 control-label" for="idCardNo">身份证：</label>
-				<div class="col-md-3" >
-					<input type="text" id="idCardNo" name="idCardNo" class="form-control" placeholder="请输入身份证号" value="${user.idCardNo}">
+				<label class="col-md-2 control-label" for="telephone">联系电话：</label>
+				<div class="col-md-4" >
+					<input type="text" id="telephone" name="telephone" class="form-control" placeholder="请输入联系电话" value="${company.telephone }">
 				</div>
-			</div>	
+			</div>
 			
 			<div class="form-group">
 				<label class="col-md-2 control-label" for="mobile">手机号：</label>
-				<div class="col-md-3" >
-					<input type="mobile" id="mobile" name="mobile" class="form-control" placeholder="请输入手机号" value="${user.mobile}">
-				</div>
-			</div>
-			
-			<div class="form-group">
-				<label class="col-md-2 control-label" for="gender">性别：</label>
-				<div class="col-md-3" >
-					<select id="gender" name="gender" class="form-control">
-						<option value="0" <c:if test="${user.gender==0}">selected</c:if>>女</option>
-						<option value="1" <c:if test="${user.gender==1}">selected</c:if>>男</option>
-					</select>
-				</div>
-			</div>
-			
-			<div class="form-group">
-				<label class="col-md-2 control-label" for="age">年龄：</label>
-				<div class="col-md-3" >
-					<input type="text" id="age" name="age" class="form-control" placeholder="请输入年龄" value="${user.age}">
-				</div>
-			</div>
-			
-			<div class="form-group">
-				<label class="col-md-2 control-label" for="age">学历：</label>
-				<div class="col-md-3" >
-					<select id="eductionId" name="educationId" >
-						<option value="" selected>-请选择-</option>
-						<option value="1" <c:if test="${user.educationId==1}">selected</c:if>>小学</option>
-						<option value="2" <c:if test="${user.educationId==2}">selected</c:if>>初中</option>
-						<option value="3" <c:if test="${user.educationId==3}">selected</c:if>>高中</option>
-						<option value="4" <c:if test="${user.educationId==4}">selected</c:if>>中专</option>
-						<option value="5" <c:if test="${user.educationId==5}">selected</c:if>>职高</option>
-						<option value="6" <c:if test="${user.educationId==6}">selected</c:if>>大专</option>
-						<option value="7" <c:if test="${user.educationId==7}">selected</c:if>>本科</option>
-						<option value="8" <c:if test="${user.educationId==8}">selected</c:if>>硕士</option>
-						<option value="9" <c:if test="${user.educationId==9}">selected</c:if>>博士</option>
-						<option value="10" <c:if test="${user.educationId==10}">selected</c:if>>博士后</option>
-					</select>
+				<div class="col-md-4" >
+					<input type="mobile" id="mobile" name="mobile" class="form-control" placeholder="请输入手机号" value="${company.mobile }">
 				</div>
 			</div>
 			
 			<div class="form-group">
 				<label class="col-md-2 control-label" for="email">email：</label>
-				<div class="col-md-3" >
-					<input type="email" id="email" name="email" class="form-control" placeholder="请输入email" value="${user.email}">
-				</div>
-			</div>
-			
-			
-			<div class="form-group">
-				<label class="col-md-2 control-label" for="address">居住地址：</label>
-				<div class="col-md-3" >
-					<input type="text" id="address" name="address" class="form-control" placeholder="请输入现在的居住地址" value="${user.address}">
+				<div class="col-md-4" >
+					<input type="email" id="email" name="email" class="form-control" placeholder="请输入email" value="${company.email }">
 				</div>
 			</div>
 			
 			<div class="form-group">
-				<label class="col-md-2 control-label" for="homeAddress">家庭住址：</label>
-				<div class="col-md-3" >
-					<input type="text" id="homeAddress" name="homeAddress" class="form-control" placeholder="请输入户籍所在地址" value="${user.homeAddress}">
+				<label class="col-md-2 control-label" for="enterpriseLegalPerson" >法人代表：</label>
+				<div class="col-md-4" >
+					<input type="text" id="enterpriseLegalPerson" name="enterpriseLegalPerson" class="form-control" placeholder="请输入法人代表" value="${company.enterpriseLegalPerson }">
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label class="col-md-2 control-label" for="address">地址：</label>
+				<div class="col-md-4" >
+					<input type="text" id="address" name="address" class="form-control" placeholder="请输入公司地址" value="${company.address }">
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label class="col-md-2 control-label" for="briefs">公司简介：</label>
+				<div class="col-md-4" >
+					<textarea class ="form-control" id="briefs" name="briefs" rows="5" value="${company.briefs }"></textarea>
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label class="col-md-2 control-label" for="environment">公司环境：</label>
+				<div class="col-md-4" >
+					<textarea class ="form-control" id="environment" name=""environment"" rows="5" value="${company.environment }"></textarea>
 				</div>
 			</div>
 			<div class="form-group">
 				<div class="col-md-3" >
 				</div>
+				<button type="submit" class="btn btn-primary">
+					下一步
+				</button>
 				<button type="submit" class="btn btn-primary">
 					保存
 				</button>

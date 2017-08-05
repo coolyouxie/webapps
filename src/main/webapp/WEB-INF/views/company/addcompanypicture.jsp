@@ -49,89 +49,15 @@
 		        $(this).fileinput(op);
 		    } else {
 		        $(this).fileinput(projectfileoptions).on("fileuploaded", function (event, data, previewId, index){
-					alert(data.result);
+		        	var response = data.response;
+					if(response&&response.result=="success"){
+						window.location.href="${ctx}/company/toCompanyListPage";
+					}
 		        });;
 		    }
 		});
 	});
 	
-	function pageAjaxDone(json) {
-	    YUNM.debug(json);
-	    YUNM.ajaxDone(json);
-
-	    if (json[YUNM.keys.statusCode] == YUNM.statusCode.ok) {
-	        var msg = json[YUNM.keys.message];
-	        // 弹出消息提示
-	        YUNM.debug(msg);
-
-	        if (YUNM.callbackType.confirmTimeoutForward == json.callbackType) {
-	            $.showSuccessTimeout(msg, function() {
-	                window.location = json.forwardUrl;
-	            });
-	        }
-	    }
-	}
-	
-	function iframeCallback(form, callback) {
-	    YUNM.debug("带文件上传处理");
-	    var $form = $(form), $iframe = $("#callbackframe");
-	    var data = $form.data('bootstrapValidator');
-	    if (data) {
-	        if (!data.isValid()) {
-	            return false;
-	        }
-	    }
-
-	    if ($iframe.size() == 0) {
-	        $iframe = $("<iframe id='callbackframe' name='callbackframe' src='about:blank' style='display:none'></iframe>").appendTo("body");
-	    }
-	    if (!form.ajax) {
-	        $form.append('<input type="hidden" name="ajax" value="1" />');
-	    }
-	    form.target = "callbackframe";
-	    _iframeResponse($iframe[0], callback || YUNM.ajaxDone);
-	}
-	
-	function _iframeResponse(iframe, callback) {
-	    var $iframe = $(iframe), $document = $(document);
-	    $document.trigger("ajaxStart");
-	    $iframe.bind("load", function(event) {
-	        $iframe.unbind("load");
-	        $document.trigger("ajaxStop");
-
-	        if (iframe.src == "javascript:'%3Chtml%3E%3C/html%3E';" || // For Safari
-	        iframe.src == "javascript:'<html></html>';") { // For FF, IE
-	            return;
-	        }
-
-	        var doc = iframe.contentDocument || iframe.document;
-
-	        // fixing Opera 9.26,10.00
-	        if (doc.readyState && doc.readyState != 'complete')
-	            return;
-	        // fixing Opera 9.64
-	        if (doc.body && doc.body.innerHTML == "false")
-	            return;
-
-	        var response;
-
-	        if (doc.XMLDocument) {
-	            // response is a xml document Internet Explorer property
-	            response = doc.XMLDocument;
-	        } else if (doc.body) {
-	            try {
-	                response = $iframe.contents().find("body").text();
-	                response = jQuery.parseJSON(response);
-	            } catch (e) { // response is html document or plain text
-	                response = doc.body.innerHTML;
-	            }
-	        } else {
-	            // response is a xml document
-	            response = doc;
-	        }
-	        callback(response);
-	    });
-	}
 </script>
 </head>
 <body>
@@ -143,12 +69,12 @@
 				</h4>
 			</div>
 		</div>
-		<form class="form-horizontal required-validate" action="${ctx}/save?callbackType=confirmTimeoutForward" enctype="multipart/form-data" method="post" onsubmit="return iframeCallback(this, pageAjaxDone)">
-			<input id="companyId" name="companyId" value="${id}" >
+		<form class="form-horizontal required-validate" enctype="multipart/form-data" method="post" >
+			<input type="hidden" id="companyId" name="companyId" value="${company.id}" >
 			<div class="form-group">
 				<div class="col-md-1"></div>
 		        <div class="col-md-8 tl th">
-		            <input type="file" id="image" name="image" class="projectfile" multiple value="${deal.image}" />
+		            <input type="file" id="image" name="image" class="projectfile" multiple value="" />
 		            <p class="help-block">支持jpg、jpeg、png、gif格式，大小不超过2.0M</p>
 		        </div>
 		    </div>

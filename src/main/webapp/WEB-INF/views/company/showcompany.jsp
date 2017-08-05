@@ -34,78 +34,84 @@
 					查看公司信息
 				</h4>
 			</div>
+			<form id="addRecruitment" action="${ctx}/recruitment/toAddRecruitmentPage" method="post">
+				<input type="hidden" name="companyId" value="${company.id}">
+				<div class="col-md-2">
+					<button type="submit" onclick="">新建发布单</button>
+				</div>
+			</form>
 		</div>
+		<div class="row">
+			<label class="col-md-2 control-label" for="name">公司名称：</label>
+			<div class="col-md-4" >
+				${company.name}
+			</div>
+		</div>
+			
+		<div class="row">
+			<label class="col-md-2 control-label" for="contactName">联系人：</label>
+			<div class="col-md-4" >
+				${company.contactName }
+			</div>
+		</div>
+			
+		<div class="row">
+			<label class="col-md-2 control-label" for="telephone">联系电话：</label>
+			<div class="col-md-4" >
+				${company.telephone}
+			</div>
+		</div>
+			
+		<div class="row">
+			<label class="col-md-2 control-label" for="mobile">手机号：</label>
+			<div class="col-md-4" >
+				${company.mobile }
+			</div>
+		</div>
+			
+		<div class="row">
+			<label class="col-md-2 control-label" for="email">email：</label>
+			<div class="col-md-4" >
+				${company.email }
+			</div>
+		</div>
+			
+		<div class="row">
+			<label class="col-md-2 control-label" for="enterpriseLegalPerson" >法人代表：</label>
+			<div class="col-md-4" >
+				${company.enterpriseLegalPerson }
+			</div>
+		</div>
+			
+		<div class="row">
+			<label class="col-md-2 control-label" for="address">地址：</label>
+			<div class="col-md-4" >
+				${company.address }
+			</div>
+		</div>
+			
+		<div class="row">
+			<label class="col-md-2 control-label" for="briefs">公司简介：</label>
+			<div class="col-md-4" >
+				${company.briefs }
+			</div>
+		</div>
+			
+		<div class="row">
+			<label class="col-md-2 control-label" for="environment">公司环境：</label>
+			<div class="col-md-4" >
+				${company.environment }
+			</div>
+		</div>
+			
+		<c:forEach items="${company.pictures}" var="item" varStatus="status">
 			<div class="row">
-				<label class="col-md-2 control-label" for="name">公司名称：</label>
+				<label class="col-md-2 control-label" for="">公司图片：</label>
 				<div class="col-md-4" >
-					${company.name}
+					<img src="${item.picUrl}" width="120"/>
 				</div>
 			</div>
-			
-			<div class="row">
-				<label class="col-md-2 control-label" for="contactName">联系人：</label>
-				<div class="col-md-4" >
-					${company.contactName }
-				</div>
-			</div>
-			
-			<div class="row">
-				<label class="col-md-2 control-label" for="telephone">联系电话：</label>
-				<div class="col-md-4" >
-					${company.telephone}
-				</div>
-			</div>
-			
-			<div class="row">
-				<label class="col-md-2 control-label" for="mobile">手机号：</label>
-				<div class="col-md-4" >
-					${company.mobile }
-				</div>
-			</div>
-			
-			<div class="row">
-				<label class="col-md-2 control-label" for="email">email：</label>
-				<div class="col-md-4" >
-					${company.email }
-				</div>
-			</div>
-			
-			<div class="row">
-				<label class="col-md-2 control-label" for="enterpriseLegalPerson" >法人代表：</label>
-				<div class="col-md-4" >
-					${company.enterpriseLegalPerson }
-				</div>
-			</div>
-			
-			<div class="row">
-				<label class="col-md-2 control-label" for="address">地址：</label>
-				<div class="col-md-4" >
-					${company.address }
-				</div>
-			</div>
-			
-			<div class="row">
-				<label class="col-md-2 control-label" for="briefs">公司简介：</label>
-				<div class="col-md-4" >
-					${company.briefs }
-				</div>
-			</div>
-			
-			<div class="row">
-				<label class="col-md-2 control-label" for="environment">公司环境：</label>
-				<div class="col-md-4" >
-					${company.environment }
-				</div>
-			</div>
-			
-			<c:forEach items="${company.pictures}" var="item" varStatus="status">
-				<div class="row">
-					<label class="col-md-2 control-label" for="">公司图片：</label>
-					<div class="col-md-4" >
-						<img src="${item.picUrl}" width="120" height="240"/>
-					</div>
-				</div>
-			</c:forEach>
+		</c:forEach>
 			
 	</div>
 </body>

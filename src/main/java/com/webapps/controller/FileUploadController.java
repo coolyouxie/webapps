@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.webapps.common.bean.ResultDto;
 import com.webapps.service.IPictureService;
 
+import net.sf.json.JSONObject;
 import net.sf.json.util.JSONUtils;
 
 @Controller
@@ -36,7 +37,7 @@ public class FileUploadController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		String result = JSONUtils.valueToString(dto);
+		String result = JSONUtils.valueToString(JSONObject.fromObject(dto));
 		return result;
 	}
 

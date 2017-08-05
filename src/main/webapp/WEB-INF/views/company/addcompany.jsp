@@ -1,4 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<c:set var="ctx" value="${pageContext.request.contextPath}" />
 <!DOCTYPE html">
 <html>
 <head>
@@ -24,18 +26,6 @@
 			alert("${result}");
 		}
 	});
-	function saveCompany(){
-		$.ajax({
-			url:"${pageContext.request.contextPath}/company/saveCompany",
-			type:"POST",
-			dataType:"JSON",
-			data:$("#saveForm").serialize(),
-			success:function(response){
-				alert(response);
-			}
-		})
-	}
-	
 </script>
 </head>
 <body>
@@ -47,11 +37,12 @@
 				</h4>
 			</div>
 		</div>
-		<form id="saveForm" class="form-horizontal" action="${pageContext.request.contextPath}/company/saveCompany"  method="post">
+		<form id="saveForm" class="form-horizontal" action="${ctx}/company/saveCompany"  method="post">
+			<input type="hidden" id="handleType" name="handleType" value="add_next">
 			<div class="form-group">
 				<label class="col-md-2 control-label" for="name">公司名称：</label>
 				<div class="col-md-4" >
-					<input type="text" id="name" name="name" class="form-control" placeholder="请输入姓名" >
+					<input type="text" id="name" name="name" class="form-control" placeholder="请输入姓名" required>
 				</div>
 			</div>
 			

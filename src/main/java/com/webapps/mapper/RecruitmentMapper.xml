@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.webapps.mapper.IRecruitmentMapper">
+	<resultMap id="resultMap" type="com.webapps.common.entity.Recruitment">
+		<id column="ID" jdbcType="DECIMAL" property="id" />
+		<result column="title" jdbcType="VARCHAR" property="title" />
+		<result column="company_id" jdbcType="DECIMAL" property="company.id" />
+		<result column="brief_info" jdbcType="VARCHAR" property="briefInfo" />
+		<result column="end_date" jdbcType="VARCHAR" property="endDate" />
+		<result column="recruitmentNumber" jdbcType="DECIMAL" property="recruitmentNumber" />
+		<result column="commision" jdbcType="DECIMAL" property="commision" />
+		<result column="work_type" jdbcType="DECIMAL" property="workType" />
+		<result column="work_address" jdbcType="VARCHAR" property="workAddress" />
+		<result column="salary_low" jdbcType="DECIMAL" property="salaryLow" />
+		<result column="salary_high" jdbcType="DECIMAL" property="salaryHigh" />
+		<result column="requirement" jdbcType="VARCHAR" property="requirement" />
+		<result column="publish_time" jdbcType="VARCHAR" property="publishTime" />
+		<result column="user_id" jdbcType="DECIMAL" property="userId" />
+		<result column="type" jdbcType="DECIMAL" property="type" />
+		<result column="cashback" jdbcType="DECIMAL" property="cashback" />
+		<result column="cashback_days" jdbcType="DECIMAL" property="cashbackDays" />
+		<result column="cashback_for_broker" jdbcType="DECIMAL" property="cashbackForBroker" />
+		<result column="create_time" jdbcType="VARCHAR" property="createTime" />
+		<result column="update_time" jdbcType="VARCHAR" property="updateTime" />
+		<result column="cashback_days" jdbcType="DECIMAL" property="cashbackDays" />
+		<result column="data_state" jdbcType="DECIMAL" property="dataState" />
+	</resultMap>
+
+	<sql id="select_columns">
+		id,
+		company_id,
+		title,
+		brief_info,
+		end_date,
+		recruitment_number,
+		commision,
+		work_type,
+		work_address,
+		salary_low,
+		salary_high,
+		requirement,
+		publish_time,
+		user_id,
+		type,
+		cashback,
+		cashback_days,
+		cashback_for_broker,
+		create_time,
+		update_time,
+		data_state
+	</sql>
+
+	<sql id="insert_columns">
+		company_id,
+		title,
+		brief_info,
+		end_date,
+		recruitment_number,
+		commision,
+		work_type,
+		work_address,
+		salary_low,
+		salary_high,
+		requirement,
+		publish_time,
+		user_id,
+		type,
+		cashback,
+		cashback_days,
+		cashback_for_broker,
+		data_state,
+		create_time
+	</sql>
+	
+	<select id="getById" resultMap="resultMap">
+		select <include refid="select_columns" /> from t_Recruitment where id = #{id}
+	</select>
+	
+	<!-- 查询所有 -->
+	<select id="queryAll" resultMap="resultMap">
+		select <include refid="select_columns" /> from t_Recruitment
+	</select>
+	
+	<!-- 根据父级行政区号查询 -->
+	<select id="queryByCompanyId" resultMap="resultMap">
+		select <include refid="select_columns" /> from t_Recruitment where company_id = #{companyId}
+	</select>
+	
+	<!-- 查询行政区总数 -->
+	<select id="queryCount" resultType="java.lang.Integer">
+		SELECT count(1) FROM t_Recruitment 
+		<trim prefix="WHERE" prefixOverrides="AND">
+			<if test="obj.keyWords !=null and obj.keyWords != ''">
+				AND title like concat('%',#{obj.keyWords},'%')
+			</if>
+			<if test="obj.parentId != null and obj.parentId != ''">
+				and company_id = #{obj.companyId,jdbcType=DECIMAL}
+			</if>
+		</trim>
+	</select>
+
+	<!-- 分页查询行政区信息 -->
+	<select id="queryPage" resultMap="resultMap">
+		<include refid="ORACLE.paginationStart" />
+		SELECT
+		<include refid="select_columns" />
+		FROM t_Recruitment
+		<trim prefix="WHERE" prefixOverrides="AND">
+			<if test="obj.keyWords !=null and obj.keyWords != ''">
+				AND title like concat('%',#{obj.keyWords},'%')
+			</if>
+			<if test="obj.parentId != null and obj.parentId != ''">
+				and company_id = #{obj.companyId,jdbcType=DECIMAL}
+			</if>
+		</trim>
+		order by create_time desc
+		<include refid="ORACLE.paginationEnd" />
+	</select>
+	
+	<!-- 用于初始化数据时使用 -->
+	<update id="batchUpdate">
+		<foreach collection="list" item="item" index="index" open="" close="" separator=";">
+			update t_Recruitment
+			<set>
+				parent_id=#{item.parentId},
+				level = #{item.level}
+			</set>
+			where id = #{item.id}
+         </foreach>
+	</update>
+	
+	<insert id="insert" useGeneratedKeys="true" keyProperty="obj.id">
+		insert into t_recruitment
+		(<include refid="insert_columns" />)
+		values
+		(
+			#{obj.company.id},
+			#{obj.title},
+			#{obj.briefInfo},
+			#{obj.endDate},
+			#{obj.recruitmentNumber},
+			#{obj.commision},
+			#{obj.workType},
+			#{obj.workAddress},
+			#{obj.salaryLow},
+			#{obj.salaryHigh},
+			#{obj.requirement},
+			#{obj.publishTime},
+			#{obj.userId},
+			#{obj.type},
+			#{obj.cashback},
+			#{obj.cashbackDays},
+			#{obj.cashbackForBroker},
+			#{obj.dataState},
+			#{obj.createTime}
+		)
+	</insert>
+</mapper>

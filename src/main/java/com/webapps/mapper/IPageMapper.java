@@ -4,9 +4,9 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
-public interface IPageMapper<T,Obj extends T> {
+public interface IPageMapper<T,R extends T> {
 
-	public int queryCount(@Param("obj")T obj);
+	public int queryCount(@Param("obj")R obj);
 
-    public List<T> queryPage(@Param("startRow")int startRow,@Param("endRow")int endRow,@Param("obj")Obj obj);
+    public List<T> queryPage(@Param("startRow")int startRow,@Param("endRow")int endRow,@Param("obj")R obj);
 }

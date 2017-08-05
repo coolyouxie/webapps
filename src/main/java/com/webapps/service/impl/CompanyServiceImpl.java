@@ -54,7 +54,12 @@ public class CompanyServiceImpl implements ICompanyService {
 	public ResultDto<Company> saveCompany(Company company) throws Exception {
 		ResultDto<Company> dto = new ResultDto<Company>();
 		if(company.getId()!=null){
-			iCompanyMapper.updateById(company.getId(), company);
+			int result = iCompanyMapper.updateById(company.getId(), company);
+			if(result == 0){
+				dto.setResult("update_fail");
+				dto.setErrorMsg("更新公司信息失败");
+				return dto;
+			}
 			dto.setResult("update_success");
 			dto.setData(company);
 			return dto;

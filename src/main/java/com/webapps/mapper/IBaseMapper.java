@@ -15,7 +15,7 @@ public interface IBaseMapper<T> {
 
     public int deleteById(Integer id);
 
-    public int updateById(@Param("id")Integer id,@Param("obj")T t);
+    public int updateById(@Param("id")Integer id,@Param("obj")T t)throws Exception;
 
     public int insert(@Param("obj")T obj) throws DuplicateKeyException;
     
