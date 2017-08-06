@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>发布单信息</title>
+<title>新增或修改发布信息</title>
 <link rel="stylesheet" href="${ctx}/js/common/bootstrap/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.css" type="text/css" />
 <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
 <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
@@ -23,7 +23,21 @@
 </style>
 
 <script type="text/javascript">
-	
+	$(function(){
+		$('.form_datetime').datetimepicker({
+			language: 'zh-CN',
+			weekStart: 1,
+	        todayBtn:  1,
+			autoclose: 1,
+			todayHighlight: 1,
+			startView: 1,
+			minView: 0,
+			maxView: 1,
+			forceParse: 0,
+			minuteStep:1,
+			format:'yyyy-mm-dd hh:ii:ss'
+		});
+	});
 </script>
 </head>
 <body>
@@ -31,7 +45,7 @@
 		<div class="row">
 			<div class="col-md-4 col-md-offset-2">
 				<h4>
-					发布单详情
+					添加发布单
 				</h4>
 			</div>
 		</div>
@@ -41,21 +55,21 @@
 			<div class="form-group">
 				<label class="col-md-2 control-label" for="">公司名称：</label>
 				<div class="col-md-4" >
-					${company.name}
+					<label class="col-md-2 control-label" >${company.name}</label>
 				</div>
 			</div>
 			
 			<div class="form-group">
 				<label class="col-md-2 control-label" for="title">标题：</label>
 				<div class="col-md-4" >
-					${recruitment.title }
+					<input type="text" id="title" name="title" class="form-control" placeholder="标题" required>
 				</div>
 			</div>
 			
 			<div class="form-group">
 				<label class="col-md-2 control-label" for="briefInfo">信息简介：</label>
 				<div class="col-md-4" >
-					${recruitment.briefInfo }
+					<textarea id="briefInfo" name="briefInfo" class="form-control" row="3" required></textarea>
 				</div>
 			</div>
 			
@@ -69,49 +83,49 @@
 			<div class="form-group">
 				<label class="col-md-2 control-label" for="recruitmentNmber">招聘人数：</label>
 				<div class="col-md-4" >
-					${recruitment.recruitmentNmber }
+					<input type="text" id="recruitmentNmber" name="recruitmentNmber" class="form-control" placeholder="请输入招聘人数" required>
 				</div>
 			</div>
 			
 			<div class="form-group">
 				<label class="col-md-2 control-label" for="commision" >推荐佣金：</label>
 				<div class="col-md-4" >
-					${recruitment.commision }
+					<input type="text" id="commision" name="commision" class="form-control" placeholder="请输入推荐佣金" required>
 				</div>
 			</div>
 			
 			<div class="form-group">
 				<label class="col-md-2 control-label" for="workType">工种：</label>
 				<div class="col-md-4" >
-					${recruitment.workType }
+					<input type="text" id="workType" name="workType" class="form-control" placeholder="工种" required>
 				</div>
 			</div>
 			
 			<div class="form-group">
 				<label class="col-md-2 control-label" for="workAddress">工作地址：</label>
 				<div class="col-md-4" >
-					${recruitment.workAddress }
+					<input type="text" class ="form-control" id="workAddress" name="workAddress" placeholder="请输入工作地址">
 				</div>
 			</div>
 			
 			<div class="form-group">
 				<label class="col-md-2 control-label" for="salaryLow">最低薪资：</label>
 				<div class="col-md-4" >
-					${recruitment.salaryLow }
+					<input type="text" class ="form-control" id="salaryLow" name=""salaryLow"" placeholder="最低薪资" required>
 				</div>
 			</div>
 			
 			<div class="form-group">
 				<label class="col-md-2 control-label" for="salaryHigh">最高薪资：</label>
 				<div class="col-md-4" >
-					${recruitment.salaryHigh }
+					<input type="text" class ="form-control" id="salaryHigh" name=""salaryHigh"" placeholder="最高薪资" required>
 				</div>
 			</div>
 			
 			<div class="form-group">
 				<label class="col-md-2 control-label" for="requirement">入职条件：</label>
 				<div class="col-md-4" >
-					${recruitment.requirement }
+					<input type="text" class ="form-control" id="requirement" name=""requirement"" placeholder="入职条件" required>
 				</div>
 			</div>
 			
@@ -125,38 +139,46 @@
 			<div class="form-group">
 				<label class="col-md-2 control-label" for="userId">发布人：</label>
 				<div class="col-md-4" >
-					${recruitment.userId }
+					<input class ="form-control" id="userId" name=""userId"" placeholder="发布人" required>
 				</div>
 			</div>
 			
 			<div class="form-group">
 				<label class="col-md-2 control-label" for="type">发布单类型：</label>
 				<div class="col-md-4" >
-					${recruitment.type }
+					<input class ="form-control" id="type" name=""type"" placeholder="发布单类型" >
 				</div>
 			</div>
 			
 			<div class="form-group">
 				<label class="col-md-2 control-label" for="cashback">返现金额：</label>
 				<div class="col-md-4" >
-					${recruitment.cashback }
+					<input class ="form-control" id="cashback" name=""cashback"" placeholder="返现金额" required>
 				</div>
 			</div>
 			
 			<div class="form-group">
 				<label class="col-md-2 control-label" for="cashbackDays">期满天数：</label>
 				<div class="col-md-4" >
-					${recruitment.cashbackDays }
+					<input class ="form-control" id="cashbackDays" name=""cashbackDays"" placeholder="期满天数" required>
 				</div>
 			</div>
 			
 			<div class="form-group">
 				<label class="col-md-2 control-label" for="cashbackForBroker">推荐人佣金：</label>
 				<div class="col-md-4" >
-					${recruitment.cashbackForBroker }
+					<input class ="form-control" id="cashbackForBroker" name=""cashbackForBroker"" placeholder="推荐人佣金" >
 				</div>
 			</div>
 			
+			<div class="">
+				<label class="col-md-4 control-label"></label>
+				<div class="col-md-4">
+					<button type="submit" class="btn btn-primary">
+						发布
+					</button>
+				</div>
+			</div>
 		</form>
 	</div>
 </body>

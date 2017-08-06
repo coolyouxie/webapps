@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.webapps.common.bean.Page;
 import com.webapps.common.entity.Company;
 import com.webapps.common.entity.Recruitment;
 import com.webapps.common.form.RecruitmentRequestForm;
@@ -46,6 +47,17 @@ public class RecruitmentServiceImpl implements IRecruitmentService {
 	public int deleteRecruitmentById(Integer id) throws Exception {
 		int result = iRecruitmentMapper.deleteByIdInLogic(id);
 		return result;
+	}
+
+	@Override
+	public Page loadRecruitmentList(Page page, RecruitmentRequestForm form) throws Exception {
+		int startRow = page.getStartRow();
+		int endRow = page.getEndRow();
+		int count = iRecruitmentMapper.queryCount(form);
+		List<Recruitment> list = iRecruitmentMapper.queryPage(startRow, endRow, form);
+		page.setResultList(list);
+		page.setRecords(count);
+		return page;
 	}
 	
 	

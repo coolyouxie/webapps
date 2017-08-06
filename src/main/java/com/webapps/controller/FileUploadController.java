@@ -15,7 +15,7 @@ import net.sf.json.JSONObject;
 import net.sf.json.util.JSONUtils;
 
 @Controller
-@RequestMapping("fileUpload")
+@RequestMapping(value="fileUpload")
 public class FileUploadController {
 	
 	@Autowired
@@ -28,7 +28,7 @@ public class FileUploadController {
 	 * @return
 	 */
 	@ResponseBody
-	@RequestMapping("/pictureUpload")
+	@RequestMapping(value="/pictureUpload")
 	public String pictureUpload(HttpServletRequest request,HttpServletResponse response){
 		ResultDto<String> dto = new ResultDto<String>();
 		try {

@@ -10,7 +10,7 @@ public class Recruitment extends Entity{
 
     private Company company;
     private String title;
-    private String breifInfo;
+    private String briefInfo;
     private Date endDate;
     private int recruitmentNumber;
     private BigDecimal commision;
@@ -43,14 +43,6 @@ public class Recruitment extends Entity{
 
     public void setTitle(String title) {
         this.title = title;
-    }
-
-    public String getBreifInfo() {
-        return breifInfo;
-    }
-
-    public void setBreifInfo(String breifInfo) {
-        this.breifInfo = breifInfo;
     }
 
     public Date getEndDate() {
@@ -163,6 +155,14 @@ public class Recruitment extends Entity{
 
 	public void setWorkAddress(String workAddress) {
 		this.workAddress = workAddress;
+	}
+
+	public String getBriefInfo() {
+		return briefInfo;
+	}
+
+	public void setBriefInfo(String briefInfo) {
+		this.briefInfo = briefInfo;
 	}
 
 }

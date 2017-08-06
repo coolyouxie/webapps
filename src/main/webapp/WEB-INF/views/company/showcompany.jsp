@@ -2,17 +2,22 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
-<!DOCTYPE html">
+<!DOCTYPE html>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>新增或修改用户信息</title>
+<title>新增或修改公司信息</title>
+<link rel="stylesheet" href="${ctx}/js/common/jquery/jquery-ui-1.12.1/jquery-ui.css" type="text/css" />
+<link rel="stylesheet" href="${ctx}/js/common/jquery/jqGrid/css/ui.jqgrid.css" type="text/css" />
 <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
 <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.js"></script>
 <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
 <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-
+<script src="${ctx}/js/common/jquery/jqGrid/js/grid.base.js"></script>
+<script src="${ctx}/js/common/jquery/jqGrid/js/grid.common.js"></script>
+<script src="${ctx}/js/common/jquery/jqGrid/js/i18n/grid.locale-cn.js"></script>
+<script src="${ctx}/js/common/jquery/jqGrid/js/jquery.jqGrid.js"></script>
 <style>
 	 col-md-2, span{
 		display:-moz-inline-box;
@@ -22,8 +27,101 @@
 </style>
 
 <script type="text/javascript">
-	
-	
+	var dataGrid = null;
+	jQuery(document).ready(function(){
+		dataGrid = jQuery("#list").jqGrid({
+	    url:"${ctx}/recruitment/loadRecruitmentList",
+	    datatype: "local",
+	    mtype : "POST",
+	    jsonReader : {
+							root : "resultList", // json中代表实际模型数据的入口
+							page : "page.page", // json中代表当前页码的数据   
+							records : "page.records", // json中代表数据行总数的数据   
+							total : 'page.total', // json中代表页码总数的数据 
+							repeatitems : false // 如果设为false，则jqGrid在解析json时，会根据name来搜索对应的数据元素（即可以json中元素可以不按顺序）；而所使用的name是来自于colModel中的name设定。   
+						},
+	    colNames : [ '标题', '招聘人数', '招聘佣金', '工种', '薪资范围', '返现金额','推荐人佣金','期满天数', '操作'],
+	    colModel : [ {
+							label : 'title',
+							name : 'title',
+							align : 'center',
+							sortable : false,
+							formatter:function(cellvalue,options,rowObject){
+								return '<a href="${ctx}/recruitment/getById?id='+rowObject.id+'" style="color:blue">'+cellvalue+'</a>';
+							}
+						}, {
+							label : 'recruitmentNumber',
+							name : 'recruitmentNumber',
+							align : 'center',
+							sortable : false
+						}, {
+							label : 'commision',
+							name : 'commision',
+							align : 'center',
+							sortable : false
+						}, {
+							label : 'workType',
+							name : 'workType',
+							align : 'center',
+							sortable : false
+						}, {
+							label : 'salaryLow',
+							name : 'salaryLow',
+							align : 'center',
+							sortable : false,
+							formatter:function(cellvalue,options,rowObject){
+								return rowObject.salaryLow+"元-"+rowObject.salaryHigh+"元";
+							}
+						}, {
+							label : 'cashback',
+							name : 'cashback',
+							align : 'center',
+							sortable : false
+						},{
+							label : 'cashbackForBroker',
+							name : 'cashbackForBroker',
+							align : 'center',
+							sortable : false
+						},{
+							label : 'cashbackDays',
+							name : 'cashbackDays',
+							align : 'center',
+							sortable : false
+						},{
+							label : 'operate',
+							name : 'operate',
+							align : 'center',
+							sortable : false
+						} ],
+	    pager: '#pager',
+	    rowNum:10,
+	    rowList:[10,20,50],
+	    sortname: 'id',
+	    viewrecords: true,
+	    sortorder: "desc",
+	    //caption: "公司发布单",
+	    gridComplete : function() { //在此事件中循环为每一行添加日志、废保和查看链接
+			var ids = jQuery("#list").jqGrid('getDataIDs');
+			for ( var i = 0; i < ids.length; i++) {
+				var id = ids[i];
+				var rowData = $('#list').jqGrid('getRowData', id);
+				operateClick = '<a href="${ctx}/recruitment/toRecruitmentInfoPage?type=edit&id='+id+'" style="color:blue">编辑</a> <a href="#" style="color:blue" onclick="deleteById('+ id + ')" >删除</a>';
+				jQuery("#list").jqGrid('setRowData', id, {
+					operate : operateClick
+				});
+			}
+		}
+	});
+	search();
+});
+	function search(){
+		var companyId=$("#companyId").val();
+		dataGrid.jqGrid("setGridParam",{
+		    postData:{"companyId":$("#companyId").val()},
+		    page:1,
+		    datatype:'json'
+		}).trigger("reloadGrid");
+	}
 </script>
 </head>
 <body>
@@ -35,7 +133,7 @@
 				</h4>
 			</div>
 			<form id="addRecruitment" action="${ctx}/recruitment/toAddRecruitmentPage" method="post">
-				<input type="hidden" name="companyId" value="${company.id}">
+				<input type="hidden" id="companyId" name="companyId" value="${company.id}">
 				<div class="col-md-2">
 					<button type="submit" onclick="">新建发布单</button>
 				</div>
@@ -112,7 +210,9 @@
 				</div>
 			</div>
 		</c:forEach>
-			
+		
 	</div>
+	<table id="list"></table>
+	<div id="pager"></div>
 </body>
 </html>

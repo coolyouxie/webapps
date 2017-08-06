@@ -20,7 +20,7 @@ import org.springframework.stereotype.Component;
  * 
  * @author 解帅
  */
-@Component("validatorCode")
+@Component(value="validatorCode")
 public class ValidatorCodeUtil {
 
 	/*

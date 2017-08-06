@@ -94,7 +94,7 @@
 			<if test="obj.keyWords !=null and obj.keyWords != ''">
 				AND title like concat('%',#{obj.keyWords},'%')
 			</if>
-			<if test="obj.parentId != null and obj.parentId != ''">
+			<if test="obj.companyId != null and obj.companyId != ''">
 				and company_id = #{obj.companyId,jdbcType=DECIMAL}
 			</if>
 		</trim>
@@ -110,7 +110,7 @@
 			<if test="obj.keyWords !=null and obj.keyWords != ''">
 				AND title like concat('%',#{obj.keyWords},'%')
 			</if>
-			<if test="obj.parentId != null and obj.parentId != ''">
+			<if test="obj.companyId != null and obj.companyId != ''">
 				and company_id = #{obj.companyId,jdbcType=DECIMAL}
 			</if>
 		</trim>

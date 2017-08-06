@@ -48,10 +48,10 @@ public class RecruitmentController {
 	}
 	
 	@ResponseBody
-	@RequestMapping("/loadCompanyList")
-	public Page loadCompanyList(Model model,Page page,CompanyRequestForm form,HttpServletRequest request,HttpServletResponse response){
+	@RequestMapping("/loadRecruitmentList")
+	public Page loadRecruitmentList(Model model,Page page,RecruitmentRequestForm form,HttpServletRequest request,HttpServletResponse response){
 		try {
-			page = iCompanyService.loadCompanyList(page, form);
+			page = iRecruitmentService.loadRecruitmentList(page, form);
 			return page;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -59,14 +59,14 @@ public class RecruitmentController {
 		return null;
 	}
 	
-	@RequestMapping("/toCompanyInfoPage")
-	public String toCompanyInfoPage(Model model,String type,Integer id,HttpServletRequest request,HttpServletResponse response){
+	@RequestMapping("/toRecruitmentInfoPage")
+	public String toRecruitmentInfoPage(Model model,String type,Integer id,HttpServletRequest request,HttpServletResponse response){
 		//如果是新增直跳转页面
 		if("add".equals(type)){
-			return "/company/addcompany";
+			return "/company/addcompanyrecruitment";
 		}
-		if("addPicture".equals(type)){
-			return "/company/addcompanypicture";
+		if("addRecruitment".equals(type)){
+			return "/company/addcompanyrecruitment";
 		}
 		//如果不是新增，则先根据ID查询出公司信息后再跳转页面
 		try {
@@ -75,10 +75,10 @@ public class RecruitmentController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		if("show".equals(type)){
-			return "/company/showcompany";
+		if("addRecruitment".equals(type)){
+			return "/company/showcompanyrecruitment";
 		}else if("edit".equals(type)){
-			return "/company/editcompany";
+			return "/company/editcompanyrecruitment";
 		}
 		return null;
 	}

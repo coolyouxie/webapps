@@ -19,16 +19,11 @@ import com.webapps.common.utils.ValidatorCodeUtil;
 import com.webapps.service.IUserService;
 
 @Controller
-@RequestMapping("login")
+@RequestMapping(value="login")
 public class LoginController {
 
 	@Autowired
 	private IUserService iUserService;
-	
-	@RequestMapping("/toLogin")
-	public String welcome(){
-		return "login";
-	}
 
 	@RequestMapping(value = "/userLogin")
 	public String login(Model model,
