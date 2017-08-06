@@ -65,7 +65,7 @@ public class RecruitmentController {
 		if("add".equals(type)){
 			return "/company/addcompanyrecruitment";
 		}
-		if("addRecruitment".equals(type)){
+		if("edit".equals(type)){
 			return "/company/addcompanyrecruitment";
 		}
 		//如果不是新增，则先根据ID查询出公司信息后再跳转页面
@@ -75,7 +75,7 @@ public class RecruitmentController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		if("addRecruitment".equals(type)){
+		if("add".equals(type)){
 			return "/company/showcompanyrecruitment";
 		}else if("edit".equals(type)){
 			return "/company/editcompanyrecruitment";
