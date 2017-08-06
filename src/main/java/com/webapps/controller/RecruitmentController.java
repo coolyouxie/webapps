@@ -13,7 +13,6 @@ import com.webapps.common.bean.Page;
 import com.webapps.common.bean.ResultDto;
 import com.webapps.common.entity.Company;
 import com.webapps.common.entity.Recruitment;
-import com.webapps.common.form.CompanyRequestForm;
 import com.webapps.common.form.RecruitmentRequestForm;
 import com.webapps.service.ICompanyService;
 import com.webapps.service.IRecruitmentService;
@@ -30,11 +29,6 @@ public class RecruitmentController {
 	@Autowired
 	private IRecruitmentService iRecruitmentService;
 	
-	@RequestMapping("/toCompanyListPage")
-	public String toCompanyListPage(HttpServletRequest request,HttpServletResponse response){
-		return "/company/companylist";
-	}
-	
 	@RequestMapping("/toAddRecruitmentPage")
 	public String toAddRecruitmentPage(Model model,Integer companyId,HttpServletRequest request,HttpServletResponse response){
 		Company company;
@@ -44,7 +38,7 @@ public class RecruitmentController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return "/company/addcompanyrecruitment";
+		return "/recruitment/addRecruitment";
 	}
 	
 	@ResponseBody
@@ -63,22 +57,20 @@ public class RecruitmentController {
 	public String toRecruitmentInfoPage(Model model,String type,Integer id,HttpServletRequest request,HttpServletResponse response){
 		//如果是新增直跳转页面
 		if("add".equals(type)){
-			return "/company/addcompanyrecruitment";
+			return "/recruitment/addRecruitment";
 		}
-		if("edit".equals(type)){
-			return "/company/addcompanyrecruitment";
-		}
-		//如果不是新增，则先根据ID查询出公司信息后再跳转页面
+		Recruitment r = null;
 		try {
-			Company company = iCompanyService.getById(id);
-			model.addAttribute("company", company);
+			r = iRecruitmentService.getById(id);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		if("add".equals(type)){
-			return "/company/showcompanyrecruitment";
-		}else if("edit".equals(type)){
-			return "/company/editcompanyrecruitment";
+		model.addAttribute("recruitment", r);
+		if("edit".equals(type)){
+			return "/recruitment/editRecruitment";
+		}
+		if("show".equals(type)){
+			return "/recruitment/showRecruitment";
 		}
 		return null;
 	}
@@ -103,11 +95,11 @@ public class RecruitmentController {
 					if(recruitment.getId()==null){
 						dto.setResult("fail");
 						dto.setErrorMsg("新增发布单失败，请稍后重试");
-						return "/company/addcompanyrecruitment";
+						return "/recruitment/addRecruitment";
 					}else{
 						dto.setResult("fail");
 						dto.setErrorMsg("更新发布单失败，请稍后重试");
-						return "/company/editcompanyrecruitment";
+						return "/recruitment/editRecruitment";
 					}
 				}
 			} catch (Exception e) {
@@ -143,13 +135,12 @@ public class RecruitmentController {
 	@RequestMapping("/getById")
 	public String getById(Model model,Integer id,HttpServletRequest request,HttpServletResponse response){
 		try {
-			Company company = iCompanyService.getById(id);
-			model.addAttribute("company", company);
+			Recruitment r = iRecruitmentService.getById(id);
+			model.addAttribute("recruitment", r);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return "/company/showcompany";
+		return "/recruitment/showRecruitment";
 	}
 	
 	

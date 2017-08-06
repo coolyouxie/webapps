@@ -15,5 +15,7 @@ public interface IRecruitmentService {
 	public int deleteRecruitmentById(Integer id)throws Exception;
 	
 	public Page loadRecruitmentList(Page page,RecruitmentRequestForm form)throws Exception;
+	
+	public Recruitment getById(Integer id)throws Exception;
 
 }

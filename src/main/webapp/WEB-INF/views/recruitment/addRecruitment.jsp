@@ -81,9 +81,9 @@
 			</div> -->
 			
 			<div class="form-group">
-				<label class="col-md-2 control-label" for="recruitmentNmber">招聘人数：</label>
+				<label class="col-md-2 control-label" for="recruitmentNumber">招聘人数：</label>
 				<div class="col-md-4" >
-					<input type="text" id="recruitmentNmber" name="recruitmentNmber" class="form-control" placeholder="请输入招聘人数" required>
+					<input type="text" id="recruitmentNumber" name="recruitmentNumber" class="form-control" placeholder="请输入招聘人数" required>
 				</div>
 			</div>
 			
@@ -111,21 +111,21 @@
 			<div class="form-group">
 				<label class="col-md-2 control-label" for="salaryLow">最低薪资：</label>
 				<div class="col-md-4" >
-					<input type="text" class ="form-control" id="salaryLow" name=""salaryLow"" placeholder="最低薪资" required>
+					<input type="text" class ="form-control" id="salaryLow" name="salaryLow" placeholder="最低薪资" required>
 				</div>
 			</div>
 			
 			<div class="form-group">
 				<label class="col-md-2 control-label" for="salaryHigh">最高薪资：</label>
 				<div class="col-md-4" >
-					<input type="text" class ="form-control" id="salaryHigh" name=""salaryHigh"" placeholder="最高薪资" required>
+					<input type="text" class ="form-control" id="salaryHigh" name="salaryHigh" placeholder="最高薪资" required>
 				</div>
 			</div>
 			
 			<div class="form-group">
 				<label class="col-md-2 control-label" for="requirement">入职条件：</label>
 				<div class="col-md-4" >
-					<input type="text" class ="form-control" id="requirement" name=""requirement"" placeholder="入职条件" required>
+					<input type="text" class ="form-control" id="requirement" name="requirement" placeholder="入职条件" required>
 				</div>
 			</div>
 			
@@ -136,38 +136,38 @@
 				</div>
 			</div> -->
 			
-			<div class="form-group">
+			<!-- <div class="form-group">
 				<label class="col-md-2 control-label" for="userId">发布人：</label>
 				<div class="col-md-4" >
-					<input class ="form-control" id="userId" name=""userId"" placeholder="发布人" required>
+					<input class ="form-control" id="userId" name="userId" placeholder="发布人" required>
 				</div>
-			</div>
+			</div> -->
 			
 			<div class="form-group">
 				<label class="col-md-2 control-label" for="type">发布单类型：</label>
 				<div class="col-md-4" >
-					<input class ="form-control" id="type" name=""type"" placeholder="发布单类型" >
+					<input class ="form-control" id="type" name="type" placeholder="发布单类型" >
 				</div>
 			</div>
 			
 			<div class="form-group">
 				<label class="col-md-2 control-label" for="cashback">返现金额：</label>
 				<div class="col-md-4" >
-					<input class ="form-control" id="cashback" name=""cashback"" placeholder="返现金额" required>
+					<input class ="form-control" id="cashback" name="cashback" placeholder="返现金额" required>
 				</div>
 			</div>
 			
 			<div class="form-group">
 				<label class="col-md-2 control-label" for="cashbackDays">期满天数：</label>
 				<div class="col-md-4" >
-					<input class ="form-control" id="cashbackDays" name=""cashbackDays"" placeholder="期满天数" required>
+					<input class ="form-control" id="cashbackDays" name="cashbackDays" placeholder="期满天数" required>
 				</div>
 			</div>
 			
 			<div class="form-group">
 				<label class="col-md-2 control-label" for="cashbackForBroker">推荐人佣金：</label>
 				<div class="col-md-4" >
-					<input class ="form-control" id="cashbackForBroker" name=""cashbackForBroker"" placeholder="推荐人佣金" >
+					<input class ="form-control" id="cashbackForBroker" name="cashbackForBroker" placeholder="推荐人佣金" >
 				</div>
 			</div>
 			

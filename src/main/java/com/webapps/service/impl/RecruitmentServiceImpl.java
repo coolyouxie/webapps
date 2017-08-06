@@ -11,6 +11,7 @@ import com.webapps.common.entity.Company;
 import com.webapps.common.entity.Recruitment;
 import com.webapps.common.form.RecruitmentRequestForm;
 import com.webapps.common.utils.DateUtil;
+import com.webapps.mapper.ICompanyMapper;
 import com.webapps.mapper.IRecruitmentMapper;
 import com.webapps.service.IRecruitmentService;
 
@@ -20,6 +21,9 @@ public class RecruitmentServiceImpl implements IRecruitmentService {
 	
 	@Autowired
 	private IRecruitmentMapper iRecruitmentMapper;
+	
+	@Autowired
+	private ICompanyMapper iCompanyMapper;
 
 	@Override
 	public int saveRecruitment(RecruitmentRequestForm form) throws Exception {
@@ -58,6 +62,16 @@ public class RecruitmentServiceImpl implements IRecruitmentService {
 		page.setResultList(list);
 		page.setRecords(count);
 		return page;
+	}
+
+	@Override
+	public Recruitment getById(Integer id) throws Exception {
+		Recruitment r = iRecruitmentMapper.getById(id);
+		if(r!=null&&r.getCompany()!=null&&r.getCompany().getId()!=null){
+			Company c = iCompanyMapper.getById(r.getCompany().getId());
+			r.setCompany(c);
+		}
+		return r;
 	}
 	
 	

@@ -105,7 +105,7 @@
 			for ( var i = 0; i < ids.length; i++) {
 				var id = ids[i];
 				var rowData = $('#list').jqGrid('getRowData', id);
-				operateClick = '<a href="${ctx}/recruitment/toRecruitmentInfoPage?type=edit&id='+id+'" style="color:blue">编辑</a> <a href="#" style="color:blue" onclick="deleteById('+ id + ')" >删除</a>';
+				operateClick = '<a href="${ctx}/recruitment/toRecruitmentInfoPage?type=edit&id='+id+'" style="color:blue">编辑</a> <a href="#" style="color:blue" onclick="deleteRecruitmentById('+ id + ')" >删除</a>';
 				jQuery("#list").jqGrid('setRowData', id, {
 					operate : operateClick
 				});
