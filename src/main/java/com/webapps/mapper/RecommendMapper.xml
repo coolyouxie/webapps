@@ -21,7 +21,7 @@
 	</sql>
 
 	<sql id="insert_columns">
-		user_id,recruitment_Id,name,mobile,age,gender,state, data_state,CREATE_TIME,UPDATE_TIME
+		user_id,recruitment_Id,name,mobile,age,gender,state, data_state,CREATE_TIME
 	</sql>
 	
 	<select id="getById" resultMap="resultMap">
@@ -31,6 +31,14 @@
 	<!-- 查询所有 -->
 	<select id="queryAll" resultMap="resultMap">
 		select <include refid="select_columns" /> from t_recommend where data_state = 1
+	</select>
+	
+	<!-- 查询所有 -->
+	<select id="queryAllByDataState" resultMap="resultMap">
+		select <include refid="select_columns" /> from t_recommend
+		<if test="dataState != null and dataState != ''">
+			where data_State = dataState 
+		</if>
 	</select>
 	
 	<!-- 根据父级行政区号查询 -->

@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.webapps.mapper.IFeeConfigMapper">
-	<resultMap id="resultMap" type="com.webapps.common.entity.FeeConfig">
+<mapper namespace="com.webapps.mapper.ICashApprovalMapper">
+	<resultMap id="resultMap" type="com.webapps.common.entity.CashApproval">
 		<id column="ID" jdbcType="DECIMAL" property="id" />
-		<result column="title" jdbcType="VARCHAR" property="title" />
-		<result column="remark" jdbcType="VARCHAR" property="remark" />
-		<result column="type" jdbcType="DECIMAL" property="type" />
+		<result column="user_id" jdbcType="DECIMAL" property="userId" />
+		<result column="state" jdbcType="DECIMAL" property="state" />
 		<result column="fee" jdbcType="DECIMAL" property="fee" />
 		<result column="data_state" jdbcType="DECIMAL" property="dataState" />
 		<result column="create_time" jdbcType="VARCHAR" property="createTime" />
@@ -14,45 +13,42 @@
 	</resultMap>
 
 	<sql id="select_columns">
-		ID,title,remark,type,fee, data_state,CREATE_TIME,UPDATE_TIME
+		ID,user_id,state,fee,data_state,CREATE_TIME,UPDATE_TIME
 	</sql>
 
 	<sql id="insert_columns">
-		title,remark,type,fee, data_state,CREATE_TIME
+		user_id,state,fee,data_state,CREATE_TIME
 	</sql>
 	
 	<select id="getById" resultMap="resultMap">
-		select <include refid="select_columns" /> from t_fee_config where id = #{id}
+		select <include refid="select_columns" /> from t_cash_approval where id = #{id}
 	</select>
 	
 	<!-- 查询所有 -->
 	<select id="queryAll" resultMap="resultMap">
-		select <include refid="select_columns" /> from t_fee_config where data_state = 1
+		select <include refid="select_columns" /> from t_cash_approval where data_state = 1
 	</select>
 	
 	<!-- 查询所有 -->
 	<select id="queryAllByDataState" resultMap="resultMap">
-		select <include refid="select_columns" /> from t_fee_config
+		select <include refid="select_columns" /> from t_cash_approval
 		<if test="dataState != null and dataState != ''">
 			where data_State = dataState 
 		</if>
 	</select>
 	
 	<!-- 根据行政区等查询 -->
-	<select id="queryByType" resultMap="resultMap">
-		select <include refid="select_columns" /> from t_fee_config where type = #{type}
+	<select id="queryByUserId" resultMap="resultMap">
+		select <include refid="select_columns" /> from t_cash_approval where user_id = #{userId}
 	</select>
 	
 	<!-- 查询行政区总数 -->
 	<select id="queryCount" resultType="java.lang.Integer">
-		SELECT count(1) FROM t_fee_config
+		SELECT count(1) FROM t_cash_approval tca left join t_user tu on tu.id = tca.user_id
 		<trim prefix="WHERE" prefixOverrides="AND">
 			data_state = 1 
 			<if test="obj.keyWords !=null and obj.keyWords != ''">
-				AND title like concat('%',#{obj.keyWords},'%')
-			</if>
-			<if test="obj.type != null and obj.type != ''">
-				and type = #{obj.type,jdbcType=DECIMAL}
+				AND tu.name like concat('%',#{obj.keyWords},'%')
 			</if>
 		</trim>
 	</select>
@@ -62,14 +58,11 @@
 		<include refid="ORACLE.paginationStart" />
 		SELECT
 		<include refid="select_columns" />
-		FROM t_fee_config
+		FROM t_cash_approval tca left join t_user tu on tu.id = tca.user_id
 		<trim prefix="WHERE" prefixOverrides="AND">
 			data_state = 1 
 			<if test="obj.keyWords !=null and obj.keyWords != ''">
-				AND title like concat('%',#{obj.keyWords},'%')
-			</if>
-			<if test="obj.type != null and obj.type != ''">
-				and type = #{obj.type,jdbcType=DECIMAL}
+				AND tu.name like concat('%',#{obj.keyWords},'%')
 			</if>
 		</trim>
 		order by create_time desc
@@ -79,7 +72,7 @@
 	<!-- 用于初始化数据时使用 -->
 	<update id="batchUpdateToDelete">
 		<foreach collection="list" item="item" index="index" open="" close="" separator=";">
-			update t_fee_config
+			update t_cash_approval
 			<set>
 				data_state=#{item.dataState},
 				update_time = now()
@@ -89,15 +82,14 @@
 	</update>
 	
 	<insert id="insert">
-		insert into t_fee_config
+		insert into t_cash_approval
 		(
 			<include refid="insert_columns" />
 		)
 		values
 		(
-			#{obj.title},
-			#{obj.remark},
-			#{obj.type},
+			#{obj.userId},
+			#{obj.state},
 			#{obj.fee},
 			#{obj.dataState},
 			now()
