@@ -104,7 +104,7 @@ public class AppController {
 	}
 	
 	@ResponseBody
-	@RequestMapping(value="/getBanner")
+	@RequestMapping(value="/getMessageConfig")
 	public String getMessageConfig(String params){
 		
 		return null;

@@ -103,4 +103,12 @@
 			now()
 		)
 	</insert>
+	
+	<update id="updateById">
+		update t_fee_config set 
+		title=#{obj.title},
+		fee=#{obj.fee},
+		update_time=now()
+		where id=#{id}
+	</update>
 </mapper>

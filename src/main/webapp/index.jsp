@@ -49,10 +49,10 @@
 					<ul class="nav nav-sidebar">
 						<li><a href="${ctx}/company/toCompanyListPage" target="mainContainer">公司管理</a></li>
 						<li><a href="${ctx}/user/toUserListPage" target="mainContainer">用户管理</a></li>
-						<li><a href="#">Analytics</a></li>
-						<li><a href="#">Export</a></li>
+						<li><a href="${ctx}/feeConfig/toFeeConfigPage" target="mainContainer">配置管理</a></li>
+						<li><a href="#">其他</a></li>
 					</ul>
-					<ul class="nav nav-sidebar">
+					<!-- <ul class="nav nav-sidebar">
 						<li><a href="">Nav item</a></li>
 						<li><a href="">Nav item again</a></li>
 						<li><a href="">One more nav</a></li>
@@ -63,7 +63,7 @@
 						<li><a href="">Nav item again</a></li>
 						<li><a href="">One more nav</a></li>
 						<li><a href="">Another nav item</a></li>
-					</ul>
+					</ul> -->
 				</div>
 				
 				<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
