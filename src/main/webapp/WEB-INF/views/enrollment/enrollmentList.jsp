@@ -24,7 +24,7 @@
 	var dataGrid = null;
 	jQuery(document).ready(function(){
 		dataGrid = jQuery("#list").jqGrid({
-		    url:"${ctx}/company/loadCompanyList",
+		    url:"${ctx}/enrollment/loadEnrollmentList",
 		    datatype: "json",
 		    mtype : "POST",
 		    height : 650,

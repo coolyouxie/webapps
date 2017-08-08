@@ -16,7 +16,7 @@
 	</resultMap>
 
 	<sql id="select_columns">
-		ID,user_id,recruitment_id,company_id,state, data_state,CREATE_TIME,UPDATE_TIME
+		te.ID,te.user_id,te.recruitment_id,te.company_id,te.state, te.data_state,te.CREATE_TIME,te.UPDATE_TIME
 	</sql>
 
 	<sql id="insert_columns">
@@ -33,15 +33,15 @@
 	</select>
 	
 	<select id="queryListByFkId" resultMap="resultMap">
-		select <include refid="select_columns" />,tc.name company_name,tr.title recruitment_title from t_enrollment te left join t_company tc on tc.id=te.compnayId
+		select <include refid="select_columns" />,tc.name company_name,tr.title recruitment_title from t_enrollment te left join t_company tc on tc.id=te.company_id
 		left join t_recruitment tr on tr.id = te.recruitment_id 
 		<trim prefix="WHERE" prefixOverrides="AND">
-			data_state = 1 
+			te.data_state = 1 
 			<if test="obj.recruitment != null and obj.recruitment.id != null">
-				and te.recruitment_id = #{obj.recruitmentId}
+				and te.recruitment_id = #{obj.recruitment.id}
 			</if>
 			<if test="obj.company != null and obj.company.id != null">
-				and te.company_id = #{obj.companyId}
+				and te.company_id = #{obj.company.id}
 			</if>
 			<if test="obj.company.name != null and obj.company.name != ''">
 				tc.name like concat('%',#{obj.company.name},'%')
@@ -53,7 +53,7 @@
 		select conut(1) from t_enrollment te left join t_company tc on tc.id=te.compnayId
 		left join t_recruitment tr on tr.id = te.recruitment_id 
 		<trim prefix="WHERE" prefixOverrides="AND">
-			data_state = 1 
+			te.data_state = 1 
 			<if test="obj.recruitment != null and obj.recruitment.id != null">
 				and te.recruitment_id = #{obj.recruitmentId}
 			</if>
@@ -67,17 +67,17 @@
 	
 	<!-- 查询行政区总数 -->
 	<select id="queryCount" resultType="java.lang.Integer">
-		SELECT count(1) from t_enrollment te left join t_company tc on tc.id=te.compnayId
+		SELECT count(1) from t_enrollment te left join t_company tc on tc.id=te.company_id
 		left join t_recruitment tr on tr.id = te.recruitment_id 
 		<trim prefix="WHERE" prefixOverrides="AND">
-			data_state = 1 
+			te.data_state = 1 
 			<if test="obj.recruitment != null and obj.recruitment.id != null">
-				and te.recruitment_id = #{obj.recruitmentId}
+				and te.recruitment_id = #{obj.recruitment.id}
 			</if>
 			<if test="obj.company != null and obj.company.id != null">
-				and te.company_id = #{obj.companyId}
+				and te.company_id = #{obj.company.id}
 			</if>
-			<if test="obj.company.name != null and obj.company.name != ''">
+			<if test="obj.company != null and obj.company.name != null and obj.company.name != ''">
 				tc.name like concat('%',#{obj.company.name},'%')
 			</if>
 		</trim>
@@ -89,17 +89,17 @@
 		SELECT
 		<include refid="select_columns" />,tc.name company_name,tr.title recruitment_title 
 		from t_enrollment te 
-		left join t_company tc on tc.id=te.compnayId
+		left join t_company tc on tc.id=te.company_id
 		left join t_recruitment tr on tr.id = te.recruitment_id 
 		<trim prefix="WHERE" prefixOverrides="AND">
-			data_state = 1 
+			te.data_state = 1 
 			<if test="obj.recruitment != null and obj.recruitment.id != null">
-				and te.recruitment_id = #{obj.recruitmentId}
+				and te.recruitment_id = #{obj.recruitment.id}
 			</if>
 			<if test="obj.company != null and obj.company.id != null">
 				and te.company_id = #{obj.companyId}
 			</if>
-			<if test="obj.company.name != null and obj.company.name != ''">
+			<if test="obj.company != null and obj.company.name != null and obj.company.name != ''">
 				tc.name like concat('%',#{obj.company.name},'%')
 			</if>
 		</trim>
@@ -136,7 +136,6 @@
 			#{obj.state},
 			#{obj.dataState},
 			now()
-		
 		)
 	</insert>
 </mapper>

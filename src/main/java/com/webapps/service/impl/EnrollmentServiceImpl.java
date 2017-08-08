@@ -3,6 +3,8 @@ package com.webapps.service.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.webapps.common.bean.Page;
 import com.webapps.common.bean.ResultDto;
@@ -11,6 +13,8 @@ import com.webapps.common.form.EnrollmentRequestForm;
 import com.webapps.mapper.IEnrollmentMapper;
 import com.webapps.service.IEnrollmentService;
 
+@Service
+@Transactional
 public class EnrollmentServiceImpl implements IEnrollmentService {
 	
 	@Autowired
