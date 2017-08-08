@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.webapps.mapper.IEnrollmentMapper">
+	<resultMap id="resultMap" type="com.webapps.common.entity.Enrollment">
+		<id column="ID" jdbcType="DECIMAL" property="id" />
+		<result column="user_id" jdbcType="DECIMAL" property="user.id" />
+		<result column="recruitment_id" jdbcType="DECIMAL" property="recruitment.id" />
+		<result column="recruitment_title" jdbcType="DECIMAL" property="recruitment.title" />
+		<result column="company_id" jdbcType="DECIMAL" property="company.id" />
+		<result column="company_name" jdbcType="DECIMAL" property="company.name" />
+		<result column="state" jdbcType="DECIMAL" property="state" />
+		<result column="data_state" jdbcType="DECIMAL" property="dataState" />
+		<result column="create_time" jdbcType="VARCHAR" property="createTime" />
+		<result column="UPDATE_TIME" jdbcType="VARCHAR" property="updateTime" />
+	</resultMap>
+
+	<sql id="select_columns">
+		ID,user_id,recruitment_id,company_id,state, data_state,CREATE_TIME,UPDATE_TIME
+	</sql>
+
+	<sql id="insert_columns">
+		user_id,recruitment_id,company_id,state, data_state,CREATE_TIME
+	</sql>
+	
+	<!-- 查询所有 -->
+	<select id="queryAll" resultMap="resultMap">
+		select <include refid="select_columns" /> from t_enrollment where data_state = 1
+	</select>
+	
+	<select id="queryByState" resultMap="resultMap">
+		select <include refid="select_columns" /> from t_enrollment where state = #{state}
+	</select>
+	
+	<select id="queryListByFkId" resultMap="resultMap">
+		select <include refid="select_columns" />,tc.name company_name,tr.title recruitment_title from t_enrollment te left join t_company tc on tc.id=te.compnayId
+		left join t_recruitment tr on tr.id = te.recruitment_id 
+		<trim prefix="WHERE" prefixOverrides="AND">
+			data_state = 1 
+			<if test="obj.recruitment != null and obj.recruitment.id != null">
+				and te.recruitment_id = #{obj.recruitmentId}
+			</if>
+			<if test="obj.company != null and obj.company.id != null">
+				and te.company_id = #{obj.companyId}
+			</if>
+			<if test="obj.company.name != null and obj.company.name != ''">
+				tc.name like concat('%',#{obj.company.name},'%')
+			</if>
+		</trim>
+	</select>
+	
+	<select id="countByFkIds" resultMap="resultMap">
+		select conut(1) from t_enrollment te left join t_company tc on tc.id=te.compnayId
+		left join t_recruitment tr on tr.id = te.recruitment_id 
+		<trim prefix="WHERE" prefixOverrides="AND">
+			data_state = 1 
+			<if test="obj.recruitment != null and obj.recruitment.id != null">
+				and te.recruitment_id = #{obj.recruitmentId}
+			</if>
+			<if test="obj.company != null and obj.company.id != null">
+				and te.company_id = #{obj.companyId}
+			</if>
+		</trim>
+	</select>
+	
+	
+	
+	<!-- 查询行政区总数 -->
+	<select id="queryCount" resultType="java.lang.Integer">
+		SELECT count(1) from t_enrollment te left join t_company tc on tc.id=te.compnayId
+		left join t_recruitment tr on tr.id = te.recruitment_id 
+		<trim prefix="WHERE" prefixOverrides="AND">
+			data_state = 1 
+			<if test="obj.recruitment != null and obj.recruitment.id != null">
+				and te.recruitment_id = #{obj.recruitmentId}
+			</if>
+			<if test="obj.company != null and obj.company.id != null">
+				and te.company_id = #{obj.companyId}
+			</if>
+			<if test="obj.company.name != null and obj.company.name != ''">
+				tc.name like concat('%',#{obj.company.name},'%')
+			</if>
+		</trim>
+	</select>
+
+	<!-- 分页查询行政区信息 -->
+	<select id="queryPage" resultMap="resultMap">
+		<include refid="ORACLE.paginationStart" />
+		SELECT
+		<include refid="select_columns" />,tc.name company_name,tr.title recruitment_title 
+		from t_enrollment te 
+		left join t_company tc on tc.id=te.compnayId
+		left join t_recruitment tr on tr.id = te.recruitment_id 
+		<trim prefix="WHERE" prefixOverrides="AND">
+			data_state = 1 
+			<if test="obj.recruitment != null and obj.recruitment.id != null">
+				and te.recruitment_id = #{obj.recruitmentId}
+			</if>
+			<if test="obj.company != null and obj.company.id != null">
+				and te.company_id = #{obj.companyId}
+			</if>
+			<if test="obj.company.name != null and obj.company.name != ''">
+				tc.name like concat('%',#{obj.company.name},'%')
+			</if>
+		</trim>
+		order by name
+		<include refid="ORACLE.paginationEnd" />
+	</select>
+	
+	<!-- 用于初始化数据时使用 -->
+	<update id="batchUpdateToDelete">
+		<foreach collection="list" item="item" index="index" open="" close="" separator=";">
+			update t_enrollment
+			<set>
+				data_state=#{item.dataState},
+				update_time = now()
+			</set>
+			where id = #{item.id}
+         </foreach>
+	</update>
+	
+	<update id="deleteByIdInLogic">
+		update t_enrollment set data_state = 0 where id = #{id,jdbcType=DECIMAL}
+	</update>
+	
+	<insert id="insert">
+		insert into t_enrollment
+		(
+			<include refid="insert_columns" />
+		)
+		values
+		(
+			#{obj.userId},
+			#{obj.recruitmentId},
+			#{obj.companyId},
+			#{obj.state},
+			#{obj.dataState},
+			now()
+		
+		)
+	</insert>
+</mapper>
