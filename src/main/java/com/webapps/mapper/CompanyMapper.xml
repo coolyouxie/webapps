@@ -19,6 +19,7 @@
 		<result column="longitude" jdbcType="DECIMAL" property="longitude" />
 		<result column="create_time" jdbcType="VARCHAR" property="createTime" />
 		<result column="UPDATE_TIME" jdbcType="VARCHAR" property="updateTime" />
+		<result column="nature" jdbcType="VARCHAR" property="nature" />
 	</resultMap>
 
 
@@ -38,7 +39,8 @@
 		longitude,
 		latitude,
 		briefs,
-		environment
+		environment,
+		nature
 	</sql>
 
 	<sql id="insert_columns">
@@ -55,7 +57,8 @@
 		longitude,
 		latitude,
 		briefs,
-		environment
+		environment,
+		nature
 	</sql>
 
 	<select id="getById" resultMap="resultMap">
@@ -159,7 +162,8 @@
 			#{obj.longitude},
 			#{obj.latitude},
 			#{obj.briefs},
-			#{obj.environment}
+			#{obj.environment},
+			#{obj.nature}
 		)
 	</insert>
 </mapper>

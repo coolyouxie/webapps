@@ -21,6 +21,10 @@ public class Company extends Entity{
     private List<Picture> pictures;
     private String environment;
     private String contactName;
+    /**
+     * 公司性质
+     */
+    private String nature;
 
     public String getName() {
         return name;
@@ -124,6 +128,14 @@ public class Company extends Entity{
 
 	public void setEnvironment(String environment) {
 		this.environment = environment;
+	}
+
+	public String getNature() {
+		return nature;
+	}
+
+	public void setNature(String nature) {
+		this.nature = nature;
 	}
 
 }

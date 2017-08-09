@@ -2,9 +2,9 @@ package com.webapps.common.entity;
 
 public class Recommend extends Entity {
 	
-	private Integer userId;
+	private User user;
 	
-	private Integer recruitmentId;
+	private Recruitment recruitment;
 	
 	private String name;
 	
@@ -15,22 +15,6 @@ public class Recommend extends Entity {
 	private int gender;
 	
 	private int age;
-
-	public Integer getUserId() {
-		return userId;
-	}
-
-	public void setUserId(Integer userId) {
-		this.userId = userId;
-	}
-
-	public Integer getRecruitmentId() {
-		return recruitmentId;
-	}
-
-	public void setRecruitmentId(Integer recruitmentId) {
-		this.recruitmentId = recruitmentId;
-	}
 
 	public String getName() {
 		return name;
@@ -70,6 +54,22 @@ public class Recommend extends Entity {
 
 	public void setAge(int age) {
 		this.age = age;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+	public Recruitment getRecruitment() {
+		return recruitment;
+	}
+
+	public void setRecruitment(Recruitment recruitment) {
+		this.recruitment = recruitment;
 	}
 	
 	

@@ -4,10 +4,12 @@
 <mapper namespace="com.webapps.mapper.IRecommendMapper">
 	<resultMap id="resultMap" type="com.webapps.common.entity.Recommend">
 		<id column="ID" jdbcType="DECIMAL" property="id" />
-		<result column="user_id" jdbcType="DECIMAL" property="userId" />
-		<result column="recruitment_Id" jdbcType="DECIMAL" property="recruitmentId" />
+		<result column="user_id" jdbcType="DECIMAL" property="user.id" />
+		<result column="user_name" jdbcType="DECIMAL" property="user.name" />
+		<result column="user_mobile" jdbcType="DECIMAL" property="user.mobile" />
+		<result column="recruitment_Id" jdbcType="DECIMAL" property="recruitment.id" />
 		<result column="name" jdbcType="VARCHAR" property="name" />
-		<result column="mobile" jdbcType="VARCHAR" property="fee" />
+		<result column="mobile" jdbcType="VARCHAR" property="mobile" />
 		<result column="state" jdbcType="DECIMAL" property="state" />
 		<result column="age" jdbcType="DECIMAL" property="age" />
 		<result column="gender" jdbcType="DECIMAL" property="gender" />
@@ -17,7 +19,7 @@
 	</resultMap>
 
 	<sql id="select_columns">
-		ID,user_id,recruitment_Id,name,mobile,age,gender,state, data_state,CREATE_TIME,UPDATE_TIME
+		tr.ID,tr.user_id,tr.recruitment_Id,tr.name,tr.mobile,tr.age,tr.gender,tr.state, tr.data_state,tr.CREATE_TIME,tr.UPDATE_TIME
 	</sql>
 
 	<sql id="insert_columns">
@@ -43,12 +45,12 @@
 	
 	<!-- 根据父级行政区号查询 -->
 	<select id="queryByUserId" resultMap="resultMap">
-		select <include refid="select_columns" /> from t_recommend where user_id = #{userId} and data_state = 1
+		select <include refid="select_columns" /> from t_recommend where user_id = #{obj.id} and data_state = 1
 	</select>
 	
 	<!-- 根据行政区等查询 -->
 	<select id="queryByRecruitmentId" resultMap="resultMap">
-		select <include refid="select_columns" /> from t_recommend where recruitment_id = #{recruitmentId} and data_state = 1
+		select <include refid="select_columns" /> from t_recommend where recruitment_id = #{obj.recruitment.id} and data_state = 1
 	</select>
 	
 	<!-- 查询行政区总数 -->
@@ -58,7 +60,7 @@
 		left join t_recruitment tre on tr.recruitment_id = tre.id
 		left join t_company tc on tc.id = tre.company_id
 		<trim prefix="WHERE" prefixOverrides="AND">
-			data_state = 1 
+			tr.data_state = 1 
 			<if test="obj.keyWords !=null and obj.keyWords != ''">
 				AND (
 					tu.name like concat('%',#{obj.keyWords},'%') 
@@ -71,10 +73,10 @@
 				)
 			</if>
 			<if test="obj.mobile != null and obj.mobile != ''">
-				and mobile = #{obj.mobile,jdbcType=VARCHAR}
+				and tr.mobile = #{obj.mobile,jdbcType=VARCHAR}
 			</if>
-			<if test="obj.type != null and obj.type != ''">
-				and type = #{obj.type,jdbcType=DECIMAL}
+			<if test="obj.state != null and obj.state != ''">
+				and tr.state = #{obj.state,jdbcType=DECIMAL}
 			</if>
 		</trim>
 	</select>
@@ -83,13 +85,14 @@
 	<select id="queryPage" resultMap="resultMap">
 		<include refid="ORACLE.paginationStart" />
 		SELECT
-		<include refid="select_columns" />
+		<include refid="select_columns" />,
+		tu.name as user_name,tu.mobile as user_mobile
 		FROM t_recommend tr 
 		left join t_user tu on tr.user_id = tu.id
 		left join t_recruitment tre on tr.recruitment_id = tre.id
 		left join t_company tc on tc.id = tre.company_id
 		<trim prefix="WHERE" prefixOverrides="AND">
-			data_state = 1 
+			tr.data_state = 1 
 			<if test="obj.keyWords !=null and obj.keyWords != ''">
 				AND (
 					tu.name like concat('%',#{obj.keyWords},'%') 
@@ -102,10 +105,10 @@
 				)
 			</if>
 			<if test="obj.mobile != null and obj.mobile != ''">
-				and mobile = #{obj.mobile,jdbcType=VARCHAR}
+				and tr.mobile = #{obj.mobile,jdbcType=VARCHAR}
 			</if>
-			<if test="obj.type != null and obj.type != ''">
-				and type = #{obj.type,jdbcType=DECIMAL}
+			<if test="obj.state != null and obj.state != ''">
+				and tr.state = #{obj.state,jdbcType=DECIMAL}
 			</if>
 		</trim>
 		order by name
@@ -119,8 +122,8 @@
 		)
 		values
 		(
-			#{obj.userId},
-			#{obj.recruitmentId},
+			#{obj.user.id},
+			#{obj.recruitment.id},
 			#{obj.name},
 			#{obj.mobile},
 			#{obj.age},
@@ -134,7 +137,7 @@
 	<update id="updateById">
 		update t_recommend 
 		set 
-			recruitment_id = #{obj.recruitmentId},
+			recruitment_id = #{obj.recruitment.id},
 			name = #{obj.name},
 			mobile = #{obj.mobile},
 			state = #{obj.state},

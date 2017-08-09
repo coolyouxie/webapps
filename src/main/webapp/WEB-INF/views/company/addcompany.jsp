@@ -42,14 +42,21 @@
 			<div class="form-group">
 				<label class="col-md-2 control-label" for="name">公司名称：</label>
 				<div class="col-md-4" >
-					<input type="text" id="name" name="name" class="form-control" placeholder="请输入姓名" required>
+					<input type="text" id="name" name="name" class="form-control" placeholder="请输入公司名称" >
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label class="col-md-2 control-label" for="name">公司性质：</label>
+				<div class="col-md-4" >
+					<input type="text" id="nature" name=""nature"" class="form-control" placeholder="请输入公司性质">
 				</div>
 			</div>
 			
 			<div class="form-group">
 				<label class="col-md-2 control-label" for="contactName">联系人：</label>
 				<div class="col-md-4" >
-					<input type="text" id="contactName" name="contactName" class="form-control" placeholder="联系人" >
+					<input type="text" id="contactName" name="contactName" class="form-control" placeholder="请输入联系人" >
 				</div>
 			</div>
 			
@@ -74,12 +81,12 @@
 				</div>
 			</div>
 			
-			<div class="form-group">
+			<!-- <div class="form-group">
 				<label class="col-md-2 control-label" for="enterpriseLegalPerson" >法人代表：</label>
 				<div class="col-md-4" >
 					<input type="text" id="enterpriseLegalPerson" name="enterpriseLegalPerson" class="form-control" placeholder="请输入法人代表">
 				</div>
-			</div>
+			</div> -->
 			
 			<div class="form-group">
 				<label class="col-md-2 control-label" for="address">地址：</label>

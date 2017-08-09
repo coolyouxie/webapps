@@ -47,7 +47,14 @@
 			<div class="form-group">
 				<label class="col-md-2 control-label" for="name">公司名称：</label>
 				<div class="col-md-4" >
-					<input type="text" id="name" name="name" class="form-control" placeholder="请输入姓名" value="${company.name }">
+					<input type="text" id="name" name="name" class="form-control" placeholder="请输入公司名称" value="${company.name }">
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label class="col-md-2 control-label" for="name">公司性质：</label>
+				<div class="col-md-4" >
+					<input type="text" id="nature" name=""nature"" class="form-control" placeholder="请输入公司性质" value="${company.nature }">
 				</div>
 			</div>
 			
