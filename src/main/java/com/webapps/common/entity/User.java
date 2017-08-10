@@ -38,6 +38,8 @@ public class User extends Entity{
     private Integer educationId;
     
     private String token;
+    
+    private UserWallet userWallet;
 
     public String getAccount() {
         return account;
@@ -173,6 +175,14 @@ public class User extends Entity{
 
 	public void setToken(String token) {
 		this.token = token;
+	}
+
+	public UserWallet getUserWallet() {
+		return userWallet;
+	}
+
+	public void setUserWallet(UserWallet userWallet) {
+		this.userWallet = userWallet;
 	}
 
 }

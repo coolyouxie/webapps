@@ -81,7 +81,7 @@
 		update t_picture set data_state = 0 where id = #{id,jdbcType=DECIMAL}
 	</update>
 	
-	<insert id="insert">
+	<insert id="insert" useGeneratedKeys="true" keyProperty="obj.id" parameterType="com.webapps.common.entity.Picture">
 		insert into t_picture
 		(
 			<include refid="insert_columns" />
@@ -96,7 +96,5 @@
 			now()
 		
 		)
-		
-		
 	</insert>
 </mapper>

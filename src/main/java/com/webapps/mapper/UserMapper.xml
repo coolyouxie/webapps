@@ -24,12 +24,14 @@
 		<result column="data_state" jdbcType="DECIMAL" property="dataState" />
 		<result column="create_time" jdbcType="VARCHAR" property="createTime" />
 		<result column="UPDATE_TIME" jdbcType="VARCHAR" property="updateTime" />
+		<result column="user_wallet_id" jdbcType="DECIMAL" property="userWallet.id" />
+		<result column="user_wallet_fee" jdbcType="DECIMAL" property="userWallet.fee" />
 	</resultMap>
 
 	<sql id="select_columns">
-		ID,account,password,token,name, gender, age, telephone, mobile,
-		qq,weiXin,email,home_Address,address,id_card_no,
-		user_type,login_State,education_Id,data_state,CREATE_TIME,UPDATE_TIME
+		tu.ID,tu.account,tu.password,tu.token,tu.name,tu. gender,tu. age,tu. telephone,tu. mobile,
+		tu.qq,tu.weiXin,tu.email,tu.home_Address,tu.address,tu.id_card_no,tu.user_type,tu.login_State,
+		tu.education_Id,tu.data_state,tu.CREATE_TIME,tu.UPDATE_TIME
 	</sql>
 
 	<sql id="insert_columns">
@@ -112,8 +114,8 @@
 			<if test="obj.gender != null and obj.gender != ''">
 				and gender = #{obj.gender,jdbcType=DECIMAL}
 			</if>
-			<if test="obj.educationId != null and obj.educationId != ''">
-				and education_Id = #{obj.educationId,jdbcType=DECIMAL}
+			<if test="obj.mobile != null and obj.mobile != ''">
+				and mobile = #{obj.mobile,jdbcType=VARCHAR}
 			</if>
 			<if test="obj.userType != null and obj.userType != ''">
 				and user_type = #{obj.userType,jdbcType=DECIMAL}
@@ -125,37 +127,37 @@
 	<select id="queryPage" resultMap="resultMap">
 		<include refid="ORACLE.paginationStart" />
 		SELECT
-		<include refid="select_columns" />
-		FROM t_user
+		<include refid="select_columns" />,tuw.id as user_wallet_id,tuw.fee user_wallet_fee
+		FROM t_user tu left join t_user_wallet tuw on tuw.user_id = tu.id
 		<trim prefix="WHERE" prefixOverrides="AND">
-			data_state = 1 
+			tu.data_state = 1 
 			<if test="obj.keyWords !=null and obj.keyWords != ''">
 				AND (
-					name like concat('%', #{obj.keyWords}, '%')
+					tu.name like concat('%', #{obj.keyWords}, '%')
 					or
-					account like concat('%', #{obj.keyWords}, '%')
+					tu.account like concat('%', #{obj.keyWords}, '%')
 					or
-					id_card_no like concat('%', #{obj.keyWords}, '%')
+					tu.id_card_no like concat('%', #{obj.keyWords}, '%')
 					)
 				
 			</if>
 			<if test="obj.name !=null and obj.name != ''">
-				AND name = #{obj.name,jdbcType=VARCHAR}
+				AND tu.name = #{obj.name,jdbcType=VARCHAR}
 			</if>
 			<if test="obj.age != null and obj.age != ''">
-				and age = #{obj.age,jdbcType=DECIMAL}
+				and tu.age = #{obj.age,jdbcType=DECIMAL}
 			</if>
 			<if test="obj.gender != null and obj.gender != ''">
-				and gender = #{obj.gender,jdbcType=VARCHAR}
+				and tu.gender = #{obj.gender,jdbcType=VARCHAR}
 			</if>
-			<if test="obj.educationId != null and obj.educationId != ''">
-				and education_Id = #{obj.educationId,jdbcType=DECIMAL}
+			<if test="obj.mobile != null and obj.mobile != ''">
+				and tu.mobile = #{obj.mobile,jdbcType=DECIMAL}
 			</if>
 			<if test="obj.userType != null and obj.userType != ''">
-				and user_type = #{obj.userType,jdbcType=VARCHAR}
+				and tu.user_type = #{obj.userType,jdbcType=VARCHAR}
 			</if>
 		</trim>
-		order by name
+		order by tu.name
 		<include refid="ORACLE.paginationEnd" />
 	</select>
 	
@@ -172,7 +174,7 @@
 	</update>
 
 
-	<insert id="insert">
+	<insert id="insert" useGeneratedKeys="true" keyProperty="obj.id">
 		insert into T_user (
 			<include refid="insert_columns" />
 		)

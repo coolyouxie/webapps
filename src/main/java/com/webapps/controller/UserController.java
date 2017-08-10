@@ -90,22 +90,17 @@ public class UserController {
 		return "/user/userlist";
 	}
 	
-	@ResponseBody
 	@RequestMapping("/getById")
-	public ResultDto<User> getById(Integer id,HttpServletRequest request,HttpSession session){
-		ResultDto<User> dto = null;
+	public String getById(Model model,Integer id,HttpServletRequest request,HttpSession session){
 		if(id!=null){
 			try {
 				User user = iUserService.getById(id);
-				dto.setData(user);
-				dto.setResult("success");
-				return dto;
+				model.addAttribute("user", user);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
-		dto.setResult("fail");
-		return dto;
+		return "/user/showUser";
 	}
 	
 	@ResponseBody

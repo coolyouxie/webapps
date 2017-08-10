@@ -8,13 +8,14 @@ import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.mysql.jdbc.exceptions.MySQLIntegrityConstraintViolationException;
 import com.webapps.common.bean.Page;
 import com.webapps.common.bean.ResultDto;
 import com.webapps.common.entity.User;
+import com.webapps.common.entity.UserWallet;
 import com.webapps.common.form.UserRequestForm;
 import com.webapps.common.utils.PasswordEncryptUtil;
 import com.webapps.mapper.IUserMapper;
+import com.webapps.mapper.IUserWalletMapper;
 import com.webapps.service.IUserService;
 
 @Service
@@ -25,6 +26,9 @@ public class UserServiceImpl implements IUserService {
 	
 	@Autowired
 	private IUserMapper iUserMapper;
+	
+	@Autowired
+	private IUserWalletMapper iUserWalletMapper;
 
 	@Override
 	public Page loadUserList(Page page,UserRequestForm user) throws Exception {

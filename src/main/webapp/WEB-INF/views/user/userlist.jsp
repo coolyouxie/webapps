@@ -36,15 +36,18 @@
 								total : 'page.total', // json中代表页码总数的数据 
 								repeatitems : false // 如果设为false，则jqGrid在解析json时，会根据name来搜索对应的数据元素（即可以json中元素可以不按顺序）；而所使用的name是来自于colModel中的name设定。   
 							},
-		    colNames : [ '姓名', '账号', '性别', '身份证号', '类型', '学历', '操作' ],
+		    colNames : [ '姓名', '手机号', '性别', '身份证号', '微信号', 'QQ号','总金额', '操作' ],
 		    colModel : [ {
 								label : 'name',
 								name : 'name',
 								align : 'center',
-								sortable : false
+								sortable : false,
+								formatter:function(cellValue,options,rowObject){
+									return '<a href="${ctx}/user/getById?id='+rowObject.id+'" style="color:blue">'+cellValue+'</a>';
+								}
 							}, {
-								label : 'account',
-								name : 'account',
+								label : 'mobile',
+								name : 'mobile',
 								align : 'center',
 								sortable : false
 							}, {
@@ -65,11 +68,11 @@
 								align : 'center',
 								sortable : false
 							}, {
-								label : 'userType',
-								name : 'userType',
+								label : 'weiXin',
+								name : 'weiXin',
 								align : 'center',
-								sortable : false,
-								formatter:function(cellValue,options,rowObject){
+								sortable : false
+								/* formatter:function(cellValue,options,rowObject){
 									if(cellValue==1){
 										return '超级管理员';
 									}else if(cellValue==2){
@@ -79,13 +82,13 @@
 									}else if(cellValue==4){
 										return '企业用户';
 									}
-								}
+								} */
 							}, {
-								label : 'educationId',
-								name : 'educationId',
+								label : 'qq',
+								name : 'qq',
 								align : 'center',
-								sortable : false,
-								formatter:function(cellValue,options,rowObject){
+								sortable : false
+								/* formatter:function(cellValue,options,rowObject){
 									if(cellValue==1){
 										return '小学';
 									}else if(cellValue==2){
@@ -109,7 +112,12 @@
 									}else if(!cellValue){
 										return "未填写";
 									}
-								}
+								} */
+							},{
+								label:'userWallet.fee',
+								name:'userWallet.fee',
+								align:'center',
+								sortable:false
 							},{
 								label : 'operate',
 								name : 'operate',
@@ -181,26 +189,6 @@
 				$('#addModal').modal('hide');
 				alert("保存成功");
 				dataGrid.trigger("reloadGrid");
-			}
-		});
-	}
-	
-	function getById(id){
-		$.ajax({
-			url:"${ctx}/user/getById",
-			type:"POST",
-			dataType:"JSON",
-			data:{
-				"id":id
-			},
-			success:function(response){
-				if(response.result=='success'){
-					setValueForUpdate(response.data);
-					$('#updateModal').modal('show');
-				}else{
-					alert('加载用户信息失败');
-					return ;
-				}
 			}
 		});
 	}
@@ -279,13 +267,15 @@
 			<div class="row" style="margin-bottom:5px">
 				<div class="col-md-3">
 					<label>
-						<span>姓名/账号/身份证:</span>
-						<input type="text" id="keyWords" name="keyWords" >
+						<!-- <span>姓名/账号/身份证:</span> -->
+						<input type="hidden" id="keyWords" name="keyWords" >
+						<span>姓名:</span>
+						<input type="text" id="name" name="name" >
 					</label>
 				</div>
-				<div class="col-md-2">
+				<div class="col-md-3">
 					<label>
-						<span>学历:</span>
+						<!-- <span>学历:</span>
 						<select id="eductionId" name="educationId">
 							<option value="" selected>-请选择-</option>
 							<option value="1">小学</option>
@@ -298,18 +288,20 @@
 							<option value="8">硕士</option>
 							<option value="9">博士</option>
 							<option value="10">博士后</option>
-						</select>
+						</select> -->
+						<span>手机号：</span>
+						<input type="text" id="mobile" name="mobile" >
 					</label>
 				</div>
-				<div class="col-md-2">
-					<label>
+				<div class="col-md-1">
+					<!-- <label>
 						<span>性别:</span>
 						<select id="genderType" name="gender">
 							<option value="" selected>-请选择-</option>
 							<option value="1">男</option>
 							<option value="0">女</option>
 						</select>
-					</label>
+					</label> -->
 				</div>
 				<div class="col-md-2">
 					<button type='button' class="btn btn-primary btn-sm" data-toggle="modal" onclick="search()">

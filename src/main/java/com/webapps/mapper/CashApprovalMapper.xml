@@ -81,7 +81,7 @@
          </foreach>
 	</update>
 	
-	<insert id="insert">
+	<insert id="insert" useGeneratedKeys="true" keyProperty="obj.id" parameterType="com.webapps.common.entity.CashApproval">
 		insert into t_cash_approval
 		(
 			<include refid="insert_columns" />

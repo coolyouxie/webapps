@@ -123,7 +123,7 @@
 		update t_enrollment set data_state = 0 where id = #{id,jdbcType=DECIMAL}
 	</update>
 	
-	<insert id="insert">
+	<insert id="insert" useGeneratedKeys="true" keyProperty="obj.id" parameterType="com.webapps.common.entity.Enrollment">
 		insert into t_enrollment
 		(
 			<include refid="insert_columns" />

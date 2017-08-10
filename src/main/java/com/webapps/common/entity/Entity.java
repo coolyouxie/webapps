@@ -9,7 +9,9 @@ public class Entity {
 
     private Integer id;
     private Date createTime = new Date();
+    
     private Date updateTime;
+    
     private int dataState = 1;
 
     public Integer getId() {

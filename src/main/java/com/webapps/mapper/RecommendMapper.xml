@@ -115,7 +115,7 @@
 		<include refid="ORACLE.paginationEnd" />
 	</select>
 	
-	<insert id="insert">
+	<insert id="insert" useGeneratedKeys="true" keyProperty="obj.id" parameterType="com.webapps.common.entity.Recommend">
 		insert into t_recommend 
 		(
 			<include refid="insert_columns" />
