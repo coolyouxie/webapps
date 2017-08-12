@@ -8,6 +8,9 @@
 		<result column="user_name" jdbcType="DECIMAL" property="user.name" />
 		<result column="user_mobile" jdbcType="DECIMAL" property="user.mobile" />
 		<result column="recruitment_Id" jdbcType="DECIMAL" property="recruitment.id" />
+		<result column="recruitment_title" jdbcType="DECIMAL" property="recruitment.title" />
+		<result column="company_id" jdbcType="DECIMAL" property="company.id" />
+		<result column="company_name" jdbcType="VARCHAR" property="company.name" />
 		<result column="name" jdbcType="VARCHAR" property="name" />
 		<result column="mobile" jdbcType="VARCHAR" property="mobile" />
 		<result column="state" jdbcType="DECIMAL" property="state" />
@@ -61,22 +64,20 @@
 		left join t_company tc on tc.id = tre.company_id
 		<trim prefix="WHERE" prefixOverrides="AND">
 			tr.data_state = 1 
-			<if test="obj.keyWords !=null and obj.keyWords != ''">
-				AND (
-					tu.name like concat('%',#{obj.keyWords},'%') 
-					or
-					tr.name like concat('%',#{obj.keyWords},'%')
-					or
-					tre.title like concat('%',#{obj.keyWords},'%')
-					or
-					tc.name like concat('%',#{obj.keyWords},'%')
-				)
+			<if test="obj.name !=null and obj.name != ''">
+				and tr.name like concat('%',#{obj.name},'%')
 			</if>
 			<if test="obj.mobile != null and obj.mobile != ''">
 				and tr.mobile = #{obj.mobile,jdbcType=VARCHAR}
 			</if>
-			<if test="obj.state != null and obj.state != ''">
-				and tr.state = #{obj.state,jdbcType=DECIMAL}
+			<if test="obj.user != null and obj.user.name != null and obj.user.name !='' ">
+				and tu.name = #{obj.user.name,jdbcType=VARCHAR}
+			</if>
+			<if test="obj.company !=null and obj.company.name != null and obj.company.name != ''">
+				and tc.name like concat('%',#{obj.company.name},'%') 
+			</if>
+			<if test="obj.recruitment != null and obj.recruitment.title != null and obj.recruitment.title != ''">
+				and tre.title like concat('%',#{obj.recruitment.title},'%')
 			</if>
 		</trim>
 	</select>
@@ -86,29 +87,31 @@
 		<include refid="ORACLE.paginationStart" />
 		SELECT
 		<include refid="select_columns" />,
-		tu.name as user_name,tu.mobile as user_mobile
+		tu.name as user_name,
+		tu.mobile as user_mobile,
+		tc.id as company_id,
+		tc.name as company_name,
+		tre.title as recruitment_title
 		FROM t_recommend tr 
 		left join t_user tu on tr.user_id = tu.id
 		left join t_recruitment tre on tr.recruitment_id = tre.id
 		left join t_company tc on tc.id = tre.company_id
 		<trim prefix="WHERE" prefixOverrides="AND">
 			tr.data_state = 1 
-			<if test="obj.keyWords !=null and obj.keyWords != ''">
-				AND (
-					tu.name like concat('%',#{obj.keyWords},'%') 
-					or
-					tr.name like concat('%',#{obj.keyWords},'%')
-					or
-					tre.title like concat('%',#{obj.keyWords},'%')
-					or
-					tc.name like concat('%',#{obj.keyWords},'%')
-				)
+			<if test="obj.name !=null and obj.name != ''">
+				and tr.name like concat('%',#{obj.name},'%')
 			</if>
 			<if test="obj.mobile != null and obj.mobile != ''">
 				and tr.mobile = #{obj.mobile,jdbcType=VARCHAR}
 			</if>
-			<if test="obj.state != null and obj.state != ''">
-				and tr.state = #{obj.state,jdbcType=DECIMAL}
+			<if test="obj.user != null and obj.user.name != null and obj.user.name !='' ">
+				and tu.name = #{obj.user.name,jdbcType=VARCHAR}
+			</if>
+			<if test="obj.company !=null and obj.company.name != null and obj.company.name != ''">
+				and tc.name like concat('%',#{obj.company.name},'%') 
+			</if>
+			<if test="obj.recruitment != null and obj.recruitment.title != null and obj.recruitment.title != ''">
+				and tre.title like concat('%',#{obj.recruitment.title},'%')
 			</if>
 		</trim>
 		order by name

@@ -12,6 +12,8 @@
 <link rel="stylesheet" href="${ctx}/js/common/jquery/jqGrid/css/ui.jqgrid.css" type="text/css" />
 <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
 <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<link rel="stylesheet" href="${ctx}/js/common/jquery/My97DatePicker/skin/WdatePicker.css" type="text/css" />
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.js"></script>
 <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
 <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
@@ -19,6 +21,10 @@
 <script src="${ctx}/js/common/jquery/jqGrid/js/grid.common.js"></script>
 <script src="${ctx}/js/common/jquery/jqGrid/js/i18n/grid.locale-cn.js"></script>
 <script src="${ctx}/js/common/jquery/jqGrid/js/jquery.jqGrid.js"></script>
+<!-- 日期时间控件 -->
+<script src="${ctx}/js/common/jquery/My97DatePicker/WdatePicker.js"></script>
+<script src="${ctx}/js/common/jquery/My97DatePicker/lang/zh-cn.js"></script>
+
 
 <script type="text/javascript">
 	var dataGrid = null;
@@ -36,38 +42,39 @@
 								total : 'page.total', // json中代表页码总数的数据 
 								repeatitems : false // 如果设为false，则jqGrid在解析json时，会根据name来搜索对应的数据元素（即可以json中元素可以不按顺序）；而所使用的name是来自于colModel中的name设定。   
 							},
-		    colNames : [ '公司名称', '发布单标题', '报名人', '身份证号', '手机号', '操作'],
+		    colNames : [ '公司名称', '发布单标题', '报名人', '手机号','报名时间'],
 		    colModel : [ {
 								label : 'company.name',
 								name : 'company.name',
 								align : 'center',
 								sortable : false,
-								formatter:function(cellvalue,options,rowObject){
-									return '<a href="${ctx}/company/getById?id='+rowObject.id+'" style="color:blue">'+cellvalue+'</a>';
+								formatter:function(cellValue,options,rowObject){
+									return '<a href="${ctx}/company/getById?id='+rowObject.id+'" style="color:blue">'+cellValue+'</a>';
 								}
 							}, {
 								label : 'recruitment.title',
 								name : 'recruitment.title',
 								align : 'center',
-								sortable : false
+								sortable : false,
+								formatter:function(cellValue,options,rowObject){
+									return '<a href="${ctx}/recruitment/getById?id='+rowObject.recruitment.id+'" style="color:blue">'+cellValue+'</a>';
+								}
 							}, {
 								label : 'user.name',
 								name : 'user.name',
 								align : 'center',
-								sortable : false
-							}, {
-								label : 'user.idCardNo',
-								name : 'user.idCardNo',
-								align : 'center',
-								sortable : false
+								sortable : false,
+								formatter:function(cellValue,options,rowObject){
+									return '<a href="${ctx}/user/getById?id='+rowObject.user.id+'" style="color:blue">'+cellValue+'</a>';
+								}
 							}, {
 								label : 'user.mobile',
 								name : 'user.mobile',
 								align : 'center',
 								sortable : false
 							},{
-								label : 'operate',
-								name : 'operate',
+								label : 'createTimeStr',
+								name : 'createTimeStr',
 								align : 'center',
 								sortable : false
 							} ],
@@ -79,27 +86,14 @@
 		    sortorder: "desc",
 		    caption: "报名列表",
 		    gridComplete : function() { //在此事件中循环为每一行添加日志、废保和查看链接
-								var ids = jQuery("#list").jqGrid('getDataIDs');
-								for ( var i = 0; i < ids.length; i++) {
-									var id = ids[i];
-									var rowData = $('#list').jqGrid('getRowData', id);
-									operateClick = '<a href="${ctx}/company/toCompanyInfoPage?type=edit&id='+id+'" style="color:blue">编辑</a> <a href="#" style="color:blue" onclick="deleteById('+ id + ')" >删除</a>';
-									jQuery("#list").jqGrid('setRowData', id, {
-										operate : operateClick
-									});
-								}
-							}
+				
+			}
 		});
 	});
 	
 	function search(){
-		var params = {};
-		var keyWords = $.trim($("#keyWords").val());
-		if(keyWords){
-			params.keyWords=keyWords;
-		}
 		dataGrid.jqGrid("setGridParam",{
-		    postData:{"keyWords":$("#keyWords").val()},
+		    postData:$("#searchForm").serialize(),
 		    page:1
 		}).trigger("reloadGrid");
 	}
@@ -141,22 +135,39 @@
 <body>
 	<div class="container-fluid">
 		<form id="searchForm">
-			<div class="row" style="margin-bottom:10px">
-				<div class="col-md-4">
+			<div class="row" style="margin-bottom:8px">
+				<div class="col-sm-3" style="width:255px">
 					<label>
 						<span>公司名称:</span>
-						<input type="text" id="keyWords" name="keyWords" value="">
+						<input type="text" id="companyName" name="company.name" value="">
 					</label>
 				</div>
-				<div class="col-md-2">
+				<div class="col-sm-3" style="width:255px">
+					<label>
+						<span>报名人:</span>
+						<input type="text" id="userName" name="user.name" value="">
+					</label>
+				</div>
+				<div class="col-sm-3" style="width:255px">
+					<label>
+						<span>手机号:</span>
+						<input type="text" id="userMobile" name="user.mobile" value="">
+					</label>
+				</div>
+				<div class="col-sm-1" style="text-align:right;width:200px">
 					<button type='button' class="btn btn-primary btn-sm" data-toggle="modal" onclick="search()">
 						查询
 					</button>
 				</div>
-				<div class="col-md-2">
-					<a type='button' class="btn btn-primary btn-sm" href="${ctx}/company/toCompanyInfoPage?type=add">
-						添加公司
-					</a>
+			</div>
+			<div class="row">
+				<div class="col-sm-4">
+					<label>
+						<span>报名时间:</span>
+						<input type="text" id="enrollTimeStart" name="enrollTimeStart" onClick="WdatePicker({isShowWeek:true})">
+						-
+						<input type="text" id="enrollTimeEnd" name="enrollTimeEnd" onClick="WdatePicker({isShowWeek:true})">
+					</label>
 				</div>
 			</div>
 		</form>

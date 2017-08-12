@@ -1,5 +1,7 @@
 package com.webapps.common.entity;
 
+import com.webapps.common.utils.DateUtil;
+
 public class Enrollment extends Entity {
 	
 	private User user;
@@ -40,6 +42,13 @@ public class Enrollment extends Entity {
 
 	public void setCompany(Company company) {
 		this.company = company;
+	}
+	
+	public String getCreateTimeStr(){
+		if(this.getCreateTime()!=null){
+			return DateUtil.format(this.getCreateTime(), DateUtil.SIMPLE_PATTERN);
+		}
+		return null;
 	}
 
 }

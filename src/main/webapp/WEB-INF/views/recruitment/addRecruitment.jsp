@@ -67,107 +67,119 @@
 			</div>
 			
 			<div class="form-group">
-				<label class="col-md-2 control-label" for="briefInfo">信息简介：</label>
+				<label class="col-md-2 control-label" for="salaryBriefs">薪酬福利：</label>
 				<div class="col-md-4" >
-					<textarea id="briefInfo" name="briefInfo" class="form-control" row="3" required></textarea>
+					<textarea id="salaryBriefs" name="salaryBriefs" class="form-control" row="3" ></textarea>
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label class="col-md-2 control-label" for="briefInfo">其他福利：</label>
+				<div class="col-md-4" >
+					<textarea id="briefInfo" name="briefInfo" class="form-control" row="3" ></textarea>
 				</div>
 			</div>
 			
 			<!-- <div class="form-group">
-				<label class="col-md-2 control-label" for="endDate">结束日期：</label>
+				<label class="col-md-2 control-label" for="recruitmentNumber">招聘人数：</label>
 				<div class="col-md-4" >
-					<input type="text" id="endDateStr" name="endDateStr" class="form_datetime" readonly>
+					<input type="text" id="recruitmentNumber" name="recruitmentNumber" class="form-control" value="" placeholder="请输入招聘人数" >
 				</div>
 			</div> -->
 			
 			<div class="form-group">
-				<label class="col-md-2 control-label" for="recruitmentNumber">招聘人数：</label>
+				<label class="col-md-2 control-label" for="mobile" >手机号：</label>
 				<div class="col-md-4" >
-					<input type="text" id="recruitmentNumber" name="recruitmentNumber" class="form-control" placeholder="请输入招聘人数" required>
+					<input type="text" id="mobile" name="mobile" class="form-control" value="" placeholder="请输入发布人手机号" >
 				</div>
 			</div>
 			
 			<div class="form-group">
-				<label class="col-md-2 control-label" for="commision" >推荐佣金：</label>
+				<label class="col-md-2 control-label" for="mobile" >QQ：</label>
 				<div class="col-md-4" >
-					<input type="text" id="commision" name="commision" class="form-control" placeholder="请输入推荐佣金" required>
+					<input type="text" id="QQ" name="QQ" class="form-control" value="" placeholder="请输入发布人QQ号" >
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label class="col-md-2 control-label" for="weiXin" >微信：</label>
+				<div class="col-md-4" >
+					<input type="text" id="weiXin" name="weiXin" class="form-control" value="" placeholder="请输入发布人微信号" >
 				</div>
 			</div>
 			
 			<div class="form-group">
 				<label class="col-md-2 control-label" for="workType">工种：</label>
 				<div class="col-md-4" >
-					<input type="text" id="workType" name="workType" class="form-control" placeholder="工种" required>
+					<input type="text" id="workType" name="workType" class="form-control" value="" placeholder="工种" >
 				</div>
 			</div>
 			
 			<div class="form-group">
-				<label class="col-md-2 control-label" for="workAddress">工作地址：</label>
-				<div class="col-md-4" >
-					<input type="text" class ="form-control" id="workAddress" name="workAddress" placeholder="请输入工作地址">
+				<label class="col-md-2 control-label" for="salaryLow">薪资范围：</label>
+				<div class="col-md-2" >
+					<input type="text" class ="form-control" id="salaryLow" name="salaryLow" value="" >
+				</div>
+				<div class="col-md-2" >
+					<input type="text" class ="form-control" id="salaryHigh" name="salaryHigh" value="" >
 				</div>
 			</div>
 			
 			<div class="form-group">
-				<label class="col-md-2 control-label" for="salaryLow">最低薪资：</label>
+				<label class="col-md-2 control-label" for="type">发布类型：</label>
 				<div class="col-md-4" >
-					<input type="text" class ="form-control" id="salaryLow" name="salaryLow" placeholder="最低薪资" required>
+					<select id="type" name="type" class="form-control">
+						<option value="1">普招</option>
+						<option value="2">直费</option>
+						<option value="3">兼职</option>
+					</select>
 				</div>
 			</div>
 			
 			<div class="form-group">
-				<label class="col-md-2 control-label" for="salaryHigh">最高薪资：</label>
+				<label class="col-md-2 control-label" for="type">发布单类型：</label>
 				<div class="col-md-4" >
-					<input type="text" class ="form-control" id="salaryHigh" name="salaryHigh" placeholder="最高薪资" required>
+					<select id="type" name="type" class="form-control">
+						<option value="1" >热招</option>
+						<option value="2" >高返费</option>
+						<option value="3" >工作轻松</option>
+						<option value="4" >高工资</option>
+					</select>
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label class="col-md-2 control-label" for="cashback">入职期满金额：</label>
+				<div class="col-md-4" >
+					<input class ="form-control" id="cashback" name="cashback" value="" placeholder="返现金额" >
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label class="col-md-2 control-label" for="requirement">岗位职责：</label>
+				<div class="col-md-4" >
+					<textarea class ="form-control" id="requirement" name="requirement" value="" ></textarea>
 				</div>
 			</div>
 			
 			<div class="form-group">
 				<label class="col-md-2 control-label" for="requirement">入职条件：</label>
 				<div class="col-md-4" >
-					<input type="text" class ="form-control" id="requirement" name="requirement" placeholder="入职条件" required>
-				</div>
-			</div>
-			
-			<!-- <div class="form-group">
-				<label class="col-md-2 control-label" for="publishTime">发布时间：</label>
-				<div class="col-md-4" >
-					<input type="text" id="publishTimeStr" name="publishTimeStr" class="form_datetime" placeholder="发布时间" required readonly>
-				</div>
-			</div> -->
-			
-			<!-- <div class="form-group">
-				<label class="col-md-2 control-label" for="userId">发布人：</label>
-				<div class="col-md-4" >
-					<input class ="form-control" id="userId" name="userId" placeholder="发布人" required>
-				</div>
-			</div> -->
-			
-			<div class="form-group">
-				<label class="col-md-2 control-label" for="type">发布单类型：</label>
-				<div class="col-md-4" >
-					<input class ="form-control" id="type" name="type" placeholder="发布单类型" >
+					<textarea class ="form-control" id="requirement" name="requirement" value="" ></textarea>
 				</div>
 			</div>
 			
 			<div class="form-group">
-				<label class="col-md-2 control-label" for="cashback">返现金额：</label>
+				<label class="col-md-2 control-label" for="requirement">补贴详情：</label>
 				<div class="col-md-4" >
-					<input class ="form-control" id="cashback" name="cashback" placeholder="返现金额" required>
+					<textarea class ="form-control" id="requirement" name="requirement" value="" ></textarea>
 				</div>
 			</div>
 			
 			<div class="form-group">
 				<label class="col-md-2 control-label" for="cashbackDays">期满天数：</label>
 				<div class="col-md-4" >
-					<input class ="form-control" id="cashbackDays" name="cashbackDays" placeholder="期满天数" required>
-				</div>
-			</div>
-			
-			<div class="form-group">
-				<label class="col-md-2 control-label" for="cashbackForBroker">推荐人佣金：</label>
-				<div class="col-md-4" >
-					<input class ="form-control" id="cashbackForBroker" name="cashbackForBroker" placeholder="推荐人佣金" >
+					<input class ="form-control" id="cashbackDays" name="cashbackDays" value="" placeholder="期满天数" >
 				</div>
 			</div>
 			

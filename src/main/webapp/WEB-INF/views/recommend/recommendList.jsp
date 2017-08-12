@@ -35,15 +35,15 @@
 								records : "page.records", // json中代表数据行总数的数据   
 								total : 'page.total', // json中代表页码总数的数据 
 								repeatitems : false // 如果设为false，则jqGrid在解析json时，会根据name来搜索对应的数据元素（即可以json中元素可以不按顺序）；而所使用的name是来自于colModel中的name设定。   
-							},
-		    colNames : [ '推荐人', '推荐人手机', '被推荐人', '被推荐人手机', '推荐状态', '操作'],
+			},
+		    colNames : [ '推荐人', '推荐人手机', '被推荐人', '被推荐人手机', '公司名称','发布单','推荐状态', '操作'],
 		    colModel : [ {
 								label : 'user.name',
 								name : 'user.name',
 								align : 'center',
 								sortable : false,
 								formatter:function(cellvalue,options,rowObject){
-									return '<a href="${ctx}/recommend/getById?id='+rowObject.id+'" style="color:blue">'+cellvalue+'</a>';
+									return '<a href="${ctx}/user/getById?id='+rowObject.user.id+'" style="color:blue">'+cellvalue+'</a>';
 								}
 							}, {
 								label : 'user.mobile',
@@ -61,6 +61,22 @@
 								align : 'center',
 								sortable : false
 							}, {
+								label : 'company.name',
+								name : 'company.name',
+								align : 'center',
+								sortable : false,
+								formatter:function(cellvalue,options,rowObject){
+									return '<a href="${ctx}/company/getById?id='+rowObject.company.id+'" style="color:blue">'+cellvalue+'</a>';
+								}
+							},{
+								label : 'recruitment.title',
+								name : 'recruitment.title',
+								align : 'center',
+								sortable : false,
+								formatter:function(cellvalue,options,rowObject){
+									return '<a href="${ctx}/recruitment/getById?id='+rowObject.recruitment.id+'" style="color:blue">'+cellvalue+'</a>';
+								}
+							},{
 								label : 'state',
 								name : 'state',
 								align : 'center',
@@ -79,27 +95,14 @@
 		    sortorder: "desc",
 		    caption: "报名列表",
 		    gridComplete : function() { //在此事件中循环为每一行添加日志、废保和查看链接
-								var ids = jQuery("#list").jqGrid('getDataIDs');
-								for ( var i = 0; i < ids.length; i++) {
-									var id = ids[i];
-									var rowData = $('#list').jqGrid('getRowData', id);
-									operateClick = '<a href="${ctx}/recommend/toRecommendInfoPage?type=edit&id='+id+'" style="color:blue">编辑</a> <a href="#" style="color:blue" onclick="deleteById('+ id + ')" >删除</a>';
-									jQuery("#list").jqGrid('setRowData', id, {
-										operate : operateClick
-									});
-								}
-							}
+				
+			}
 		});
 	});
 	
 	function search(){
-		var params = {};
-		var keyWords = $.trim($("#keyWords").val());
-		if(keyWords){
-			params.keyWords=keyWords;
-		}
 		dataGrid.jqGrid("setGridParam",{
-		    postData:{"keyWords":$("#keyWords").val()},
+		    postData:$("#searchForm").serialize(),
 		    page:1
 		}).trigger("reloadGrid");
 	}
@@ -142,21 +145,42 @@
 	<div class="container-fluid">
 		<form id="searchForm">
 			<div class="row" style="margin-bottom:10px">
-				<div class="col-md-4">
+				<div class="col-sm-3" style="width:255px;">
 					<label>
-						<span>推荐人/被推荐人:</span>
-						<input type="text" id="keyWords" name="keyWords" value="">
+						<span>推荐人:</span>
+						<input type="text" id="user.name" name="user.name" value="">
+					</label>
+				</div>
+				<div class="col-sm-4" style="width:275px;">
+					<label>
+						<span>推荐人手机:</span>
+						<input type="text" id="user.mobile" name="user.mobile" value="">
+					</label>
+				</div>
+				<div class="col-md-3" >
+					<label>
+						<span>被推荐人:</span>
+						<input type="text" id="name" name="name" value="">
+					</label>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-3" style="width:255px">
+					<label>
+						<span>公司名称:</span>
+						<input type="text" id="company.name" name="company.name" value="">
+					</label>
+				</div>
+				<div class="col-md-3" style="width:255px">
+					<label>
+						<span>发布单:</span>
+						<input type="text" id="recruitment.title" name="recruitment.title" value="">
 					</label>
 				</div>
 				<div class="col-md-2">
 					<button type='button' class="btn btn-primary btn-sm" data-toggle="modal" onclick="search()">
 						查询
 					</button>
-				</div>
-				<div class="col-md-2">
-					<a type='button' class="btn btn-primary btn-sm" >
-						添加
-					</a>
 				</div>
 			</div>
 		</form>

@@ -50,7 +50,7 @@
 			</div>
 		</div>
 		<form id="saveForm" class="form-horizontal" action="${ctx}/recruitment/saveRecruitment"  method="post">
-			<input type="hidden" id="handleType" name="handleType" value="add">
+			<input type="hidden" id="handleType" name="handleType" value="edit">
 			<input type="hidden" id="id" name="id" value="${recruitment.id}">
 			<input type="hidden" id="companyId" name="companyId" value="${recruitment.company.id}" >
 			<div class="form-group">
@@ -81,12 +81,12 @@
 				</div>
 			</div>
 			
-			<div class="form-group">
+			<%-- <div class="form-group">
 				<label class="col-md-2 control-label" for="recruitmentNumber">招聘人数：</label>
 				<div class="col-md-4" >
 					<input type="text" id="recruitmentNumber" name="recruitmentNumber" class="form-control" value="${recruitment.recruitmentNumber}" placeholder="请输入招聘人数" >
 				</div>
-			</div>
+			</div> --%>
 			
 			<div class="form-group">
 				<label class="col-md-2 control-label" for="mobile" >手机号：</label>

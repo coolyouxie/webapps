@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
-public interface IPageMapper<T,R extends T> {
+public interface IPageMapper<T,R> {
 
 	public int queryCount(@Param("obj")R obj);
 

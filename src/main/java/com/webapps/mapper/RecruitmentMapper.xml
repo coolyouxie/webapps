@@ -8,7 +8,7 @@
 		<result column="company_id" jdbcType="DECIMAL" property="company.id" />
 		<result column="brief_info" jdbcType="VARCHAR" property="briefInfo" />
 		<result column="end_date" jdbcType="VARCHAR" property="endDate" />
-		<result column="recruitmentNumber" jdbcType="DECIMAL" property="recruitmentNumber" />
+		<result column="recruitment_Number" jdbcType="DECIMAL" property="recruitmentNumber" />
 		<result column="commision" jdbcType="DECIMAL" property="commision" />
 		<result column="work_type" jdbcType="DECIMAL" property="workType" />
 		<result column="work_address" jdbcType="VARCHAR" property="workAddress" />

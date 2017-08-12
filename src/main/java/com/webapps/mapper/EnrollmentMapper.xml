@@ -5,6 +5,8 @@
 	<resultMap id="resultMap" type="com.webapps.common.entity.Enrollment">
 		<id column="ID" jdbcType="DECIMAL" property="id" />
 		<result column="user_id" jdbcType="DECIMAL" property="user.id" />
+		<result column="user_name" jdbcType="DECIMAL" property="user.name" />
+		<result column="user_mobile" jdbcType="DECIMAL" property="user.mobile" />
 		<result column="recruitment_id" jdbcType="DECIMAL" property="recruitment.id" />
 		<result column="recruitment_title" jdbcType="DECIMAL" property="recruitment.title" />
 		<result column="company_id" jdbcType="DECIMAL" property="company.id" />
@@ -67,18 +69,26 @@
 	
 	<!-- 查询行政区总数 -->
 	<select id="queryCount" resultType="java.lang.Integer">
-		SELECT count(1) from t_enrollment te left join t_company tc on tc.id=te.company_id
+		SELECT count(1) from t_enrollment te 
+		left join t_company tc on tc.id=te.company_id
 		left join t_recruitment tr on tr.id = te.recruitment_id 
+		left join t_user tu on tu.id = te.user_id
 		<trim prefix="WHERE" prefixOverrides="AND">
 			te.data_state = 1 
-			<if test="obj.recruitment != null and obj.recruitment.id != null">
-				and te.recruitment_id = #{obj.recruitment.id}
+			<if test="obj.user != null and obj.user.name != null and obj.user.name != ''">
+				and tu.name = #{obj.user.name}
 			</if>
-			<if test="obj.company != null and obj.company.id != null">
-				and te.company_id = #{obj.company.id}
+			<if test="obj.user != null and obj.user.mobile !=null and obj.user.mobile != ''">
+				and tu.mobile = #{obj.user.mobile}
 			</if>
 			<if test="obj.company != null and obj.company.name != null and obj.company.name != ''">
-				tc.name like concat('%',#{obj.company.name},'%')
+				and tc.name like concat('%',#{obj.company.name},'%')
+			</if>
+			<if test="obj.enrollTimeStart != null and obj.enrollTimeStart != ''">
+				and te.create_time >= #{obj.enrollTimeStart}
+			</if>
+			<if test="obj.enrollTimeEnd != null and obj.enrollTimeEnd != ''">
+				and #{obj.enrollTimeEnd} >= te.create_time
 			</if>
 		</trim>
 	</select>
@@ -87,23 +97,34 @@
 	<select id="queryPage" resultMap="resultMap">
 		<include refid="ORACLE.paginationStart" />
 		SELECT
-		<include refid="select_columns" />,tc.name company_name,tr.title recruitment_title 
+		<include refid="select_columns" />,
+		tc.name company_name,
+		tr.title recruitment_title,
+		tu.name as user_name,
+		tu.mobile as user_mobile
 		from t_enrollment te 
 		left join t_company tc on tc.id=te.company_id
 		left join t_recruitment tr on tr.id = te.recruitment_id 
+		left join t_user tu on tu.id=te.user_id
 		<trim prefix="WHERE" prefixOverrides="AND">
 			te.data_state = 1 
-			<if test="obj.recruitment != null and obj.recruitment.id != null">
-				and te.recruitment_id = #{obj.recruitment.id}
+			<if test="obj.user != null and obj.user.name != null and obj.user.name != ''">
+				and tu.name = #{obj.user.name}
 			</if>
-			<if test="obj.company != null and obj.company.id != null">
-				and te.company_id = #{obj.companyId}
+			<if test="obj.user != null and obj.user.mobile !=null and obj.user.mobile != ''">
+				and tu.mobile = #{obj.user.mobile}
 			</if>
 			<if test="obj.company != null and obj.company.name != null and obj.company.name != ''">
-				tc.name like concat('%',#{obj.company.name},'%')
+				and tc.name like concat('%',#{obj.company.name},'%')
+			</if>
+			<if test="obj.enrollTimeStart != null and obj.enrollTimeStart != ''">
+				and te.create_time >= #{obj.enrollTimeStart}
+			</if>
+			<if test="obj.enrollTimeEnd != null and obj.enrollTimeEnd != ''">
+				and #{obj.enrollTimeEnd} >= te.create_time
 			</if>
 		</trim>
-		order by name
+		order by te.create_time desc
 		<include refid="ORACLE.paginationEnd" />
 	</select>
 	

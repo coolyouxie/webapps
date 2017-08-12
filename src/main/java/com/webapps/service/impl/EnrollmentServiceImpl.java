@@ -10,6 +10,7 @@ import com.webapps.common.bean.Page;
 import com.webapps.common.bean.ResultDto;
 import com.webapps.common.entity.Enrollment;
 import com.webapps.common.form.EnrollmentRequestForm;
+import com.webapps.common.form.EnrollmentResponseForm;
 import com.webapps.mapper.IEnrollmentMapper;
 import com.webapps.service.IEnrollmentService;
 
@@ -25,7 +26,7 @@ public class EnrollmentServiceImpl implements IEnrollmentService {
 		int startRow = page.getStartRow();
 		int endRow = page.getEndRow();
 		int count = iEnrollmentMapper.queryCount(enrollment);
-		List<Enrollment> list = iEnrollmentMapper.queryPage(startRow, endRow, enrollment);
+		List<EnrollmentResponseForm> list = iEnrollmentMapper.queryPage(startRow, endRow, enrollment);
 		page.setResultList(list);
 		page.setRecords(count);
 		return page;

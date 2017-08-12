@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import com.webapps.common.bean.Page;
 import com.webapps.common.entity.Enrollment;
+import com.webapps.common.utils.DateUtil;
 
 public class EnrollmentResponseForm extends Enrollment implements Serializable {
 
@@ -17,6 +18,8 @@ public class EnrollmentResponseForm extends Enrollment implements Serializable {
 	 * 操作类型（查询，新增，更新，删除）
 	 */
 	private String handleType;
+	
+	private String createTimeStr;
 
 	public String getKeyWords() {
 		return keyWords;
@@ -41,5 +44,15 @@ public class EnrollmentResponseForm extends Enrollment implements Serializable {
 	public void setHandleType(String handleType) {
 		this.handleType = handleType;
 	}
-
+	
+	public String getCreateTimeStr(){
+		if(this.getCreateTime()!=null){
+			return DateUtil.format(this.getCreateTime(), DateUtil.SIMPLE_PATTERN);
+		}
+		return null;
+	}
+	
+	public void setCreateTimeStr(String createTimeStr){
+		this.createTimeStr = createTimeStr;
+	}
 }

@@ -16,6 +16,16 @@ public class EnrollmentRequestForm extends Enrollment implements RequestForm,Ser
 	private String handleType;
 	
 	private Integer step;
+	
+	private String companyName;
+	
+	private String userName;
+	
+	private String userMobile;
+	
+	private String enrollTimeStart;
+	
+	private String enrollTimeEnd;
 
 	public String getKeyWords() {
 		return keyWords;
@@ -39,6 +49,46 @@ public class EnrollmentRequestForm extends Enrollment implements RequestForm,Ser
 
 	public void setStep(Integer step) {
 		this.step = step;
+	}
+
+	public String getCompanyName() {
+		return companyName;
+	}
+
+	public void setCompanyName(String companyName) {
+		this.companyName = companyName;
+	}
+
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
+	public String getUserMobile() {
+		return userMobile;
+	}
+
+	public void setUserMobile(String userMobile) {
+		this.userMobile = userMobile;
+	}
+
+	public String getEnrollTimeStart() {
+		return enrollTimeStart;
+	}
+
+	public void setEnrollTimeStart(String enrollTimeStart) {
+		this.enrollTimeStart = enrollTimeStart;
+	}
+
+	public String getEnrollTimeEnd() {
+		return enrollTimeEnd;
+	}
+
+	public void setEnrollTimeEnd(String enrollTimeEnd) {
+		this.enrollTimeEnd = enrollTimeEnd;
 	}
 
 }

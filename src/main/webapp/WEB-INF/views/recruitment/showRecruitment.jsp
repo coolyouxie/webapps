@@ -53,107 +53,119 @@
 			</div>
 			
 			<div class="form-group">
-				<label class="col-md-2 control-label" for="briefInfo">信息简介：</label>
+				<label class="col-md-2 control-label" for="salaryBriefs">薪酬福利：</label>
 				<div class="col-md-4" >
-					${recruitment.briefInfo }
+					${recruitment.salaryBriefs}
 				</div>
 			</div>
 			
-			<!-- <div class="form-group">
-				<label class="col-md-2 control-label" for="endDate">结束日期：</label>
-				<div class="col-md-4" >
-					<input type="text" id="endDateStr" name="endDateStr" class="form_datetime" readonly>
-				</div>
-			</div> -->
-			
 			<div class="form-group">
+				<label class="col-md-2 control-label" for="briefInfo">其他福利：</label>
+				<div class="col-md-4" >
+					${recruitment.briefInfo}
+				</div>
+			</div>
+			
+			<%-- <div class="form-group">
 				<label class="col-md-2 control-label" for="recruitmentNumber">招聘人数：</label>
 				<div class="col-md-4" >
-					${recruitment.recruitmentNumber }
+					${recruitment.recruitmentNumber}
+				</div>
+			</div> --%>
+			
+			<div class="form-group">
+				<label class="col-md-2 control-label" for="mobile" >手机号：</label>
+				<div class="col-md-4" >
+					${recruitment.mobile}
 				</div>
 			</div>
 			
 			<div class="form-group">
-				<label class="col-md-2 control-label" for="commision" >推荐佣金：</label>
+				<label class="col-md-2 control-label" for="mobile" >QQ：</label>
 				<div class="col-md-4" >
-					${recruitment.commision }
+					${recruitment.QQ}
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label class="col-md-2 control-label" for="weiXin" >微信：</label>
+				<div class="col-md-4" >
+					${recruitment.weiXin}
 				</div>
 			</div>
 			
 			<div class="form-group">
 				<label class="col-md-2 control-label" for="workType">工种：</label>
 				<div class="col-md-4" >
-					${recruitment.workType }
+					${recruitment.workType}
 				</div>
 			</div>
 			
 			<div class="form-group">
-				<label class="col-md-2 control-label" for="workAddress">工作地址：</label>
-				<div class="col-md-4" >
-					${recruitment.workAddress }
+				<label class="col-md-2 control-label" for="salaryLow">薪资范围：</label>
+				<div class="col-md-2" >
+					${recruitment.salaryLow}
+				</div>
+				<div class="col-md-2" >
+					${recruitment.salaryHigh}
 				</div>
 			</div>
 			
 			<div class="form-group">
-				<label class="col-md-2 control-label" for="salaryLow">最低薪资：</label>
+				<label class="col-md-2 control-label" for="type">发布类型：</label>
 				<div class="col-md-4" >
-					${recruitment.salaryLow }
+					<select id="type" name="type" class="form-control" disabled="disabled">
+						<option value="1" <c:if test="${recruitment.publishType!=null and recruitment.publishType==1}">selected</c:if>>普招</option>
+						<option value="2" <c:if test="${recruitment.publishType!=null and recruitment.publishType==2}">selected</c:if>>直费</option>
+						<option value="3" <c:if test="${recruitment.publishType!=null and recruitment.publishType==3}">selected</c:if>>兼职</option>
+					</select>
 				</div>
 			</div>
 			
 			<div class="form-group">
-				<label class="col-md-2 control-label" for="salaryHigh">最高薪资：</label>
+				<label class="col-md-2 control-label" for="type">发布单类型：</label>
 				<div class="col-md-4" >
-					${recruitment.salaryHigh }
+					<select id="type" name="type" class="form-control" disabled="disabled">
+						<option value="1" <c:if test="${recruitment.type!=null and recruitment.type==1}">selected</c:if>>热招</option>
+						<option value="2" <c:if test="${recruitment.type!=null and recruitment.type==2}">selected</c:if>>高返费</option>
+						<option value="3" <c:if test="${recruitment.type!=null and recruitment.type==3}">selected</c:if>>工作轻松</option>
+						<option value="4" <c:if test="${recruitment.type!=null and recruitment.type==4}">selected</c:if>>高工资</option>
+					</select>
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label class="col-md-2 control-label" for="cashback">入职期满金额：</label>
+				<div class="col-md-4" >
+					${recruitment.cashback}
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label class="col-md-2 control-label" for="requirement">岗位职责：</label>
+				<div class="col-md-4" >
+					${recruitment.jobBriefs}
 				</div>
 			</div>
 			
 			<div class="form-group">
 				<label class="col-md-2 control-label" for="requirement">入职条件：</label>
 				<div class="col-md-4" >
-					${recruitment.requirement }
-				</div>
-			</div>
-			
-			<!-- <div class="form-group">
-				<label class="col-md-2 control-label" for="publishTime">发布时间：</label>
-				<div class="col-md-4" >
-					<input type="text" id="publishTimeStr" name="publishTimeStr" class="form_datetime" placeholder="发布时间" required readonly>
-				</div>
-			</div> -->
-			
-			<%-- <div class="form-group">
-				<label class="col-md-2 control-label" for="userId">发布人：</label>
-				<div class="col-md-4" >
-					${recruitment.userId }
-				</div>
-			</div> --%>
-			
-			<div class="form-group">
-				<label class="col-md-2 control-label" for="type">发布单类型：</label>
-				<div class="col-md-4" >
-					${recruitment.type }
+					${recruitment.requirement}
 				</div>
 			</div>
 			
 			<div class="form-group">
-				<label class="col-md-2 control-label" for="cashback">返现金额：</label>
+				<label class="col-md-2 control-label" for="requirement">补贴详情：</label>
 				<div class="col-md-4" >
-					${recruitment.cashback }
+					${recruitment.cashbackBriefs}
 				</div>
 			</div>
 			
 			<div class="form-group">
 				<label class="col-md-2 control-label" for="cashbackDays">期满天数：</label>
 				<div class="col-md-4" >
-					${recruitment.cashbackDays }
-				</div>
-			</div>
-			
-			<div class="form-group">
-				<label class="col-md-2 control-label" for="cashbackForBroker">推荐人佣金：</label>
-				<div class="col-md-4" >
-					${recruitment.cashbackForBroker }
+					${recruitment.cashbackDays}
 				</div>
 			</div>
 			
