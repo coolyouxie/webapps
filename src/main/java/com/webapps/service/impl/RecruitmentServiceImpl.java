@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.webapps.common.bean.Page;
+import com.webapps.common.bean.ResultDto;
 import com.webapps.common.entity.Company;
 import com.webapps.common.entity.Recruitment;
 import com.webapps.common.form.RecruitmentRequestForm;
@@ -26,19 +27,30 @@ public class RecruitmentServiceImpl implements IRecruitmentService {
 	private ICompanyMapper iCompanyMapper;
 
 	@Override
-	public int saveRecruitment(RecruitmentRequestForm form) throws Exception {
+	public ResultDto<RecruitmentRequestForm> saveRecruitment(RecruitmentRequestForm form) throws Exception {
+		ResultDto<RecruitmentRequestForm> dto = new ResultDto<RecruitmentRequestForm>();
 		Company company = new Company();
 		company.setId(form.getCompanyId());
 		form.setCompany(company);
 		form.setEndDate(DateUtil.parseDateByStr(form.getEndDateStr(), DateUtil.FULL_PATTERN));
 		form.setPublishTime(DateUtil.parseDateByStr(form.getPublishTimeStr(), DateUtil.FULL_PATTERN));
 		int result = 0;
+		String errorMsg = null;
 		if(form.getId()==null){
 			result = iRecruitmentMapper.insert(form);
+			errorMsg = "新增失败";
 		}else{
 			result = iRecruitmentMapper.updateById(form.getId(), form);
+			errorMsg = "更新失败";
 		}
-		return result;
+		if(result != 1){
+			dto.setErrorMsg(errorMsg);
+			dto.setResult("fail");
+		}else{
+			dto.setResult("success");
+		}
+		dto.setData(form);
+		return dto;
 	}
 
 	@Override

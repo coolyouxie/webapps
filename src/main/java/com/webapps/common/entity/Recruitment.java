@@ -22,12 +22,39 @@ public class Recruitment extends Entity{
     private Date publishTime;
     //发布人
     private Integer userId;
+    /**
+     * 发布单类型，1热招，2高返费，3工作轻松，4高工资
+     */
     private int type;
     private BigDecimal cashback;
     private int cashbackDays;
     private BigDecimal cashbackForBroker;
+    
+    private String mobile;
+    
+    private String QQ;
+    
+    private String weiXin;
 
+    /**
+     * 发布类型，1普招，2直招，3兼职
+     */
+    private int publishType;
 
+    /**
+     * 薪酬福利
+     */
+    private String salaryBriefs;
+    
+    /**
+     * 补贴详情
+     */
+    private String cashbackBriefs;
+    
+    /**
+     * 岗位职责
+     */
+    private String jobBriefs;
 
     public Company getCompany() {
         return company;
@@ -163,6 +190,62 @@ public class Recruitment extends Entity{
 
 	public void setBriefInfo(String briefInfo) {
 		this.briefInfo = briefInfo;
+	}
+
+	public String getMobile() {
+		return mobile;
+	}
+
+	public void setMobile(String mobile) {
+		this.mobile = mobile;
+	}
+
+	public String getQQ() {
+		return QQ;
+	}
+
+	public void setQQ(String qQ) {
+		QQ = qQ;
+	}
+
+	public String getWeiXin() {
+		return weiXin;
+	}
+
+	public void setWeiXin(String weiXin) {
+		this.weiXin = weiXin;
+	}
+
+	public int getPublishType() {
+		return publishType;
+	}
+
+	public void setPublishType(int publishType) {
+		this.publishType = publishType;
+	}
+
+	public String getSalaryBriefs() {
+		return salaryBriefs;
+	}
+
+	public void setSalaryBriefs(String salaryBriefs) {
+		this.salaryBriefs = salaryBriefs;
+	}
+
+	public String getCashbackBriefs() {
+		return cashbackBriefs;
+	}
+
+	public void setCashbackBriefs(String cashbackBriefs) {
+		this.cashbackBriefs = cashbackBriefs;
+	}
+
+	public String getJobBriefs() {
+		return jobBriefs;
+	}
+
+	public void setJobBriefs(String jobBriefs) {
+		this.jobBriefs = jobBriefs;
 	}
 
 }

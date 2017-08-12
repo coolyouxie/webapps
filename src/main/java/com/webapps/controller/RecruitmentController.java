@@ -85,13 +85,15 @@ public class RecruitmentController {
 	 */
 	@RequestMapping("/saveRecruitment")
 	public String saveRecruitment(Model model,RecruitmentRequestForm recruitment,HttpServletRequest request,HttpServletResponse response){
-		ResultDto<Recruitment> dto = new ResultDto<Recruitment>();
+		ResultDto<RecruitmentRequestForm> dto = null;
+		Integer companyId = recruitment.getCompanyId();
+		model.addAttribute("id",companyId);
+		model.addAttribute("type","show");
 		if(null!=recruitment){
-			int result;
 			try {
-				result = iRecruitmentService.saveRecruitment(recruitment);
+				dto = iRecruitmentService.saveRecruitment(recruitment);
 				model.addAttribute("recruitment", recruitment);
-				if(result == 0){
+				if("fail".equals(dto.getResult())){
 					if(recruitment.getId()==null){
 						dto.setResult("fail");
 						dto.setErrorMsg("新增发布单失败，请稍后重试");
@@ -106,7 +108,7 @@ public class RecruitmentController {
 				e.printStackTrace();
 			}
 		}
-		return null;
+		return "redirect:/company/toCompanyInfoPage";
 	}
 	
 	@ResponseBody

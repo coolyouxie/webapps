@@ -25,6 +25,14 @@
 		<result column="update_time" jdbcType="VARCHAR" property="updateTime" />
 		<result column="cashback_days" jdbcType="DECIMAL" property="cashbackDays" />
 		<result column="data_state" jdbcType="DECIMAL" property="dataState" />
+		
+		<result column="publish_type" jdbcType="DECIMAL" property="publishType" />
+		<result column="mobile" jdbcType="VARCHAR" property="mobile" />
+		<result column="QQ" jdbcType="VARCHAR" property="QQ" />
+		<result column="weixin" jdbcType="VARCHAR" property="weiXin" />
+		<result column="salary_briefs" jdbcType="VARCHAR" property="salaryBriefs" />
+		<result column="cashback_briefs" jdbcType="VARCHAR" property="cashbackBriefs" />
+		<result column="job_briefs" jdbcType="VARCHAR" property="jobBriefs" />
 	</resultMap>
 
 	<sql id="select_columns">
@@ -48,7 +56,14 @@
 		cashback_for_broker,
 		create_time,
 		update_time,
-		data_state
+		data_state,
+		publish_type,
+		mobile,
+		QQ,
+		weixin,
+		salary_briefs,
+		cashback_briefs,
+		job_briefs
 	</sql>
 
 	<sql id="insert_columns">
@@ -70,7 +85,14 @@
 		cashback_days,
 		cashback_for_broker,
 		data_state,
-		create_time
+		create_time,
+		publish_type,
+		mobile,
+		QQ,
+		weixin,
+		salary_briefs,
+		cashback_briefs,
+		job_briefs
 	</sql>
 	
 	<select id="getById" resultMap="resultMap">
@@ -153,7 +175,45 @@
 			#{obj.cashbackDays},
 			#{obj.cashbackForBroker},
 			#{obj.dataState},
-			#{obj.createTime}
+			now(),
+			#{obj.publishType},
+			#{obj.mobile},
+			#{obj.QQ},
+			#{obj.weiXin},
+			#{obj.salaryBriefs},
+			#{obj.cashbackBriefs},
+			#{obj.jobBriefs}
 		)
 	</insert>
+	
+	<update id="updateById">
+		update t_recruitment set
+		company_id = #{obj.company.id},
+		title = #{obj.title},
+		brief_info = #{obj.briefInfo},
+		end_date = #{obj.endDate},
+		recruitment_number = #{obj.recruitmentNumber},
+		commision = #{obj.commision},
+		work_type = #{obj.workType},
+		work_address = #{obj.workAddress},
+		salary_low = #{obj.salaryLow},
+		salary_high = #{obj.salaryHigh},
+		requirement = #{obj.requirement},
+		publish_time = #{obj.publishTime},
+		user_id = #{obj.userId},
+		type = #{obj.type},
+		cashback = #{obj.cashback},
+		cashback_days = #{obj.cashbackDays},
+		cashback_for_broker = #{obj.cashbackForBroker},
+		update_time = now(),
+		data_state = #{obj.dataState},
+		publish_type = #{obj.publishType},
+		mobile = #{obj.mobile},
+		QQ = #{obj.QQ},
+		weixin = #{obj.weiXin},
+		salary_briefs = #{obj.salaryBriefs},
+		cashback_briefs = #{obj.cashbackBriefs},
+		job_briefs = #{obj.jobBriefs}
+		where id=#{id}
+	</update>
 </mapper>
