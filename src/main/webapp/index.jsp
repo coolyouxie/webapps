@@ -50,6 +50,7 @@
 						<li><a href="${ctx}/company/toCompanyListPage" target="mainContainer">公司管理</a></li>
 						<li><a href="${ctx}/user/toUserListPage" target="mainContainer">用户管理</a></li>
 						<li><a href="${ctx}/feeConfig/toFeeConfigPage" target="mainContainer">配置管理</a></li>
+						<li><a href="${ctx}/bannerConfig/toBannerConfigPage" target="mainContainer">Banner管理</a></li>
 					</ul>
 					 <ul class="nav nav-sidebar">
 						<li><a href="${ctx}/enrollment/toEnrollmentListPage" target="mainContainer">报名列表</a></li>

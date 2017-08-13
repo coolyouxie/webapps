@@ -1,5 +1,7 @@
 package com.webapps.mapper;
 
+import java.util.List;
+
 import com.webapps.common.entity.BannerConfig;
 import com.webapps.common.form.BannerConfigRequestForm;
 

@@ -64,23 +64,11 @@ public class BannerConfigController {
 	 */
 	@ResponseBody
 	@RequestMapping("/saveBannerConfig")
-	public ResultDto<BannerConfig> saveFeeConfig(Model model,BannerConfigRequestForm form,HttpServletRequest request,HttpServletResponse response){
-		ResultDto<BannerConfig> dto = new ResultDto<BannerConfig>();
+	public ResultDto<BannerConfig> saveBannerConfig(Model model,BannerConfigRequestForm form,HttpServletRequest request,HttpServletResponse response){
+		ResultDto<BannerConfig> dto = null;
 		if(null!=form){
-			int result;
 			try {
-				result = iBannerConfigService.saveBannerConfig(form);
-				if(result == 0){
-					if(form.getId()==null){
-						dto.setResult("fail");
-						dto.setErrorMsg("新增banner配置信息失败，请稍后重试");
-					}else{
-						dto.setResult("fail");
-						dto.setErrorMsg("更新banner配置信息失败，请稍后重试");
-					}
-				}else{
-					dto.setResult("success");
-				}
+				dto = iBannerConfigService.saveBannerConfig(form);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -88,4 +76,31 @@ public class BannerConfigController {
 		return dto;
 	}
 
+	@ResponseBody
+	@RequestMapping("/deleteBannerConfigById")
+	public ResultDto<BannerConfig> deleteBannerConfigById(Model model, Integer id, HttpServletRequest request,
+			HttpServletResponse response) {
+		ResultDto<BannerConfig> dto = new ResultDto<BannerConfig>();
+		int result;
+		try {
+			result = iBannerConfigService.deleteBannerConfigById(id);
+			if (result == 0) {
+				dto.setResult("fail");
+				dto.setErrorMsg("删除失败，请稍后重试");
+			} else {
+				dto.setResult("success");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return dto;
+	}
+	
+	@RequestMapping(value="/toAddBannerPicturePage")
+	public String toAddBannerPicturePage(Model model,Integer id,Integer type,String title){
+		model.addAttribute("id", id);
+		model.addAttribute("type", type);
+		model.addAttribute("title", title);
+		return "/config/addBannerPicture";
+	}
 }

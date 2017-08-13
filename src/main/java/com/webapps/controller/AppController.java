@@ -2,15 +2,23 @@ package com.webapps.controller;
 
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSONObject;
+import com.webapps.common.bean.Page;
 import com.webapps.common.bean.ResultDto;
 import com.webapps.common.entity.BannerConfig;
+import com.webapps.common.entity.Company;
+import com.webapps.common.entity.Recruitment;
+import com.webapps.common.form.BannerConfigRequestForm;
+import com.webapps.common.form.RecruitmentRequestForm;
 import com.webapps.service.IBannerConfigService;
+import com.webapps.service.IRecruitmentService;
 
 import net.sf.json.util.JSONUtils;
 
@@ -20,6 +28,9 @@ public class AppController {
 	
 	@Autowired
 	private IBannerConfigService iBannerConfigService;
+	
+	@Autowired
+	private IRecruitmentService iRecruitmentService;
 	
 	/**
 	 * app端登录接口
@@ -83,9 +94,34 @@ public class AppController {
 	 */
 	@ResponseBody
 	@RequestMapping(value="/getRecruitmentList")
-	public String getRecruitmentList(String params){
-		
-		return null;
+	public String getRecruitmentList(@RequestBody String params){
+		ResultDto<List<Recruitment>> dto = new ResultDto<List<Recruitment>>();
+		JSONObject jsonObj = JSONObject.parseObject(params);
+		int currentPage = jsonObj.getInteger("page");
+		int rows = jsonObj.getInteger("rows");
+		String companyName = jsonObj.getString("companyName");
+		Page page = new Page();
+		page.setPage(currentPage);
+		page.setRows(rows);
+		RecruitmentRequestForm form = new RecruitmentRequestForm();
+		if(StringUtils.isNotBlank(companyName)){
+			Company company = new Company();
+			company.setName(companyName);
+			form.setCompany(company);
+		}
+		try {
+			page = iRecruitmentService.loadRecruitmentList(page, form);
+			if(page!=null){
+				dto.setData(page.getResultList());
+				dto.setResult("S");
+			}
+		} catch (Exception e) {
+			dto.setResult("F");
+			dto.setErrorMsg("查询异常，请稍后再试");
+			e.printStackTrace();
+		}
+		String result = JSONUtils.valueToString(JSONObject.toJSON(dto));
+		return result;
 	}
 	
 	@ResponseBody
@@ -143,17 +179,22 @@ public class AppController {
 	 * @return
 	 */
 	@ResponseBody
-	@RequestMapping("/queryAllBanner")
-	public String toiBannerConfigPage(){
+	@SuppressWarnings("unchecked")
+	@RequestMapping("/queryBannerConfig")
+	public String queryBannerConfig(){
 		ResultDto<List<BannerConfig>> dto = new ResultDto<List<BannerConfig>>();
+		BannerConfigRequestForm form = new BannerConfigRequestForm();
+		Page page = new Page();
+		page.setStartRow(0);
+		page.setEndRow(5);
 		try {
-			List<BannerConfig> list = iBannerConfigService.queryAll();
-			dto.setData(list);
+			page = iBannerConfigService.loadBannerConfigList(page, form);
+			dto.setData(page.getResultList());
 			dto.setResult("S");
-		} catch (Exception e) {
+		} catch (Exception e1) {
 			dto.setResult("F");
 			dto.setErrorMsg("获取数据异常");
-			e.printStackTrace();
+			e1.printStackTrace();
 		}
 		String result = JSONUtils.valueToString(JSONObject.toJSON(dto));
 		return result;

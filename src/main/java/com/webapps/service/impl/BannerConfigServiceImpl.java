@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.webapps.common.bean.Page;
+import com.webapps.common.bean.ResultDto;
 import com.webapps.common.entity.BannerConfig;
 import com.webapps.common.form.BannerConfigRequestForm;
 import com.webapps.mapper.IBannerConfigMapper;
@@ -20,14 +21,25 @@ public class BannerConfigServiceImpl implements IBannerConfigService {
 	private IBannerConfigMapper iBannerConfigMapper;
 
 	@Override
-	public int saveBannerConfig(BannerConfigRequestForm form) throws Exception {
+	public ResultDto<BannerConfig> saveBannerConfig(BannerConfigRequestForm form) throws Exception {
 		int result = 0;
+		String errorMsg = "";
+		ResultDto<BannerConfig> dto = new ResultDto<BannerConfig>();
 		if(form.getId()!=null){
 			result = iBannerConfigMapper.updateById(form.getId(), form);
+			errorMsg = "更新失败，请稍后再试";
 		}else{
 			result = iBannerConfigMapper.insert(form);
+			errorMsg = "新增失败，请稍后再试";
 		}
-		return result;
+		if(result!=1){
+			dto.setResult("fail");
+			dto.setErrorMsg(errorMsg);
+		}else{
+			dto.setResult("success");
+			dto.setData(form);
+		}
+		return dto;
 	}
 
 	@Override

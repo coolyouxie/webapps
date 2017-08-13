@@ -44,8 +44,7 @@ public class PictureServiceImpl implements IPictureService {
 
 	@Override
 	public int savePicture(Picture obj,HttpServletRequest request) throws Exception {
-		String type = request.getParameter("type");
-		Integer id = Integer.valueOf(request.getParameter("id"));
+		String sourceType = request.getParameter("sourceType");
 		int picType = 0;
 		File destFile = null;
 		Picture file = new Picture();
@@ -56,8 +55,14 @@ public class PictureServiceImpl implements IPictureService {
         Iterator<String> fileIterator = multipartRequest.getFileNames();
         String requestURL = request.getRequestURL().toString();
         String projectPath = requestURL.replace("/fileUpload/pictureUpload","");
-        String path="/Users/xieshuai/fileupload/company"+File.separator;
-        File dir = new File(path+type+"_"+id);
+        String path="/Users/xieshuai/fileupload/";
+        Integer id = Integer.valueOf(request.getParameter("id"));
+        if("company".equals(sourceType)){
+        	path += "company"+File.separator;
+        }else if("banner".equals(sourceType)){
+        	path += "banner"+File.separator;
+        }
+        File dir = new File(path+sourceType+"_"+id);
         if(!dir.exists()){
         	dir.mkdirs();
         }
@@ -73,10 +78,10 @@ public class PictureServiceImpl implements IPictureService {
             multipartFile.transferTo(destFile);
         }
         int result = 0;
-		if("company".equals(type)){
+		if("company".equals(sourceType)){
 			picType = 1;
 			result = savePicture(obj, id, picType, destFile, file, projectPath);
-		}else if("banner".equals(type)){
+		}else if("banner".equals(sourceType)){
 			Integer companyId = -1;
 			Integer recruitmentId = -1;
 			String companyIdStr = request.getParameter("companyId");
@@ -85,7 +90,7 @@ public class PictureServiceImpl implements IPictureService {
 				companyId = Integer.valueOf(companyIdStr);
 			if(StringUtils.isNotBlank(recruitmentIdStr))
 				recruitmentId = Integer.valueOf(recruitmentIdStr);
-			result = saveBannerConfig(obj, id, picType, destFile, projectPath, type, companyId, recruitmentId);
+			result = saveBannerConfig(obj, id, picType, destFile, projectPath, sourceType, companyId, recruitmentId);
 		}
         
         
@@ -96,7 +101,7 @@ public class PictureServiceImpl implements IPictureService {
 			throws Exception {
 		file.setDataState(1);
         file.setType(picType);
-        file.setPicUrl(projectPath+File.separator+"fileupload/company_"+id+File.separator+destFile.getName());
+        file.setPicUrl(projectPath+File.separator+"fileupload/company/company_"+id+File.separator+destFile.getName());
         file.setFkId(id);
 		if(file.getId()==null){
 			int count = iPictureMapper.insert(file);
@@ -108,25 +113,14 @@ public class PictureServiceImpl implements IPictureService {
 	}
 	
 	private int saveBannerConfig(Picture obj, Integer id, int picType, File destFile, String projectPath,String type,Integer companyId,Integer recruitmentId){
-		BannerConfig bc = new BannerConfig();
-		Company c = new Company();
-		c.setId(companyId);
-		Recruitment r = new Recruitment();
-		r.setId(recruitmentId);
-		bc.setDataState(1);
-		bc.setType(picType);
-		bc.setPicUrl(projectPath+File.separator+"fileupload/"+type+"_"+id+File.separator+destFile.getName());
-        bc.setCompany(c);
-        bc.setRecruitment(r);
-        int count = 0;
-		if(bc.getId()==null){
-			count = iBannerConfigMapper.insert(bc);
-		}else{
-			try {
-				count = iBannerConfigMapper.updateById(obj.getId(), bc);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+		BannerConfig bc = iBannerConfigMapper.getById(id);
+		bc.setPicUrl(projectPath+File.separator+"fileupload/banner/"+type+"_"+id+File.separator+destFile.getName());
+		int count = 0;
+		try {
+			count = iBannerConfigMapper.updateById(bc.getId(), bc);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		return count ;
 	}

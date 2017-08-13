@@ -35,6 +35,7 @@
 			<mvc:mapping path="/login/userLogin" />
 			<mvc:exclude-mapping path="/login/getValidatorImage" />
 			<mvc:exclude-mapping path="/**/login.jsp" />
+			<mvc:exclude-mapping path="/appServer/**" />
 			<bean class="com.webapps.controller.interceptor.UserValidateInterceptor" />
 		</mvc:interceptor>
 		<mvc:interceptor>
@@ -52,6 +53,7 @@
 			<mvc:exclude-mapping path="/**/login.jsp" />
 			<mvc:exclude-mapping path="/webapps" />
 			<mvc:exclude-mapping path="/webapps/" />
+			<mvc:exclude-mapping path="/appServer/**" />
 			<bean class="com.webapps.controller.interceptor.UserSessionVerifyInterceptor" />
 		</mvc:interceptor>
 	</mvc:interceptors>

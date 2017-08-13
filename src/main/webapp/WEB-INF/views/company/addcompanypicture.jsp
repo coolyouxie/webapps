@@ -35,7 +35,7 @@
 			    validateInitialCount: true,
 			    overwriteInitial: false,
 			    allowedFileExtensions: ["jpg", "png", "gif"],
-			    uploadExtraData:{"type":"company","id":$("#companyId").val()}
+			    uploadExtraData:{"sourceType":"company","id":$("#companyId").val()}
 			};
 		// 文件上传框
 		$('input[class=projectfile]').each(function() {

@@ -3,12 +3,13 @@ package com.webapps.service;
 import java.util.List;
 
 import com.webapps.common.bean.Page;
+import com.webapps.common.bean.ResultDto;
 import com.webapps.common.entity.BannerConfig;
 import com.webapps.common.form.BannerConfigRequestForm;
 
 public interface IBannerConfigService {
 	
-	public int saveBannerConfig(BannerConfigRequestForm form)throws Exception;
+	public ResultDto<BannerConfig> saveBannerConfig(BannerConfigRequestForm form)throws Exception;
 	
 	public int deleteBannerConfigById(Integer id)throws Exception;
 	
@@ -17,5 +18,5 @@ public interface IBannerConfigService {
 	public BannerConfig getById(Integer id)throws Exception;
 	
 	public List<BannerConfig> queryAll()throws Exception;
-
+	
 }

@@ -8,10 +8,9 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>新增Banner信息</title>
 <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
-<link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<link rel="stylesheet" href="${ctx}/js/common/bootstrap/bootstrap-3.3.7/dist/css/bootstrap.min.css" type="text/css" />
 <link rel="stylesheet" href="${ctx}/js/common/bootstrap/bootstrap-fileinput-master/css/fileinput.css" type="text/css" />
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.js"></script>
+<script src="${ctx}/js/jquery/jQuery-1.12.4.0.js"></script>
 <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
 <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 <script src="${ctx}/js/common/bootstrap/bootstrap-fileinput-master/js/fileinput.js"></script>
@@ -25,38 +24,28 @@
 </style>
 
 <script type="text/javascript">
-	$(function(){
-		var projectfileoptions = {
-			    uploadUrl: "${ctx}/fileUpload/pictureUpload",
-			    language:'zh',
-			    maxFileCount: 1,
-			    maxFileSize:2000,
-			    autoReplace:false,
-			    validateInitialCount: true,
-			    overwriteInitial: false,
-			    allowedFileExtensions: ["jpg", "png", "gif"],
-			    uploadExtraData:{"type":"company","id":$("#companyId").val()}
-			};
-		// 文件上传框
-		$('input[class=projectfile]').each(function() {
-		    var imageurl = $(this).attr("value");
-		    if (imageurl) {
-		        var op = $.extend({
-		            initialPreview : [ // 预览图片的设置
-		            "<img src='" + imageurl + "' class='file-preview-image'>", ]
-		        }, projectfileoptions);
-	
-		        $(this).fileinput(op);
-		    } else {
-		        $(this).fileinput(projectfileoptions).on("fileuploaded", function (event, data, previewId, index){
-		        	var response = data.response;
-					if(response&&response.result=="success"){
-						window.location.href="${ctx}/company/toCompanyListPage";
-					}
-		        });;
-		    }
+	function next(){
+		$.ajax({
+			url:"${ctx}/bannerConfig/saveBannerConfig",
+			type:"post",
+			dataType:"json",
+			data:{
+				title:$("#title").val(),
+				type:$("#type").val()
+			},
+			success:function(response){
+				if(response.result=="success"){
+					var id = response.data.id;
+					var type = response.data.type;
+					var title = response.data.title;
+					window.location.href = "${ctx}/bannerConfig/toAddBannerPicturePage?id="+id+"&type="+type+"&title="+title;
+				}else{
+					alert("信息保存失败，请稍后再试");
+					return ;
+				}
+			}
 		});
-	});
+	}
 	
 </script>
 </head>
@@ -69,17 +58,30 @@
 				</h4>
 			</div>
 		</div>
-		<form class="form-horizontal required-validate" enctype="multipart/form-data" method="post" >
-			<select id="type" name="type">
-				<option value="2">分享</option>
-			</select>
-			<div class="form-group">
-				<div class="col-md-1"></div>
-		        <div class="col-md-8 tl th">
-		            <input type="file" id="image" name="image" class="projectfile" multiple value="" />
-		            <p class="help-block">支持jpg、jpeg、png、gif格式，大小不超过2.0M</p>
-		        </div>
-		    </div>
+		<form class="form-horizontal required-validate" method="post" >
+			<div class="form-group" style="width:1000px;">
+				<div class="row">
+					<div class="col-md-3">
+						<label>
+							<span>标题：</span>
+							<input id="title" name="title" >
+						</label>
+					</div>
+					<div class="col-md-2">
+						<select id="type" name="type">
+							<option value="1">推荐</option>
+							<option value="2">分享</option>
+						</select>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-3">
+						<button type="button" class="btn btn-primary" onclick="next()">
+							下一步
+						</button>
+					</div>
+				</div>
+			</div>
 		</form>
 	</div>
 </body>
