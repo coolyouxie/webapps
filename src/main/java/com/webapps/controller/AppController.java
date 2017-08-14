@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.alibaba.fastjson.JSONObject;
 import com.webapps.common.bean.Page;
 import com.webapps.common.bean.ResultDto;
 import com.webapps.common.entity.BannerConfig;
@@ -17,10 +16,12 @@ import com.webapps.common.entity.Company;
 import com.webapps.common.entity.Recruitment;
 import com.webapps.common.form.BannerConfigRequestForm;
 import com.webapps.common.form.RecruitmentRequestForm;
+import com.webapps.common.utils.JSONUtil;
 import com.webapps.service.IBannerConfigService;
 import com.webapps.service.IRecruitmentService;
 
-import net.sf.json.util.JSONUtils;
+import net.sf.json.JSONObject;
+
 
 @Controller
 @RequestMapping(value="appServer")
@@ -96,9 +97,9 @@ public class AppController {
 	@RequestMapping(value="/getRecruitmentList")
 	public String getRecruitmentList(@RequestBody String params){
 		ResultDto<List<Recruitment>> dto = new ResultDto<List<Recruitment>>();
-		JSONObject jsonObj = JSONObject.parseObject(params);
-		int currentPage = jsonObj.getInteger("page");
-		int rows = jsonObj.getInteger("rows");
+		JSONObject jsonObj = JSONUtil.toJSONObject(params);
+		int currentPage = jsonObj.getInt("page");
+		int rows = jsonObj.getInt("rows");
 		String companyName = jsonObj.getString("companyName");
 		Page page = new Page();
 		page.setPage(currentPage);
@@ -120,7 +121,7 @@ public class AppController {
 			dto.setErrorMsg("查询异常，请稍后再试");
 			e.printStackTrace();
 		}
-		String result = JSONUtils.valueToString(JSONObject.toJSON(dto));
+		String result = JSONUtil.toJSONString(JSONObject.fromObject(dto));
 		return result;
 	}
 	
@@ -196,7 +197,7 @@ public class AppController {
 			dto.setErrorMsg("获取数据异常");
 			e1.printStackTrace();
 		}
-		String result = JSONUtils.valueToString(JSONObject.toJSON(dto));
+		String result = JSONUtil.toJSONString(JSONObject.fromObject(dto));
 		return result;
 	}
 	
