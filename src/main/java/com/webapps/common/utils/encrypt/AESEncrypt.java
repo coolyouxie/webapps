@@ -1,4 +1,4 @@
-package com.webapps.common.entity.encrypt;
+package com.webapps.common.utils.encrypt;
 
 import java.security.MessageDigest;
 import java.util.Date;

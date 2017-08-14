@@ -1,4 +1,4 @@
-package com.webapps.common.entity.encrypt;
+package com.webapps.common.utils.encrypt;
 
 public final class Base64 {
 

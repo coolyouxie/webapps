@@ -1,4 +1,4 @@
-package com.webapps.common.entity.encrypt;
+package com.webapps.common.utils.encrypt;
 
 /**
  * 加密算发的枚举类

@@ -127,10 +127,21 @@ public class AppController {
 	}
 	
 	@ResponseBody
-	@RequestMapping(value="/getRecruitmentDetail")
-	public String getRecruitmentDetail(String params){
-		
-		return null;
+	@RequestMapping(value="/getRecruitmentDetail", method=RequestMethod.POST, produces="text/html;charset=UTF-8")
+	public String getRecruitmentDetail(@RequestBody String params){
+		JSONObject obj = JSONUtil.toJSONObject(params);
+		Integer id = obj.getInt("id");
+		ResultDto<Recruitment> dto = new ResultDto<Recruitment>();
+		try {
+			Recruitment r = iRecruitmentService.getById(id);
+			dto.setData(r);
+			dto.setResult("S");
+		} catch (Exception e) {
+			e.printStackTrace();
+			dto.setResult("F");
+			dto.setErrorMsg("查询信息异常，请稍后再试");
+		}
+		return JSONUtil.toJSONString(JSONUtil.toJSONObject(dto));
 	}
 	
 	@ResponseBody
@@ -182,7 +193,7 @@ public class AppController {
 	 */
 	@ResponseBody
 	@SuppressWarnings("unchecked")
-	@RequestMapping("/queryBannerConfig")
+	@RequestMapping(value="/queryBannerConfig", method=RequestMethod.POST, produces="text/html;charset=UTF-8")
 	public String queryBannerConfig(){
 		ResultDto<List<BannerConfig>> dto = new ResultDto<List<BannerConfig>>();
 		BannerConfigRequestForm form = new BannerConfigRequestForm();
