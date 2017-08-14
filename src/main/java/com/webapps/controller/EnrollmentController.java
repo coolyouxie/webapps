@@ -10,8 +10,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.webapps.common.bean.Page;
+import com.webapps.common.bean.ResultDto;
 import com.webapps.common.entity.Enrollment;
 import com.webapps.common.form.EnrollmentRequestForm;
+import com.webapps.common.utils.JSONUtil;
 import com.webapps.service.IEnrollmentService;
 
 @Controller
@@ -48,6 +50,32 @@ public class EnrollmentController {
 			e.printStackTrace();
 		}
 		return "/enrollment/showEnrollment";
+	}
+	
+	/**
+	 * 保存报名列表中的沟通信息
+	 * @param model
+	 * @param em
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value="/saveTalkInfo")
+	public String saveTalkInfo(Model model,Enrollment em){
+		ResultDto<String> dto = new ResultDto<String>();
+		try {
+			int count = iEnrollmentService.saveTalkInfoById(em);
+			if(count==1){
+				dto.setResult("success");
+			}else{
+				dto.setErrorMsg("更新数据失败，请稍后再试");
+				dto.setResult("fail");
+			}
+		} catch (Exception e) {
+			dto.setErrorMsg("更新数据异常，请稍后再试");
+			dto.setResult("fail");
+			e.printStackTrace();
+		}
+		return JSONUtil.toJSONString(JSONUtil.toJSONObject(dto));
 	}
 	
 	

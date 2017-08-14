@@ -11,6 +11,10 @@ public class Enrollment extends Entity {
 	private Company company;
 	
 	private Integer state;
+	
+	private Integer isTalked;
+	
+	private String talkResult;
 
 	public Integer getState() {
 		return state;
@@ -49,6 +53,22 @@ public class Enrollment extends Entity {
 			return DateUtil.format(this.getCreateTime(), DateUtil.SIMPLE_PATTERN);
 		}
 		return null;
+	}
+
+	public Integer getIsTalked() {
+		return isTalked;
+	}
+
+	public void setIsTalked(Integer isTalked) {
+		this.isTalked = isTalked;
+	}
+
+	public String getTalkResult() {
+		return talkResult;
+	}
+
+	public void setTalkResult(String talkResult) {
+		this.talkResult = talkResult;
 	}
 
 }

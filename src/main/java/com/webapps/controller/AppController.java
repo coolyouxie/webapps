@@ -3,6 +3,7 @@ package com.webapps.controller;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,11 +15,13 @@ import com.webapps.common.bean.Page;
 import com.webapps.common.bean.ResultDto;
 import com.webapps.common.entity.BannerConfig;
 import com.webapps.common.entity.Company;
+import com.webapps.common.entity.Enrollment;
 import com.webapps.common.entity.Recruitment;
 import com.webapps.common.form.BannerConfigRequestForm;
 import com.webapps.common.form.RecruitmentRequestForm;
 import com.webapps.common.utils.JSONUtil;
 import com.webapps.service.IBannerConfigService;
+import com.webapps.service.IEnrollmentService;
 import com.webapps.service.IRecruitmentService;
 
 import net.sf.json.JSONObject;
@@ -28,11 +31,16 @@ import net.sf.json.JSONObject;
 @RequestMapping(value="appServer")
 public class AppController {
 	
+	private static Logger logger = Logger.getLogger(AppController.class);
+	
 	@Autowired
 	private IBannerConfigService iBannerConfigService;
 	
 	@Autowired
 	private IRecruitmentService iRecruitmentService;
+	
+	@Autowired
+	private IEnrollmentService iEnrollmentService;
 	
 	/**
 	 * app端登录接口
@@ -73,7 +81,7 @@ public class AppController {
 	@ResponseBody
 	@RequestMapping(value="/getUserRecommomend")
 	public String getUserRecommomend(String params){
-		
+		logger.info("");
 		return null;
 	}
 
@@ -83,8 +91,32 @@ public class AppController {
 	 * @return
 	 */
 	@ResponseBody
-	@RequestMapping(value="/getUserEnroll")
-	public String getUserEnroll(String params){
+	@RequestMapping(value="/getUserEnrollmentList", method=RequestMethod.POST, produces="text/html;charset=UTF-8")
+	public String getUserEnrollmentList(@RequestBody String params){
+		JSONObject jsonObj = JSONUtil.toJSONObject(params);
+		Integer userId = jsonObj.getInt("userId");
+		ResultDto<List<Enrollment>> dto = new ResultDto<List<Enrollment>>();
+		try {
+			List<Enrollment> list = iEnrollmentService.queryEnrollmentListByUserId(userId);
+			dto.setData(list);
+			dto.setResult("S");
+		} catch (Exception e) {
+			e.printStackTrace();
+			dto.setErrorMsg("查询异常，请稍后再试");
+			dto.setResult("F");
+		}
+		return JSONUtil.toJSONString(JSONUtil.toJSONObject(dto));
+	}
+	
+	/**
+	 * 用户报名接口
+	 * @param params
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value="/userEnroll", method=RequestMethod.POST, produces="text/html;charset=UTF-8")
+	public String userEnroll(@RequestBody String params){
+		logger.info("用户报名接口userEnroll接收参数："+params);
 		
 		return null;
 	}
@@ -159,8 +191,8 @@ public class AppController {
 	}
 	
 	@ResponseBody
-	@RequestMapping(value="/getBanner")
-	public String getBanner(String params){
+	@RequestMapping(value="/getBannerConfig")
+	public String getBannerConfig(String params){
 		
 		return null;
 	}

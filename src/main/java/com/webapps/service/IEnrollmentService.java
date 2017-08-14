@@ -1,5 +1,7 @@
 package com.webapps.service;
 
+import java.util.List;
+
 import com.webapps.common.bean.Page;
 import com.webapps.common.bean.ResultDto;
 import com.webapps.common.entity.Enrollment;
@@ -14,5 +16,9 @@ public interface IEnrollmentService {
 	public ResultDto<Enrollment> saveEnrollment(Enrollment enrollment) throws Exception;
 	
 	public ResultDto<Enrollment> deleteEnrollmentById(Integer id) throws Exception;
-
+	
+	public List<Enrollment> queryEnrollmentListByUserId(Integer id)throws Exception;
+	
+	public int saveTalkInfoById(Enrollment em)throws Exception;
+	
 }

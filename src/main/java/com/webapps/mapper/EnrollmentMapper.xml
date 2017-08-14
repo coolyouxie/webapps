@@ -12,17 +12,19 @@
 		<result column="company_id" jdbcType="DECIMAL" property="company.id" />
 		<result column="company_name" jdbcType="DECIMAL" property="company.name" />
 		<result column="state" jdbcType="DECIMAL" property="state" />
+		<result column="is_talked" jdbcType="DECIMAL" property="isTalked" />
+		<result column="talk_result" jdbcType="VARCHAR" property="talkResult" />
 		<result column="data_state" jdbcType="DECIMAL" property="dataState" />
 		<result column="create_time" jdbcType="VARCHAR" property="createTime" />
 		<result column="UPDATE_TIME" jdbcType="VARCHAR" property="updateTime" />
 	</resultMap>
 
 	<sql id="select_columns">
-		te.ID,te.user_id,te.recruitment_id,te.company_id,te.state, te.data_state,te.CREATE_TIME,te.UPDATE_TIME
+		te.ID,te.user_id,te.recruitment_id,te.company_id,te.state, te.data_state,te.CREATE_TIME,te.UPDATE_TIME,te.is_talked,te.talk_result
 	</sql>
 
 	<sql id="insert_columns">
-		user_id,recruitment_id,company_id,state, data_state,CREATE_TIME
+		user_id,recruitment_id,company_id,state, data_state,CREATE_TIME,is_talked,talk_result
 	</sql>
 	
 	<!-- 查询所有 -->
@@ -38,7 +40,7 @@
 		select <include refid="select_columns" />,tc.name company_name,tr.title recruitment_title from t_enrollment te left join t_company tc on tc.id=te.company_id
 		left join t_recruitment tr on tr.id = te.recruitment_id 
 		<trim prefix="WHERE" prefixOverrides="AND">
-			te.data_state = 1 
+			<!-- te.data_state = 1 --> 
 			<if test="obj.recruitment != null and obj.recruitment.id != null">
 				and te.recruitment_id = #{obj.recruitment.id}
 			</if>
@@ -157,12 +159,37 @@
 		)
 		values
 		(
-			#{obj.userId},
-			#{obj.recruitmentId},
-			#{obj.companyId},
+			#{obj.user.id},
+			#{obj.recruitment.id},
+			#{obj.company.id},
 			#{obj.state},
 			#{obj.dataState},
-			now()
+			now(),
+			#{obj.isTalked},
+			#{obj.talkResult}
 		)
 	</insert>
+	
+	<update id="updateById">
+		update t_enrollment 
+		set 
+			user_id=#{obj.user.id},
+			recruitment_id=#{obj.recruitment.id},
+			company_id=#{obj.company.id},
+			state=#{obj.state}, 
+			data_state=#{obj.dataState},
+			update_TIME=now(),
+			is_talked=#{obj.isTalked},
+			talk_result=#{obj.talkResult}
+		where id=#{id}
+	</update>
+	
+	<update id="saveTalkInfoById">
+		update t_enrollment 
+		set 
+			update_TIME=now(),
+			is_talked=#{obj.isTalked},
+			talk_result=#{obj.talkResult}
+		where id=#{id}
+	</update>
 </mapper>

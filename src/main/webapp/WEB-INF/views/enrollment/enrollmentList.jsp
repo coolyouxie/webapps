@@ -42,7 +42,7 @@
 								total : 'page.total', // json中代表页码总数的数据 
 								repeatitems : false // 如果设为false，则jqGrid在解析json时，会根据name来搜索对应的数据元素（即可以json中元素可以不按顺序）；而所使用的name是来自于colModel中的name设定。   
 							},
-		    colNames : [ '公司名称', '发布单标题', '报名人', '手机号','报名时间'],
+		    colNames : [ '公司名称', '发布单标题', '报名人', '手机号','报名时间','沟通结果','操作'],
 		    colModel : [ {
 								label : 'company.name',
 								name : 'company.name',
@@ -77,6 +77,25 @@
 								name : 'createTimeStr',
 								align : 'center',
 								sortable : false
+							},{
+								label : 'talkResult',
+								name : 'talkResult',
+								align : 'center',
+								sortable : false
+							},{
+								label : 'operate',
+								name : 'operate',
+								align : 'center',
+								sortable : false,
+								formatter:function(cellValue,options,rowObject){
+									var result = null;
+									if(rowObject.isTalked==-1){
+										result = "<button id='btn_"+rowObject.id+"' class='btn btn-primary btn-sm' data-toggle='modal' onclick='showModal("+rowObject.id+")'>已沟通</button>";
+									}else{
+										result = "已沟通";
+									}
+									return result;
+								}
 							} ],
 		    pager: '#pager',
 		    rowNum:50,
@@ -113,6 +132,33 @@
 		});
 	}
 	
+	function showModal(id){
+		$("#enrollmentId").val(id);
+		$('#talkInfo').modal('show');
+	}
+	
+	function saveTalkInfo(){
+		$.ajax({
+			url:"${ctx}/enrollment/saveTalkInfo",
+			type:"POST",
+			dataType:"JSON",
+			data:{
+				'id':$("#enrollmentId").val(),
+				'talkResult':$("#talkResult").val(),
+				'isTalked':1
+			},
+			success:function(response){
+				if(response.result=="success"){
+					$('#talkInfo').modal('hide');
+					alert("保存成功");
+					search();
+				}else{
+					alert(response.errorMsg);
+				}
+			}
+		});
+	}
+	
 </script>
 <style>
 	.input-group-sm {
@@ -133,6 +179,24 @@
 </style>
 </head>
 <body>
+	<input type="hidden" id="enrollmentId" >
+	<div class="modal fade" id="talkInfo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="myModalLabel">沟通结果</h4>
+				</div>
+				<div class="modal-body">
+					<textarea id="talkResult" class="form-control" ></textarea>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+					<button type="button" class="btn btn-primary" onclick="saveTalkInfo()">提交</button>
+				</div>
+			</div><!-- /.modal-content -->
+		</div><!-- /.modal -->
+	</div>
 	<div class="container-fluid">
 		<form id="searchForm">
 			<div class="row" style="margin-bottom:8px">
