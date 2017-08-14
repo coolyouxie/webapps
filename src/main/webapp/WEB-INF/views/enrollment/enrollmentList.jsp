@@ -169,6 +169,18 @@
 						<input type="text" id="enrollTimeEnd" name="enrollTimeEnd" onClick="WdatePicker({isShowWeek:true})">
 					</label>
 				</div>
+				<div class="col-sm-3">
+					<label>
+						<span>状态:</span>
+						<select id="state" name="state">
+							<option value="">-请选择-</option>
+							<option value="1">已报名</option>
+							<option value="2">已入职</option>
+							<option value="3">已期满</option>
+							<option value="4">已离职</option>
+						</select>
+					</label>
+				</div>
 			</div>
 		</form>
 	</div>
