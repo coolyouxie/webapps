@@ -238,7 +238,7 @@ public class AESEncrypt {
 		int d = (int) (Math.random() * 1000);
 		key = String.valueOf((new Date()).getTime()) + d;
 		// 需要加密的字串
-		String cSrc = "青客官网www.qk365.com";
+		String cSrc = "官网www.baidu.com";
 		System.out.println(cSrc);
 		KeyGenerator kg = null;
 		kg = KeyGenerator.getInstance("AES");
