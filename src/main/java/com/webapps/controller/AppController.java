@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.webapps.common.bean.Page;
@@ -94,7 +95,7 @@ public class AppController {
 	 * @return
 	 */
 	@ResponseBody
-	@RequestMapping(value="/getRecruitmentList")
+	@RequestMapping(value="/getRecruitmentList", method=RequestMethod.POST, produces="text/html;charset=UTF-8")
 	public String getRecruitmentList(@RequestBody String params){
 		ResultDto<List<Recruitment>> dto = new ResultDto<List<Recruitment>>();
 		JSONObject jsonObj = JSONUtil.toJSONObject(params);
