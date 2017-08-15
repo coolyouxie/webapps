@@ -53,16 +53,18 @@
 		</trim>
 	</select>
 	
-	<select id="countByFkIds" resultMap="resultMap">
-		select conut(1) from t_enrollment te left join t_company tc on tc.id=te.compnayId
-		left join t_recruitment tr on tr.id = te.recruitment_id 
+	<select id="countByFkIds" resultType="java.lang.Integer">
+		select count(1) from t_enrollment te 
 		<trim prefix="WHERE" prefixOverrides="AND">
-			te.data_state = 1 
+			te.data_state = 1
 			<if test="obj.recruitment != null and obj.recruitment.id != null">
-				and te.recruitment_id = #{obj.recruitmentId}
+				and te.recruitment_id = #{obj.recruitment.id}
 			</if>
 			<if test="obj.company != null and obj.company.id != null">
-				and te.company_id = #{obj.companyId}
+				and te.company_id = #{obj.company.id}
+			</if>
+			<if test="obj.user != null and obj.user.id != null">
+				and te.user_id = #{obj.user.id}
 			</if>
 		</trim>
 	</select>

@@ -43,6 +43,7 @@ public class RecommendServiceImpl implements IRecommendService {
 		int result = 0;
 		ResultDto<Recommend> dto = new ResultDto<Recommend>();
 		if(recommend.getId()==null){
+			recommend.setDataState(1);
 			result = iRecommendMapper.insert(recommend);
 			if(result!=1){
 				dto.setData(recommend);
@@ -80,6 +81,12 @@ public class RecommendServiceImpl implements IRecommendService {
 			dto.setResult("success");
 		}
 		return null;
+	}
+
+	@Override
+	public List<Recommend> queryRecommendListByUserId(Integer userId) throws Exception {
+		List<Recommend> list = iRecommendMapper.queryByUserId(userId);
+		return list;
 	}
 
 }
