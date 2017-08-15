@@ -47,7 +47,7 @@
 			<if test="obj.company != null and obj.company.id != null">
 				and te.company_id = #{obj.company.id}
 			</if>
-			<if test="obj.company.name != null and obj.company.name != ''">
+			<if test="obj.company != null and obj.company.name != ''">
 				tc.name like concat('%',#{obj.company.name},'%')
 			</if>
 		</trim>
