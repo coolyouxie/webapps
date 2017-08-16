@@ -23,7 +23,7 @@ public interface IEnrollApprovalService {
 	 * @return
 	 * @throws Exception
 	 */
-	public ResultDto<EnrollApproval> approval(EnrollApprovalRequestForm form)throws Exception;
+	public ResultDto<EnrollApproval> approvalById(Integer id,Integer state,String remark)throws Exception;
 	
 	public EnrollApproval getById(Integer id)throws Exception;
 

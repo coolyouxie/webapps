@@ -19,6 +19,10 @@ public class EnrollApprovalRequestForm extends EnrollApproval implements Request
 	 * approvalType 审核类型，1入职审核，2期满审核
 	 */
 	private Integer approvalType;
+	
+	private String enrollTimeStart;
+	
+	private String enrollTimeEnd;
 
 	public String getKeyWords() {
 		return keyWords;
@@ -42,6 +46,22 @@ public class EnrollApprovalRequestForm extends EnrollApproval implements Request
 
 	public void setApprovalType(Integer approvalType) {
 		this.approvalType = approvalType;
+	}
+
+	public String getEnrollTimeStart() {
+		return enrollTimeStart;
+	}
+
+	public void setEnrollTimeStart(String enrollTimeStart) {
+		this.enrollTimeStart = enrollTimeStart;
+	}
+
+	public String getEnrollTimeEnd() {
+		return enrollTimeEnd;
+	}
+
+	public void setEnrollTimeEnd(String enrollTimeEnd) {
+		this.enrollTimeEnd = enrollTimeEnd;
 	}
 
 }

@@ -30,7 +30,7 @@
 	var dataGrid = null;
 	jQuery(document).ready(function(){
 		dataGrid = jQuery("#list").jqGrid({
-		    url:"${ctx}/enrollment/loadEnrollmentList",
+		    url:"${ctx}/enrollApproval/loadEnrollApprovalList",
 		    datatype: "json",
 		    mtype : "POST",
 		    height : 650,
@@ -42,7 +42,7 @@
 								total : 'page.total', // json中代表页码总数的数据 
 								repeatitems : false // 如果设为false，则jqGrid在解析json时，会根据name来搜索对应的数据元素（即可以json中元素可以不按顺序）；而所使用的name是来自于colModel中的name设定。   
 							},
-		    colNames : [ '报名人', '手机号','报名时间','入职公司','发布单标题','类型','操作'],
+		    colNames : [ '报名人', '手机号','报名时间','入职公司','发布单标题','类型','状态','备注','操作'],
 		    colModel : [ {
 								label : 'user.name',
 								name : 'user.name',
@@ -84,13 +84,34 @@
 								sortable : false,
 								formatter:function(cellValue,options,rowObject){
 									var result = null;
-									if(type==1){
+									if(cellValue==1){
 										result = '入职审核';
-									}else if(type==2){
+									}else if(cellValue==2){
 										result = "期满审核";
 									}
 									return result;
 								}
+							},{
+								label : 'state',
+								name : 'state',
+								align : 'center',
+								sortable : false,
+								formatter:function(cellValue,options,rowObject){
+									var result = null;
+									if(cellValue==0){
+										result = '待审核';
+									}else if(cellValue==1){
+										result = "审核通过";
+									}else if(cellValue==2){
+										result = "审核不通过";
+									}
+									return result;
+								}
+							},{
+								label : 'remark',
+								name : 'remark',
+								align : 'center',
+								sortable : false
 							}, {
 								label : 'operate',
 								name : 'operate',
@@ -99,8 +120,8 @@
 								formatter:function(cellValue,options,rowObject){
 									var result = null;
 									if(rowObject.state==0){
-										result = '<button class="btn-sm" onclick="enrollApprovalById('+rowObject.id+',1)">'+通过+'</button>'+
-										'<button class="btn-sm" onclick="showModal('+rowObject.id+',2)">'+不通过+'</button>';
+										result = '<button class="btn btn-primary btn-sm" onclick="enrollApprovalById('+rowObject.id+',1)">通过</button>'+
+										'<button class="btn btn-primary btn-sm" onclick="showModal('+rowObject.id+',2)">不通过</button>';
 									}else{
 										result = "已审核";
 									}
@@ -138,7 +159,7 @@
 				"remark":remark
 			},
 			success:function(response){
-				$('#talkInfo').modal('hide');
+				$('#remarkModal').modal('hide');
 				if(response.result=='success'){
 					alert("审核信息更新完成");
 					dataGrid.trigger("reloadGrid");
@@ -158,7 +179,7 @@
 	function enrollApprovalByIdWithRemark(){
 		var id = $("#enrollApprovalId").val();
 		var state = $("#approvalState").val();
-		var remark = $("remark").val().trim();
+		var remark = $("#remark").val().trim();
 		if(state==2){
 			if(!remark){
 				alert("请填写审核不通过原因");
@@ -166,7 +187,6 @@
 			}
 		}
 		enrollApprovalById(id,state,remark);
-		
 	}
 	
 </script>
@@ -189,7 +209,8 @@
 </style>
 </head>
 <body>
-	<input type="hidden" id="enrollmentId" >
+	<input type="hidden" id="enrollApprovalId" >
+	<input type="hidden" id="approvalState" >
 	<div class="modal fade" id="remarkModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class="modal-dialog">
 			<div class="modal-content">

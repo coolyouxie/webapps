@@ -55,10 +55,7 @@
 					 <ul class="nav nav-sidebar">
 						<li><a href="${ctx}/enrollment/toEnrollmentListPage" target="mainContainer">报名列表</a></li>
 						<li><a href="${ctx}/recommend/toRecommendListPage" target="mainContainer">推荐列表</a></li>
-						<!-- <li><a href="" target="mainContainer">Nav item again</a></li>
-						<li><a href="" target="mainContainer">One more nav</a></li>
-						<li><a href="" target="mainContainer">Another nav item</a></li>
-						<li><a href="" target="mainContainer">More navigation</a></li> -->
+						<li><a href="${ctx}/enrollApproval/toEnrollApprovalListPage" target="mainContainer">审核列表</a></li>
 					</ul>
 					<!--<ul class="nav nav-sidebar">
 						<li><a href="">Nav item again</a></li>

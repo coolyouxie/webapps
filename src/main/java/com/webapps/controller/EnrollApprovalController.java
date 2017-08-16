@@ -84,5 +84,20 @@ public class EnrollApprovalController {
 	}
 	
 	
+	@ResponseBody
+	@RequestMapping(value="/enrollApprovalById")
+	public String enrollApprovalById(Model model,Integer id,Integer state,String remark){
+		ResultDto<EnrollApproval> dto = new ResultDto<EnrollApproval>();
+		try {
+			dto = iEnrollApprovalService.approvalById(id,state,remark);
+		} catch (Exception e) {
+			dto.setResult("fail");
+			dto.setErrorMsg("审核异常，请稍后重试");
+			e.printStackTrace();
+		}
+		return JSONUtil.toJSONString(JSONUtil.toJSONObject(dto));
+	}
+	
+	
 
 }

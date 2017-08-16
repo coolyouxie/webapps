@@ -4,9 +4,15 @@ import com.webapps.common.utils.DateUtil;
 
 public class EnrollApproval extends Enrollment {
 	
+	private Integer enrollmentId;
+	
 	private Integer state;
 	
 	private Integer operatorId;
+	
+	private Integer type;
+	
+	private String remark;
 
 	public Integer getState() {
 		return state;
@@ -29,6 +35,30 @@ public class EnrollApproval extends Enrollment {
 
 	public void setOperatorId(Integer operatorId) {
 		this.operatorId = operatorId;
+	}
+
+	public Integer getType() {
+		return type;
+	}
+
+	public void setType(Integer type) {
+		this.type = type;
+	}
+
+	public Integer getEnrollmentId() {
+		return enrollmentId;
+	}
+
+	public void setEnrollmentId(Integer enrollmentId) {
+		this.enrollmentId = enrollmentId;
+	}
+
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
 	}
 
 }
