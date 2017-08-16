@@ -11,17 +11,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.google.gson.Gson;
 import com.webapps.common.bean.Page;
 import com.webapps.common.bean.ResultDto;
 import com.webapps.common.entity.BannerConfig;
 import com.webapps.common.entity.Company;
 import com.webapps.common.entity.Enrollment;
+import com.webapps.common.entity.Recommend;
 import com.webapps.common.entity.Recruitment;
 import com.webapps.common.form.BannerConfigRequestForm;
 import com.webapps.common.form.RecruitmentRequestForm;
 import com.webapps.common.utils.JSONUtil;
 import com.webapps.service.IBannerConfigService;
 import com.webapps.service.IEnrollmentService;
+import com.webapps.service.IRecommendService;
 import com.webapps.service.IRecruitmentService;
 
 import net.sf.json.JSONObject;
@@ -41,6 +44,9 @@ public class AppController {
 	
 	@Autowired
 	private IEnrollmentService iEnrollmentService;
+	
+	@Autowired
+	private IRecommendService iRecommendService;
 	
 	/**
 	 * app端登录接口
@@ -73,16 +79,50 @@ public class AppController {
 		return null;
 	}
 	
+	@ResponseBody
+	@RequestMapping(value="/userRecommend", method=RequestMethod.POST, produces="text/html;charset=UTF-8")
+	public String userRecommend(@RequestBody String params){
+		logger.info("获取用户推荐列表getUserRecommomendList接收参数:"+params);
+		Gson gson = new Gson();
+		Recommend r = gson.fromJson(params, Recommend.class);
+		ResultDto<Recommend> dto = null;
+		try {
+			dto = iRecommendService.saveRecommend(r);
+			if("success".equals(dto.getResult())){
+				dto.setResult("S");
+			}else{
+				dto.setResult("F");
+			}
+		} catch (Exception e) {
+			dto.setErrorMsg("保存异常，请稍后再试");
+			dto.setResult("F");
+			e.printStackTrace();
+		}
+		return JSONUtil.toJSONString(JSONUtil.toJSONObject(dto));
+	}
+	
 	/**
 	 * app端获取用户推荐列表
 	 * @param params
 	 * @return
 	 */
 	@ResponseBody
-	@RequestMapping(value="/getUserRecommomend")
-	public String getUserRecommomend(String params){
-		logger.info("");
-		return null;
+	@RequestMapping(value="/getUserRecommendList", method=RequestMethod.POST, produces="text/html;charset=UTF-8")
+	public String getUserRecommendList(@RequestBody String params){
+		logger.info("获取用户推荐列表getUserRecommomendList接收参数:"+params);
+		JSONObject jsonObj = JSONUtil.toJSONObject(params);
+		Integer userId = jsonObj.getInt("userId");
+		ResultDto<List<Recommend>> dto = new ResultDto<List<Recommend>>();
+		try {
+			List<Recommend> list = iRecommendService.queryRecommendListByUserId(userId);
+			dto.setData(list);
+			dto.setResult("S");
+		} catch (Exception e) {
+			dto.setErrorMsg("查询异常，请稍后再试");
+			dto.setResult("F");
+			e.printStackTrace();
+		}
+		return JSONUtil.toJSONString(JSONUtil.toJSONObject(dto));
 	}
 
 	/**
@@ -116,9 +156,25 @@ public class AppController {
 	@ResponseBody
 	@RequestMapping(value="/userEnroll", method=RequestMethod.POST, produces="text/html;charset=UTF-8")
 	public String userEnroll(@RequestBody String params){
-		logger.info("用户报名接口userEnroll接收参数："+params);
-		
-		return null;
+		logger.info("用户报名接口userEnroll接收参数:"+params);
+		Gson gson = new Gson();
+		Enrollment em = gson.fromJson(params, Enrollment.class);
+		ResultDto<Enrollment> dto = null;
+		if(StringUtils.isNotBlank(params)){
+			try {
+				dto = iEnrollmentService.userEnroll(em);
+			} catch (Exception e) {
+				dto = new ResultDto<Enrollment>();
+				dto.setErrorMsg("报名异常，请稍后再试");
+				dto.setResult("F");
+				e.printStackTrace();
+			}
+		}else{
+			dto = new ResultDto<Enrollment>();
+			dto.setErrorMsg("参数为空");
+			dto.setResult("F");
+		}
+		return JSONUtil.toJSONString(JSONUtil.toJSONObject(dto));
 	}
 	
 	/**

@@ -8,12 +8,16 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.webapps.common.bean.Page;
 import com.webapps.common.bean.ResultDto;
+import com.webapps.common.entity.Company;
 import com.webapps.common.entity.Enrollment;
+import com.webapps.common.entity.Recruitment;
 import com.webapps.common.entity.User;
 import com.webapps.common.form.EnrollmentRequestForm;
-import com.webapps.common.form.EnrollmentResponseForm;
+import com.webapps.common.utils.JSONUtil;
 import com.webapps.mapper.IEnrollmentMapper;
 import com.webapps.service.IEnrollmentService;
+
+import net.sf.json.JSONObject;
 
 @Service
 @Transactional
@@ -90,6 +94,32 @@ public class EnrollmentServiceImpl implements IEnrollmentService {
 	public int saveTalkInfoById(Enrollment em) throws Exception {
 		int count = iEnrollmentMapper.saveTalkInfoById(em,em.getId());
 		return count;
+	}
+
+	@Override
+	public ResultDto<Enrollment> userEnroll(Enrollment em) throws Exception {
+		ResultDto<Enrollment> dto = null;
+		em.setIsTalked(-1);
+		em.setState(1);
+		em.setDataState(1);
+		int count = iEnrollmentMapper.countByFkIds(em);
+		if(count>=1){
+			dto = new ResultDto<Enrollment>();
+			dto.setErrorMsg("已经报名了本次招工，请不要重复申请");
+			dto.setResult("F");
+			return dto;
+		}
+		int result = iEnrollmentMapper.insert(em);
+		if(result == 1){
+			dto = new ResultDto<Enrollment>();
+			dto.setData(em);
+			dto.setResult("S");
+		}else{
+			dto = new ResultDto<Enrollment>();
+			dto.setErrorMsg("保存报名信息异常");
+			dto.setResult("F");
+		}
+		return dto;
 	}
 
 }

@@ -21,4 +21,12 @@ public interface IEnrollmentService {
 	
 	public int saveTalkInfoById(Enrollment em)throws Exception;
 	
+	/**
+	 * 用户报名接口
+	 * @param params
+	 * @return
+	 * @throws Exception
+	 */
+	public ResultDto<Enrollment> userEnroll(Enrollment em)throws Exception;
+	
 }
