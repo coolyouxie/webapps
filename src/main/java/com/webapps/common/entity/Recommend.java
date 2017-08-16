@@ -4,10 +4,6 @@ public class Recommend extends Entity {
 	
 	private User user;
 	
-	private Recruitment recruitment;
-	
-	private Company company;
-	
 	private String name;
 	
 	private String mobile;
@@ -65,23 +61,5 @@ public class Recommend extends Entity {
 	public void setUser(User user) {
 		this.user = user;
 	}
-
-	public Recruitment getRecruitment() {
-		return recruitment;
-	}
-
-	public void setRecruitment(Recruitment recruitment) {
-		this.recruitment = recruitment;
-	}
-
-	public Company getCompany() {
-		return company;
-	}
-
-	public void setCompany(Company company) {
-		this.company = company;
-	}
-	
-	
 
 }

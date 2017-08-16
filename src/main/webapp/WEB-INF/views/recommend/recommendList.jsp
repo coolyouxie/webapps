@@ -36,7 +36,7 @@
 								total : 'page.total', // json中代表页码总数的数据 
 								repeatitems : false // 如果设为false，则jqGrid在解析json时，会根据name来搜索对应的数据元素（即可以json中元素可以不按顺序）；而所使用的name是来自于colModel中的name设定。   
 			},
-		    colNames : [ '推荐人', '推荐人手机', '被推荐人', '被推荐人手机', '公司名称','发布单','推荐状态', '操作'],
+		    colNames : [ '推荐人', '推荐人手机', '被推荐人', '被推荐人手机', '推荐状态', '操作'],
 		    colModel : [ {
 								label : 'user.name',
 								name : 'user.name',
@@ -60,27 +60,22 @@
 								name : 'mobile',
 								align : 'center',
 								sortable : false
-							}, {
-								label : 'company.name',
-								name : 'company.name',
-								align : 'center',
-								sortable : false,
-								formatter:function(cellvalue,options,rowObject){
-									return '<a href="${ctx}/company/getById?id='+rowObject.company.id+'" style="color:blue">'+cellvalue+'</a>';
-								}
-							},{
-								label : 'recruitment.title',
-								name : 'recruitment.title',
-								align : 'center',
-								sortable : false,
-								formatter:function(cellvalue,options,rowObject){
-									return '<a href="${ctx}/recruitment/getById?id='+rowObject.recruitment.id+'" style="color:blue">'+cellvalue+'</a>';
-								}
 							},{
 								label : 'state',
 								name : 'state',
 								align : 'center',
-								sortable : false
+								sortable : false,
+								formatter:function(cellValue,options,rowObject){
+									var result = null;
+									if(cellValue==1){
+										result = "未注册会员";
+									}else if(cellValue==2){
+										result = "已注册会员";
+									}else if(cellValue==3){
+										result = "推荐超期";
+									}
+									return result;
+								}
 							},{
 								label : 'operate',
 								name : 'operate',

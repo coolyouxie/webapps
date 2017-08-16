@@ -7,10 +7,6 @@
 		<result column="user_id" jdbcType="DECIMAL" property="user.id" />
 		<result column="user_name" jdbcType="DECIMAL" property="user.name" />
 		<result column="user_mobile" jdbcType="DECIMAL" property="user.mobile" />
-		<result column="recruitment_Id" jdbcType="DECIMAL" property="recruitment.id" />
-		<result column="recruitment_title" jdbcType="DECIMAL" property="recruitment.title" />
-		<result column="company_id" jdbcType="DECIMAL" property="company.id" />
-		<result column="company_name" jdbcType="VARCHAR" property="company.name" />
 		<result column="name" jdbcType="VARCHAR" property="name" />
 		<result column="mobile" jdbcType="VARCHAR" property="mobile" />
 		<result column="state" jdbcType="DECIMAL" property="state" />
@@ -22,11 +18,11 @@
 	</resultMap>
 
 	<sql id="select_columns">
-		tr.ID,tr.user_id,tr.recruitment_Id,tr.name,tr.mobile,tr.age,tr.gender,tr.state, tr.data_state,tr.CREATE_TIME,tr.UPDATE_TIME
+		tr.ID,tr.user_id,tr.name,tr.mobile,tr.age,tr.gender,tr.state, tr.data_state,tr.CREATE_TIME,tr.UPDATE_TIME
 	</sql>
 
 	<sql id="insert_columns">
-		user_id,recruitment_Id,name,mobile,age,gender,state, data_state,CREATE_TIME
+		user_id,name,mobile,age,gender,state, data_state,CREATE_TIME
 	</sql>
 	
 	<select id="getById" resultMap="resultMap">
@@ -51,17 +47,10 @@
 		select <include refid="select_columns" /> from t_recommend where user_id = #{obj.id} and data_state = 1
 	</select>
 	
-	<!-- 根据行政区等查询 -->
-	<select id="queryByRecruitmentId" resultMap="resultMap">
-		select <include refid="select_columns" /> from t_recommend where recruitment_id = #{obj.recruitment.id} and data_state = 1
-	</select>
-	
 	<!-- 查询行政区总数 -->
 	<select id="queryCount" resultType="java.lang.Integer">
 		SELECT count(1) FROM t_recommend tr 
 		left join t_user tu on tr.user_id = tu.id
-		left join t_recruitment tre on tr.recruitment_id = tre.id
-		left join t_company tc on tc.id = tre.company_id
 		<trim prefix="WHERE" prefixOverrides="AND">
 			tr.data_state = 1 
 			<if test="obj.name !=null and obj.name != ''">
@@ -72,12 +61,6 @@
 			</if>
 			<if test="obj.user != null and obj.user.name != null and obj.user.name !='' ">
 				and tu.name = #{obj.user.name,jdbcType=VARCHAR}
-			</if>
-			<if test="obj.company !=null and obj.company.name != null and obj.company.name != ''">
-				and tc.name like concat('%',#{obj.company.name},'%') 
-			</if>
-			<if test="obj.recruitment != null and obj.recruitment.title != null and obj.recruitment.title != ''">
-				and tre.title like concat('%',#{obj.recruitment.title},'%')
 			</if>
 		</trim>
 	</select>
@@ -88,14 +71,9 @@
 		SELECT
 		<include refid="select_columns" />,
 		tu.name as user_name,
-		tu.mobile as user_mobile,
-		tc.id as company_id,
-		tc.name as company_name,
-		tre.title as recruitment_title
+		tu.mobile as user_mobile
 		FROM t_recommend tr 
 		left join t_user tu on tr.user_id = tu.id
-		left join t_recruitment tre on tr.recruitment_id = tre.id
-		left join t_company tc on tc.id = tre.company_id
 		<trim prefix="WHERE" prefixOverrides="AND">
 			tr.data_state = 1 
 			<if test="obj.name !=null and obj.name != ''">
@@ -106,12 +84,6 @@
 			</if>
 			<if test="obj.user != null and obj.user.name != null and obj.user.name !='' ">
 				and tu.name = #{obj.user.name,jdbcType=VARCHAR}
-			</if>
-			<if test="obj.company !=null and obj.company.name != null and obj.company.name != ''">
-				and tc.name like concat('%',#{obj.company.name},'%') 
-			</if>
-			<if test="obj.recruitment != null and obj.recruitment.title != null and obj.recruitment.title != ''">
-				and tre.title like concat('%',#{obj.recruitment.title},'%')
 			</if>
 		</trim>
 		order by name
@@ -126,7 +98,6 @@
 		values
 		(
 			#{obj.user.id},
-			#{obj.recruitment.id},
 			#{obj.name},
 			#{obj.mobile},
 			#{obj.age},
@@ -140,7 +111,6 @@
 	<update id="updateById">
 		update t_recommend 
 		set 
-			recruitment_id = #{obj.recruitment.id},
 			name = #{obj.name},
 			mobile = #{obj.mobile},
 			state = #{obj.state},
