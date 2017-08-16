@@ -46,14 +46,6 @@
 		select <include refid="select_columns" /> from t_recommend tr where user_id = #{userId} and data_state = 1
 	</select>
 	
-<<<<<<< HEAD
-	<!-- 查询行政区总数 -->
-=======
-	<select id="queryByRecruitmentId" resultMap="resultMap">
-		select <include refid="select_columns" /> from t_recommend tr where recruitment_id = #{obj.recruitment.id} and data_state = 1
-	</select>
-	
->>>>>>> origin/master
 	<select id="queryCount" resultType="java.lang.Integer">
 		SELECT count(1) FROM t_recommend tr 
 		left join t_user tu on tr.user_id = tu.id
