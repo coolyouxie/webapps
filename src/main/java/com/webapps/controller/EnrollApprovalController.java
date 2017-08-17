@@ -70,14 +70,14 @@ public class EnrollApprovalController {
 		try {
 			int count = iEnrollmentService.saveTalkInfoById(em);
 			if(count==1){
-				dto.setResult("success");
+				dto.setResult("S");
 			}else{
 				dto.setErrorMsg("更新数据失败，请稍后再试");
-				dto.setResult("fail");
+				dto.setResult("F");
 			}
 		} catch (Exception e) {
 			dto.setErrorMsg("更新数据异常，请稍后再试");
-			dto.setResult("fail");
+			dto.setResult("F");
 			e.printStackTrace();
 		}
 		return JSONUtil.toJSONString(JSONUtil.toJSONObject(dto));
@@ -91,7 +91,7 @@ public class EnrollApprovalController {
 		try {
 			dto = iEnrollApprovalService.approvalById(id,state,remark);
 		} catch (Exception e) {
-			dto.setResult("fail");
+			dto.setResult("F");
 			dto.setErrorMsg("审核异常，请稍后重试");
 			e.printStackTrace();
 		}

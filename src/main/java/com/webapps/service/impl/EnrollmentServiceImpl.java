@@ -51,16 +51,16 @@ public class EnrollmentServiceImpl implements IEnrollmentService {
 		ResultDto<Enrollment> dto = new ResultDto<Enrollment>();
 		int count = iEnrollmentMapper.countByFkIds(enrollment);
 		if(count>=1){
-			dto.setResult("fail");
+			dto.setResult("F");
 			dto.setErrorMsg("不能重复报名");
 			return dto;
 		}
 		int result = iEnrollmentMapper.insert(enrollment);
 		if(result==1){
-			dto.setResult("success");
+			dto.setResult("S");
 			return dto;
 		}else{
-			dto.setResult("fail");
+			dto.setResult("F");
 			dto.setErrorMsg("报名失败，请稍后再试");
 			return dto;
 		}
@@ -71,10 +71,10 @@ public class EnrollmentServiceImpl implements IEnrollmentService {
 		ResultDto<Enrollment> dto = new ResultDto<Enrollment>();
 		int result = iEnrollmentMapper.deleteByIdInLogic(id);
 		if(result==1){
-			dto.setResult("success");
+			dto.setResult("S");
 			return dto;
 		}else{
-			dto.setResult("fail");
+			dto.setResult("F");
 			dto.setErrorMsg("取消失败");
 			return dto;
 		}

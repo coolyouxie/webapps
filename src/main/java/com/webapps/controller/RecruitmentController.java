@@ -93,13 +93,13 @@ public class RecruitmentController {
 			try {
 				dto = iRecruitmentService.saveRecruitment(recruitment);
 				model.addAttribute("recruitment", recruitment);
-				if("fail".equals(dto.getResult())){
+				if("F".equals(dto.getResult())){
 					if(recruitment.getId()==null){
-						dto.setResult("fail");
+						dto.setResult("F");
 						dto.setErrorMsg("新增发布单失败，请稍后重试");
 						return "/recruitment/addRecruitment";
 					}else{
-						dto.setResult("fail");
+						dto.setResult("F");
 						dto.setErrorMsg("更新发布单失败，请稍后重试");
 						return "/recruitment/editRecruitment";
 					}
@@ -119,17 +119,17 @@ public class RecruitmentController {
 			int result = iRecruitmentService.deleteRecruitmentById(id);
 			if(result==1){
 				dto.setErrorMsg("删除成功");
-				dto.setResult("success");
+				dto.setResult("S");
 			}else{
 				dto.setErrorMsg("删除失败，稍后重试");
-				dto.setResult("fail");
+				dto.setResult("F");
 			}
 			return JSONUtils.valueToString(dto);
 		} catch (Exception e) {
 			e.printStackTrace();
 			ResultDto<Recruitment> dto = new ResultDto<Recruitment>();
 			dto.setErrorMsg("删除公司信息时异常，请稍后再试");
-			dto.setResult("fail");
+			dto.setResult("F");
 			return JSONUtils.valueToString(dto);
 		}
 	}

@@ -160,7 +160,7 @@
 			},
 			success:function(response){
 				$('#remarkModal').modal('hide');
-				if(response.result=='success'){
+				if(response.result=='S'){
 					alert("审核信息更新完成");
 					dataGrid.trigger("reloadGrid");
 				}else{

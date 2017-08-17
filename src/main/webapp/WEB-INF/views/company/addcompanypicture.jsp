@@ -50,7 +50,7 @@
 		    } else {
 		        $(this).fileinput(projectfileoptions).on("fileuploaded", function (event, data, previewId, index){
 		        	var response = data.response;
-					if(response&&response.result=="success"){
+					if(response&&response.result=="S"){
 						window.location.href="${ctx}/company/toCompanyListPage";
 					}
 		        });;

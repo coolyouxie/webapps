@@ -148,7 +148,7 @@
 				'isTalked':1
 			},
 			success:function(response){
-				if(response.result=="success"){
+				if(response.result=="S"){
 					$('#talkInfo').modal('hide');
 					alert("保存成功");
 					search();

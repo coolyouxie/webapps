@@ -85,10 +85,10 @@ public class BannerConfigController {
 		try {
 			result = iBannerConfigService.deleteBannerConfigById(id);
 			if (result == 0) {
-				dto.setResult("fail");
+				dto.setResult("F");
 				dto.setErrorMsg("删除失败，请稍后重试");
 			} else {
-				dto.setResult("success");
+				dto.setResult("S");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

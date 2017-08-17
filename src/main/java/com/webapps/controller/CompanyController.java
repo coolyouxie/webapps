@@ -75,7 +75,7 @@ public class CompanyController {
 				if("add_next".equals(company.getHandleType())){
 					if("insert_success".equals(dto.getResult())){
 						model.addAttribute("company", dto.getData());
-						model.addAttribute("result", "success");
+						model.addAttribute("result", "S");
 						return "/company/addcompanypicture";
 					}
 					if("insert_failed".equals(dto.getResult())){
@@ -97,7 +97,7 @@ public class CompanyController {
 				if("edit_next".equals(company.getHandleType())){
 					if("update_success".equals(dto.getResult())){
 						model.addAttribute("company", dto.getData());
-						model.addAttribute("result","success");
+						model.addAttribute("result","S");
 						return "/company/editcompanypicture";
 					}
 					if("update_fail".equals(dto.getResult())){
@@ -142,7 +142,7 @@ public class CompanyController {
 			e.printStackTrace();
 			ResultDto<Company> dto = new ResultDto<Company>();
 			dto.setErrorMsg("删除公司信息时异常，请稍后再试");
-			dto.setResult("fail");
+			dto.setResult("F");
 			return JSONUtils.valueToString(dto);
 		}
 	}

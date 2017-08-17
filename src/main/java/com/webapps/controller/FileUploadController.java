@@ -33,7 +33,7 @@ public class FileUploadController {
 		ResultDto<String> dto = new ResultDto<String>();
 		try {
 			iPictureService.savePicture(null, request);
-			dto.setResult("success");
+			dto.setResult("S");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

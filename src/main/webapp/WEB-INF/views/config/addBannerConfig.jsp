@@ -34,7 +34,7 @@
 				type:$("#type").val()
 			},
 			success:function(response){
-				if(response.result=="success"){
+				if(response.result=="S"){
 					var id = response.data.id;
 					var type = response.data.type;
 					var title = response.data.title;

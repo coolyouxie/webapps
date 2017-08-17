@@ -65,7 +65,7 @@ public class UserServiceImpl implements IUserService {
 	@Override
 	public ResultDto<User> saveUser(User user) throws Exception {
 		ResultDto<User> dto = new ResultDto<User>();
-		dto.setResult("success");
+		dto.setResult("S");
 		if(user.getId()!=null){
 			iUserMapper.updateById(user.getId(), user);
 			dto.setData(user);
@@ -80,14 +80,14 @@ public class UserServiceImpl implements IUserService {
 				int result = iUserMapper.insert(user);
 				if(result==0){
 					dto.setData(user);
-					dto.setResult("fail");
+					dto.setResult("F");
 					dto.setErrorMsg("新增失败");
 					return dto;
 				}
 			} catch (DuplicateKeyException e) {
 				logger.error(e.getMessage());
 				dto.setData(user);
-				dto.setResult("fail");
+				dto.setResult("F");
 				dto.setErrorMsg("该账号已被注册，请更换重试");
 				return dto;
 			}
@@ -105,7 +105,7 @@ public class UserServiceImpl implements IUserService {
 	public ResultDto<User> deleteUserById(Integer id) throws Exception {
 		iUserMapper.deleteById(id);
 		ResultDto<User> dto = new ResultDto<User>();
-		dto.setResult("success");
+		dto.setResult("S");
 		return dto;
 	}
 	

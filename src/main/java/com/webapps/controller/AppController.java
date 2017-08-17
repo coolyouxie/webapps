@@ -87,16 +87,12 @@ public class AppController {
 		Recommend r = gson.fromJson(params, Recommend.class);
 		ResultDto<Recommend> dto = null;
 		try {
-			dto = iRecommendService.saveRecommend(r);
-			if("success".equals(dto.getResult())){
-				dto.setResult("S");
-			}else{
-				dto.setResult("F");
-			}
+			dto = iRecommendService.userRecommend(r);
 		} catch (Exception e) {
-			dto.setErrorMsg("保存异常，请稍后再试");
+			dto.setErrorMsg("保存推荐信息异常，请稍后再试");
 			dto.setResult("F");
-			e.printStackTrace();
+			logger.error(e.getMessage());
+			return gson.toJson(dto);
 		}
 		return JSONUtil.toJSONString(JSONUtil.toJSONObject(dto));
 	}

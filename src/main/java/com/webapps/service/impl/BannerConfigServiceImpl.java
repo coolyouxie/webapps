@@ -33,10 +33,10 @@ public class BannerConfigServiceImpl implements IBannerConfigService {
 			errorMsg = "新增失败，请稍后再试";
 		}
 		if(result!=1){
-			dto.setResult("fail");
+			dto.setResult("F");
 			dto.setErrorMsg(errorMsg);
 		}else{
-			dto.setResult("success");
+			dto.setResult("S");
 			dto.setData(form);
 		}
 		return dto;

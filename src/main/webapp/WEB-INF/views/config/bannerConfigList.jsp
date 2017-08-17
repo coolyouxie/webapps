@@ -150,7 +150,7 @@
 				"id":id
 			},
 			success:function(response){
-				if(response.result=="success"){
+				if(response.result=="S"){
 					alert("删除成功");
 				}else{
 					alert(response.errorMsg);

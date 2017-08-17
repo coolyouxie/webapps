@@ -68,10 +68,10 @@ public class UserController {
 		if(null != user){
 			try {
 				ResultDto<User> dto = iUserService.saveUser(user);
-				if(null!=dto&&"success".equals(dto.getResult())){
+				if(null!=dto&&"S".equals(dto.getResult())){
 					return "/user/userlist";
 				}
-				if(null!=dto&&"fail".equals(dto.getResult())){
+				if(null!=dto&&"F".equals(dto.getResult())){
 					model.addAttribute("user", user);
 					model.addAttribute("result", dto.getErrorMsg());
 					return "/user/adduser";
@@ -112,7 +112,7 @@ public class UserController {
 		} catch (Exception e) {
 			e.printStackTrace();
 			dto = new ResultDto<User>();
-			dto.setResult("fail");
+			dto.setResult("F");
 		}
 		return JSONUtils.valueToString(dto);
 	}

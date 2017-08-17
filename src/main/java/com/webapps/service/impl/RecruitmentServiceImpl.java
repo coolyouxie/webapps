@@ -45,9 +45,9 @@ public class RecruitmentServiceImpl implements IRecruitmentService {
 		}
 		if(result != 1){
 			dto.setErrorMsg(errorMsg);
-			dto.setResult("fail");
+			dto.setResult("F");
 		}else{
-			dto.setResult("success");
+			dto.setResult("S");
 		}
 		dto.setData(form);
 		return dto;

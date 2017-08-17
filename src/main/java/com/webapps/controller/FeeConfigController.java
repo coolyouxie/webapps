@@ -63,14 +63,14 @@ public class FeeConfigController {
 				result = iFeeConfigService.saveFeeConfig(form);
 				if(result == 0){
 					if(form.getId()==null){
-						dto.setResult("fail");
+						dto.setResult("F");
 						dto.setErrorMsg("新增配置信息失败，请稍后重试");
 					}else{
-						dto.setResult("fail");
+						dto.setResult("F");
 						dto.setErrorMsg("更新配置信息失败，请稍后重试");
 					}
 				}else{
-					dto.setResult("success");
+					dto.setResult("S");
 				}
 			} catch (Exception e) {
 				e.printStackTrace();

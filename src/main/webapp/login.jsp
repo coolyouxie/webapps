@@ -33,7 +33,7 @@
 	            dataType: "json",
 	            data: null,
 	            success: function(data) {
-	                if(data && data.result == "success"){
+	                if(data && data.result == "S"){
 	                	$("#sys_verion").html(data.resultVo.version);
 	                	$("#sys_copyright").html(data.resultVo.copyright);
 	                }else{

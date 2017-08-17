@@ -43,7 +43,7 @@ $(function(){
 	    } else {
 	        $(this).fileinput(projectFileOptions).on("fileuploaded", function (event, data, previewId, index){
 	        	var response = data.response;
-				if(response&&response.result=="success"){
+				if(response&&response.result=="S"){
 					alert("添加成功");
 				}
 	        });

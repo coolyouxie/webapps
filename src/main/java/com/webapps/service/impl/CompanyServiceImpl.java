@@ -88,7 +88,7 @@ public class CompanyServiceImpl implements ICompanyService {
 	public ResultDto<Company> deleteCompanyById(Integer id) throws Exception {
 		ResultDto<Company> dto = new ResultDto<Company>();
 		iCompanyMapper.deleteByIdInLogic(id);
-		dto.setResult("success");
+		dto.setResult("S");
 		return dto;
 	}
 

@@ -18,5 +18,7 @@ public interface IRecommendService {
 	public ResultDto<Recommend> deleteRecommendById(Integer id) throws Exception;
 	
 	public List<Recommend> queryRecommendListByUserId(Integer userId)throws Exception;
+	
+	public ResultDto<Recommend> userRecommend(Recommend recommend);
 
 }

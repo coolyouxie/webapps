@@ -43,7 +43,26 @@
 	</select>
 	
 	<select id="queryByUserId" resultMap="resultMap">
-		select <include refid="select_columns" /> from t_recommend tr where user_id = #{userId} and data_state = 1
+		select <include refid="select_columns" /> from t_recommend tr where user_id = #{userId} and data_state = 1 order by create_time desc
+	</select>
+	
+	
+	<!-- 用户推荐时判断被推荐人是否可以被推荐 -->
+	<select id="queryCountForUserRecommend" resultType="java.lang.Integer">
+		SELECT count(1) FROM t_recommend tr 
+		left join t_user tu on tr.user_id = tu.id
+		<trim prefix="WHERE" prefixOverrides="AND">
+			tr.data_state = 1 
+			<if test="obj.name !=null and obj.name != ''">
+				and tr.name like concat('%',#{obj.name},'%')
+			</if>
+			<if test="obj.mobile != null and obj.mobile != ''">
+				and tr.mobile = #{obj.mobile,jdbcType=VARCHAR}
+			</if>
+			<if test="obj.user != null and obj.user.name != null and obj.user.name !='' ">
+				and tu.name = #{obj.user.name,jdbcType=VARCHAR}
+			</if>
+		</trim>
 	</select>
 	
 	<select id="queryCount" resultType="java.lang.Integer">
@@ -84,7 +103,7 @@
 				and tu.name = #{obj.user.name,jdbcType=VARCHAR}
 			</if>
 		</trim>
-		order by name
+		order by create_time desc
 		<include refid="ORACLE.paginationEnd" />
 	</select>
 	

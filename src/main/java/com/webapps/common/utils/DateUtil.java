@@ -1,5 +1,7 @@
 package com.webapps.common.utils;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -72,6 +74,16 @@ public class DateUtil {
 			e.printStackTrace();
 		}
 		return null;
+	}
+	
+	public static double getDaysBetweenTwoDates(Date startDate,Date endDate) throws Exception{
+		BigDecimal startMills = new BigDecimal(startDate.getTime());
+		BigDecimal endmills = new BigDecimal(endDate.getTime());
+		BigDecimal mills = endmills.subtract(startMills);
+		BigDecimal oneDayMills = new BigDecimal(86400000);
+		BigDecimal days = null;
+		days = mills.divide(oneDayMills,2,RoundingMode.UP);
+		return days.doubleValue();
 	}
 
 }

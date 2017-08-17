@@ -43,9 +43,9 @@ public class EnrollApprovalServiceImpl implements IEnrollApprovalService {
 		int result = iEnrollApprovalMapper.updateById(id, ea);
 		dto.setData(ea);
 		if(result == 1){
-			dto.setResult("success");
+			dto.setResult("S");
 		}else{
-			dto.setResult("fail");
+			dto.setResult("F");
 			dto.setErrorMsg("审核信息更新失败，请稍后再试");
 		}
 		return dto;
