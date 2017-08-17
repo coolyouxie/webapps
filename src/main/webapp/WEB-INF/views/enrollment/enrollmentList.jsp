@@ -89,11 +89,12 @@
 								sortable : false,
 								formatter:function(cellValue,options,rowObject){
 									var result = null;
-									if(rowObject.isTalked==-1){
-										result = "<button id='btn_"+rowObject.id+"' class='btn btn-primary btn-sm' data-toggle='modal' onclick='showModal("+rowObject.id+")'>已沟通</button>";
+									if(rowObject.isTalked==0){
+										result = "<button id='btn_"+rowObject.id+"' class='btn btn-primary btn-sm' data-toggle='modal' onclick='showModal("+rowObject.id+",1)'>已沟通</button>";
 									}else{
 										result = "已沟通";
 									}
+									result += "<button id='btn_"+rowObject.id+"' class='btn btn-primary btn-sm' data-toggle='modal' onclick='showModal("+rowObject.id+",2)'>作废</button>";
 									return result;
 								}
 							} ],
@@ -132,13 +133,24 @@
 		});
 	}
 	
-	function showModal(id){
+	function showModal(id,type){
 		$("#enrollmentId").val(id);
+		$("#handleType").val(type);
 		$('#talkInfo').modal('show');
 	}
 	
+	function updateEnrollmentInfo(){
+		var handleType = $("#handleType").val();
+		if(handleType==1){
+			saveTalkInfo();
+		}else if(handleType==2){
+			//作废报名
+			cancelEnroll();
+		}
+	}
+	
 	function saveTalkInfo(){
-		$.ajax({
+		$.ajax({		
 			url:"${ctx}/enrollment/saveTalkInfo",
 			type:"POST",
 			dataType:"JSON",
@@ -146,6 +158,28 @@
 				'id':$("#enrollmentId").val(),
 				'talkResult':$("#talkResult").val(),
 				'isTalked':1
+			},
+			success:function(response){
+				if(response.result=="S"){
+					$('#talkInfo').modal('hide');
+					alert("保存成功");
+					search();
+				}else{
+					alert(response.errorMsg);
+				}
+			}
+		});
+	}
+	
+	function cancelEnroll(){
+		$.ajax({		
+			url:"${ctx}/enrollment/cancelEnroll",
+			type:"POST",
+			dataType:"JSON",
+			data:{
+				'id':$("#enrollmentId").val(),
+				'remark':$("#talkResult").val(),
+				'dataState':0
 			},
 			success:function(response){
 				if(response.result=="S"){
@@ -180,19 +214,20 @@
 </head>
 <body>
 	<input type="hidden" id="enrollmentId" >
+	<input type="hidden" id="handleType" >
 	<div class="modal fade" id="talkInfo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-					<h4 class="modal-title" id="myModalLabel">沟通结果</h4>
+					<h4 class="modal-title" id="myModalLabel">沟通结果和备注</h4>
 				</div>
 				<div class="modal-body">
 					<textarea id="talkResult" class="form-control" ></textarea>
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-					<button type="button" class="btn btn-primary" onclick="saveTalkInfo()">提交</button>
+					<button type="button" class="btn btn-primary" onclick="updateEnrollmentInfo()">提交</button>
 				</div>
 			</div><!-- /.modal-content -->
 		</div><!-- /.modal -->

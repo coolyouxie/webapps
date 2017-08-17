@@ -78,6 +78,13 @@ public class EnrollmentController {
 		return JSONUtil.toJSONString(JSONUtil.toJSONObject(dto));
 	}
 	
+	@ResponseBody
+	@RequestMapping(value="/cancelEnroll")
+	public String cancelEnroll(Model model,EnrollmentRequestForm form){
+		ResultDto<Enrollment> dto = iEnrollmentService.updateEnrollment(form);
+		return JSONUtil.toJSONString(JSONUtil.toJSONObject(dto));
+	}
+	
 	
 
 }

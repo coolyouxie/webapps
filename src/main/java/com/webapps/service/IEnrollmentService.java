@@ -29,4 +29,6 @@ public interface IEnrollmentService {
 	 */
 	public ResultDto<Enrollment> userEnroll(Enrollment em)throws Exception;
 	
+	public ResultDto<Enrollment> updateEnrollment(EnrollmentRequestForm form);
+	
 }

@@ -15,6 +15,8 @@ public class Enrollment extends Entity {
 	private Integer isTalked;
 	
 	private String talkResult;
+	
+	private String remark;
 
 	public Integer getState() {
 		return state;
@@ -69,6 +71,14 @@ public class Enrollment extends Entity {
 
 	public void setTalkResult(String talkResult) {
 		this.talkResult = talkResult;
+	}
+
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
 	}
 
 }
