@@ -49,6 +49,7 @@
 					<ul class="nav nav-sidebar">
 						<li><a href="${ctx}/company/toCompanyListPage" target="mainContainer">公司管理</a></li>
 						<li><a href="${ctx}/user/toUserListPage" target="mainContainer">用户管理</a></li>
+						<li><a href="${ctx}/recruitment/toRecruitmentPage" target="mainContainer">发布单管理</a></li>
 						<li><a href="${ctx}/feeConfig/toFeeConfigPage" target="mainContainer">配置管理</a></li>
 						<li><a href="${ctx}/bannerConfig/toBannerConfigPage" target="mainContainer">Banner管理</a></li>
 					</ul>
@@ -57,11 +58,6 @@
 						<li><a href="${ctx}/recommend/toRecommendListPage" target="mainContainer">推荐列表</a></li>
 						<li><a href="${ctx}/enrollApproval/toEnrollApprovalListPage" target="mainContainer">审核列表</a></li>
 					</ul>
-					<!--<ul class="nav nav-sidebar">
-						<li><a href="">Nav item again</a></li>
-						<li><a href="">One more nav</a></li>
-						<li><a href="">Another nav item</a></li>
-					</ul> -->
 				</div>
 				
 				<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">

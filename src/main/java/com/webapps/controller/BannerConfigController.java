@@ -77,7 +77,7 @@ public class BannerConfigController {
 	}
 
 	@ResponseBody
-	@RequestMapping("/deleteBannerConfigById")
+	@RequestMapping(value="/deleteBannerConfigById")
 	public ResultDto<BannerConfig> deleteBannerConfigById(Model model, Integer id, HttpServletRequest request,
 			HttpServletResponse response) {
 		ResultDto<BannerConfig> dto = new ResultDto<BannerConfig>();

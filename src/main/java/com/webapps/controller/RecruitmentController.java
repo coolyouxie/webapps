@@ -9,11 +9,13 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.google.gson.Gson;
 import com.webapps.common.bean.Page;
 import com.webapps.common.bean.ResultDto;
 import com.webapps.common.entity.Company;
 import com.webapps.common.entity.Recruitment;
 import com.webapps.common.form.RecruitmentRequestForm;
+import com.webapps.common.utils.JSONUtil;
 import com.webapps.service.ICompanyService;
 import com.webapps.service.IRecruitmentService;
 
@@ -28,6 +30,11 @@ public class RecruitmentController {
 	
 	@Autowired
 	private IRecruitmentService iRecruitmentService;
+	
+	@RequestMapping(value="/toRecruitmentPage")
+	public String toRecruitmentPage(){
+		return "/recruitment/recruitmentList";
+	}
 	
 	@RequestMapping("/toAddRecruitmentPage")
 	public String toAddRecruitmentPage(Model model,Integer companyId,HttpServletRequest request,HttpServletResponse response){
@@ -66,7 +73,8 @@ public class RecruitmentController {
 			e.printStackTrace();
 		}
 		model.addAttribute("recruitment", r);
-		if("edit".equals(type)){
+		if("editFromList".equals(type)||"edit".equals(type)){
+			model.addAttribute("handleType", type);
 			return "/recruitment/editRecruitment";
 		}
 		if("show".equals(type)){
@@ -84,28 +92,32 @@ public class RecruitmentController {
 	 * @return
 	 */
 	@RequestMapping("/saveRecruitment")
-	public String saveRecruitment(Model model,RecruitmentRequestForm recruitment,HttpServletRequest request,HttpServletResponse response){
+	public String saveRecruitment(Model model, RecruitmentRequestForm recruitment, HttpServletRequest request,
+			HttpServletResponse response) {
 		ResultDto<RecruitmentRequestForm> dto = null;
 		Integer companyId = recruitment.getCompanyId();
-		model.addAttribute("id",companyId);
-		model.addAttribute("type","show");
-		if(null!=recruitment){
-			try {
-				dto = iRecruitmentService.saveRecruitment(recruitment);
-				model.addAttribute("recruitment", recruitment);
-				if("F".equals(dto.getResult())){
-					if(recruitment.getId()==null){
-						dto.setResult("F");
-						dto.setErrorMsg("新增发布单失败，请稍后重试");
-						return "/recruitment/addRecruitment";
-					}else{
-						dto.setResult("F");
-						dto.setErrorMsg("更新发布单失败，请稍后重试");
-						return "/recruitment/editRecruitment";
-					}
+		String handleType = recruitment.getHandleType();
+		model.addAttribute("id", companyId);
+		 model.addAttribute("type",handleType);
+		if (null != recruitment) {
+			dto = iRecruitmentService.saveRecruitment(recruitment);
+			model.addAttribute("recruitment", recruitment);
+			if ("F".equals(dto.getResult())) {
+				if (recruitment.getId() == null) {
+					dto.setResult("F");
+					dto.setErrorMsg("新增发布单失败，请稍后重试");
+					return "/recruitment/addRecruitment";
+				} else {
+					dto.setResult("F");
+					dto.setErrorMsg("更新发布单失败，请稍后重试");
+					return "/recruitment/editRecruitment";
 				}
-			} catch (Exception e) {
-				e.printStackTrace();
+			} else if ("S".equals(dto.getResult())) {
+				if ("editFromList".equals(handleType)) {
+					return "redirect:/recruitment/toRecruitmentPage";
+				} else if ("edit".equals(handleType)) {
+					return "redirect:/company/toCompanyInfoPage";
+				}
 			}
 		}
 		return "redirect:/company/toCompanyInfoPage";
@@ -114,8 +126,8 @@ public class RecruitmentController {
 	@ResponseBody
 	@RequestMapping("/deleteRecruitmentById")
 	public String deleteRecruitmentById(Model model,Integer id,HttpServletRequest request,HttpServletResponse response){
+		ResultDto<Recruitment> dto = new ResultDto<Recruitment>();
 		try {
-			ResultDto<Recruitment> dto = new ResultDto<Recruitment>();
 			int result = iRecruitmentService.deleteRecruitmentById(id);
 			if(result==1){
 				dto.setErrorMsg("删除成功");
@@ -124,14 +136,13 @@ public class RecruitmentController {
 				dto.setErrorMsg("删除失败，稍后重试");
 				dto.setResult("F");
 			}
-			return JSONUtils.valueToString(dto);
 		} catch (Exception e) {
 			e.printStackTrace();
-			ResultDto<Recruitment> dto = new ResultDto<Recruitment>();
 			dto.setErrorMsg("删除公司信息时异常，请稍后再试");
 			dto.setResult("F");
-			return JSONUtils.valueToString(dto);
 		}
+		String result = JSONUtil.toJSONObjectString(dto);
+		return result;
 	}
 	
 	@RequestMapping("/getById")

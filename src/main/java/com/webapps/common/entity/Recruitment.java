@@ -12,7 +12,7 @@ public class Recruitment extends Entity{
     private String title;
     private String briefInfo;
     private Date endDate;
-    private int recruitmentNumber;
+    private Integer recruitmentNumber;
     private BigDecimal commision;
     private String workType;
     private String workAddress;
@@ -25,9 +25,9 @@ public class Recruitment extends Entity{
     /**
      * 发布单类型，1热招，2高返费，3工作轻松，4高工资
      */
-    private int type;
+    private Integer type;
     private BigDecimal cashback;
-    private int cashbackDays;
+    private Integer cashbackDays;
     private BigDecimal cashbackForBroker;
     
     private String mobile;
@@ -39,7 +39,7 @@ public class Recruitment extends Entity{
     /**
      * 发布类型，1普招，2直招，3兼职
      */
-    private int publishType;
+    private Integer publishType;
 
     /**
      * 薪酬福利
@@ -80,11 +80,11 @@ public class Recruitment extends Entity{
         this.endDate = endDate;
     }
 
-    public int getRecruitmentNumber() {
+    public Integer getRecruitmentNumber() {
         return recruitmentNumber;
     }
 
-    public void setRecruitmentNumber(int recruitmentNumber) {
+    public void setRecruitmentNumber(Integer recruitmentNumber) {
         this.recruitmentNumber = recruitmentNumber;
     }
 
@@ -136,11 +136,11 @@ public class Recruitment extends Entity{
         this.publishTime = publishTime;
     }
 
-    public int getType() {
+    public Integer getType() {
         return type;
     }
 
-    public void setType(int type) {
+    public void setType(Integer type) {
         this.type = type;
     }
 
@@ -152,11 +152,11 @@ public class Recruitment extends Entity{
         this.cashback = cashback;
     }
 
-    public int getCashbackDays() {
+    public Integer getCashbackDays() {
         return cashbackDays;
     }
 
-    public void setCashbackDays(int cashbackDays) {
+    public void setCashbackDays(Integer cashbackDays) {
         this.cashbackDays = cashbackDays;
     }
 
@@ -216,11 +216,11 @@ public class Recruitment extends Entity{
 		this.weiXin = weiXin;
 	}
 
-	public int getPublishType() {
+	public Integer getPublishType() {
 		return publishType;
 	}
 
-	public void setPublishType(int publishType) {
+	public void setPublishType(Integer publishType) {
 		this.publishType = publishType;
 	}
 

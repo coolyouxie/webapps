@@ -16,23 +16,11 @@
 	<link rel="stylesheet" href="${ctx}/js/common/amazeUI/assets/css/app.css">
 	
 	<script src="${ctx}/js/jquery/jQuery-1.12.4.0.js"></script>
-	<script src="${ctx}/js/common/amazeUI/assets/js/jquery.min.js"></script>
 	<script src="${ctx}/js/common/amazeUI/assets/js/amazeui.min.js"></script>
 	<script src="${ctx}/js/common/amazeUI/assets/js/app.js"></script>
 	
 	<title>后台管理系统</title>
 	<script type="text/javascript">
-		window.onload = function(){
-			if(window.top!=null && window.top.document.URL!=document.URL){
-				top.location.href = window.href;
-				window.top.location= document.URL;
-			}
-			var w = document.documentElement.clientHeight;
-			var w_top = (w-540)/2;
-			var login = document.getElementById('login');
-			login.setAttribute('style','margin-top:'+w_top+'px');
-		}
-		
 		$(function(){
 			$(document).keydown(function(event){
 				if(event.keyCode==13){
@@ -142,5 +130,17 @@
 			</div>
 		</div>
 	</div>
+	<script>
+		window.onload = function(){
+			if(window.top!=null && window.top.document.URL!=document.URL){
+				top.location.href = window.href;
+				window.top.location= document.URL;
+			}
+			var w = document.documentElement.clientHeight;
+			var w_top = (w-540)/2;
+			var login = document.getElementById('login');
+			login.setAttribute('style','margin-top:'+w_top+'px');
+		}
+	</script>
 </body>
 </html>

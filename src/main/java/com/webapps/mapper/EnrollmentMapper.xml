@@ -198,4 +198,13 @@
 			talk_result=#{obj.talkResult}
 		where id=#{id}
 	</update>
+	
+	<update id="cancelEnroll">
+		update t_enrollment 
+		set 
+			update_TIME=now(),
+			remark=#{obj.remark},
+			data_state=#{obj.talkResult}
+		where id=#{id}
+	</update>
 </mapper>

@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta charset="utf-8" />
-<title>企业信息管理</title>	
+<title>发布单管理</title>	
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" href="${ctx}/js/common/jquery/jquery-ui-1.12.1/jquery-ui.css" type="text/css" />
 <link rel="stylesheet" href="${ctx}/js/common/jquery/jqGrid/css/ui.jqgrid.css" type="text/css" />
@@ -20,11 +20,15 @@
 <script src="${ctx}/js/common/jquery/jqGrid/js/i18n/grid.locale-cn.js"></script>
 <script src="${ctx}/js/common/jquery/jqGrid/js/jquery.jqGrid.js"></script>
 
+<!-- 日期时间控件 -->
+<script src="${ctx}/js/common/jquery/My97DatePicker/WdatePicker.js"></script>
+<script src="${ctx}/js/common/jquery/My97DatePicker/lang/zh-cn.js"></script>
+
 <script type="text/javascript">
 	var dataGrid = null;
 	jQuery(document).ready(function(){
 		dataGrid = jQuery("#list").jqGrid({
-		    url:"${ctx}/bannerConfig/loadBannerConfigList",
+		    url:"${ctx}/recruitment/loadRecruitmentList",
 		    datatype: "json",
 		    mtype : "POST",
 		    height : 650,
@@ -35,50 +39,67 @@
 								records : "page.records", // json中代表数据行总数的数据   
 								total : 'page.total', // json中代表页码总数的数据 
 								repeatitems : false // 如果设为false，则jqGrid在解析json时，会根据name来搜索对应的数据元素（即可以json中元素可以不按顺序）；而所使用的name是来自于colModel中的name设定。   
-							},
-		    colNames : [ '标题','图片', '公司名称', '发布单', '类型', '新建时间', '操作'],
+			},
+		    colNames : [ '标题', '公司', '工种', '薪资范围','联系电话','发布日期', '招工类型','发布单类型','期满天数','状态', '操作'],
 		    colModel : [ {
 								label : 'title',
 								name : 'title',
 								align : 'center',
 								sortable : false,
-								formatter:function(cellValue,options,rowObject){
-									return '<a href="${ctx}/bannerConfig/getById?id='+rowObject.id+'" style="color:blue">'+cellValue+'</a>';
+								formatter:function(cellvalue,options,rowObject){
+									return '<a href="${ctx}/recruitment/getById?id='+rowObject.id+'" style="color:blue">'+cellvalue+'</a>';
 								}
 							}, {
-								label : 'picUrl',
-								name : 'picUrl',
+								label : 'company.name',
+								name : 'company.name',
 								align : 'center',
 								sortable : false,
 								formatter:function(cellValue,options,rowObject){
-									return '<img src="'+cellValue+'" width="100"></img>';
-								}
-							}, {
-								label : 'companyName',
-								name : 'companyName',
-								align : 'center',
-								sortable : false,
-								formatter:function(cellValue,options,rowObject){
-									if(rowObject!=null){
-										if(rowObject.company){
-											return '<a href="${ctx}/company/getById?id='+rowObject.company.id+'" style="color:blue;">'+cellValue+'</a>';
-										}
-										return "";
+									var result = "";
+									if(rowObject.company){
+										result = '<a href="${ctx}/company/getById?id='+rowObject.company.id+'" style="color:blue">'+cellValue+'</a>';
 									}
-									return "";
+									return result;
 								}
 							}, {
-								label : 'reruitmentTitle',
-								name : 'reruitmentTitle',
+								label : 'workType',
+								name : 'workType',
+								align : 'center',
+								sortable : false
+							}, {
+								label : 'salaryLow',
+								name : 'salaryLow',
 								align : 'center',
 								sortable : false,
 								formatter:function(cellValue,options,rowObject){
-									if(rowObject){
-										if(rowObject.recruitment){
-											return '<a href="${ctx}/recruitment/getById?id='+rowObject.recruitment.id+'" style="color:blue">'+cellValue+'</a>';
-										}
+									var result =  cellValue+'元~'+rowObject.salaryHigh+'元';
+									return result;
+								}
+							}, {
+								label : 'mobile',
+								name : 'mobile',
+								align : 'center',
+								sortable : false
+							}, {
+								label : 'createTimeStr',
+								name : 'createTimeStr',
+								align : 'center',
+								sortable : false
+							}, {
+								label : 'publishType',
+								name : 'publishType',
+								align : 'center',
+								sortable : false,
+								formatter:function(cellValue,options,rowObject){
+									var result = null;
+									if(cellValue==1){
+										result = "普招";
+									}else if(cellValue==2){
+										result = "直招";
+									}else if(cellValue==3){
+										result = "兼职";
 									}
-									return "";
+									return result;
 								}
 							}, {
 								label : 'type',
@@ -88,26 +109,49 @@
 								formatter:function(cellValue,options,rowObject){
 									var result = null;
 									if(cellValue==1){
-										result = "推荐";
+										result = "热招";
 									}else if(cellValue==2){
-										result = "分享";
+										result = "高返费";
 									}else if(cellValue==3){
-										result = "公司详情";
+										result = "工作轻松";
 									}else if(cellValue==4){
-										result = "发布单详情";
+										result = "高工资";
 									}
 									return result;
 								}
 							}, {
-								label : 'createTimeStr',
-								name : 'createTimeStr',
+								label : 'cashbackDays',
+								name : 'cashbackDays',
 								align : 'center',
 								sortable : false
+							}, {
+								label : 'dataState',
+								name : 'dataState',
+								align : 'center',
+								sortable : false,
+								formatter:function(cellValue,options,rowObject){
+									var result = "";
+									if(cellValue==0){
+										result = "无效";
+									}else{
+										result = "有效";
+									}
+									return result;
+								}
 							}, {
 								label : 'operate',
 								name : 'operate',
 								align : 'center',
-								sortable : false
+								sortable : false,
+								formatter:function(cellValue,options,rowObject){
+									var result = null;
+									if(rowObject.dataState==0){
+										return "";
+									}
+									result = '<a href="${ctx}/recruitment/toRecruitmentInfoPage?type=editFromList&id='+rowObject.id+'" style="color:blue">编辑</a>'+
+										' <a href="#" style="color:blue" onclick="deleteById('+ rowObject.id + ')" >删除</a>'
+									return result;
+								}
 							} ],
 		    pager: '#pager',
 		    rowNum:50,
@@ -115,48 +159,35 @@
 		    sortname: 'id',
 		    viewrecords: true,
 		    sortorder: "desc",
-		    caption: "Banner列表",
+		    caption: "报名列表",
 		    gridComplete : function() { //在此事件中循环为每一行添加日志、废保和查看链接
-				var ids = jQuery("#list").jqGrid('getDataIDs');
-				for ( var i = 0; i < ids.length; i++) {
-				var id = ids[i];
-				var rowData = $('#list').jqGrid('getRowData', id);
-					operateClick = '<a href="${ctx}/bannerConfig/toAddBannerPicturePage?id='+id+'" style="color:blue">编辑</a> <a href="#" style="color:blue" onclick="deleteById('+ id + ')" >删除</a>';
-					jQuery("#list").jqGrid('setRowData', id, {
-						operate : operateClick
-					});
-				}
+				
 			}
 		});
 	});
 	
 	function search(){
-		var params = {};
-		var keyWords = $.trim($("#keyWords").val());
-		if(keyWords){
-			params.keyWords=keyWords;
-		}
 		dataGrid.jqGrid("setGridParam",{
-		    postData:{"keyWords":$("#keyWords").val()},
+		    postData:$("#searchForm").serialize(),
 		    page:1
 		}).trigger("reloadGrid");
 	}
 	
 	function deleteById(id){
 		$.ajax({
-			url:"${ctx}/bannerConfig/deleteBannerConfigById",
+			url:"${ctx}/recruitment/deleteRecruitmentById",
 			type:"POST",
 			dataType:"JSON",
 			data:{
 				"id":id
 			},
 			success:function(response){
-				if(response.result=="S"){
+				if("S"==response.resutl){
 					alert("删除成功");
+					dataGrid.trigger("reloadGrid");
 				}else{
 					alert(response.errorMsg);
 				}
-				dataGrid.trigger("reloadGrid");
 			}
 		});
 	}
@@ -184,21 +215,53 @@
 	<div class="container-fluid">
 		<form id="searchForm">
 			<div class="row" style="margin-bottom:10px">
-				<!-- <div class="col-md-4">
+				<div class="col-sm-3" style="width:275px;">
 					<label>
-						<span>公司名称:</span>
-						<input type="text" id="keyWords" name="keyWords" value="">
+						<span>公司:</span>
+						<input type="text" id="company.name" name="company.name">
 					</label>
-				</div> -->
-				<!-- <div class="col-md-2">
+				</div>
+				<div class="col-sm-4" style="width:275px;">
+					<label>
+						<span>发布单:</span>
+						<input type="text" id="title" name="title">
+					</label>
+				</div>
+				<div class="col-md-3" >
+					<label>
+						<span>招工类型:</span>
+						<select id="publishType" name="publishType" >
+							<option value="">-请选择-</option>
+							<option value="1">普招</option>
+							<option value="2">直招</option>
+							<option value="3">兼职</option>
+						</select>
+					</label>
+					<label>
+						<span>发布单类型:</span>
+						<select id="type" name="type" >
+							<option value="">-请选择-</option>
+							<option value="1">热招</option>
+							<option value="2">高返费</option>
+							<option value="3">工作轻松</option>
+							<option value="4">工资高</option>
+						</select>
+					</label>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-6" style="width:435px">
+					<label>
+						<span>发布时间:</span>
+						<input type="text" id="publishTimeStart" name="publishTimeStart" onclick="WdatePicker({isShowWeek:true})" style="widht:100px">
+						-
+						<input type="text" id="publishTimeEnd" name="publishTimeEnd" onclick="WdatePicker({isShowWeek:true})" style="widht:100px">
+					</label>
+				</div>
+				<div class="col-md-2">
 					<button type='button' class="btn btn-primary btn-sm" data-toggle="modal" onclick="search()">
 						查询
 					</button>
-				</div> -->
-				<div class="col-md-2">
-					<a type='button' class="btn btn-primary btn-sm" href="${ctx}/bannerConfig/toBannerConfigAddPage">
-						添加banner
-					</a>
 				</div>
 			</div>
 		</form>

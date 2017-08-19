@@ -50,7 +50,7 @@
 			</div>
 		</div>
 		<form id="saveForm" class="form-horizontal" action="${ctx}/recruitment/saveRecruitment"  method="post">
-			<input type="hidden" id="handleType" name="handleType" value="edit">
+			<input type="hidden" id="handleType" name="handleType" value="${handleType}">
 			<input type="hidden" id="id" name="id" value="${recruitment.id}">
 			<input type="hidden" id="companyId" name="companyId" value="${recruitment.company.id}" >
 			<div class="form-group">
@@ -63,7 +63,7 @@
 			<div class="form-group">
 				<label class="col-md-2 control-label" for="title">标题：</label>
 				<div class="col-md-4" >
-					<input type="text" id="title" name="title" class="form-control" value="${recruitment.title }" >
+					<input type="text" id="title" name="title" class="form-control" value="${recruitment.title}" >
 				</div>
 			</div>
 			
@@ -80,13 +80,6 @@
 					<textarea id="briefInfo" name="briefInfo" class="form-control" row="3" >${recruitment.briefInfo}</textarea>
 				</div>
 			</div>
-			
-			<%-- <div class="form-group">
-				<label class="col-md-2 control-label" for="recruitmentNumber">招聘人数：</label>
-				<div class="col-md-4" >
-					<input type="text" id="recruitmentNumber" name="recruitmentNumber" class="form-control" value="${recruitment.recruitmentNumber}" placeholder="请输入招聘人数" >
-				</div>
-			</div> --%>
 			
 			<div class="form-group">
 				<label class="col-md-2 control-label" for="mobile" >手机号：</label>
@@ -127,11 +120,11 @@
 			</div>
 			
 			<div class="form-group">
-				<label class="col-md-2 control-label" for="type">发布类型：</label>
+				<label class="col-md-2 control-label" for="publishType">招工类型：</label>
 				<div class="col-md-4" >
-					<select id="type" name="type" class="form-control">
+					<select id="type" name="publishType" class="form-control">
 						<option value="1" <c:if test="${recruitment.publishType!=null and recruitment.publishType==1}">selected</c:if>>普招</option>
-						<option value="2" <c:if test="${recruitment.publishType!=null and recruitment.publishType==2}">selected</c:if>>直费</option>
+						<option value="2" <c:if test="${recruitment.publishType!=null and recruitment.publishType==2}">selected</c:if>>直招</option>
 						<option value="3" <c:if test="${recruitment.publishType!=null and recruitment.publishType==3}">selected</c:if>>兼职</option>
 					</select>
 				</div>
@@ -157,23 +150,23 @@
 			</div>
 			
 			<div class="form-group">
-				<label class="col-md-2 control-label" for="requirement">岗位职责：</label>
+				<label class="col-md-2 control-label" for="jobBriefs">岗位职责：</label>
 				<div class="col-md-4" >
-					<textarea class ="form-control" id="requirement" name="requirement" value="${recruitment.jobBriefs}" ></textarea>
+					<textarea class ="form-control" id="jobBriefs" name="jobBriefs" >${recruitment.jobBriefs}</textarea>
 				</div>
 			</div>
 			
 			<div class="form-group">
 				<label class="col-md-2 control-label" for="requirement">入职条件：</label>
 				<div class="col-md-4" >
-					<textarea class ="form-control" id="requirement" name="requirement" value="${recruitment.requirement}" ></textarea>
+					<textarea class ="form-control" id="requirement" name="requirement" >${recruitment.requirement}</textarea>
 				</div>
 			</div>
 			
 			<div class="form-group">
-				<label class="col-md-2 control-label" for="requirement">补贴详情：</label>
+				<label class="col-md-2 control-label" for="cashbackBriefs">补贴详情：</label>
 				<div class="col-md-4" >
-					<textarea class ="form-control" id="requirement" name="requirement" value="${recruitment.cashbackBriefs}" ></textarea>
+					<textarea class ="form-control" id="cashbackBriefs" name="cashbackBriefs" >${recruitment.cashbackBriefs}</textarea>
 				</div>
 			</div>
 			

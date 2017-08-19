@@ -2,6 +2,8 @@ package com.webapps.common.entity;
 
 import java.util.Date;
 
+import com.webapps.common.utils.DateUtil;
+
 /**
  * Created by xieshuai on 2017-6-28.
  */
@@ -11,6 +13,13 @@ public class Entity {
     private Date createTime = new Date();
     
     private Date updateTime;
+    
+    public String getCreateTimeStr(){
+		if(this.getCreateTime()!=null){
+			return DateUtil.format(this.getCreateTime(), DateUtil.SIMPLE_PATTERN);
+		}
+		return null;
+	}
     
     private int dataState = 1;
 

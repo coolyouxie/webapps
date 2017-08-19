@@ -81,7 +81,7 @@ public class EnrollmentController {
 	@ResponseBody
 	@RequestMapping(value="/cancelEnroll")
 	public String cancelEnroll(Model model,EnrollmentRequestForm form){
-		ResultDto<Enrollment> dto = iEnrollmentService.updateEnrollment(form);
+		ResultDto<Enrollment> dto = iEnrollmentService.cancelEnroll(form);
 		return JSONUtil.toJSONString(JSONUtil.toJSONObject(dto));
 	}
 	

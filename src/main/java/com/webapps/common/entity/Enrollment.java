@@ -50,13 +50,6 @@ public class Enrollment extends Entity {
 		this.company = company;
 	}
 	
-	public String getCreateTimeStr(){
-		if(this.getCreateTime()!=null){
-			return DateUtil.format(this.getCreateTime(), DateUtil.SIMPLE_PATTERN);
-		}
-		return null;
-	}
-
 	public Integer getIsTalked() {
 		return isTalked;
 	}

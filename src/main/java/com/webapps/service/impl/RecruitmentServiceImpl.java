@@ -27,7 +27,7 @@ public class RecruitmentServiceImpl implements IRecruitmentService {
 	private ICompanyMapper iCompanyMapper;
 
 	@Override
-	public ResultDto<RecruitmentRequestForm> saveRecruitment(RecruitmentRequestForm form) throws Exception {
+	public ResultDto<RecruitmentRequestForm> saveRecruitment(RecruitmentRequestForm form) {
 		ResultDto<RecruitmentRequestForm> dto = new ResultDto<RecruitmentRequestForm>();
 		Company company = new Company();
 		company.setId(form.getCompanyId());
@@ -40,7 +40,11 @@ public class RecruitmentServiceImpl implements IRecruitmentService {
 			result = iRecruitmentMapper.insert(form);
 			errorMsg = "新增失败";
 		}else{
-			result = iRecruitmentMapper.updateById(form.getId(), form);
+			try {
+				result = iRecruitmentMapper.updateById(form.getId(), form);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 			errorMsg = "更新失败";
 		}
 		if(result != 1){

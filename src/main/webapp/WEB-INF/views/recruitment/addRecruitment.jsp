@@ -80,13 +80,6 @@
 				</div>
 			</div>
 			
-			<!-- <div class="form-group">
-				<label class="col-md-2 control-label" for="recruitmentNumber">招聘人数：</label>
-				<div class="col-md-4" >
-					<input type="text" id="recruitmentNumber" name="recruitmentNumber" class="form-control" value="" placeholder="请输入招聘人数" >
-				</div>
-			</div> -->
-			
 			<div class="form-group">
 				<label class="col-md-2 control-label" for="mobile" >手机号：</label>
 				<div class="col-md-4" >
@@ -126,11 +119,11 @@
 			</div>
 			
 			<div class="form-group">
-				<label class="col-md-2 control-label" for="type">发布类型：</label>
+				<label class="col-md-2 control-label" for="publishType">招工类型：</label>
 				<div class="col-md-4" >
-					<select id="type" name="type" class="form-control">
+					<select id="type" name="publishType" class="form-control">
 						<option value="1">普招</option>
-						<option value="2">直费</option>
+						<option value="2">直招</option>
 						<option value="3">兼职</option>
 					</select>
 				</div>
@@ -156,23 +149,23 @@
 			</div>
 			
 			<div class="form-group">
-				<label class="col-md-2 control-label" for="requirement">岗位职责：</label>
+				<label class="col-md-2 control-label" for="jobBriefs">岗位职责：</label>
 				<div class="col-md-4" >
-					<textarea class ="form-control" id="requirement" name="requirement" value="" ></textarea>
+					<textarea class ="form-control" id="jobBriefs" name="jobBriefs" ></textarea>
 				</div>
 			</div>
 			
 			<div class="form-group">
 				<label class="col-md-2 control-label" for="requirement">入职条件：</label>
 				<div class="col-md-4" >
-					<textarea class ="form-control" id="requirement" name="requirement" value="" ></textarea>
+					<textarea class ="form-control" id="requirement" name="requirement" ></textarea>
 				</div>
 			</div>
 			
 			<div class="form-group">
-				<label class="col-md-2 control-label" for="requirement">补贴详情：</label>
+				<label class="col-md-2 control-label" for="cashbackBriefs">补贴详情：</label>
 				<div class="col-md-4" >
-					<textarea class ="form-control" id="requirement" name="requirement" value="" ></textarea>
+					<textarea class ="form-control" id="cashbackBriefs" name="cashbackBriefs" ></textarea>
 				</div>
 			</div>
 			

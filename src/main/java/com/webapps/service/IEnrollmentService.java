@@ -31,4 +31,5 @@ public interface IEnrollmentService {
 	
 	public ResultDto<Enrollment> updateEnrollment(EnrollmentRequestForm form);
 	
+	public ResultDto<Enrollment> cancelEnroll(EnrollmentRequestForm form);
 }
