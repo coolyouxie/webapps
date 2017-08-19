@@ -67,7 +67,11 @@
 								align : 'center',
 								sortable : false,
 								formatter:function(cellValue,options,rowObject){
-									return '<a href="${ctx}/company/getById?id='+rowObject.company.id+'" style="color:blue">'+cellValue+'</a>';
+									var result = "无";
+									if(rowObject.company){
+										result = '<a href="${ctx}/company/getById?id='+rowObject.company.id+'" style="color:blue">'+cellValue+'</a>';
+									}
+									return result;
 								}
 							}, {
 								label : 'recruitment.title',
@@ -75,7 +79,11 @@
 								align : 'center',
 								sortable : false,
 								formatter:function(cellValue,options,rowObject){
-									return '<a href="${ctx}/recruitment/getById?id='+rowObject.recruitment.id+'" style="color:blue">'+cellValue+'</a>';
+									var result = "无";
+									if(rowObject.recruitment){
+										result = '<a href="${ctx}/recruitment/getById?id='+rowObject.company.id+'" style="color:blue">'+cellValue+'</a>';
+									}
+									return result;
 								}
 							}, {
 								label : 'type',

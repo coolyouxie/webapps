@@ -7,13 +7,32 @@
 	<meta charset="UTF-8">
 	<meta http-equiv="X-UA-colpatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
-	<link rel="stylesheet" href="${ctx}/js/common/bootstrap/bootstrap-3.3.7/dist/css/bootstrap.min.css" type="text/css" />
+	
+	<link rel="icon" type="image/png" href="${ctx}/js/common/amazeUI/assets/i/favicon.png">
+	<link rel="apple-touch-icon-precomposed" href="${ctx}/js/common/amazeUI/assets/i/app-icon72x72@2x.png">
+	<meta name="apple-mobile-web-app-title" content="Amaze UI" />
+	<link rel="stylesheet" href="${ctx}/js/common/amazeUI/assets/css/amazeui.min.css" />
+	<link rel="stylesheet" href="${ctx}/js/common/amazeUI/assets/css/admin.css">
+	<link rel="stylesheet" href="${ctx}/js/common/amazeUI/assets/css/app.css">
+	
 	<script src="${ctx}/js/jquery/jQuery-1.12.4.0.js"></script>
-	<!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
-	<script src="${ctx}/js/common/bootstrap/bootstrap-3.3.7/dist/js/bootstrap.min.js"></script>
+	<script src="${ctx}/js/common/amazeUI/assets/js/jquery.min.js"></script>
+	<script src="${ctx}/js/common/amazeUI/assets/js/amazeui.min.js"></script>
+	<script src="${ctx}/js/common/amazeUI/assets/js/app.js"></script>
 	
 	<title>后台管理系统</title>
 	<script type="text/javascript">
+		window.onload = function(){
+			if(window.top!=null && window.top.document.URL!=document.URL){
+				top.location.href = window.href;
+				window.top.location= document.URL;
+			}
+			var w = document.documentElement.clientHeight;
+			var w_top = (w-540)/2;
+			var login = document.getElementById('login');
+			login.setAttribute('style','margin-top:'+w_top+'px');
+		}
+		
 		$(function(){
 			$(document).keydown(function(event){
 				if(event.keyCode==13){
@@ -44,8 +63,6 @@
 	        });
 		});
 		
-		
-		
 		function saveUser(){
 			if ($("#ck_rmbUser").is(":checked")) {
 	            var str_username = $("#nameId").val();
@@ -65,11 +82,6 @@
 	        obj.src= "${ctx}/login" + "/getValidatorImage?d=" + new Date().getTime();     
 	    }
 	    function login(){
-	    	/* var checkCode = $("#checkCodeId").val();
-	    	if(checkCode==null||checkCode==""||$.trim(checkCode)==""){
-	    		alert("请输入验证码！");
-	    		return;
-	    	} */
 	    	var fm = document.loginForm;
 	    	fm.action="${ctx}/login/userLogin";	
 	    	fm.method="POST";
@@ -94,59 +106,41 @@
     </style>
 	
 </head>
-<body onload="Code(loginForm.yzImg);">
-	<div class="center">
-		<form name="loginForm">
-			<div class="">
-				<p>后台管理系统</p>
-			</div>
-			<div class="form-group">
-				<div class="input-group input-group-lg">
-					<span class="input-group-addon" id="basic-addon1" style="width:48px">账号</span>
-					<input name="account" id="nameId" type="text" class="form-control" id="" placeholder="请输入用户名">
-				</div>
-				<br/>
-				<div class="input-group input-group-lg">
-					<span class="input-group-addon" id="basic-addon1" style="width:48px">密码</span>
-					<input name="password" id="pwdId" type="password" class="form-control" id="" placeholder="请输入密码">
+
+
+<body data-type="login" onload="Code(loginForm.yzImg);">
+
+	<div class="am-g myapp-login">
+		<div class="myapp-login-logo-block  tpl-login-max">
+			<div class="myapp-login-logo-text">
+				<div class="myapp-login-logo-text">
+					后台管理<span> 登录</span> <i class="am-icon-skyatlas"></i>
 				</div>
 			</div>
-			<div class="form-group">
-				<div class="input-group input-group-lg" style="float:left">
-					<span class="input-group-addon" id="basic-addon1" style="width:48px">验证码</span>
-					<input  name="checkCode" id="checkCodeId"  type="text" class="form-control" id="" placeholder="请输入验证码">
-				</div>
-				<div class="login_form_testcode">
-					<img id="yzImg" src="${ctx}/login/getValidatorImage" alt="看不清?点击图片换一张" onclick="Code(this)">
-				</div>
+	
+			<div class="login-font">
+				<i> </i>  <span> </span>
 			</div>
-			<div class="checkbox">
-				<label class="pull-left">
-					<input type="checkbox" id="ck_rmbUser" class="login_form_checkbox"/>记住用户名和密码
-				</label>
-				<label class="f12">
-					<span id="state" style="color:red;display:inline-block">${loginResult}</span></br>
-				</label>
+			<div class="am-u-sm-10 login-am-center">
+				<form class="am-form" name="loginForm" method="post">
+					<fieldset>
+						<div class="am-form-group">
+							<input type="text" class="" name="account" id="nameId" placeholder="输入账号">
+						</div>
+						<div class="am-form-group">
+							<input type="password" class="" name="password" id="pwdId" placeholder="输入密码">
+						</div>
+						<div class="" style="float:left;width:350px;">
+							<input  name="checkCode" id="checkCodeId"  type="text" id="" placeholder="请输入验证码">
+						</div>
+						<div class="" style="float:right;width:120px;">
+							<img id="yzImg" src="${ctx}/login/getValidatorImage" alt="看不清?点击图片换一张" onclick="Code(this)">
+						</div>
+						<p><button type="submit" class="am-btn am-btn-default" onclick="login(); return false">登录</button></p>
+					</fieldset>
+				</form>
 			</div>
-			<div class="btn-group btn-group-justified" role="group" aria-label="...">
-				<div class="btn-group" role="group">
-					<button type="submit" class="btn btn-default" onclick="login(); return false">登录</button>
-				</div>
-			</div>
-		</form>
+		</div>
 	</div>
-			
-	<script language="javascript">
-		window.onload = function(){
-			if(window.top!=null && window.top.document.URL!=document.URL){
-				top.location.href = window.href;
-				window.top.location= document.URL;
-			}
-			var w = document.documentElement.clientHeight;
-			var w_top = (w-540)/2;
-			var login = document.getElementById('login');
-			login.setAttribute('style','margin-top:'+w_top+'px');
-		}
-	</script>
 </body>
 </html>
