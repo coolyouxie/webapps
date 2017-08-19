@@ -95,10 +95,10 @@ public class RecruitmentController {
 	public String saveRecruitment(Model model, RecruitmentRequestForm recruitment, HttpServletRequest request,
 			HttpServletResponse response) {
 		ResultDto<RecruitmentRequestForm> dto = null;
-		Integer companyId = recruitment.getCompanyId();
+		Integer companyId = recruitment.getCompany().getId();
 		String handleType = recruitment.getHandleType();
 		model.addAttribute("id", companyId);
-		 model.addAttribute("type",handleType);
+		model.addAttribute("type",handleType);
 		if (null != recruitment) {
 			dto = iRecruitmentService.saveRecruitment(recruitment);
 			model.addAttribute("recruitment", recruitment);
@@ -115,7 +115,8 @@ public class RecruitmentController {
 			} else if ("S".equals(dto.getResult())) {
 				if ("editFromList".equals(handleType)) {
 					return "redirect:/recruitment/toRecruitmentPage";
-				} else if ("edit".equals(handleType)) {
+				} else if ("edit".equals(handleType)||"add".equals(handleType)) {
+					model.addAttribute("type","show");
 					return "redirect:/company/toCompanyInfoPage";
 				}
 			}

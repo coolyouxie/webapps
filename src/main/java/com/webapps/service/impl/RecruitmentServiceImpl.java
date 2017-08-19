@@ -29,11 +29,6 @@ public class RecruitmentServiceImpl implements IRecruitmentService {
 	@Override
 	public ResultDto<RecruitmentRequestForm> saveRecruitment(RecruitmentRequestForm form) {
 		ResultDto<RecruitmentRequestForm> dto = new ResultDto<RecruitmentRequestForm>();
-		Company company = new Company();
-		company.setId(form.getCompanyId());
-		form.setCompany(company);
-		form.setEndDate(DateUtil.parseDateByStr(form.getEndDateStr(), DateUtil.FULL_PATTERN));
-		form.setPublishTime(DateUtil.parseDateByStr(form.getPublishTimeStr(), DateUtil.FULL_PATTERN));
 		int result = 0;
 		String errorMsg = null;
 		if(form.getId()==null){

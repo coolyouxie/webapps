@@ -17,8 +17,6 @@ public class RecruitmentRequestForm extends Recruitment implements RequestForm,S
 	
 	private Integer step;
 	
-	private Integer companyId;
-	
 	private String endDateStr;
 	
 	private String publishTimeStr;
@@ -49,14 +47,6 @@ public class RecruitmentRequestForm extends Recruitment implements RequestForm,S
 
 	public void setStep(Integer step) {
 		this.step = step;
-	}
-
-	public Integer getCompanyId() {
-		return companyId;
-	}
-
-	public void setCompanyId(Integer companyId) {
-		this.companyId = companyId;
 	}
 
 	public String getEndDateStr() {

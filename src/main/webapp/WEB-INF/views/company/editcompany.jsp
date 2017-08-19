@@ -27,7 +27,7 @@
 		}
 	});
 	function next(){
-		$(#"handleType").val("edit_next");
+		$("#handleType").val("edit_next");
 		$("#.saveForm").submit();
 	}
 </script>
@@ -83,13 +83,6 @@
 				<label class="col-md-2 control-label" for="email">email：</label>
 				<div class="col-md-4" >
 					<input type="email" id="email" name="email" class="form-control" placeholder="请输入email" value="${company.email }">
-				</div>
-			</div>
-			
-			<div class="form-group">
-				<label class="col-md-2 control-label" for="enterpriseLegalPerson" >法人代表：</label>
-				<div class="col-md-4" >
-					<input type="text" id="enterpriseLegalPerson" name="enterpriseLegalPerson" class="form-control" placeholder="请输入法人代表" value="${company.enterpriseLegalPerson }">
 				</div>
 			</div>
 			
