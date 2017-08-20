@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.webapps.common.bean.ResultDto;
+import com.webapps.common.utils.JSONUtil;
 import com.webapps.service.IPictureService;
 
 import net.sf.json.JSONObject;
@@ -39,6 +40,13 @@ public class FileUploadController {
 		}
 		String result = JSONUtils.valueToString(JSONObject.fromObject(dto));
 		return result;
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="/uploadBannerPic")
+	public String uploadBannerPic(HttpServletRequest request,HttpServletResponse response){
+		ResultDto<String> dto = iPictureService.uploadBannerPicture(request);
+		return JSONUtil.toJSONString(JSONObject.fromObject(dto));
 	}
 
 }

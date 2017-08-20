@@ -1,17 +1,20 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
 <!DOCTYPE html>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>新增或修改公司信息</title>
+<title>新增Banner信息</title>
 <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
 <link rel="stylesheet" href="${ctx}/js/common/bootstrap/bootstrap-3.3.7/dist/css/bootstrap.min.css" type="text/css" />
+<link rel="stylesheet" href="${ctx}/js/common/bootstrap/bootstrap-fileinput-master/css/fileinput.css" type="text/css" />
 <script src="${ctx}/js/jquery/jQuery-1.12.4.0.js"></script>
 <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
 <script src="${ctx}/js/common/bootstrap/bootstrap-3.3.7/dist/js/bootstrap.min.js"></script>
-
+<script src="${ctx}/js/common/bootstrap/bootstrap-fileinput-master/js/fileinput.js"></script>
+<script src="${ctx}/js/common/bootstrap/bootstrap-fileinput-master/js/locales/zh.js"></script>
 <style>
 	 col-md-2, span{
 		display:-moz-inline-box;
@@ -21,107 +24,110 @@
 </style>
 
 <script type="text/javascript">
+
+	var projectFileOptions = null;
+	var upload = null;
 	$(function(){
-		if("${result}"){
-			alert("result");
-		}
+		projectFileOptions = {
+			    uploadUrl: "${ctx}/fileUpload/uploadBannerPic",
+			    language:'zh',
+			    maxFileCount: 1,
+			    maxFileSize:2000,
+			    autoReplace:false,
+			    validateInitialCount: true,
+			    overwriteInitial: false,
+			    allowedFileExtensions: ["jpg", "png", "gif"],
+			    uploadExtraData:{"sourceType":"banner"}
+		};
+		upload = $('input[class=projectfile]').each(function() {
+		    var imageurl = $(this).attr("value");
+		    if (imageurl) {
+		        var op = $.extend({
+		            initialPreview : [ // 预览图片的设置
+		            "<img src='" + imageurl + "' class='file-preview-image'>", ]
+		        }, projectfileoptions);
+		        $(this).fileinput(op);
+		    } else {
+		        $(this).fileinput(projectFileOptions).on("fileuploaded", function (event, data, previewId, index){
+		        	var response = data.response;
+					if(response&&response.result=="S"){
+						$("#picUrl").val(response.data);
+					}
+		        });
+		    }
+		});
 	});
+
 	function next(){
-		$(#"handleType").val("edit_next");
-		$("#.saveForm").submit();
+		$.ajax({
+			url:"${ctx}/bannerConfig/saveBannerConfig",
+			type:"post",
+			dataType:"json",
+			data:{
+				id:$("#id").val(),
+				title:$("#title").val(),
+				type:$("#type").val(),
+				picUrl:$("#picUrl").val()
+			},
+			success:function(response){
+				if(response.result=="S"){
+					window.location.href = "${ctx}/bannerConfig/toBannerConfigPage";
+				}else{
+					alert("信息保存失败，请稍后再试");
+					return ;
+				}
+			}
+		});
 	}
+	
 </script>
 </head>
 <body>
-	<div class="container-fluid">
+	<div class="container-fluid" style="height:480px;">
 		<div class="row">
 			<div class="col-md-3 col-md-offset-2">
 				<h4>
-					编辑公司信息
+					修改Banner信息
 				</h4>
 			</div>
 		</div>
-		<form id="saveForm" class="form-horizontal" action="${ctx}/company/saveCompany" method="post">
-			<input type="hidden" id="id" name="id" value="${company.id}">
-			<input type="hidden" id="handleType" name="handleType" value="edit_save">
-			<div class="form-group">
-				<label class="col-md-2 control-label" for="name">公司名称：</label>
-				<div class="col-md-4" >
-					<input type="text" id="name" name="name" class="form-control" placeholder="请输入公司名称" value="${company.name }">
+		
+		<!-- 图片信息 -->
+		<form enctype="multipart/form-data">
+			<input type="hidden" id="id" value="${bannerConfig.id}">
+			<div class="form-group" style="width:1000px;">
+				<div id="imgInput" class="row" >
+					<div class="col-md-8 tl th">
+						<input type="file" id="image" name="image" class="projectfile" multiple value="" />
+						<p class="help-block">支持jpg、jpeg、png、gif格式，大小不超过2.0M</p>
+					</div>
 				</div>
 			</div>
-			
-			<div class="form-group">
-				<label class="col-md-2 control-label" for="name">公司性质：</label>
-				<div class="col-md-4" >
-					<input type="text" id="nature" name=""nature"" class="form-control" placeholder="请输入公司性质" value="${company.nature }">
-				</div>
-			</div>
-			
-			<div class="form-group">
-				<label class="col-md-2 control-label" for="contactName">联系人：</label>
-				<div class="col-md-4" >
-					<input type="text" id="contactName" name="contactName" class="form-control" placeholder="联系人" value="${company.contactName }">
-				</div>
-			</div>
-			
-			<div class="form-group">
-				<label class="col-md-2 control-label" for="telephone">联系电话：</label>
-				<div class="col-md-4" >
-					<input type="text" id="telephone" name="telephone" class="form-control" placeholder="请输入联系电话" value="${company.telephone }">
-				</div>
-			</div>
-			
-			<div class="form-group">
-				<label class="col-md-2 control-label" for="mobile">手机号：</label>
-				<div class="col-md-4" >
-					<input type="mobile" id="mobile" name="mobile" class="form-control" placeholder="请输入手机号" value="${company.mobile }">
-				</div>
-			</div>
-			
-			<div class="form-group">
-				<label class="col-md-2 control-label" for="email">email：</label>
-				<div class="col-md-4" >
-					<input type="email" id="email" name="email" class="form-control" placeholder="请输入email" value="${company.email }">
-				</div>
-			</div>
-			
-			<div class="form-group">
-				<label class="col-md-2 control-label" for="enterpriseLegalPerson" >法人代表：</label>
-				<div class="col-md-4" >
-					<input type="text" id="enterpriseLegalPerson" name="enterpriseLegalPerson" class="form-control" placeholder="请输入法人代表" value="${company.enterpriseLegalPerson }">
-				</div>
-			</div>
-			
-			<div class="form-group">
-				<label class="col-md-2 control-label" for="address">地址：</label>
-				<div class="col-md-4" >
-					<input type="text" id="address" name="address" class="form-control" placeholder="请输入公司地址" value="${company.address }">
-				</div>
-			</div>
-			
-			<div class="form-group">
-				<label class="col-md-2 control-label" for="briefs">公司简介：</label>
-				<div class="col-md-4" >
-					<textarea class ="form-control" id="briefs" name="briefs" rows="5" value="${company.briefs }"></textarea>
-				</div>
-			</div>
-			
-			<div class="form-group">
-				<label class="col-md-2 control-label" for="environment">公司环境：</label>
-				<div class="col-md-4" >
-					<textarea class ="form-control" id="environment" name=""environment"" rows="5" value="${company.environment }"></textarea>
-				</div>
-			</div>
-			<div class="form-group">
-				<div class="col-md-3" >
-				</div>
-				<button type="submit" class="btn btn-primary">
-					下一步
-				</button>
-				<button type="submit" class="btn btn-primary">
-					保存
-				</button>
+		</form>
+		
+		<form method="post" >
+			<input type="hidden" id="picUrl" name="picUrl" >
+			<div class="form-group" style="width:1000px;">
+				<label>
+					<span>当前图片：</span>
+					<img src="${bannerConfig.picUrl}" style="width:120px;" />
+				</label>
+				<br/>
+				<label>
+					<span>标题：</span>
+					<input id="title" name="title" value="${bannerConfig.title}">
+				</label>
+				<label>
+					<select id="type" name="type">
+						<option value="1" <c:if test="${bannerConfig.type==1}">selected</c:if>>推荐</option>
+						<option value="2" <c:if test="${bannerConfig.type==2}">selected</c:if>>分享</option>
+					</select>
+				</label>
+				<label>
+					<button type="button" class="btn btn-primary" onclick="next()">
+						保存
+					</button>
+				</label>
 			</div>
 		</form>
 	</div>

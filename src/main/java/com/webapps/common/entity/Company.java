@@ -21,10 +21,13 @@ public class Company extends Entity{
     private List<Picture> pictures;
     private String environment;
     private String contactName;
+    
+    private String companySize;
+    
     /**
      * 公司性质
      */
-    private String nature;
+    private String type;
 
     public String getName() {
         return name;
@@ -130,12 +133,20 @@ public class Company extends Entity{
 		this.environment = environment;
 	}
 
-	public String getNature() {
-		return nature;
+	public String getType() {
+		return type;
 	}
 
-	public void setNature(String nature) {
-		this.nature = nature;
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	public String getCompanySize() {
+		return companySize;
+	}
+
+	public void setCompanySize(String companySize) {
+		this.companySize = companySize;
 	}
 
 }

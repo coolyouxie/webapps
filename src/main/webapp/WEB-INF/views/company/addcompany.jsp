@@ -47,9 +47,16 @@
 			</div>
 			
 			<div class="form-group">
-				<label class="col-md-2 control-label" for="name">公司性质：</label>
+				<label class="col-md-2 control-label" for="type">公司性质：</label>
 				<div class="col-md-4" >
-					<input type="text" id="nature" name=""nature"" class="form-control" placeholder="请输入公司性质">
+					<input type="text" id="type" name="type" class="form-control" placeholder="请输入公司性质">
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label class="col-md-2 control-label" for="companySize">公司规模：</label>
+				<div class="col-md-4" >
+					<input type="text" id="companySize" name="companySize" class="form-control" placeholder="请输入公司规模">
 				</div>
 			</div>
 			
@@ -81,20 +88,6 @@
 				</div>
 			</div>
 			
-			<!-- <div class="form-group">
-				<label class="col-md-2 control-label" for="enterpriseLegalPerson" >法人代表：</label>
-				<div class="col-md-4" >
-					<input type="text" id="enterpriseLegalPerson" name="enterpriseLegalPerson" class="form-control" placeholder="请输入法人代表">
-				</div>
-			</div> -->
-			
-			<div class="form-group">
-				<label class="col-md-2 control-label" for="address">地址：</label>
-				<div class="col-md-4" >
-					<input type="text" id="address" name="address" class="form-control" placeholder="请输入公司地址" >
-				</div>
-			</div>
-			
 			<div class="form-group">
 				<label class="col-md-2 control-label" for="briefs">公司简介：</label>
 				<div class="col-md-4" >
@@ -105,7 +98,7 @@
 			<div class="form-group">
 				<label class="col-md-2 control-label" for="environment">公司环境：</label>
 				<div class="col-md-4" >
-					<textarea class ="form-control" id="environment" name=""environment"" rows="5" ></textarea>
+					<textarea class ="form-control" id="environment" name="environment" rows="5" ></textarea>
 				</div>
 			</div>
 			

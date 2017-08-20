@@ -19,7 +19,8 @@
 		<result column="longitude" jdbcType="DECIMAL" property="longitude" />
 		<result column="create_time" jdbcType="VARCHAR" property="createTime" />
 		<result column="UPDATE_TIME" jdbcType="VARCHAR" property="updateTime" />
-		<result column="nature" jdbcType="VARCHAR" property="nature" />
+		<result column="type" jdbcType="VARCHAR" property="type" />
+		<result column="company_size" jdbcType="VARCHAR" property="companySize" />
 	</resultMap>
 
 
@@ -40,7 +41,8 @@
 		latitude,
 		briefs,
 		environment,
-		nature
+		type,
+		company_size
 	</sql>
 
 	<sql id="insert_columns">
@@ -58,7 +60,8 @@
 		latitude,
 		briefs,
 		environment,
-		nature
+		type,
+		company_size
 	</sql>
 
 	<select id="getById" resultMap="resultMap">
@@ -72,24 +75,26 @@
 				name = #{obj.name,jdbcType=VARCHAR},
 			</if>
 			<if test="obj.contactName != null and obj.contactName != ''">
-				contact_name = #{obj.contactName}
+				contact_name = #{obj.contactName},
 			</if>
-			<if test="obj.telephone != null and obj.telephone != null and obj.telephone != ''">
+			<if test="obj.telephone != null and obj.telephone != ''">
 				telephone = #{obj.telephone,jdbcType=VARCHAR},
 			</if>
-			<if test="obj.address != null and obj.address != ''">
-				id_card_no = #{obj.idCardNo,jdbcType=VARCHAR},
+			<if test="obj.environment != null and obj.environment != ''">
+				environment = #{obj.environment,jdbcType=VARCHAR},
 			</if>
-			<if test="obj.enterpriseLegalPerson != null and obj.enterpriseLegalPerson != ''">
-				enterprise_Legal_Person = #{obj.enterpriseLegalPerson,jdbcType=DECIMAL},
+			<if test="obj.briefs != null and obj.briefs != ''">
+				briefs = #{obj.briefs,jdbcType=VARCHAR},
 			</if>
-			login_State = #{obj.loginState,jdbcType=DECIMAL},
-			industry_Id = #{obj.industryId,jdbcType=DECIMAL},
-			latitude = #{obj.latitude,jdbcType=DECIMAL},
-			longitude = #{obj.longitude,jdbcType=DECIMAL},
-			mobile = #{obj.mobile,jdbcType=VARCHAR},
-			briefs = #{obj.briefs,jdbcType=VARCHAR},
-			enviroment = #{obj.environment},
+			<if test="obj.companySize != null and obj.companySize !=''">
+				company_size = #{obj.companySize},
+			</if>
+			<if test="obj.mobile != null and obj.mobile !=''">
+				mobile = #{obj.mobile},
+			</if>
+			<if test="obj.type != null and obj.type !=''">
+				type = #{obj.type},
+			</if>
 			update_time = now()
 		</set>
 		WHERE ID = #{id,jdbcType=DECIMAL}
@@ -163,7 +168,8 @@
 			#{obj.latitude},
 			#{obj.briefs},
 			#{obj.environment},
-			#{obj.nature}
+			#{obj.type},
+			#{obj.companySize}
 		)
 	</insert>
 </mapper>

@@ -7,23 +7,27 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.webapps.common.bean.Page;
 import com.webapps.common.bean.ResultDto;
 import com.webapps.common.entity.Company;
 import com.webapps.common.form.CompanyRequestForm;
+import com.webapps.common.form.PictureRequestForm;
 import com.webapps.service.ICompanyService;
+import com.webapps.service.IPictureService;
 
 import net.sf.json.util.JSONUtils;
 
 @Controller
-@RequestMapping("company")
-public class CompanyController {
+@RequestMapping(value="picture")
+public class PictureController {
 	
 	@Autowired
 	private ICompanyService iCompanyService;
+	
+	@Autowired
+	private IPictureService iPictureService;
 	
 	@RequestMapping("/toCompanyListPage")
 	public String toCompanyListPage(HttpServletRequest request,HttpServletResponse response){
@@ -31,10 +35,12 @@ public class CompanyController {
 	}
 	
 	@ResponseBody
-	@RequestMapping("/loadCompanyList")
-	public Page loadCompanyList(Model model,Page page,CompanyRequestForm form,HttpServletRequest request,HttpServletResponse response){
+	@RequestMapping("/loadCompanyPicList")
+	public Page loadCompanyList(Model model,Page page,Integer fkId,HttpServletRequest request,HttpServletResponse response){
+		PictureRequestForm form = new PictureRequestForm();
+		form.setFkId(fkId);
 		try {
-			page = iCompanyService.loadCompanyList(page, form);
+			page = iPictureService.loadPictureList(page, form);
 			return page;
 		} catch (Exception e) {
 			e.printStackTrace();

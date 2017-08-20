@@ -46,6 +46,9 @@
 			<if test="obj.type != null and obj.type != ''">
 				and type = #{obj.type,jdbcType=DECIMAL}
 			</if>
+			<if test="obj.fkId != null and obj.fkId != ''">
+				and fk_id = #{obj.fkId,jdbcType=DECIMAL}
+			</if>
 		</trim>
 	</select>
 
@@ -60,8 +63,11 @@
 			<if test="obj.type != null and obj.type != ''">
 				and type = #{obj.type,jdbcType=DECIMAL}
 			</if>
+			<if test="obj.fkId != null and obj.fkId != ''">
+				and fk_id = #{obj.fkId,jdbcType=DECIMAL}
+			</if>
 		</trim>
-		order by name
+		order by create_time desc
 		<include refid="ORACLE.paginationEnd" />
 	</select>
 	

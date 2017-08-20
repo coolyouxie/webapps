@@ -4,7 +4,10 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.webapps.common.bean.Page;
+import com.webapps.common.bean.ResultDto;
 import com.webapps.common.entity.Picture;
+import com.webapps.common.form.PictureRequestForm;
 
 public interface IPictureService {
 	
@@ -21,6 +24,10 @@ public interface IPictureService {
 	 * @param obj
 	 * @return
 	 */
-	public int savePicture(Picture obj,HttpServletRequest request)throws Exception;
+	public ResultDto savePicture(Picture obj,HttpServletRequest request);
+	
+	public Page loadPictureList(Page page ,PictureRequestForm form);
+	
+	public ResultDto<String> uploadBannerPicture(HttpServletRequest request);
 	
 }

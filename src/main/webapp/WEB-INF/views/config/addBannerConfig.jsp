@@ -15,7 +15,7 @@
 <script src="${ctx}/js/common/bootstrap/bootstrap-3.3.7/dist/js/bootstrap.min.js"></script>
 <script src="${ctx}/js/common/bootstrap/bootstrap-fileinput-master/js/fileinput.js"></script>
 <script src="${ctx}/js/common/bootstrap/bootstrap-fileinput-master/js/locales/zh.js"></script>
-<style>/webapps
+<style>
 	 col-md-2, span{
 		display:-moz-inline-box;
 		display:inline-block;
@@ -24,6 +24,40 @@
 </style>
 
 <script type="text/javascript">
+
+	var projectFileOptions = null;
+	var upload = null;
+	$(function(){
+		projectFileOptions = {
+			    uploadUrl: "${ctx}/fileUpload/uploadBannerPic",
+			    language:'zh',
+			    maxFileCount: 1,
+			    maxFileSize:2000,
+			    autoReplace:false,
+			    validateInitialCount: true,
+			    overwriteInitial: false,
+			    allowedFileExtensions: ["jpg", "png", "gif"],
+			    uploadExtraData:{"sourceType":"banner"}
+		};
+		upload = $('input[class=projectfile]').each(function() {
+		    var imageurl = $(this).attr("value");
+		    if (imageurl) {
+		        var op = $.extend({
+		            initialPreview : [ // 预览图片的设置
+		            "<img src='" + imageurl + "' class='file-preview-image'>", ]
+		        }, projectfileoptions);
+		        $(this).fileinput(op);
+		    } else {
+		        $(this).fileinput(projectFileOptions).on("fileuploaded", function (event, data, previewId, index){
+		        	var response = data.response;
+					if(response&&response.result=="S"){
+						$("#picUrl").val(response.data);
+					}
+		        });
+		    }
+		});
+	});
+
 	function next(){
 		$.ajax({
 			url:"${ctx}/bannerConfig/saveBannerConfig",
@@ -31,14 +65,12 @@
 			dataType:"json",
 			data:{
 				title:$("#title").val(),
-				type:$("#type").val()
+				type:$("#type").val(),
+				picUrl:$("#picUrl").val()
 			},
 			success:function(response){
 				if(response.result=="S"){
-					var id = response.data.id;
-					var type = response.data.type;
-					var title = response.data.title;
-					window.location.href = "${ctx}/bannerConfig/toAddBannerPicturePage?id="+id+"&type="+type+"&title="+title;
+					window.location.href = "${ctx}/bannerConfig/toBannerConfigPage";
 				}else{
 					alert("信息保存失败，请稍后再试");
 					return ;
@@ -58,29 +90,38 @@
 				</h4>
 			</div>
 		</div>
-		<form class="form-horizontal required-validate" method="post" >
+		
+		<!-- 图片信息 -->
+		<form enctype="multipart/form-data">
+			<input type="hidden" id="id" value="${id}">
 			<div class="form-group" style="width:1000px;">
-				<div class="row">
-					<div class="col-md-3">
-						<label>
-							<span>标题：</span>
-							<input id="title" name="title" >
-						</label>
-					</div>
-					<div class="col-md-2">
-						<select id="type" name="type">
-							<option value="1">推荐</option>
-							<option value="2">分享</option>
-						</select>
+				<div id="imgInput" class="row" >
+					<div class="col-md-8 tl th">
+						<input type="file" id="image" name="image" class="projectfile" multiple value="" />
+						<p class="help-block">支持jpg、jpeg、png、gif格式，大小不超过2.0M</p>
 					</div>
 				</div>
-				<div class="row">
-					<div class="col-md-3">
-						<button type="button" class="btn btn-primary" onclick="next()">
-							下一步
-						</button>
-					</div>
-				</div>
+			</div>
+		</form>
+		
+		<form method="post" >
+			<input type="hidden" id="picUrl" name="picUrl" >
+			<div class="form-group" style="width:1000px;">
+				<label>
+					<span>标题：</span>
+					<input id="title" name="title" >
+				</label>
+				<label>
+					<select id="type" name="type">
+						<option value="1">推荐</option>
+						<option value="2">分享</option>
+					</select>
+				</label>
+				<label>
+					<button type="button" class="btn btn-primary" onclick="next()">
+						保存
+					</button>
+				</label>
 			</div>
 		</form>
 	</div>

@@ -28,7 +28,7 @@
 	});
 	function next(){
 		$("#handleType").val("edit_next");
-		$("#.saveForm").submit();
+		$("#saveForm").submit();
 	}
 </script>
 </head>
@@ -52,9 +52,16 @@
 			</div>
 			
 			<div class="form-group">
-				<label class="col-md-2 control-label" for="name">公司性质：</label>
+				<label class="col-md-2 control-label" for="type">公司性质：</label>
 				<div class="col-md-4" >
-					<input type="text" id="nature" name=""nature"" class="form-control" placeholder="请输入公司性质" value="${company.nature }">
+					<input type="text" id="type" name="type" class="form-control" placeholder="请输入公司性质" value="${company.type}">
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label class="col-md-2 control-label" for="companySize">公司规模：</label>
+				<div class="col-md-4" >
+					<input type="text" id="companySize" name="companySize" class="form-control" placeholder="请输入公司规模" value="${company.companySize}">
 				</div>
 			</div>
 			
@@ -87,32 +94,25 @@
 			</div>
 			
 			<div class="form-group">
-				<label class="col-md-2 control-label" for="address">地址：</label>
-				<div class="col-md-4" >
-					<input type="text" id="address" name="address" class="form-control" placeholder="请输入公司地址" value="${company.address }">
-				</div>
-			</div>
-			
-			<div class="form-group">
 				<label class="col-md-2 control-label" for="briefs">公司简介：</label>
 				<div class="col-md-4" >
-					<textarea class ="form-control" id="briefs" name="briefs" rows="5" value="${company.briefs }"></textarea>
+					<textarea class ="form-control" id="briefs" name="briefs" rows="5" >${company.briefs}</textarea>
 				</div>
 			</div>
 			
 			<div class="form-group">
 				<label class="col-md-2 control-label" for="environment">公司环境：</label>
 				<div class="col-md-4" >
-					<textarea class ="form-control" id="environment" name=""environment"" rows="5" value="${company.environment }"></textarea>
+					<textarea class ="form-control" id="environment" name="environment" rows="5" >${company.environment }</textarea>
 				</div>
 			</div>
 			<div class="form-group">
 				<div class="col-md-3" >
 				</div>
-				<button type="submit" class="btn btn-primary">
+				<button type="button" class="btn btn-primary" onclick="next()">
 					下一步
 				</button>
-				<button type="submit" class="btn btn-primary">
+				<button type="submit" class="btn btn-primary" >
 					保存
 				</button>
 			</div>

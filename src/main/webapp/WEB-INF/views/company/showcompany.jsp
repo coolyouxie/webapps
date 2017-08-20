@@ -192,11 +192,25 @@
 				${company.name}
 			</div>
 		</div>
+		
+		<div class="row">
+			<label class="col-md-2 control-label" >公司性质：</label>
+			<div class="col-md-4" >
+				${company.type}
+			</div>
+		</div>
+		
+		<div class="row">
+			<label class="col-md-2 control-label" >公司规模：</label>
+			<div class="col-md-4" >
+				${company.companySize}
+			</div>
+		</div>
 			
 		<div class="row">
 			<label class="col-md-2 control-label" for="contactName">联系人：</label>
 			<div class="col-md-4" >
-				${company.contactName }
+				${company.contactName}
 			</div>
 		</div>
 			
@@ -210,28 +224,21 @@
 		<div class="row">
 			<label class="col-md-2 control-label" for="mobile">手机号：</label>
 			<div class="col-md-4" >
-				${company.mobile }
-			</div>
-		</div>
-			
-		<div class="row">
-			<label class="col-md-2 control-label" for="address">地址：</label>
-			<div class="col-md-4" >
-				${company.address }
+				${company.mobile}
 			</div>
 		</div>
 			
 		<div class="row">
 			<label class="col-md-2 control-label" for="briefs">公司简介：</label>
 			<div class="col-md-4" >
-				${company.briefs }
+				${company.briefs}
 			</div>
 		</div>
 			
 		<div class="row">
 			<label class="col-md-2 control-label" for="environment">公司环境：</label>
 			<div class="col-md-4" >
-				${company.environment }
+				${company.environment}
 			</div>
 		</div>
 			
