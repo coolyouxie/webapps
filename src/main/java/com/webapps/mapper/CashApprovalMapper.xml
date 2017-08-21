@@ -75,7 +75,7 @@
 			update t_cash_approval
 			<set>
 				data_state=#{item.dataState},
-				update_time = now()
+				update_time = #{item.updateTime}
 			</set>
 			where id = #{item.id}
          </foreach>
@@ -92,7 +92,7 @@
 			#{obj.state},
 			#{obj.fee},
 			#{obj.dataState},
-			now()
+			#{obj.createTime}
 		)
 	</insert>
 </mapper>

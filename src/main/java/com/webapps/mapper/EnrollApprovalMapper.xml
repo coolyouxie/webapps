@@ -164,7 +164,7 @@
 			update t_enrollment_approval
 			<set>
 				data_state=#{item.dataState},
-				update_time = now()
+				update_time = #{item.updateTime}
 			</set>
 			where id = #{item.id}
          </foreach>
@@ -186,7 +186,7 @@
 			#{obj.company.id},
 			#{obj.state},
 			#{obj.dataState},
-			now(),
+			#{obj.createTime},
 			#{obj.operatorId},
 			#{obj.remark},
 			#{obj.type}
@@ -202,7 +202,7 @@
 			talk_result = #{obj.talkResult},
 			remark = #{obj.remark},
 			data_state = #{obj.dataState},
-			update_time = now()
+			update_time = #{obj.updateTime}
 		where id = #{id}
 	</update>
 </mapper>

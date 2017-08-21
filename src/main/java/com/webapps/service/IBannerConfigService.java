@@ -9,14 +9,14 @@ import com.webapps.common.form.BannerConfigRequestForm;
 
 public interface IBannerConfigService {
 	
-	public ResultDto<BannerConfig> saveBannerConfig(BannerConfigRequestForm form)throws Exception;
+	public ResultDto<BannerConfig> saveBannerConfig(BannerConfigRequestForm form);
 	
-	public int deleteBannerConfigById(Integer id)throws Exception;
+	public int deleteBannerConfigById(BannerConfigRequestForm form);
 	
-	public Page loadBannerConfigList(Page page,BannerConfigRequestForm form)throws Exception;
+	public Page loadBannerConfigList(Page page,BannerConfigRequestForm form);
 	
-	public BannerConfig getById(Integer id)throws Exception;
+	public BannerConfig getById(Integer id);
 	
-	public List<BannerConfig> queryAll()throws Exception;
+	public List<BannerConfig> queryAll();
 	
 }

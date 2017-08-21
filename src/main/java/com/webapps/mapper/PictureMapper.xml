@@ -77,7 +77,7 @@
 			update t_picture
 			<set>
 				data_state=#{item.dataState},
-				update_time = now()
+				update_time = #{item.updateTime}
 			</set>
 			where id = #{item.id}
          </foreach>
@@ -99,7 +99,7 @@
 			#{obj.type},
 			#{obj.remark},
 			#{obj.dataState},
-			now()
+			#{obj.createTime}
 		
 		)
 	</insert>

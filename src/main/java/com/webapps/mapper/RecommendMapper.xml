@@ -134,7 +134,7 @@
 			data_state = #{obj.dataState},
 			age = #{obj.age},
 			gender = #{obj.gender},
-			update_time = now()
+			update_time = #{obj.updateTime}
 		where id = #{id}
 	</update>
 </mapper>

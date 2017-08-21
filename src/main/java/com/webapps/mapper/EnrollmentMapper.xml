@@ -147,7 +147,7 @@
 			update t_enrollment
 			<set>
 				data_state=#{item.dataState},
-				update_time = now()
+				update_time = #{item.updateTime}
 			</set>
 			where id = #{item.id}
          </foreach>
@@ -169,7 +169,7 @@
 			#{obj.company.id},
 			#{obj.state},
 			#{obj.dataState},
-			now(),
+			#{obj.createTime},
 			#{obj.isTalked},
 			#{obj.talkResult}
 		)
@@ -183,7 +183,7 @@
 			company_id=#{obj.company.id},
 			state=#{obj.state}, 
 			data_state=#{obj.dataState},
-			update_TIME=now(),
+			update_TIME=#{obj.updateTime},
 			is_talked=#{obj.isTalked},
 			talk_result=#{obj.talkResult},
 			remark = #{obj.remark}
@@ -193,7 +193,7 @@
 	<update id="saveTalkInfoById">
 		update t_enrollment 
 		set 
-			update_TIME=now(),
+			update_TIME=#{obj.updateTime},
 			is_talked=#{obj.isTalked},
 			talk_result=#{obj.talkResult}
 		where id=#{id}
@@ -202,7 +202,7 @@
 	<update id="cancelEnroll">
 		update t_enrollment 
 		set 
-			update_TIME=now(),
+			update_TIME=#{obj.updateTime},
 			remark=#{obj.remark},
 			data_state=#{obj.talkResult}
 		where id=#{id}

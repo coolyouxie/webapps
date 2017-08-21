@@ -78,12 +78,12 @@ public class BannerConfigController {
 
 	@ResponseBody
 	@RequestMapping(value="/deleteBannerConfigById")
-	public ResultDto<BannerConfig> deleteBannerConfigById(Model model, Integer id, HttpServletRequest request,
+	public ResultDto<BannerConfig> deleteBannerConfigById(Model model, BannerConfigRequestForm form, HttpServletRequest request,
 			HttpServletResponse response) {
 		ResultDto<BannerConfig> dto = new ResultDto<BannerConfig>();
 		int result;
 		try {
-			result = iBannerConfigService.deleteBannerConfigById(id);
+			result = iBannerConfigService.deleteBannerConfigById(form);
 			if (result == 0) {
 				dto.setResult("F");
 				dto.setErrorMsg("删除失败，请稍后重试");

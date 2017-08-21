@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.webapps.mapper.IOperateLogMapper">
+	<resultMap id="resultMap" type="com.webapps.common.entity.OperateLog">
+		<id column="ID" jdbcType="DECIMAL" property="id" />
+		<result column="operator_id" jdbcType="DECIMAL" property="operatorId" />
+		<result column="fk_Id" jdbcType="DECIMAL" property="fkId" />
+		<result column="type" jdbcType="DECIMAL" property="type" />
+		<result column="result" jdbcType="VARCHAR" property="result" />
+		<result column="remark" jdbcType="VARCHAR" property="remark" />
+		<result column="errorMsg" jdbcType="VARCHAR" property="errorMsg" />
+		<result column="create_time" jdbcType="VARCHAR" property="createTime" />
+	</resultMap>
+
+	<sql id="select_columns">
+		id,user_id,fk_id,type,result,remark,errorMsg,create_time
+	</sql>
+
+	<sql id="insert_columns">
+		user_id,fk_id,type,result,remark,errorMsg,create_time
+	</sql>
+
+	<select id="queryCount" resultType="java.lang.Integer">
+		SELECT count(1) FROM t_operate_log
+		<trim prefix="WHERE" prefixOverrides="AND">
+			<if test="obj.type != null and obj.type != ''">
+				and type = #{obj.type,jdbcType=DECIMAL}
+			</if>
+			<if test="obj.createTimeStart != null and obj.createTimeStart != ''">
+				and create_time >= #{obj.createTimeStart}
+			</if>
+			<if test="obj.createTimeEnd != null and obj.createTimeEnd != ''">
+				and #{obj.createTimeEnd,jdbcType=VARCHAR} >= create_time 
+			</if>
+		</trim>
+	</select>
+
+	<!-- 根据productId获取product -->
+	<select id="queryPage" resultMap="resultMap">
+		<include refid="ORACLE.paginationStart" />
+		SELECT
+		<include refid="select_columns" />
+		FROM t_operate_log 
+		<trim prefix="WHERE" prefixOverrides="AND">
+			<if test="obj.type != null and obj.type != ''">
+				and type = #{obj.type,jdbcType=DECIMAL}
+			</if>
+			<if test="obj.createTimeStart != null and obj.createTimeStart != ''">
+				and create_time >= #{obj.createTimeStart}
+			</if>
+			<if test="obj.createTimeEnd != null and obj.createTimeEnd != ''">
+				and #{obj.createTimeEnd,jdbcType=VARCHAR} >= create_time 
+			</if>
+		</trim>
+		order by create_time desc
+		<include refid="ORACLE.paginationEnd" />
+	</select>
+
+	<insert id="insert" useGeneratedKeys="true" keyProperty="obj.id">
+		insert into t_operate_log (
+			<include refid="insert_columns" />
+		)
+		values
+		(
+			#{obj.operatorId},
+			#{obj.fkId},
+			#{obj.type},
+			#{obj.result},
+			#{obj.remark},
+			#{obj.errorMsg},
+			#{obj.createTime}
+		)
+	</insert>
+</mapper>

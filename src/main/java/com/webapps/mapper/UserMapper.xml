@@ -89,7 +89,7 @@
 			education_Id = #{obj.educationId,jdbcType=DECIMAL},
 			qq = #{obj.qq,jdbcType=VARCHAR},
 			mobile = #{obj.mobile,jdbcType=VARCHAR},
-			update_time = now()
+			update_time = #{obj.updateTime}
 		</set>
 		WHERE ID = #{id,jdbcType=DECIMAL}
 	</update>

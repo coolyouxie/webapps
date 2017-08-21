@@ -10,9 +10,15 @@ import com.webapps.common.utils.DateUtil;
 public class Entity {
 
     private Integer id;
+    
     private Date createTime = new Date();
     
-    private Date updateTime;
+    private Date updateTime = new Date();
+    
+    /**
+     * 操作人ID
+     */
+    private Integer operatorId;
     
     public String getCreateTimeStr(){
 		if(this.getCreateTime()!=null){
@@ -54,4 +60,12 @@ public class Entity {
     public void setDataState(int dataState) {
         this.dataState = dataState;
     }
+
+	public Integer getOperatorId() {
+		return operatorId;
+	}
+
+	public void setOperatorId(Integer operatorId) {
+		this.operatorId = operatorId;
+	}
 }

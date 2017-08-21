@@ -82,7 +82,7 @@
 			update t_fee_config
 			<set>
 				data_state=#{item.dataState},
-				update_time = now()
+				update_time = #{item.updateTime}
 			</set>
 			where id = #{item.id}
          </foreach>
@@ -100,7 +100,7 @@
 			#{obj.type},
 			#{obj.fee},
 			#{obj.dataState},
-			now()
+			#{obj.createTime}
 		)
 	</insert>
 	
@@ -108,7 +108,7 @@
 		update t_fee_config set 
 		title=#{obj.title},
 		fee=#{obj.fee},
-		update_time=now()
+		update_time=#{obj.updateTime}
 		where id=#{id}
 	</update>
 </mapper>

@@ -95,7 +95,7 @@
 			<if test="obj.type != null and obj.type !=''">
 				type = #{obj.type},
 			</if>
-			update_time = now()
+			update_time = #{obj.updateTime}
 		</set>
 		WHERE ID = #{id,jdbcType=DECIMAL}
 	</update>

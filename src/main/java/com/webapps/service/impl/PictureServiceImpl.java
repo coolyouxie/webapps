@@ -135,7 +135,13 @@ public class PictureServiceImpl implements IPictureService {
 	
 	private ResultDto<BannerConfig> saveBannerConfig(Picture obj, Integer id, int picType, File destFile, String projectPath,String type,Integer companyId,Integer recruitmentId){
 		ResultDto<BannerConfig> dto = new ResultDto<BannerConfig>();
-		BannerConfig bc = iBannerConfigMapper.getById(id);
+		BannerConfig bc = null;
+		try {
+			bc = iBannerConfigMapper.getById(id);
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		bc.setPicUrl(projectPath+File.separator+"fileupload/banner/"+type+"_"+id+File.separator+destFile.getName());
 		int count = 0;
 		try {
