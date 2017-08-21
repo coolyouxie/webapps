@@ -11,14 +11,15 @@
 		<result column="data_state" jdbcType="DECIMAL" property="dataState" />
 		<result column="create_time" jdbcType="VARCHAR" property="createTime" />
 		<result column="UPDATE_TIME" jdbcType="VARCHAR" property="updateTime" />
+		<result column="title" jdbcType="VARCHAR" property="title" />
 	</resultMap>
 
 	<sql id="select_columns">
-		ID,fk_id,pic_Url,type,remark, data_state,CREATE_TIME,UPDATE_TIME
+		ID,fk_id,pic_Url,type,remark, data_state,CREATE_TIME,UPDATE_TIME,title
 	</sql>
 
 	<sql id="insert_columns">
-		fk_id,pic_Url,type,remark, data_state,CREATE_TIME
+		fk_id,pic_Url,type,remark, data_state,CREATE_TIME,title
 	</sql>
 	
 	<select id="getById" resultMap="resultMap">
@@ -35,7 +36,13 @@
 	</select>
 	
 	<select id="queryListByFkId" resultMap="resultMap">
-		select <include refid="select_columns" /> from t_picture where fk_id = #{fk_id}
+		select <include refid="select_columns" /> from t_picture where fk_id = #{fk_id} and data_state = 1
+	</select>
+	
+	<select id="queryListByFkIdAndType" resultMap="resultMap">
+		select <include refid="select_columns" /> from t_picture 
+		where fk_id = #{fkId} and data_state = 1 and type = #{type}
+		order by create_time desc
 	</select>
 	
 	<!-- 查询行政区总数 -->
@@ -72,15 +79,19 @@
 	</select>
 	
 	<!-- 用于初始化数据时使用 -->
-	<update id="batchUpdateToDelete">
+	<update id="batchDeleteInLogic">
 		<foreach collection="list" item="item" index="index" open="" close="" separator=";">
 			update t_picture
 			<set>
-				data_state=#{item.dataState},
+				data_state = 0,
 				update_time = #{item.updateTime}
 			</set>
 			where id = #{item.id}
          </foreach>
+	</update>
+	
+	<update id="deleteInLogicByPicture">
+		update t_picture set data_state = 0 ,update_time = #{obj.updateTime} where id = #{obj.id}
 	</update>
 	
 	<update id="deleteByIdInLogic">
@@ -99,8 +110,8 @@
 			#{obj.type},
 			#{obj.remark},
 			#{obj.dataState},
-			#{obj.createTime}
-		
+			#{obj.createTime},
+			#{obj.title}
 		)
 	</insert>
 </mapper>

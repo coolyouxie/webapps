@@ -10,6 +10,8 @@ public class Picture extends Entity {
 	
 	private Integer type;
 	
+	private String title;
+	
 	public Integer getFkId() {
 		return fkId;
 	}
@@ -33,6 +35,12 @@ public class Picture extends Entity {
 	}
 	public void setRemark(String remark) {
 		this.remark = remark;
+	}
+	public String getTitle() {
+		return title;
+	}
+	public void setTitle(String title) {
+		this.title = title;
 	}
 	
 

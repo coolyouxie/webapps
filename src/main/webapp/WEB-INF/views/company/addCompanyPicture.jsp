@@ -17,7 +17,7 @@
 <script src="${ctx}/js/common/bootstrap/bootstrap-fileinput-master/js/fileinput.js"></script>
 <script src="${ctx}/js/common/bootstrap/bootstrap-fileinput-master/js/locales/zh.js"></script>
 
-<style>/webapps
+<style>
 	 col-md-2, span{
 		display:-moz-inline-box;
 		display:inline-block;

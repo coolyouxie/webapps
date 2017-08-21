@@ -5,10 +5,13 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.webapps.common.bean.ResultDto;
+import com.webapps.common.entity.Picture;
+import com.webapps.common.form.PictureRequestForm;
 import com.webapps.common.utils.JSONUtil;
 import com.webapps.service.IPictureService;
 
@@ -30,11 +33,10 @@ public class FileUploadController {
 	 */
 	@ResponseBody
 	@RequestMapping(value="/pictureUpload")
-	public String pictureUpload(HttpServletRequest request,HttpServletResponse response){
-		ResultDto<String> dto = new ResultDto<String>();
+	public String pictureUpload(Model model,PictureRequestForm form,HttpServletRequest request,HttpServletResponse response){
+		ResultDto<Picture> dto = new ResultDto<Picture>();
 		try {
-			iPictureService.savePicture(null, request);
-			dto.setResult("S");
+			dto = iPictureService.savePicture(form);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

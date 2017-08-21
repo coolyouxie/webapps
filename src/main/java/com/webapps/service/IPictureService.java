@@ -24,7 +24,11 @@ public interface IPictureService {
 	 * @param obj
 	 * @return
 	 */
-	public ResultDto savePicture(Picture obj,HttpServletRequest request);
+	public ResultDto<String> uploadCompanyPicture(HttpServletRequest request);
+	
+	public ResultDto<Picture> savePicture(PictureRequestForm form);
+	
+	public ResultDto<Picture> saveCompanyPicture(PictureRequestForm form);
 	
 	public Page loadPictureList(Page page ,PictureRequestForm form);
 	

@@ -9,7 +9,6 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,10 +18,9 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.webapps.common.bean.Page;
 import com.webapps.common.bean.ResultDto;
-import com.webapps.common.entity.BannerConfig;
 import com.webapps.common.entity.Picture;
 import com.webapps.common.form.PictureRequestForm;
-import com.webapps.mapper.IBannerConfigMapper;
+import com.webapps.common.utils.PropertyUtil;
 import com.webapps.mapper.IPictureMapper;
 import com.webapps.service.IPictureService;
 
@@ -34,9 +32,6 @@ public class PictureServiceImpl implements IPictureService {
 	
 	@Autowired
 	private IPictureMapper iPictureMapper;
-	
-	@Autowired
-	private IBannerConfigMapper iBannerConfigMapper;
 
 	@Override
 	public List<Picture> getByFkId(Integer fkId) throws Exception {
@@ -45,133 +40,12 @@ public class PictureServiceImpl implements IPictureService {
 	}
 
 	@Override
-	public ResultDto savePicture(Picture obj,HttpServletRequest request) {
-		ResultDto<Picture> dto = null;
-		String sourceType = request.getParameter("sourceType");
-		int picType = 0;
-		File destFile = null;
-		Picture file = new Picture();
-		// 转换为文件类型的request
-        MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
-        // 获取对应file对象
-        Map<String, MultipartFile> fileMap = multipartRequest.getFileMap();
-        Iterator<String> fileIterator = multipartRequest.getFileNames();
-        String requestURL = request.getRequestURL().toString();
-        String projectPath = requestURL.replace("/fileUpload/pictureUpload","");
-        String path="/Users/xieshuai/fileupload/";
-        Integer id = Integer.valueOf(request.getParameter("id"));
-        if("company".equals(sourceType)){
-        	path += "company"+File.separator;
-        }else if("banner".equals(sourceType)){
-        	path += "banner"+File.separator;
-        }
-        File dir = new File(path+sourceType+"_"+id);
-        if(!dir.exists()){
-        	dir.mkdirs();
-        }
-        while (fileIterator.hasNext()) {
-            String fileKey = fileIterator.next();
-            logger.debug("文件名为：" + fileKey);
-            // 获取对应文件
-            MultipartFile multipartFile = fileMap.get(fileKey);
-            String contentType = multipartFile.getContentType();
-            String fileType = contentType.substring(contentType.indexOf("/") + 1);
-            String fileName = new Date().getTime() + "." + fileType;
-            destFile = new File(dir.getAbsolutePath()+File.separator+fileName);
-            try {
-				multipartFile.transferTo(destFile);
-			} catch (IllegalStateException e) {
-				logger.error("图片文件状态异常");
-				e.printStackTrace();
-			} catch (IOException e) {
-				logger.error("图片文件输入输出异常");
-				e.printStackTrace();
-			}
-        }
-		if("company".equals(sourceType)){
-			picType = 1;
-			try {
-				dto = savePicture(obj, id, picType, destFile, file, projectPath);
-			} catch (Exception e) {
-				logger.error("保存图片异常");
-				e.printStackTrace();
-			}
-		}else if("banner".equals(sourceType)){
-			Integer companyId = -1;
-			Integer recruitmentId = -1;
-			String companyIdStr = request.getParameter("companyId");
-			String recruitmentIdStr = request.getParameter("recruitmentId");
-			if(StringUtils.isNotBlank(companyIdStr))
-				companyId = Integer.valueOf(companyIdStr);
-			if(StringUtils.isNotBlank(recruitmentIdStr))
-				recruitmentId = Integer.valueOf(recruitmentIdStr);
-			saveBannerConfig(obj, id, picType, destFile, projectPath, sourceType, companyId, recruitmentId);
-		}
+	public ResultDto<String> uploadCompanyPicture(HttpServletRequest request) {
+		ResultDto<String> dto = uploadPicture(request);
         return dto;
 	}
-
-	private ResultDto<Picture> savePicture(Picture obj, Integer id, int picType, File destFile, Picture file, String projectPath)
-			throws Exception {
-		ResultDto<Picture> dto = new ResultDto<Picture>();
-		file.setDataState(1);
-        file.setType(picType);
-        file.setPicUrl(projectPath+File.separator+"fileupload/company/company_"+id+File.separator+destFile.getName());
-        file.setFkId(id);
-        int count = 0;
-		if(file.getId()==null){
-			count = iPictureMapper.insert(file);
-		}else{
-			count = iPictureMapper.updateById(obj.getId(), file);
-		}
-		if(count==1){
-			dto.setResult("S");
-		}else{
-			dto.setErrorMsg("图片保存或更新失败，请稍后重试");
-			dto.setResult("F");
-		}
-		dto.setData(file);
-		return dto;
-	}
 	
-	private ResultDto<BannerConfig> saveBannerConfig(Picture obj, Integer id, int picType, File destFile, String projectPath,String type,Integer companyId,Integer recruitmentId){
-		ResultDto<BannerConfig> dto = new ResultDto<BannerConfig>();
-		BannerConfig bc = null;
-		try {
-			bc = iBannerConfigMapper.getById(id);
-		} catch (Exception e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		bc.setPicUrl(projectPath+File.separator+"fileupload/banner/"+type+"_"+id+File.separator+destFile.getName());
-		int count = 0;
-		try {
-			count = iBannerConfigMapper.updateById(bc.getId(), bc);
-			if(count==1){
-				dto.setData(bc);
-				dto.setResult("S");
-			}else{
-				dto.setErrorMsg("保存失败");
-				dto.setResult("F");
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return dto ;
-	}
-
-	@Override
-	public Page loadPictureList(Page page, PictureRequestForm form) {
-		int startRow  = page.getStartRow();
-		int endRow = page.getEndRow();
-		int count = iPictureMapper.queryCount(form);
-		List<Picture> list = iPictureMapper.queryPage(startRow, endRow, form);
-		page.setRecords(count);
-		page.setResultList(list);
-		return page;
-	}
-
-	@Override
-	public ResultDto<String> uploadBannerPicture(HttpServletRequest request) {
+	private ResultDto<String> uploadPicture(HttpServletRequest request){
 		ResultDto<String> dto = new ResultDto<String>();
 		String sourceType = request.getParameter("sourceType");
 		File destFile = null;
@@ -180,9 +54,8 @@ public class PictureServiceImpl implements IPictureService {
         // 获取对应file对象
         Map<String, MultipartFile> fileMap = multipartRequest.getFileMap();
         Iterator<String> fileIterator = multipartRequest.getFileNames();
-        String requestURL = request.getRequestURL().toString();
-        String projectPath = requestURL.replace("/fileUpload/uploadBannerPic","");
-        String path="/Users/xieshuai/fileupload/";
+        String projectPath = (String) PropertyUtil.getProperty("WebApp_Path");
+        String path=(String) PropertyUtil.getProperty("FileUpload_Path");
         path += sourceType+File.separator;
         File dir = new File(path);
         if(!dir.exists()){
@@ -208,10 +81,65 @@ public class PictureServiceImpl implements IPictureService {
 				e.printStackTrace();
 			}
         }
-        String picUrl = projectPath+File.separator+"fileupload/banner"+File.separator+destFile.getName();
+        String picUrl = projectPath+File.separator+"fileupload/"+sourceType+File.separator+destFile.getName();
+        logger.info("文件路径："+picUrl);
 		dto.setData(picUrl);
 		dto.setResult("S");
+		return dto;
+	}
+
+	@Override
+	public Page loadPictureList(Page page, PictureRequestForm form) {
+		int startRow  = page.getStartRow();
+		int endRow = page.getEndRow();
+		int count = iPictureMapper.queryCount(form);
+		List<Picture> list = iPictureMapper.queryPage(startRow, endRow, form);
+		page.setRecords(count);
+		page.setResultList(list);
+		return page;
+	}
+
+	@Override
+	public ResultDto<String> uploadBannerPicture(HttpServletRequest request) {
+		ResultDto<String> dto = uploadPicture(request);
         return dto;
+	}
+
+	@Override
+	public ResultDto<Picture> saveCompanyPicture(PictureRequestForm form) {
+		ResultDto<Picture> dto = new ResultDto<Picture>();
+		//插入新图片前将原来相同类型的图片记录置为无效
+		try {
+			List<Picture> list = iPictureMapper.queryListByFkIdAndType(form.getFkId(),form.getType());
+			if(form.getType()==1){
+				iPictureMapper.batchDeleteInLogic(list);
+			}else if(form.getType()==2&&list.size()>=2){
+				iPictureMapper.deleteInLogicByPicture(list.get(list.size()-1));
+			}
+		} catch (Exception e) {
+			logger.error("设置相同类型的图片状态为无效时异常："+e.getMessage());
+			dto.setErrorMsg("设置相同类型的图片状态为无效时异常，请稍后再试");
+			dto.setResult("F");
+			return dto;
+		}
+		form.setDataState(1);
+		form.setCreateTime(new Date());
+		int count = iPictureMapper.insert(form);
+		if(count==1){
+			dto.setData(form);
+			dto.setResult("S");
+		}else{
+			dto.setErrorMsg("图片保存失败，请稍后重试");
+			dto.setResult("F");
+			logger.error(dto.getErrorMsg());
+		}
+		return dto;
+	}
+
+	@Override
+	public ResultDto<Picture> savePicture(PictureRequestForm form) {
+		
+		return null;
 	}
 
 }

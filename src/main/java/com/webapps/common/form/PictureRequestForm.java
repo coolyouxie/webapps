@@ -14,6 +14,10 @@ public class PictureRequestForm extends Picture implements RequestForm,Serializa
 	 * 操作类型（查询，新增，更新，删除）
 	 */
 	private String handleType;
+	
+	private String picUrl1;
+	
+	private String picUrl2;
 
 	public String getKeyWords() {
 		return keyWords;
@@ -29,6 +33,22 @@ public class PictureRequestForm extends Picture implements RequestForm,Serializa
 
 	public void setHandleType(String handleType) {
 		this.handleType = handleType;
+	}
+
+	public String getPicUrl1() {
+		return picUrl1;
+	}
+
+	public void setPicUrl1(String picUrl1) {
+		this.picUrl1 = picUrl1;
+	}
+
+	public String getPicUrl2() {
+		return picUrl2;
+	}
+
+	public void setPicUrl2(String picUrl2) {
+		this.picUrl2 = picUrl2;
 	}
 
 }

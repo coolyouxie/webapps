@@ -25,7 +25,7 @@
 <script src="${ctx}/js/common/jquery/jqGrid/js/jquery.jqGrid.js"></script>
 
 
-<style>/webapps
+<style>
 	 col-md-2, span{
 		display:-moz-inline-box;
 		display:inline-block;
@@ -49,16 +49,16 @@ function search(){
 }
 	$(function(){
 		var projectfileoptions = {
-			    uploadUrl: "${ctx}/fileUpload/pictureUpload",
-			    language:'zh',
-			    maxFileCount: 4,
-			    maxFileSize:2000,
-			    autoReplace:false,
-			    validateInitialCount: true,
-			    overwriteInitial: false,
-			    allowedFileExtensions: ["jpg", "png", "gif"],
-			    uploadExtraData:{"sourceType":"company","id":$("#companyId").val()}
-			};
+			uploadUrl: "${ctx}/picture/uploadPicture",
+			language:'zh',
+			maxFileCount: 2,
+			maxFileSize:2000,
+			autoReplace:false,
+			validateInitialCount: true,
+			overwriteInitial: false,
+			allowedFileExtensions: ["jpg", "png", "gif"],
+			uploadExtraData:{"sourceType":"company","id":$("#companyId").val()}
+		};
 		// 文件上传框
 		$('input[class=projectfile]').each(function() {
 		    var imageurl = $(this).attr("value");
@@ -73,7 +73,8 @@ function search(){
 		        $(this).fileinput(projectfileoptions).on("fileuploaded", function (event, data, previewId, index){
 		        	var response = data.response;
 					if(response&&response.result=="S"){
-						alert("图片上传成功");
+						$("#newPicUrl").val(response.data);
+						//alert("图片上传成功");
 						//window.location.href="${ctx}/company/toCompanyListPage";
 					}
 		        });;
@@ -106,7 +107,14 @@ function search(){
 								label : 'type',
 								name : 'type',
 								align : 'center',
-								sortable : false
+								sortable : false,
+								formatter:function(cellValue,options,rowObject){
+									if(cellValue==1){
+										return '首页图片';
+									}else if(cellValue==2){
+										return '详情图片';
+									}
+								}
 							}, {
 								label : 'picUrl',
 								name : 'picUrl',
@@ -122,8 +130,7 @@ function search(){
 								sortable : false,
 								formatter:function(cellValue,options,rowObject){
 									var result = "";
-									result = '<a href="#" style="color:blue" onclick="deleteById('+rowObject.id+')">删除</a>'+
-									'<a href="#" style="color:blue" onclick="showModal('+rowObject.id+')">修改类型</a>';
+									result = '<a href="#" style="color:blue" onclick="deleteById('+rowObject.id+')">删除  </a>';
 									return result;
 								}
 							} ],
@@ -147,9 +154,77 @@ function search(){
 		}).trigger("reloadGrid");
 	}
 	
+	function next(){
+		var url = $("#newPicUrl").val().trim();
+		var oldUrl = $("#oldPicUrl").val().trim();
+		var type = $("#type").val();
+		if(type==1){
+			if(!url){
+				alert("请先上传首页图片");
+				return ;
+			}
+		}
+		if(type==2){
+			if(!url){
+				alert("请先上传首页图片");
+				return ;
+			}
+		}
+		save();
+	}
+	
+	function save(){
+		$.ajax({
+			url:"${ctx}/company/addCompanyPicture",
+			type:"post",
+			dataType:"json",
+			data:{
+				fkId:$("#companyId").val(),
+				title:$("#title").val(),
+				type:$("#type").val(),
+				picUrl:$("#newPicUrl").val()
+			},
+			success:function(response){
+				if(response.result=="S"){
+					$("#oldPicUrl").val($("#newPicUrl").val());
+					search();
+					//window.location.href = "${ctx}/bannerConfig/toBannerConfigPage";
+				}else{
+					alert("信息保存失败，请稍后再试");
+					return ;
+				}
+			}
+		});
+	}
+	
 </script>
 </head>
 <body>
+
+	<div class="modal fade" id="msgModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+						&times;
+					</button>
+					<h4 class="modal-title" id="myModalLabel">
+						提示
+					</h4>
+				</div>
+				<div class="modal-body">
+					当前检测你没有上传最新的图片，确定要使用当前图片吗
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">关闭
+					</button>
+					<button type="button" class="btn btn-primary" onclick="save()">
+						确定
+					</button>
+				</div>
+			</div><!-- /.modal-content -->
+		</div><!-- /.modal -->
+	</div>
 	<div class="container-fluid" style="height:480px;">
 		<div class="row">
 			<div class="col-md-3 col-md-offset-2">
@@ -158,18 +233,39 @@ function search(){
 				</h4>
 			</div>
 		</div>
-		<form class="form-horizontal required-validate" enctype="multipart/form-data" method="post" >
+		<form id="textForm">
+			<input type="hidden" id="newPicUrl" value="">
+			<input type="hidden" id="oldPicUrl" value="" >
+			<div class="form-group" style="width:1000px;">
+				<label>
+					<span>标题：</span>
+					<input id="title" name="title" >
+				</label>
+				<label>
+					<select id="type" name="type">
+						<option value="1">首页图片</option>
+						<option value="2">详情图片</option>
+					</select>
+				</label>
+				<label>
+					<button type="button" class="btn btn-primary" onclick="next()">
+						保存
+					</button>
+				</label>
+			</div>
+		</form>
+		<form id="picForm" class="form-horizontal required-validate" enctype="multipart/form-data" method="post" >
 			<input type="hidden" id="companyId" name="companyId" value="${company.id}" >
 			<div class="form-group">
-				<div class="col-md-1"></div>
 		        <div class="col-md-8 tl th">
 		            <input type="file" id="image" name="image" class="projectfile" multiple value="" />
 		            <p class="help-block">支持jpg、jpeg、png、gif格式，大小不超过2.0M</p>
 		        </div>
 		    </div>
 		</form>
+		<table id="list"></table>
+		<div id="pager"></div>
 	</div>
-	<table id="list"></table>
-	<div id="pager"></div>
+	
 </body>
 </html>
