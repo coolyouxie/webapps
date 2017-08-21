@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.webapps.mapper.IUserWalletMapper">
+	<resultMap id="resultMap" type="com.webapps.common.entity.UserWallet">
+		<id column="ID" jdbcType="DECIMAL" property="id" />
+		<result column="user_id" jdbcType="DECIMAL" property="userId" />
+		<result column="fee" jdbcType="DECIMAL" property="fee" />
+		<result column="data_state" jdbcType="DECIMAL" property="dataState" />
+		<result column="create_time" jdbcType="VARCHAR" property="createTime" />
+		<result column="UPDATE_TIME" jdbcType="VARCHAR" property="updateTime" />
+	</resultMap>
+
+	<sql id="select_columns">
+		ID,user_id,fee, data_state,CREATE_TIME,UPDATE_TIME
+	</sql>
+
+	<sql id="insert_columns">
+		user_id,fee, data_state,CREATE_TIME
+	</sql>
+	
+	<select id="getById" resultMap="resultMap">
+		select <include refid="select_columns" /> from t_user_wallet where id = #{id}
+	</select>
+	
+	<!-- 查询所有 -->
+	<select id="queryAll" resultMap="resultMap">
+		select <include refid="select_columns" /> from t_user_wallet where data_state = 1
+	</select>
+	
+	<!-- 查询所有 -->
+	<select id="queryByUserId" resultMap="resultMap">
+		select <include refid="select_columns" /> from t_user_wallet where user_id = #{userId} 
+	</select>
+	
+	<select id="queryCount" resultType="java.lang.Integer">
+		SELECT count(1) FROM t_user_wallet
+			where data_state = 1 
+	</select>
+
+	<select id="queryPage" resultMap="resultMap">
+		<include refid="ORACLE.paginationStart" />
+		SELECT
+		<include refid="select_columns" />
+		FROM t_user_wallet
+		where data_state = 1
+		order by create_time desc
+		<include refid="ORACLE.paginationEnd" />
+	</select>
+	
+	<insert id="insert" useGeneratedKeys="true" keyProperty="obj.id">
+		insert into t_user_wallet
+		(
+			<include refid="insert_columns" />
+		)
+		values
+		(
+			#{obj.userId},
+			#{obj.fee},
+			#{obj.dataState},
+			now()
+		)
+	</insert>
+	
+	<update id="updateById">
+		update t_user_wallet set 
+		user_id=#{obj.userId},
+		fee=#{obj.fee},
+		update_time=now()
+		where id=#{id}
+	</update>
+</mapper>
