@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.webapps.mapper.IBannerConfigMapper">
+	<resultMap id="resultMap" type="com.webapps.common.entity.BannerConfig">
+		<id column="ID" jdbcType="DECIMAL" property="id" />
+		<result column="title" jdbcType="VARCHAR" property="title" />
+		<result column="pic_url" jdbcType="VARCHAR" property="picUrl" />
+		<result column="content_url" jdbcType="VARCHAR" property="contentUrl" />
+		<result column="type" jdbcType="DECIMAL" property="type" />
+		<result column="company_id" jdbcType="DECIMAL" property="company.id" />
+		<result column="comapny_name" jdbcType="VARCHAR" property="company.name" />
+		<result column="recruitment_id" jdbcType="DECIMAL" property="recruitment.id" />
+		<result column="recruitment_title" jdbcType="VARCHAR" property="recruitment.title" />
+		<result column="data_state" jdbcType="DECIMAL" property="dataState" />
+		<result column="create_time" jdbcType="VARCHAR" property="createTime" />
+		<result column="UPDATE_TIME" jdbcType="VARCHAR" property="updateTime" />
+	</resultMap>
+
+	<sql id="select_columns">
+		tbc.ID,tbc.title,tbc.pic_url,tbc.content_url,tbc.type, tbc.data_state,tbc.CREATE_TIME,tbc.UPDATE_TIME
+	</sql>
+
+	<sql id="insert_columns">
+		title,pic_url,content_url,type, data_state,CREATE_TIME
+	</sql>
+	
+	<select id="getById" resultMap="resultMap">
+		select <include refid="select_columns" /> from t_banner_config tbc where tbc.id = #{id}
+	</select>
+	
+	<!-- 查询所有 -->
+	<select id="queryAll" resultMap="resultMap">
+		select <include refid="select_columns" /> from t_banner_config tbc where tbc.data_state = 1 
+	</select>
+	
+	<select id="queryTopNumBanners" resultMap="resultMap">
+		<include refid="ORACLE.paginationStart" /> 
+		select <include refid="select_columns" /> from t_banner_config tbc where tbc.data_state = 1 order by create_time desc
+		<include refid="ORACLE.paginationEnd" />
+	</select>
+	
+	<!-- 查询行政区总数 -->
+	<select id="queryCount" resultType="java.lang.Integer">
+		SELECT count(1) FROM t_banner_config tbc
+		<trim prefix="WHERE" prefixOverrides="AND">
+			tbc.data_state = 1 
+			<if test="obj.keyWords !=null and obj.keyWords != ''">
+				AND tbc.title like concat('%',#{obj.keyWords},'%')
+			</if>
+			<if test="obj.type != null and obj.type != ''">
+				and tbc.type = #{obj.type,jdbcType=DECIMAL}
+			</if>
+		</trim>
+	</select>
+
+	<!-- 分页查询行政区信息 -->
+	<select id="queryPage" resultMap="resultMap">
+		<include refid="ORACLE.paginationStart" />
+		SELECT
+		<include refid="select_columns" />,
+		tc.id as company_id,tc.name as company_name,
+		tr.id as recruitment_id,tr.title as recruitment_title
+		FROM t_banner_config tbc 
+		left join t_company tc on tc.id = tbc.company_id
+		left join t_recruitment tr on tr.id = tbc.recruitment_id
+		<trim prefix="WHERE" prefixOverrides="AND">
+			tbc.data_state = 1 
+			<if test="obj.keyWords !=null and obj.keyWords != ''">
+				AND tbc.title like concat('%',#{obj.keyWords},'%')
+			</if>
+			<if test="obj.type != null and obj.type != ''">
+				and tbc.type = #{obj.type,jdbcType=DECIMAL}
+			</if>
+		</trim>
+		order by name
+		<include refid="ORACLE.paginationEnd" />
+	</select>
+	
+	<!-- 用于初始化数据时使用 -->
+	<update id="batchUpdate">
+		<foreach collection="list" item="item" index="index" open="" close="" separator=";">
+			update t_banner_config
+			<set>
+				parent_id=#{item.parentId},
+				type = #{item.type}
+			</set>
+			where id = #{item.id}
+         </foreach>
+	</update>
+	
+	<insert id="insert" useGeneratedKeys="true" keyProperty="obj.id">
+		insert into t_banner_config 
+		(<include refid="insert_columns" />)
+		values
+		(
+			#{obj.title},
+			#{obj.picUrl},
+			#{obj.contentUrl},
+			#{obj.type},
+			#{obj.dataState},
+			now()
+		)
+	</insert>
+	
+	<update id="updateById">
+		update t_banner_config set
+		title=#{obj.title},
+		pic_url=#{obj.picUrl},
+		content_url=#{obj.contentUrl},
+		type=#{obj.type},
+		data_state=#{obj.dataState},
+		update_time=now()
+		where id=#{id}
+	</update>
+	
+	<update id="deleteByIdInLogic">
+		update t_banner_config
+		set data_state = 0,
+		update_time = now()
+		where id = #{id}
+	</update>
+</mapper>
