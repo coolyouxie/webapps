@@ -82,7 +82,7 @@ public class CompanyController {
 					if("insert_success".equals(dto.getResult())){
 						model.addAttribute("company", dto.getData());
 						model.addAttribute("result", "S");
-						return "/company/addCompanyPicture";
+						return "/company/editCompanyPicture";
 					}
 					if("insert_failed".equals(dto.getResult())){
 						model.addAttribute("company", company);
@@ -159,7 +159,6 @@ public class CompanyController {
 			Company company = iCompanyService.getById(id);
 			model.addAttribute("company", company);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return "/company/showCompany";
