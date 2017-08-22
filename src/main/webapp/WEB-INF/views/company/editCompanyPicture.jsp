@@ -113,6 +113,8 @@ function search(){
 										return '首页图片';
 									}else if(cellValue==2){
 										return '详情图片';
+									}else if(cellValue==6){
+										return 'banner图片';
 									}
 								}
 							}, {

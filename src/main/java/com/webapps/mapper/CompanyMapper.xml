@@ -22,29 +22,32 @@
 		<result column="type" jdbcType="VARCHAR" property="type" />
 		<result column="company_size" jdbcType="VARCHAR" property="companySize" />
 		<result column="is_banner" jdbcType="DECIMAL" property="isBanner" />
+		<result column="pic_id" jdbcType="DECIMAL" property="picture.id" />
+		<result column="pic_type" jdbcType="DECIMAL" property="picture.type" />
+		<result column="pic_url" jdbcType="DECIMAL" property="picture.picUrl" />
 	</resultMap>
 
 
 	<sql id="select_columns">
-		id ,
-		name ,
-		address,
-		telephone,
-		contact_Name,
-		mobile,
-		email,
-		industry_id,
-		enterprise_legal_person,
-		create_time,
-		update_time,
-		data_state,
-		longitude,
-		latitude,
-		briefs,
-		environment,
-		type,
-		company_size,
-		is_banner
+		tc.id ,
+		tc.name ,
+		tc.address,
+		tc.telephone,
+		tc.contact_Name,
+		tc.mobile,
+		tc.email,
+		tc.industry_id,
+		tc.enterprise_legal_person,
+		tc.create_time,
+		tc.update_time,
+		tc.data_state,
+		tc.longitude,
+		tc.latitude,
+		tc.briefs,
+		tc.environment,
+		tc.type,
+		tc.company_size,
+		tc.is_banner
 	</sql>
 
 	<sql id="insert_columns">
@@ -68,7 +71,13 @@
 	</sql>
 
 	<select id="getById" resultMap="resultMap">
-		select <include refid="select_columns" /> from t_company where id = #{id}
+		select <include refid="select_columns" />,
+		tp.id as pic_id,
+		tp.pic_url as pic_url,
+		tp.type as pic_type 
+		from t_company tc 
+		left join t_picture tp on tc.id = tp.fk_id and tp.type=6 and tp.data_state = 1
+		where tc.id = #{id}
 	</select>
 
 	<update id="updateById">
@@ -105,14 +114,15 @@
 	</update>
 
 	<select id="queryCount" resultType="java.lang.Integer">
-		SELECT count(1) FROM t_company
+		SELECT count(1) FROM t_company tc
+		left join t_picture tp on tc.id = tp.fk_id and tp.type=6 and tp.data_state = 1
 		<trim prefix="WHERE" prefixOverrides="AND">
-			data_state = 1
+			tc.data_state = 1
 			<if test="obj.keyWords !=null and obj.keyWords != ''">
-				AND name like concat('%',#{obj.keyWords},'%')
+				AND tc.name like concat('%',#{obj.keyWords},'%')
 			</if>
 			<if test="obj.industryId != null and obj.industryId != ''">
-				and industry_id = #{obj.industryId,jdbcType=DECIMAL}
+				and tc.industry_id = #{obj.industryId,jdbcType=DECIMAL}
 			</if>
 		</trim>
 	</select>
@@ -121,26 +131,30 @@
 	<select id="queryPage" resultMap="resultMap">
 		<include refid="ORACLE.paginationStart" />
 		SELECT
-		<include refid="select_columns" />
-		FROM t_company
+		<include refid="select_columns" />,
+		tp.id as pic_id,
+		tp.pic_url as pic_url,
+		tp.type as pic_type 
+		FROM t_company tc
+		left join t_picture tp on tc.id = tp.fk_id and tp.type=6 and tp.data_state = 1
 		<trim prefix="WHERE" prefixOverrides="AND">
-			data_state = 1
+			tc.data_state = 1
 			<if test="obj.name !=null and obj.name != ''">
-				AND (name like concat('%',#{obj.name},'%')
+				AND (tc.name like concat('%',#{obj.name},'%')
 			</if>
 			<if test="obj.contactName !=null and obj.contactName != ''">
-				AND (contact_Name like concat('%',#{obj.contactName},'%')
+				AND (tc.contact_Name like concat('%',#{obj.contactName},'%')
 			</if>
 			<if test="obj.industryId != null and obj.industryId != ''">
-				and industry_id = #{obj.industryId,jdbcType=DECIMAL}
+				and tc.industry_id = #{obj.industryId,jdbcType=DECIMAL}
 			</if>
 		</trim>
-		order by name
+		order by tc.name
 		<include refid="ORACLE.paginationEnd" />
 	</select>
 
 	<select id="queryCompanyByName" resultMap="resultMap">
-		select * from t_company where data_state = 1 and name = #{name}
+		select <include refid="select_columns" /> from t_company tc where tc.data_state = 1 and tc.name = #{name}
 	</select>
 
 	<delete id="deleteById">

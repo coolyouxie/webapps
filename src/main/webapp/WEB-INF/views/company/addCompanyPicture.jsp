@@ -30,7 +30,7 @@
 		var projectfileoptions = {
 			    uploadUrl: "${ctx}/fileUpload/pictureUpload",
 			    language:'zh',
-			    maxFileCount: 4,
+			    maxFileCount: 1,
 			    maxFileSize:2000,
 			    autoReplace:false,
 			    validateInitialCount: true,

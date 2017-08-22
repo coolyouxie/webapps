@@ -8,9 +8,12 @@
 <title>新增或修改公司信息</title>
 <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
 <link rel="stylesheet" href="${ctx}/js/common/bootstrap/bootstrap-3.3.7/dist/css/bootstrap.min.css" type="text/css" />
+<link rel="stylesheet" href="${ctx}/js/common/bootstrap/bootstrap-fileinput-master/css/fileinput.css" type="text/css" />
 <script src="${ctx}/js/jquery/jQuery-1.12.4.0.js"></script>
 <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
 <script src="${ctx}/js/common/bootstrap/bootstrap-3.3.7/dist/js/bootstrap.min.js"></script>
+<script src="${ctx}/js/common/bootstrap/bootstrap-fileinput-master/js/fileinput.js"></script>
+<script src="${ctx}/js/common/bootstrap/bootstrap-fileinput-master/js/locales/zh.js"></script>
 
 <style>
 	 col-md-2, span{
@@ -22,10 +25,42 @@
 
 <script type="text/javascript">
 	$(function(){
-		if("${result}"){
-			alert("result");
-		}
+		var projectfileoptions = {
+				uploadUrl: "${ctx}/picture/uploadPicture",
+				language:'zh',
+				maxFileCount: 1,
+				maxFileSize:2000,
+				autoReplace:false,
+				validateInitialCount: true,
+				overwriteInitial: false,
+				allowedFileExtensions: ["jpg", "png", "gif"],
+				uploadExtraData:{"sourceType":"banner"}
+			};
+			// 文件上传框
+			$('input[class=projectfile]').each(function() {
+			    var imageurl = $(this).attr("value");
+			    if (imageurl) {
+			        var op = $.extend({
+			            initialPreview : [ // 预览图片的设置
+			            "<img src='" + imageurl + "' class='file-preview-image'>", ]
+			        }, projectfileoptions);
+			        $(this).fileinput(op);
+			    } else {
+			        $(this).fileinput(projectfileoptions).on("fileuploaded", function (event, data, previewId, index){
+			        	var response = data.response;
+						if(response&&response.result=="S"){
+							$("#msgModal").modal("hide");
+							$("#picUrl").val(response.data);
+						}
+					});;
+				}
+		});
 	});
+	
+	function showModal(){
+		$("#msgModal").modal("show");
+	}
+	
 	function next(){
 		$("#handleType").val("edit_next");
 		$("#saveForm").submit();
@@ -33,6 +68,29 @@
 </script>
 </head>
 <body>
+	<form id="picForm" enctype="multipart/form-data" method="post" >
+		<div class="modal fade" id="msgModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-dialog modal-md" style="width: 580px;height:300px;">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+							&times;
+						</button>
+						<h4 class="modal-title" id="myModalLabel">
+							添加图片
+						</h4>
+					</div>
+					<div class="modal-body">
+						<input type="file" id="image" name="image" class="projectfile" multiple value="" />
+						<p class="help-block">支持jpg、jpeg、png、gif格式，大小不超过2.0M</p>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</form>
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col-md-3 col-md-offset-2">
@@ -43,6 +101,7 @@
 		</div>
 		<form id="saveForm" class="form-horizontal" action="${ctx}/company/saveCompany" method="post">
 			<input type="hidden" id="id" name="id" value="${company.id}">
+			<input type="hidden" id="picUrl" name="picture.picUrl" value="">
 			<input type="hidden" id="handleType" name="handleType" value="edit_save">
 			<div class="form-group">
 				<label class="col-md-2 control-label" for="name">公司名称：</label>
@@ -55,9 +114,12 @@
 				<label class="col-md-2 control-label" for="isBanner">Banner展示：</label>
 				<div class="col-md-4" >
 					<select id="isBanner" name="isBanner" class="form-control">
-						<option value="2" <c:if test="${company.type==2}">selected</c:if>>否</option>
-						<option value="1" <c:if test="${company.type==1}">selected</c:if>>是</option>
+						<option value="2" <c:if test="${company.isBanner==2}">selected</c:if>>否</option>
+						<option value="1" <c:if test="${company.isBanner==1}">selected</c:if>>是</option>
 					</select>
+					<button type="button" class="btn btn-primary" onclick="showModal()">
+						上传Banner图片
+					</button>
 				</div>
 			</div>
 			

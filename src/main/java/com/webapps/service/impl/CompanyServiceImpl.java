@@ -2,6 +2,7 @@ package com.webapps.service.impl;
 
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
@@ -13,6 +14,7 @@ import com.webapps.common.bean.ResultDto;
 import com.webapps.common.entity.Company;
 import com.webapps.common.entity.Picture;
 import com.webapps.common.form.CompanyRequestForm;
+import com.webapps.common.form.RecruitmentRequestForm;
 import com.webapps.mapper.ICompanyMapper;
 import com.webapps.mapper.IPictureMapper;
 import com.webapps.service.ICompanyService;
@@ -60,8 +62,14 @@ public class CompanyServiceImpl implements ICompanyService {
 				dto.setErrorMsg("更新公司信息失败");
 				return dto;
 			}
-			dto.setResult("update_success");
-			dto.setData(company);
+			ResultDto<Picture> dto1 = saveBannerPicture(company);
+			if("S".equals(dto1.getResult())){
+				dto.setResult("update_success");
+				dto.setData(company);
+			}else{
+				dto.setResult("update_fail");
+				dto.setErrorMsg("更新公司banner图片失败");
+			}
 			return dto;
 		}else{
 			try {
@@ -72,7 +80,14 @@ public class CompanyServiceImpl implements ICompanyService {
 					dto.setErrorMsg("新增失败");
 					return dto;
 				}
-				dto.setResult("insert_success");
+				ResultDto<Picture> dto1 = saveBannerPicture(company);
+				if("S".equals(dto1.getResult())){
+					dto.setResult("insert_success");
+					dto.setData(company);
+				}else{
+					dto.setResult("insert_fail");
+					dto.setErrorMsg("保存公司banner图片失败");
+				}
 			} catch (DuplicateKeyException e) {
 				logger.error(e.getMessage());
 				dto.setData(company);
@@ -80,6 +95,39 @@ public class CompanyServiceImpl implements ICompanyService {
 				dto.setErrorMsg("该公司已被注册，请更换重试");
 				return dto;
 			}
+		}
+		return dto;
+	}
+	
+	private ResultDto<Picture> saveBannerPicture(Company form){
+		ResultDto<Picture> dto = new ResultDto<Picture>();
+		try {
+			//找到老的banner图片，置为删除状态
+			List<Picture> list = iPictureMapper.queryListByFkIdAndType(form.getId(), 6);
+			if(CollectionUtils.isNotEmpty(list)){
+				iPictureMapper.batchDeleteInLogic(list);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			dto.setResult("F");
+			dto.setErrorMsg("删除发布单老banner图片时异常");
+			return dto;
+		}
+		//保存新的图片
+		Picture p = new Picture();
+		p.setDataState(1);
+		p.setFkId(form.getId());
+		p.setPicUrl(form.getPicture().getPicUrl());
+		p.setType(6);
+		p.setTitle(form.getName());
+		p.setRemark("公司banner图片");
+		int result = iPictureMapper.insert(p);
+		if(result == 1 ){
+			dto.setData(p);
+			dto.setResult("S");
+		}else{
+			dto.setErrorMsg("保存发布单banner图片失败");
+			dto.setResult("F");
 		}
 		return dto;
 	}

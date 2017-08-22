@@ -33,6 +33,8 @@ public class Company extends Entity{
      * 是否作为banner展示
      */
     private Integer isBanner;
+    
+    private Picture picture;
 
     public String getName() {
         return name;
@@ -160,6 +162,14 @@ public class Company extends Entity{
 
 	public void setIsBanner(Integer isBanner) {
 		this.isBanner = isBanner;
+	}
+
+	public Picture getPicture() {
+		return picture;
+	}
+
+	public void setPicture(Picture picture) {
+		this.picture = picture;
 	}
 
 }
