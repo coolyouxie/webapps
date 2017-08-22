@@ -28,6 +28,11 @@ public class Company extends Entity{
      * 公司性质
      */
     private String type;
+    
+    /**
+     * 是否作为banner展示
+     */
+    private Integer isBanner;
 
     public String getName() {
         return name;
@@ -147,6 +152,14 @@ public class Company extends Entity{
 
 	public void setCompanySize(String companySize) {
 		this.companySize = companySize;
+	}
+
+	public Integer getIsBanner() {
+		return isBanner;
+	}
+
+	public void setIsBanner(Integer isBanner) {
+		this.isBanner = isBanner;
 	}
 
 }

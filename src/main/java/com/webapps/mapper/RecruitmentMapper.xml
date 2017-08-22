@@ -33,6 +33,10 @@
 		<result column="cashback_briefs" jdbcType="VARCHAR" property="cashbackBriefs" />
 		<result column="job_briefs" jdbcType="VARCHAR" property="jobBriefs" />
 		<result column="company_name" jdbcType="VARCHAR" property="company.name" />
+		<result column="is_banner" jdbcType="DECIMAL" property="isBanner" />
+		<result column="pic_id" jdbcType="DECIMAL" property="picture.id" />
+		<result column="pic_type" jdbcType="DECIMAL" property="picture.type" />
+		<result column="pic_url" jdbcType="DECIMAL" property="picture.picUrl" />
 	</resultMap>
 
 	<sql id="select_columns">
@@ -63,7 +67,8 @@
 		tr.weixin,
 		tr.salary_briefs,
 		tr.cashback_briefs,
-		tr.job_briefs
+		tr.job_briefs,
+		tr.is_banner
 	</sql>
 
 	<sql id="insert_columns">
@@ -92,11 +97,18 @@
 		weixin,
 		salary_briefs,
 		cashback_briefs,
-		job_briefs
+		job_briefs,
+		is_banner
 	</sql>
 	
 	<select id="getById" resultMap="resultMap">
-		select <include refid="select_columns" /> from t_Recruitment tr where id = #{id}
+		select <include refid="select_columns" />,
+		tp.id as pic_id,
+		tp.pic_url as pic_url,
+		tp.type as pic_type 
+		from t_Recruitment tr 
+		left join t_picture tp on tp.fk_id = tr.id and tp.type = 7 and tp.data_state = 1
+		where tr.id = #{id}
 	</select>
 	
 	<!-- 查询所有 -->
@@ -113,6 +125,7 @@
 	<select id="queryCount" resultType="java.lang.Integer">
 		SELECT count(1) FROM t_Recruitment tr
 		left join t_company tc on tr.company_id = tc.id
+		left join t_picture tp on tp.fk_id = tr.id and tp.type = 7 and tp.data_state = 1
 		<trim prefix="WHERE" prefixOverrides="AND">
 			<if test="obj.title !=null and obj.title != ''">
 				AND tr.title like concat('%',#{obj.title},'%')
@@ -143,9 +156,13 @@
 		<include refid="ORACLE.paginationStart" />
 		SELECT
 		<include refid="select_columns" />,
-		tc.name as company_name
+		tc.name as company_name,
+		tp.fk_id as pic_id,
+		tp.pic_url as pic_url,
+		tp.type as pic_type
 		FROM t_Recruitment tr
 		left join t_company tc on tr.company_id = tc.id
+		left join t_picture tp on tp.fk_id = tr.id and tp.type=7 and tp.data_state = 1
 		<trim prefix="WHERE" prefixOverrides="AND">
 			<if test="obj.title !=null and obj.title != ''">
 				AND tr.title like concat('%',#{obj.title},'%')
@@ -215,7 +232,8 @@
 			#{obj.weiXin},
 			#{obj.salaryBriefs},
 			#{obj.cashbackBriefs},
-			#{obj.jobBriefs}
+			#{obj.jobBriefs},
+			#{obj.isBanner}
 		)
 	</insert>
 	
@@ -246,7 +264,8 @@
 		weixin = #{obj.weiXin},
 		salary_briefs = #{obj.salaryBriefs},
 		cashback_briefs = #{obj.cashbackBriefs},
-		job_briefs = #{obj.jobBriefs}
+		job_briefs = #{obj.jobBriefs},
+		is_banner = #{obj.isBanner}
 		where id=#{id}
 	</update>
 	

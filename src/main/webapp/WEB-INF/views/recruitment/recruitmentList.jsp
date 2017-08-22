@@ -40,7 +40,7 @@
 								total : 'page.total', // json中代表页码总数的数据 
 								repeatitems : false // 如果设为false，则jqGrid在解析json时，会根据name来搜索对应的数据元素（即可以json中元素可以不按顺序）；而所使用的name是来自于colModel中的name设定。   
 			},
-		    colNames : [ '标题', '公司', '工种', '薪资范围','联系电话','发布日期', '招工类型','发布单类型','期满天数','状态', '操作'],
+		    colNames : [ '标题', '公司', '工种', '薪资范围','联系电话','发布日期', '招工类型','发布单类型','期满天数','状态','Banner展示','Banner图片', '操作'],
 		    colModel : [ {
 								label : 'title',
 								name : 'title',
@@ -135,6 +135,34 @@
 										result = "无效";
 									}else{
 										result = "有效";
+									}
+									return result;
+								}
+							}, {
+								label : 'isBanner',
+								name : 'isBanner',
+								align : 'center',
+								sortable : false,
+								formatter:function(cellValue,options,rowObject){
+									var result = "";
+									if(cellValue==1){
+										result = "是";
+									}else{
+										result = "否";
+									}
+									return result;
+								}
+							}, {
+								label : 'picture.picUrl',
+								name : 'picture.picUrl',
+								align : 'center',
+								sortable : false,
+								formatter:function(cellValue,options,rowObject){
+									var result = "";
+									if(rowObject.isBanner==1){
+										result = "<img src='"+cellValue+"' style='width:120px;'>";
+									}else{
+										result = "无";
 									}
 									return result;
 								}

@@ -135,6 +135,25 @@
 			</div>
 			
 			<div class="form-group">
+				<label class="col-md-2 control-label" for="isBanner">Banner展示：</label>
+				<div class="col-md-4" >
+					<select id="isBanner" name="isBanner" class="form-control" disabled="disabled">
+						<option value="2" <c:if test="${recruitment.isBanner==2}">selected</c:if>>否</option>
+						<option value="1" <c:if test="${recruitment.isBanner==1}">selected</c:if>>是</option>
+					</select>
+				</div>
+			</div>
+			
+			<c:if test="${recruitment.isBanner==1}">
+				<div class="form-group">
+					<label class="col-md-2 control-label">Banner图片：</label>
+					<div class="col-md-4" >
+						<img src="${recruitment.picture.picUrl}" style="width:120px;" />
+					</div>
+				</div>
+			</c:if>
+			
+			<div class="form-group">
 				<label class="col-md-2 control-label" for="cashback">入职期满金额：</label>
 				<div class="col-md-4" >
 					${recruitment.cashback}

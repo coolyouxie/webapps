@@ -55,6 +55,13 @@ public class Recruitment extends Entity{
      * 岗位职责
      */
     private String jobBriefs;
+    
+    /**
+     * 是否作为banner展示
+     */
+    private Integer isBanner;
+    
+    private Picture picture;
 
     public Company getCompany() {
         return company;
@@ -246,6 +253,22 @@ public class Recruitment extends Entity{
 
 	public void setJobBriefs(String jobBriefs) {
 		this.jobBriefs = jobBriefs;
+	}
+
+	public Integer getIsBanner() {
+		return isBanner;
+	}
+
+	public void setIsBanner(Integer isBanner) {
+		this.isBanner = isBanner;
+	}
+
+	public Picture getPicture() {
+		return picture;
+	}
+
+	public void setPicture(Picture picture) {
+		this.picture = picture;
 	}
 
 }

@@ -21,6 +21,7 @@
 		<result column="UPDATE_TIME" jdbcType="VARCHAR" property="updateTime" />
 		<result column="type" jdbcType="VARCHAR" property="type" />
 		<result column="company_size" jdbcType="VARCHAR" property="companySize" />
+		<result column="is_banner" jdbcType="DECIMAL" property="isBanner" />
 	</resultMap>
 
 
@@ -42,7 +43,8 @@
 		briefs,
 		environment,
 		type,
-		company_size
+		company_size,
+		is_banner
 	</sql>
 
 	<sql id="insert_columns">
@@ -61,7 +63,8 @@
 		briefs,
 		environment,
 		type,
-		company_size
+		company_size,
+		is_banner
 	</sql>
 
 	<select id="getById" resultMap="resultMap">
@@ -95,7 +98,8 @@
 			<if test="obj.type != null and obj.type !=''">
 				type = #{obj.type},
 			</if>
-			update_time = #{obj.updateTime}
+			update_time = #{obj.updateTime},
+			is_banner = #{obj.isBanner}
 		</set>
 		WHERE ID = #{id,jdbcType=DECIMAL}
 	</update>
@@ -169,7 +173,8 @@
 			#{obj.briefs},
 			#{obj.environment},
 			#{obj.type},
-			#{obj.companySize}
+			#{obj.companySize},
+			#{obj.isBanner}
 		)
 	</insert>
 </mapper>
