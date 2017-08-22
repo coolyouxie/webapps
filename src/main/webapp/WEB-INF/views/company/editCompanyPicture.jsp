@@ -100,8 +100,8 @@ function search(){
 								name : 'title',
 								align : 'center',
 								sortable : false,
-								formatter:function(cellvalue,options,rowObject){
-									return '<a href="${ctx}/company/getById?id='+rowObject.id+'" style="color:blue">'+cellvalue+'</a>';
+								formatter:function(cellValue,options,rowObject){
+									return '<a href="${ctx}/company/getById?id='+rowObject.fkId+'" style="color:blue">'+cellValue+'</a>';
 								}
 							}, {
 								label : 'type',
