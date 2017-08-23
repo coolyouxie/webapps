@@ -55,11 +55,58 @@
 					});;
 				}
 		});
+		loadProvince("province");
 	});
 	
 	function showModal(){
 		$("#msgModal").modal("show");
 	}
+	
+	function loadProvince(type){
+		var parentId = 0;
+		if(type!="province"){
+			if(type=="city"){
+				parentId = $("#province").val();
+			}else if(type=="area"){
+				parentId = $("#city").val();
+			}
+		}
+		if(type=="city"){
+			if($("#province").val()==-1){
+				$("#city").empty();
+				$("#city").append("<option value='-1'>-请选择-</option>");
+				$("#area").empty();
+				$("#area").append("<option value='-1'>-请选择-</option>");
+				return ;
+			}
+		}
+		if(type=="area"){
+			if($("#city").val()==-1){
+				$("#area").empty();
+				$("#area").append("<option value='-1'>-请选择-</option>");
+				return ;
+			}
+		}
+		$.ajax({
+			url:"${ctx}/province/queryProvinceByParentId",
+			type:"POST",
+			dataType:"JSON",
+			data:{
+				parentId:parentId
+			},
+			success:function(response){
+				if(response&&response.result=="S"){
+					var provinces = response.data;
+					$("#"+type).empty();
+					$("#"+type).append("<option value='-1'>-请选择-</option>");
+					for(var i=0;i<provinces.length;i++){
+						$("#"+type).append("<option value='"+provinces[i].id+"'>"+provinces[i].name+"</option>");
+					}
+				}
+			}
+		})
+	}
+	
 </script>
 </head>
 <body>
@@ -101,6 +148,20 @@
 				<label class="col-md-2 control-label" for="name">公司名称：</label>
 				<div class="col-md-4" >
 					<input type="text" id="name" name="name" class="form-control" placeholder="请输入公司名称" >
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-md-2 control-label" for="name">公司地址：</label>
+				<div class="col-md-4" >
+					<select id="province" name="province" onchange="loadProvince('city')" >
+					</select>
+					<select id="city" name="city" onchange="loadProvince('area')" >
+						<option value="-1">-请选择-</option>
+					</select>
+					<select id="area" name="area" >
+						<option value="-1">-请选择-</option>
+					</select>
+					<input type="text" id="name" name="name" class="form-control" placeholder="请输入详细地址" >
 				</div>
 			</div>
 			

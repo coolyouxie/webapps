@@ -2,6 +2,7 @@ package com.webapps.service;
 
 import java.util.List;
 
+import com.webapps.common.bean.ResultDto;
 import com.webapps.common.entity.Province;
 
 public interface IProvinceService {
@@ -21,7 +22,7 @@ public interface IProvinceService {
 	 * @return
 	 * @throws Exception
 	 */
-	public List<Province> queryProvinceByParentId(Integer parentId)throws Exception;
+	public ResultDto<List<Province>> queryProvinceByParentId(Integer parentId);
 	
 	/**
 	 * 根据行政区等级查询行政区信息
@@ -29,6 +30,6 @@ public interface IProvinceService {
 	 * @return
 	 * @throws Exception
 	 */
-	public List<Province> queryProvinceByLevel(Integer level)throws Exception;
+	public ResultDto<List<Province>> queryProvinceByLevel(Integer level);
 
 }

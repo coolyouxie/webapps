@@ -13,12 +13,12 @@ import com.webapps.common.form.ProvinceRequestForm;
  */
 public interface IProvinceMapper extends IBaseMapper<Province>{
 	
-	public Province getByCode(String code);
+	public Province getByCode(String code) throws Exception;
 	
-	public int batchUpdate(List<Province> list);
+	public int batchUpdate(List<Province> list) throws Exception;
 	
-	public List<Province> queryByParentId(Integer parentId);
+	public List<Province> queryByParentId(Integer parentId) throws Exception;
 	
-	public List<Province> queryByLevel(Integer level);
+	public List<Province> queryByLevel(Integer level) throws Exception;
 
 }

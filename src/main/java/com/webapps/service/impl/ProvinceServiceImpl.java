@@ -2,20 +2,21 @@ package com.webapps.service.impl;
 
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.webapps.common.bean.Page;
+import com.webapps.common.bean.ResultDto;
 import com.webapps.common.entity.Province;
-import com.webapps.common.entity.User;
-import com.webapps.common.form.UserRequestForm;
 import com.webapps.mapper.IProvinceMapper;
 import com.webapps.service.IProvinceService;
 
 @Service
 @Transactional
 public class ProvinceServiceImpl implements IProvinceService {
+	
+	private static Logger logger = Logger.getLogger(ProvinceServiceImpl.class);
 	
 	@Autowired
 	private IProvinceMapper iProvinceMapper;
@@ -49,15 +50,36 @@ public class ProvinceServiceImpl implements IProvinceService {
 	}
 
 	@Override
-	public List<Province> queryProvinceByParentId(Integer parentId) throws Exception {
-		List<Province> list = iProvinceMapper.queryByParentId(parentId);
-		return list;
+	public ResultDto<List<Province>> queryProvinceByParentId(Integer parentId) {
+		ResultDto<List<Province>> dto = new ResultDto<List<Province>>();
+		List<Province> list = null;
+		try {
+			list = iProvinceMapper.queryByParentId(parentId);
+			dto.setData(list);
+			dto.setResult("S");
+		} catch (Exception e) {
+			logger.error("根据上级行政区ID查询等政区信息异常："+e.getMessage());
+			dto.setErrorMsg("根据上级行政区ID查询等政区信息异常");
+			dto.setResult("F");
+		}
+		
+		return dto;
 	}
 
 	@Override
-	public List<Province> queryProvinceByLevel(Integer level) throws Exception {
-		List<Province> list = iProvinceMapper.queryByLevel(level);
-		return list;
+	public ResultDto<List<Province>> queryProvinceByLevel(Integer level) {
+		ResultDto<List<Province>> dto = new ResultDto<List<Province>>();
+		List<Province> list = null;
+		try {
+			list = iProvinceMapper.queryByLevel(level);
+			dto.setData(list);
+			dto.setResult("S");
+		} catch (Exception e) {
+			logger.error("根据等级查询等政区信息异常："+e.getMessage());
+			dto.setErrorMsg("根据等级查询等政区信息异常");
+			dto.setResult("F");
+		}
+		return dto;
 	}
 
 }

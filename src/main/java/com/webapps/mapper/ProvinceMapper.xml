@@ -16,17 +16,12 @@
 	</resultMap>
 
 	<sql id="select_columns">
-		ID,level,code,parentId,name, longitude, latitude,data_state,CREATE_TIME,UPDATE_TIME
+		ID,level,code,parent_Id,name, longitude, latitude,data_state,CREATE_TIME,UPDATE_TIME
 	</sql>
 
 	<sql id="insert_columns">
-		level,code,parentId,name, longitude, latitude,data_state,CREATE_TIME
+		level,code,parent_Id,name, longitude, latitude,data_state,CREATE_TIME
 	</sql>
-	
-	<sql id="update_columns">
-		level,code,parentId,name, longitude, latitude,data_state,update_time
-	</sql>
-
 	
 	<select id="getById" resultMap="resultMap">
 		select <include refid="select_columns" /> from t_province where id = #{id}
