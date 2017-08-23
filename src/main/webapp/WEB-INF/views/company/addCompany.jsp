@@ -96,7 +96,7 @@
 		</div>
 		<form id="saveForm" class="form-horizontal" action="${ctx}/company/saveCompany"  method="post">
 			<input type="hidden" id="handleType" name="handleType" value="add_next">
-			<input type="hidden" id="picUrl" name="picture.picUrl" value="">
+			<input type="hidden" id="picUrl" name="bannerConfig.picUrl" value="">
 			<div class="form-group">
 				<label class="col-md-2 control-label" for="name">公司名称：</label>
 				<div class="col-md-4" >

@@ -100,7 +100,7 @@ function showModal(){
 			<input type="hidden" id="handleType" name="handleType" value="${handleType}">
 			<input type="hidden" id="id" name="id" value="${recruitment.id}">
 			<input type="hidden" id="companyId" name="company.id" value="${recruitment.company.id}" >
-			<input type="hidden" id="picUrl" name="picture.picUrl" value="${recruitment.picture.picUrl}">
+			<input type="hidden" id="picUrl" name="bannerConfig.picUrl" value="${recruitment.bannerConfig.picUrl}">
 			<div class="form-group">
 				<label class="col-md-2 control-label" for="">公司名称：</label>
 				<div class="col-md-4" >

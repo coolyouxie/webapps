@@ -153,8 +153,8 @@
 									return result;
 								}
 							}, {
-								label : 'picture.picUrl',
-								name : 'picture.picUrl',
+								label : 'bannerConfig.picUrl',
+								name : 'bannerConfig.picUrl',
 								align : 'center',
 								sortable : false,
 								formatter:function(cellValue,options,rowObject){

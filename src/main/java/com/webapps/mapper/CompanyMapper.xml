@@ -22,9 +22,9 @@
 		<result column="type" jdbcType="VARCHAR" property="type" />
 		<result column="company_size" jdbcType="VARCHAR" property="companySize" />
 		<result column="is_banner" jdbcType="DECIMAL" property="isBanner" />
-		<result column="pic_id" jdbcType="DECIMAL" property="picture.id" />
-		<result column="pic_type" jdbcType="DECIMAL" property="picture.type" />
-		<result column="pic_url" jdbcType="DECIMAL" property="picture.picUrl" />
+		<result column="banner_id" jdbcType="DECIMAL" property="bannerConfig.id" />
+		<result column="banner_type" jdbcType="DECIMAL" property="bannerConfig.type" />
+		<result column="pic_url" jdbcType="DECIMAL" property="bannerConfig.picUrl" />
 	</resultMap>
 
 
@@ -72,11 +72,11 @@
 
 	<select id="getById" resultMap="resultMap">
 		select <include refid="select_columns" />,
-		tp.id as pic_id,
-		tp.pic_url as pic_url,
-		tp.type as pic_type 
+		tbc.id as banner_id,
+		tbc.pic_url as pic_url,
+		tbc.type as banner_type 
 		from t_company tc 
-		left join t_picture tp on tc.id = tp.fk_id and tp.type=6 and tp.data_state = 1
+		left join t_banner_config tbc on tc.id = tbc.fk_id and tbc.type=3 and tbc.data_state = 1
 		where tc.id = #{id}
 	</select>
 
@@ -115,7 +115,7 @@
 
 	<select id="queryCount" resultType="java.lang.Integer">
 		SELECT count(1) FROM t_company tc
-		left join t_picture tp on tc.id = tp.fk_id and tp.type=6 and tp.data_state = 1
+		left join t_banner_config tbc on tc.id = tbc.fk_id and tbc.type=3 and tbc.data_state = 1
 		<trim prefix="WHERE" prefixOverrides="AND">
 			tc.data_state = 1
 			<if test="obj.keyWords !=null and obj.keyWords != ''">
@@ -132,11 +132,11 @@
 		<include refid="ORACLE.paginationStart" />
 		SELECT
 		<include refid="select_columns" />,
-		tp.id as pic_id,
-		tp.pic_url as pic_url,
-		tp.type as pic_type 
+		tbc.id as banner_id,
+		tbc.pic_url as pic_url,
+		tbc.type as banner_type 
 		FROM t_company tc
-		left join t_picture tp on tc.id = tp.fk_id and tp.type=6 and tp.data_state = 1
+		left join t_banner_config tbc on tc.id = tbc.fk_id and tbc.type=3 and tbc.data_state = 1
 		<trim prefix="WHERE" prefixOverrides="AND">
 			tc.data_state = 1
 			<if test="obj.name !=null and obj.name != ''">

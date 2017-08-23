@@ -34,7 +34,7 @@ public class Company extends Entity{
      */
     private Integer isBanner;
     
-    private Picture picture;
+    private BannerConfig bannerConfig;
 
     public String getName() {
         return name;
@@ -164,12 +164,12 @@ public class Company extends Entity{
 		this.isBanner = isBanner;
 	}
 
-	public Picture getPicture() {
-		return picture;
+	public BannerConfig getBannerConfig() {
+		return bannerConfig;
 	}
 
-	public void setPicture(Picture picture) {
-		this.picture = picture;
+	public void setBannerConfig(BannerConfig bannerConfig) {
+		this.bannerConfig = bannerConfig;
 	}
 
 }

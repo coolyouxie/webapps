@@ -148,7 +148,7 @@
 				<div class="form-group">
 					<label class="col-md-2 control-label">Banner图片：</label>
 					<div class="col-md-4" >
-						<img src="${recruitment.picture.picUrl}" style="width:120px;" />
+						<img src="${recruitment.bannerConfig.picUrl}" style="width:120px;" />
 					</div>
 				</div>
 			</c:if>

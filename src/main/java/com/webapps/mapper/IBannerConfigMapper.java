@@ -2,6 +2,8 @@ package com.webapps.mapper;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.webapps.common.entity.BannerConfig;
 import com.webapps.common.form.BannerConfigRequestForm;
 
@@ -10,4 +12,7 @@ import com.webapps.common.form.BannerConfigRequestForm;
  */
 public interface IBannerConfigMapper extends IBaseMapper<BannerConfig>,IPageMapper<BannerConfig,BannerConfigRequestForm>{
 	
+	public List<BannerConfig> getByFkIdAndType(@Param("fkId")Integer fkId,@Param("type")Integer type)throws Exception;
+	
+	public int batchDeleteInLogic(List<BannerConfig> list)throws Exception;
 }

@@ -13,6 +13,8 @@ public class BannerConfig extends Entity {
 	private Company company;
 	
 	private Recruitment recruitment;
+	
+	private Integer fkId;
 
 	public String getTitle() {
 		return title;
@@ -60,6 +62,14 @@ public class BannerConfig extends Entity {
 
 	public void setRecruitment(Recruitment recruitment) {
 		this.recruitment = recruitment;
+	}
+
+	public Integer getFkId() {
+		return fkId;
+	}
+
+	public void setFkId(Integer fkId) {
+		this.fkId = fkId;
 	}
 	
 	

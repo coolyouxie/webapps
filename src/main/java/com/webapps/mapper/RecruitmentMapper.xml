@@ -34,9 +34,9 @@
 		<result column="job_briefs" jdbcType="VARCHAR" property="jobBriefs" />
 		<result column="company_name" jdbcType="VARCHAR" property="company.name" />
 		<result column="is_banner" jdbcType="DECIMAL" property="isBanner" />
-		<result column="pic_id" jdbcType="DECIMAL" property="picture.id" />
-		<result column="pic_type" jdbcType="DECIMAL" property="picture.type" />
-		<result column="pic_url" jdbcType="DECIMAL" property="picture.picUrl" />
+		<result column="banner_id" jdbcType="DECIMAL" property="bannerConfig.id" />
+		<result column="banner_type" jdbcType="DECIMAL" property="bannerConfig.type" />
+		<result column="pic_url" jdbcType="DECIMAL" property="bannerConfig.picUrl" />
 	</resultMap>
 
 	<sql id="select_columns">
@@ -103,11 +103,11 @@
 	
 	<select id="getById" resultMap="resultMap">
 		select <include refid="select_columns" />,
-		tp.id as pic_id,
-		tp.pic_url as pic_url,
-		tp.type as pic_type 
+		tbc.id as banner_id,
+		tbc.pic_url as pic_url,
+		tbc.type as banner_type 
 		from t_Recruitment tr 
-		left join t_picture tp on tp.fk_id = tr.id and tp.type = 7 and tp.data_state = 1
+		left join t_banner_config tbc on tbc.fk_id = tr.id and tbc.type = 4 and tbc.data_state = 1
 		where tr.id = #{id}
 	</select>
 	
@@ -125,7 +125,7 @@
 	<select id="queryCount" resultType="java.lang.Integer">
 		SELECT count(1) FROM t_Recruitment tr
 		left join t_company tc on tr.company_id = tc.id
-		left join t_picture tp on tp.fk_id = tr.id and tp.type = 7 and tp.data_state = 1
+		left join t_banner_config tbc on tbc.fk_id = tr.id and tbc.type = 4 and tbc.data_state = 1
 		<trim prefix="WHERE" prefixOverrides="AND">
 			<if test="obj.title !=null and obj.title != ''">
 				AND tr.title like concat('%',#{obj.title},'%')
@@ -157,12 +157,12 @@
 		SELECT
 		<include refid="select_columns" />,
 		tc.name as company_name,
-		tp.fk_id as pic_id,
-		tp.pic_url as pic_url,
-		tp.type as pic_type
+		tbc.fk_id as banner_id,
+		tbc.pic_url as pic_url,
+		tbc.type as banner_type
 		FROM t_Recruitment tr
 		left join t_company tc on tr.company_id = tc.id
-		left join t_picture tp on tp.fk_id = tr.id and tp.type=7 and tp.data_state = 1
+		left join t_banner_config tbc on tbc.fk_id = tr.id and tbc.type=4 and tbc.data_state = 1
 		<trim prefix="WHERE" prefixOverrides="AND">
 			<if test="obj.title !=null and obj.title != ''">
 				AND tr.title like concat('%',#{obj.title},'%')

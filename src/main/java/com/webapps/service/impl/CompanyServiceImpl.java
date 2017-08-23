@@ -11,10 +11,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.webapps.common.bean.Page;
 import com.webapps.common.bean.ResultDto;
+import com.webapps.common.entity.BannerConfig;
 import com.webapps.common.entity.Company;
 import com.webapps.common.entity.Picture;
 import com.webapps.common.form.CompanyRequestForm;
-import com.webapps.common.form.RecruitmentRequestForm;
+import com.webapps.mapper.IBannerConfigMapper;
 import com.webapps.mapper.ICompanyMapper;
 import com.webapps.mapper.IPictureMapper;
 import com.webapps.service.ICompanyService;
@@ -30,6 +31,9 @@ public class CompanyServiceImpl implements ICompanyService {
 	
 	@Autowired
 	private IPictureMapper iPictureMapper;
+	
+	@Autowired
+	private IBannerConfigMapper iBannerConfigMapper;
 
 	@Override
 	public Page loadCompanyList(Page page, CompanyRequestForm company) throws Exception {
@@ -62,7 +66,7 @@ public class CompanyServiceImpl implements ICompanyService {
 				dto.setErrorMsg("更新公司信息失败");
 				return dto;
 			}
-			ResultDto<Picture> dto1 = saveBannerPicture(company);
+			ResultDto<BannerConfig> dto1 = saveBannerPicture(company);
 			if("S".equals(dto1.getResult())){
 				dto.setResult("update_success");
 				dto.setData(company);
@@ -80,7 +84,7 @@ public class CompanyServiceImpl implements ICompanyService {
 					dto.setErrorMsg("新增失败");
 					return dto;
 				}
-				ResultDto<Picture> dto1 = saveBannerPicture(company);
+				ResultDto<BannerConfig> dto1 = saveBannerPicture(company);
 				if("S".equals(dto1.getResult())){
 					dto.setResult("insert_success");
 					dto.setData(company);
@@ -99,37 +103,55 @@ public class CompanyServiceImpl implements ICompanyService {
 		return dto;
 	}
 	
-	private ResultDto<Picture> saveBannerPicture(Company form){
-		ResultDto<Picture> dto = new ResultDto<Picture>();
+	private ResultDto<BannerConfig> saveBannerPicture(Company form){
+		ResultDto<BannerConfig> dto = new ResultDto<BannerConfig>();
 		try {
-			//找到老的banner图片，置为删除状态
-			List<Picture> list = iPictureMapper.queryListByFkIdAndType(form.getId(), 6);
+			List<BannerConfig> list = iBannerConfigMapper.getByFkIdAndType(form.getId(), 3);
 			if(CollectionUtils.isNotEmpty(list)){
-				iPictureMapper.batchDeleteInLogic(list);
+				if(form.getIsBanner()==2){
+					int count = iBannerConfigMapper.batchDeleteInLogic(list);
+					if(count==list.size()){
+						dto.setResult("S");
+					}else{
+						dto.setResult("F");
+						dto.setErrorMsg("删除banner数据时出错");
+					}
+					return dto;
+				}
+				BannerConfig bc = list.get(0);
+				bc.setPicUrl(form.getBannerConfig().getPicUrl());
+				int result = iBannerConfigMapper.updateById(bc.getId(), bc);
+				if(result==1){
+					dto.setResult("S");
+					dto.setData(bc);
+				}else{
+					dto.setErrorMsg("更新发布单banner信息出错");
+					dto.setResult("F");
+				}
+				return dto;
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			dto.setResult("F");
-			dto.setErrorMsg("删除发布单老banner图片时异常");
+			BannerConfig bc = new BannerConfig();
+			bc.setUpdateTime(null);
+			bc.setDataState(1);
+			bc.setPicUrl(form.getBannerConfig().getPicUrl());
+			bc.setFkId(form.getId());
+			bc.setTitle(form.getName());
+			bc.setType(3);
+			int result = iBannerConfigMapper.insert(bc);
+			if(result==1){
+				dto.setResult("S");
+				dto.setData(bc);
+			}else{
+				dto.setErrorMsg("保存发布单banner信息出错");
+				dto.setResult("F");
+			}
 			return dto;
-		}
-		//保存新的图片
-		Picture p = new Picture();
-		p.setDataState(1);
-		p.setFkId(form.getId());
-		p.setPicUrl(form.getPicture().getPicUrl());
-		p.setType(6);
-		p.setTitle(form.getName());
-		p.setRemark("公司banner图片");
-		int result = iPictureMapper.insert(p);
-		if(result == 1 ){
-			dto.setData(p);
-			dto.setResult("S");
-		}else{
-			dto.setErrorMsg("保存发布单banner图片失败");
+		} catch (Exception e) {
+			logger.error("保存或更新发布单banner信息异常："+e.getMessage());
 			dto.setResult("F");
+			dto.setErrorMsg("保存或更新发布单banner信息异常");
 		}
-		return dto;
+		return null;
 	}
 
 	@Override

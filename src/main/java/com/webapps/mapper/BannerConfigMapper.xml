@@ -8,21 +8,20 @@
 		<result column="pic_url" jdbcType="VARCHAR" property="picUrl" />
 		<result column="content_url" jdbcType="VARCHAR" property="contentUrl" />
 		<result column="type" jdbcType="DECIMAL" property="type" />
-		<result column="company_id" jdbcType="DECIMAL" property="company.id" />
-		<result column="comapny_name" jdbcType="VARCHAR" property="company.name" />
-		<result column="recruitment_id" jdbcType="DECIMAL" property="recruitment.id" />
-		<result column="recruitment_title" jdbcType="VARCHAR" property="recruitment.title" />
+		<result column="fk_id" jdbcType="DECIMAL" property="fkId" />
+		<result column="company_name" jdbcType="DECIMAL" property="company.name" />
+		<result column="recruitment_title" jdbcType="DECIMAL" property="recruitment.title" />
 		<result column="data_state" jdbcType="DECIMAL" property="dataState" />
 		<result column="create_time" jdbcType="VARCHAR" property="createTime" />
 		<result column="UPDATE_TIME" jdbcType="VARCHAR" property="updateTime" />
 	</resultMap>
 
 	<sql id="select_columns">
-		tbc.ID,tbc.title,tbc.pic_url,tbc.content_url,tbc.type, tbc.data_state,tbc.CREATE_TIME,tbc.UPDATE_TIME
+		tbc.ID,tbc.title,tbc.pic_url,tbc.content_url,tbc.type, tbc.data_state,tbc.CREATE_TIME,tbc.UPDATE_TIME,tbc.fk_id
 	</sql>
 
 	<sql id="insert_columns">
-		title,pic_url,content_url,type, data_state,CREATE_TIME
+		title,pic_url,content_url,type, data_state,CREATE_TIME,fk_id
 	</sql>
 	
 	<select id="getById" resultMap="resultMap">
@@ -62,28 +61,43 @@
 		tc.id as company_id,tc.name as company_name,
 		tr.id as recruitment_id,tr.title as recruitment_title
 		FROM t_banner_config tbc 
-		left join t_company tc on tc.id = tbc.company_id
-		left join t_recruitment tr on tr.id = tbc.recruitment_id
+		left join t_company tc on tc.id = tbc.fk_id and tbc.type = 3
+		left join t_recruitment tr on tr.id = tbc.fk_id and tbc.type = 4
 		<trim prefix="WHERE" prefixOverrides="AND">
 			tbc.data_state = 1 
 			<if test="obj.keyWords !=null and obj.keyWords != ''">
 				AND tbc.title like concat('%',#{obj.keyWords},'%')
 			</if>
 			<if test="obj.type != null and obj.type != ''">
-				and tbc.type = #{obj.type,jdbcType=DECIMAL}
+				AND tbc.type = #{obj.type,jdbcType=DECIMAL}
 			</if>
 		</trim>
 		order by name
 		<include refid="ORACLE.paginationEnd" />
 	</select>
 	
+	<select id="getByFkIdAndType" resultMap="resultMap">
+		select * from t_banner_config where fk_id = #{fkId} and type = #{type}
+	</select>
+	
 	<!-- 用于初始化数据时使用 -->
-	<update id="batchUpdate">
+	<update id="batchUpdate" >
 		<foreach collection="list" item="item" index="index" open="" close="" separator=";">
 			update t_banner_config
 			<set>
 				parent_id=#{item.parentId},
 				type = #{item.type}
+			</set>
+			where id = #{item.id}
+         </foreach>
+	</update>
+	
+	<update id="batchDeleteInLogic" >
+		<foreach collection="list" item="item" index="index" open="" close="" separator=";">
+			update t_banner_config
+			<set>
+				data_state = 0,
+				update_time = #{item.updateTime}
 			</set>
 			where id = #{item.id}
          </foreach>
@@ -99,11 +113,12 @@
 			#{obj.contentUrl},
 			#{obj.type},
 			#{obj.dataState},
-			now()
+			#{obj.createTime},
+			#{obj.fkId}
 		)
 	</insert>
 	
-	<update id="updateById">
+	<update id="updateById" >
 		update t_banner_config set
 		title=#{obj.title},
 		pic_url=#{obj.picUrl},
@@ -114,7 +129,7 @@
 		where id=#{id}
 	</update>
 	
-	<update id="deleteByIdInLogic">
+	<update id="deleteByIdInLogic" >
 		update t_banner_config
 		set data_state = 0,
 		update_time = now()

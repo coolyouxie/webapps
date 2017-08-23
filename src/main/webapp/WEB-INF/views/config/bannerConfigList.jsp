@@ -60,10 +60,9 @@
 								sortable : false,
 								formatter:function(cellValue,options,rowObject){
 									if(rowObject!=null){
-										if(rowObject.company){
-											return '<a href="${ctx}/company/getById?id='+rowObject.company.id+'" style="color:blue;">'+cellValue+'</a>';
+										if(rowObject.type==3){
+											return '<a href="${ctx}/company/getById?id='+rowObject.fkId+'" style="color:blue;">'+rowObject.company.name+'</a>';
 										}
-										return "";
 									}
 									return "";
 								}
@@ -74,8 +73,8 @@
 								sortable : false,
 								formatter:function(cellValue,options,rowObject){
 									if(rowObject){
-										if(rowObject.recruitment){
-											return '<a href="${ctx}/recruitment/getById?id='+rowObject.recruitment.id+'" style="color:blue">'+cellValue+'</a>';
+										if(rowObject.type==4){
+											return '<a href="${ctx}/recruitment/getById?id='+rowObject.fkId+'" style="color:blue">'+rowObject.recruitment.title+'</a>';
 										}
 									}
 									return "";

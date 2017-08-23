@@ -100,7 +100,7 @@
 		<form id="saveForm" class="form-horizontal" action="${ctx}/recruitment/saveRecruitment"  method="post">
 			<input type="hidden" id="handleType" name="handleType" value="add">
 			<input type="hidden" id="companyId" name="company.id" value="${company.id}" >
-			<input type="hidden" id="picUrl" name="picture.picUrl" value="">
+			<input type="hidden" id="picUrl" name="bannerConfig.picUrl" value="">
 			<div class="form-group">
 				<label class="col-md-2 control-label" for="">公司名称：</label>
 				<div class="col-md-4" >

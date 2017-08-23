@@ -101,7 +101,7 @@
 		</div>
 		<form id="saveForm" class="form-horizontal" action="${ctx}/company/saveCompany" method="post">
 			<input type="hidden" id="id" name="id" value="${company.id}">
-			<input type="hidden" id="picUrl" name="picture.picUrl" value="${company.picture.picUrl }">
+			<input type="hidden" id="picUrl" name="bannerConfig.picUrl" value="${company.bannerConfig.picUrl }">
 			<input type="hidden" id="handleType" name="handleType" value="edit_save">
 			<div class="form-group">
 				<label class="col-md-2 control-label" for="name">公司名称：</label>

@@ -3,16 +3,19 @@ package com.webapps.service.impl;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.webapps.common.bean.Page;
 import com.webapps.common.bean.ResultDto;
+import com.webapps.common.entity.BannerConfig;
 import com.webapps.common.entity.Company;
 import com.webapps.common.entity.Picture;
 import com.webapps.common.entity.Recruitment;
 import com.webapps.common.form.RecruitmentRequestForm;
+import com.webapps.mapper.IBannerConfigMapper;
 import com.webapps.mapper.ICompanyMapper;
 import com.webapps.mapper.IPictureMapper;
 import com.webapps.mapper.IRecruitmentMapper;
@@ -22,6 +25,8 @@ import com.webapps.service.IRecruitmentService;
 @Transactional
 public class RecruitmentServiceImpl implements IRecruitmentService {
 	
+	private static Logger logger = Logger.getLogger(RecruitmentServiceImpl.class);
+	
 	@Autowired
 	private IRecruitmentMapper iRecruitmentMapper;
 	
@@ -30,6 +35,9 @@ public class RecruitmentServiceImpl implements IRecruitmentService {
 	
 	@Autowired
 	private IPictureMapper iPictureMapper;
+	
+	@Autowired
+	private IBannerConfigMapper iBannerConfigMapper;
 
 	@Override
 	public ResultDto<RecruitmentRequestForm> saveRecruitment(RecruitmentRequestForm form) {
@@ -52,16 +60,68 @@ public class RecruitmentServiceImpl implements IRecruitmentService {
 			dto.setResult("F");
 		}else{
 			dto.setResult("S");
-			ResultDto<Picture> dto1 = saveBannerPicture(form);
-			if("F".equals(dto1.getResult())){
+			ResultDto<BannerConfig> dto2 = saveBannerForRecruitment(form);
+			if("F".equals(dto2.getResult())){
 				dto.setResult("F");
-				dto.setResult(dto1.getResult());
+				dto.setResult(dto2.getResult());
 			}
 		}
 		dto.setData(form);
 		return dto;
 	}
 	
+	private ResultDto<BannerConfig> saveBannerForRecruitment(RecruitmentRequestForm form){
+		ResultDto<BannerConfig> dto = new ResultDto<BannerConfig>();
+		try {
+			List<BannerConfig> list = iBannerConfigMapper.getByFkIdAndType(form.getId(), 4);
+			if(CollectionUtils.isNotEmpty(list)){
+				if(form.getIsBanner()==2){
+					int count = iBannerConfigMapper.batchDeleteInLogic(list);
+					if(count==list.size()){
+						dto.setResult("S");
+					}else{
+						dto.setResult("F");
+						dto.setErrorMsg("删除banner数据时出错");
+					}
+					return dto;
+				}
+				BannerConfig bc = list.get(0);
+				bc.setPicUrl(form.getBannerConfig().getPicUrl());
+				int result = iBannerConfigMapper.updateById(bc.getId(), bc);
+				if(result==1){
+					dto.setResult("S");
+					dto.setData(bc);
+				}else{
+					dto.setErrorMsg("更新发布单banner信息出错");
+					dto.setResult("F");
+				}
+				return dto;
+			}
+			BannerConfig bc = new BannerConfig();
+			bc.setUpdateTime(null);
+			bc.setDataState(1);
+			bc.setPicUrl(form.getBannerConfig().getPicUrl());
+			bc.setFkId(form.getId());
+			bc.setTitle(form.getTitle());
+			bc.setType(4);
+			int result = iBannerConfigMapper.insert(bc);
+			if(result==1){
+				dto.setResult("S");
+				dto.setData(bc);
+			}else{
+				dto.setErrorMsg("保存发布单banner信息出错");
+				dto.setResult("F");
+			}
+			return dto;
+		} catch (Exception e) {
+			logger.error("保存或更新发布单banner信息异常："+e.getMessage());
+			dto.setResult("F");
+			dto.setErrorMsg("保存或更新发布单banner信息异常");
+		}
+		return null;
+	}
+	
+	@SuppressWarnings("unused")
 	private ResultDto<Picture> saveBannerPicture(RecruitmentRequestForm form){
 		ResultDto<Picture> dto = new ResultDto<Picture>();
 		try {
@@ -80,7 +140,7 @@ public class RecruitmentServiceImpl implements IRecruitmentService {
 		Picture p = new Picture();
 		p.setDataState(1);
 		p.setFkId(form.getId());
-		p.setPicUrl(form.getPicture().getPicUrl());
+		p.setPicUrl(form.getBannerConfig().getPicUrl());
 		p.setType(7);
 		p.setTitle(form.getTitle());
 		p.setRemark("发布单banner图片");
