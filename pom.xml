@@ -134,11 +134,6 @@
 			<artifactId>mysql-connector-java</artifactId>
 			<version>5.1.37</version>
 		</dependency>
-		<!-- <dependency>
-			<groupId>commons-dbcp</groupId>
-			<artifactId>commons-dbcp</artifactId>
-			<version>1.4</version>
-		</dependency> -->
 		<dependency>
 			<groupId>org.javassist</groupId>
 			<artifactId>javassist</artifactId>
@@ -235,22 +230,34 @@
 		<!-- jstl end -->
 		<!-- gson start -->
 		<dependency>
-            <groupId>com.google.code.gson</groupId>
-            <artifactId>gson</artifactId>
-            <version>2.2.4</version>
-        </dependency>
-        <!-- gson end -->
-        <!-- https://mvnrepository.com/artifact/commons-beanutils/commons-beanutils -->
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+			<version>2.2.4</version>
+		</dependency>
+		<!-- gson end -->
+		<!-- https://mvnrepository.com/artifact/commons-beanutils/commons-beanutils -->
 		<dependency>
-		    <groupId>commons-beanutils</groupId>
-		    <artifactId>commons-beanutils</artifactId>
-		    <version>1.9.3</version>
+			<groupId>commons-beanutils</groupId>
+			<artifactId>commons-beanutils</artifactId>
+			<version>1.9.3</version>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/com.thetransactioncompany/java-property-utils -->
 		<dependency>
-		    <groupId>com.thetransactioncompany</groupId>
-		    <artifactId>java-property-utils</artifactId>
-		    <version>1.9</version>
+			<groupId>com.thetransactioncompany</groupId>
+			<artifactId>java-property-utils</artifactId>
+			<version>1.9</version>
+		</dependency>
+		<!-- 阿里云短信验证时需要的核心SDK，基本上阿里的服务都需要这个JAR包 -->
+		<dependency>
+			<groupId>com.aliyun</groupId>
+			<artifactId>aliyun-java-sdk-core</artifactId>
+			<version>3.2.3</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.aliyun</groupId>
+			<artifactId>aliyun-java-sdk-dysmsapi</artifactId>
+			<version>1.0.0-SANPSHOT</version>
 		</dependency>
 	</dependencies>
 	<build>

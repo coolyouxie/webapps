@@ -8,12 +8,15 @@ import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.aliyuncs.dysmsapi.model.v20170525.SendSmsResponse;
+import com.aliyuncs.exceptions.ClientException;
 import com.webapps.common.bean.Page;
 import com.webapps.common.bean.ResultDto;
 import com.webapps.common.entity.User;
 import com.webapps.common.entity.UserWallet;
 import com.webapps.common.form.UserRequestForm;
 import com.webapps.common.utils.PasswordEncryptUtil;
+import com.webapps.common.utils.SmsUtil;
 import com.webapps.mapper.IUserMapper;
 import com.webapps.mapper.IUserWalletMapper;
 import com.webapps.service.IUserService;
@@ -107,6 +110,11 @@ public class UserServiceImpl implements IUserService {
 		ResultDto<User> dto = new ResultDto<User>();
 		dto.setResult("S");
 		return dto;
+	}
+
+	@Override
+	public ResultDto<String> getSmsValidateMsg(String phoneNum) {
+		return null;
 	}
 	
 	

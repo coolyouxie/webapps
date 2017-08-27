@@ -19,5 +19,7 @@ public interface IUserService {
 	
 	public ResultDto<User> deleteUserById(Integer id) throws Exception;
 	
+	public ResultDto<String> getSmsValidateMsg(String phoneNum);
+	
 
 }

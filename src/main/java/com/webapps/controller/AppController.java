@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.google.gson.Gson;
 import com.webapps.common.bean.Page;
 import com.webapps.common.bean.ResultDto;
+import com.webapps.common.entity.AliSmsMsg;
 import com.webapps.common.entity.BannerConfig;
 import com.webapps.common.entity.Company;
 import com.webapps.common.entity.Enrollment;
@@ -22,6 +23,7 @@ import com.webapps.common.entity.Recruitment;
 import com.webapps.common.form.BannerConfigRequestForm;
 import com.webapps.common.form.RecruitmentRequestForm;
 import com.webapps.common.utils.JSONUtil;
+import com.webapps.service.IAliSmsMsgService;
 import com.webapps.service.IBannerConfigService;
 import com.webapps.service.IEnrollmentService;
 import com.webapps.service.IRecommendService;
@@ -48,6 +50,8 @@ public class AppController {
 	@Autowired
 	private IRecommendService iRecommendService;
 	
+	@Autowired IAliSmsMsgService iAliSmsMsgService;
+	
 	/**
 	 * app端登录接口
 	 * @param params
@@ -61,10 +65,12 @@ public class AppController {
 	}
 	
 	@ResponseBody
-	@RequestMapping(value="/register")
-	public String register(String params){
-		
-		return null;
+	@RequestMapping(value="/register", method=RequestMethod.POST, produces="text/html;charset=UTF-8")
+	public String register(@RequestBody String params){
+		Gson gson = new Gson();
+		AliSmsMsg asm = gson.fromJson(params, AliSmsMsg.class);
+		ResultDto<AliSmsMsg> dto = iAliSmsMsgService.getAliSmsCode(asm.getPhoneNumbers(), asm.getType());
+		return JSONUtil.toJSONString(JSONUtil.toJSONObject(dto));
 	}
 	
 	/**
@@ -75,7 +81,6 @@ public class AppController {
 	@ResponseBody
 	@RequestMapping(value="/getValidatCode")
 	public String getValidatCode(String params){
-		
 		return null;
 	}
 	
