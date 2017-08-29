@@ -61,7 +61,7 @@
 	</select>
 
 	<update id="updateById">
-		UPDATE T_User
+		UPDATE t_user
 		<set>
 			<if test="obj.name != null and obj.name != ''">
 				name = #{obj.name,jdbcType=VARCHAR},
@@ -166,7 +166,7 @@
 	</select>
 
 	<select id="deleteById" resultType="java.lang.Integer">
-		DELETE T_user where id = #{id,jdbcType=DECIMAL}
+		DELETE t_user where id = #{id,jdbcType=DECIMAL}
 	</select>
 	
 	<update id="deleteByIdInLogic">
@@ -175,7 +175,7 @@
 
 
 	<insert id="insert" useGeneratedKeys="true" keyProperty="obj.id">
-		insert into T_user (
+		insert into t_user (
 			<include refid="insert_columns" />
 		)
 		values

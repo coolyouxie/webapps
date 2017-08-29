@@ -9,6 +9,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -112,7 +113,9 @@ public class PictureServiceImpl implements IPictureService {
 		try {
 			List<Picture> list = iPictureMapper.queryListByFkIdAndType(form.getFkId(),form.getType());
 			if(form.getType()==1){
-				iPictureMapper.batchDeleteInLogic(list);
+				if(CollectionUtils.isNotEmpty(list)){
+					iPictureMapper.batchDeleteInLogic(list);
+				}
 			}else if(form.getType()==2&&list.size()>=2){
 				iPictureMapper.deleteInLogicByPicture(list.get(list.size()-1));
 			}
