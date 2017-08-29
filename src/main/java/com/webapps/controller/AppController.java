@@ -65,8 +65,8 @@ public class AppController {
 	}
 	
 	@ResponseBody
-	@RequestMapping(value="/register", method=RequestMethod.POST, produces="text/html;charset=UTF-8")
-	public String register(@RequestBody String params){
+	@RequestMapping(value="/getValidateCode", method=RequestMethod.POST, produces="text/html;charset=UTF-8")
+	public String getValidateCode(@RequestBody String params){
 		Gson gson = new Gson();
 		AliSmsMsg asm = gson.fromJson(params, AliSmsMsg.class);
 		ResultDto<AliSmsMsg> dto = iAliSmsMsgService.getAliSmsCode(asm.getPhoneNumbers(), asm.getType());
