@@ -18,6 +18,7 @@ import com.webapps.common.entity.AliSmsMsg;
 import com.webapps.common.entity.BannerConfig;
 import com.webapps.common.entity.Company;
 import com.webapps.common.entity.Enrollment;
+import com.webapps.common.entity.FeeConfig;
 import com.webapps.common.entity.Recommend;
 import com.webapps.common.entity.Recruitment;
 import com.webapps.common.entity.User;
@@ -28,6 +29,7 @@ import com.webapps.service.IAliSmsMsgService;
 import com.webapps.service.IBannerConfigService;
 import com.webapps.service.ICompanyService;
 import com.webapps.service.IEnrollmentService;
+import com.webapps.service.IFeeConfigService;
 import com.webapps.service.IRecommendService;
 import com.webapps.service.IRecruitmentService;
 import com.webapps.service.IUserService;
@@ -57,9 +59,12 @@ public class AppController {
 
 	@Autowired
 	private IUserService iUserService;
-	
+
 	@Autowired
 	private ICompanyService iCompanyService;
+	
+	@Autowired
+	private IFeeConfigService iFeeConfigService;
 
 	/**
 	 * app端登录接口
@@ -228,6 +233,7 @@ public class AppController {
 	 * @return
 	 */
 	@ResponseBody
+	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/getRecruitmentList", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
 	public String getRecruitmentList(@RequestBody String params) {
 		ResultDto<List<Recruitment>> dto = new ResultDto<List<Recruitment>>();
@@ -297,15 +303,25 @@ public class AppController {
 	@ResponseBody
 	@RequestMapping(value = "/getFeeConfig")
 	public String getFeeConfig(@RequestBody String params) {
-
-		return null;
+		ResultDto<List<FeeConfig>> dto = new ResultDto<List<FeeConfig>>();
+		try {
+			List<FeeConfig> temp = iFeeConfigService.queryAll();
+			dto.setData(temp);
+			dto.setResult("S");
+		} catch (Exception e) {
+			e.printStackTrace();
+			dto.setErrorMsg("查询信息异常，请稍后再试");
+			dto.setResult("F");
+		}
+		return JSONUtil.toJSONString(JSONUtil.toJSONObject(dto));
 	}
 
 	@ResponseBody
-	@RequestMapping(value = "/getBannerConfig")
-	public String getBannerConfig(String params) {
+	@RequestMapping(value = "/getBannerConfig", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
+	public String getBannerConfig(@RequestBody String params) {
 
 		return null;
+
 	}
 
 	@ResponseBody
@@ -392,7 +408,7 @@ public class AppController {
 		ResultDto<User> dto = new ResultDto<User>();
 		try {
 			User ur = iUserService.getById(id);
-			if(ur!=null){
+			if (ur != null) {
 				ur.setPassword(null);
 			}
 			dto.setData(ur);
