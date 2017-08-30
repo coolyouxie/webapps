@@ -72,7 +72,7 @@
 			<if test="obj.idCardNo != null and obj.idCardNo != ''">
 				id_card_no = #{obj.idCardNo,jdbcType=VARCHAR},
 			</if>
-			<if test="obj.gender != null and obj.gender != ''">
+			<if test="obj.gender != null and obj.gender != '' or obj.gender == 0">
 				gender = #{obj.gender,jdbcType=DECIMAL},
 			</if>
 			<if test="obj.password != null and obj.password != '' ">
