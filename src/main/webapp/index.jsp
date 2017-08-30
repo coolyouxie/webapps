@@ -52,6 +52,7 @@
 						<li><a href="${ctx}/recruitment/toRecruitmentPage" target="mainContainer">发布单管理</a></li>
 						<li><a href="${ctx}/feeConfig/toFeeConfigPage" target="mainContainer">配置管理</a></li>
 						<li><a href="${ctx}/bannerConfig/toBannerConfigPage" target="mainContainer">Banner管理</a></li>
+						<li><a href="${ctx}/messageConfig/toMessageConfigPage" target="mainContainer">消息管理</a></li>
 					</ul>
 					 <ul class="nav nav-sidebar">
 						<li><a href="${ctx}/enrollment/toEnrollmentListPage" target="mainContainer">报名列表</a></li>

@@ -1,5 +1,6 @@
 package com.webapps.service.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -13,10 +14,12 @@ import com.webapps.common.bean.Page;
 import com.webapps.common.bean.ResultDto;
 import com.webapps.common.entity.BannerConfig;
 import com.webapps.common.entity.Company;
+import com.webapps.common.entity.MessageConfig;
 import com.webapps.common.entity.Picture;
 import com.webapps.common.form.CompanyRequestForm;
 import com.webapps.mapper.IBannerConfigMapper;
 import com.webapps.mapper.ICompanyMapper;
+import com.webapps.mapper.IMessageConfigMapper;
 import com.webapps.mapper.IPictureMapper;
 import com.webapps.service.ICompanyService;
 
@@ -34,6 +37,9 @@ public class CompanyServiceImpl implements ICompanyService {
 	
 	@Autowired
 	private IBannerConfigMapper iBannerConfigMapper;
+	
+	@Autowired
+	private IMessageConfigMapper iMessageConfigMapper;
 
 	@Override
 	public Page loadCompanyList(Page page, CompanyRequestForm company) throws Exception {
@@ -52,7 +58,14 @@ public class CompanyServiceImpl implements ICompanyService {
 		if(company!=null){
 			List<Picture> pics = iPictureMapper.queryListByFkId(company.getId());
 			company.setPictures(pics);
+			if(company.getIsMessage()==1){
+				List<MessageConfig> messages = iMessageConfigMapper.getByFkIdTypeAndBelongType(id, 3, 2);
+				if(CollectionUtils.isNotEmpty(messages)){
+					company.setMessage(messages.get(0));
+				}
+			}
 		}
+		
 		return company;
 	}
 
@@ -70,6 +83,13 @@ public class CompanyServiceImpl implements ICompanyService {
 			if("S".equals(dto1.getResult())){
 				dto.setResult("update_success");
 				dto.setData(company);
+				if(company.getIsMessage()==1&&company.getMessage()!=null){
+					MessageConfig message = iMessageConfigMapper.getById(company.getMessage().getId());
+					message.setMessage(company.getMessage().getMessage());
+					message.setTitle(company.getMessage().getTitle());
+					message.setUpdateTime(new Date());
+					iMessageConfigMapper.updateById(message.getId(), message);
+				}
 			}else{
 				dto.setResult("update_fail");
 				dto.setErrorMsg("更新公司banner图片失败");
@@ -87,6 +107,18 @@ public class CompanyServiceImpl implements ICompanyService {
 				ResultDto<BannerConfig> dto1 = saveBannerPicture(company);
 				if("S".equals(dto1.getResult())){
 					dto.setResult("insert_success");
+					if(company.getIsMessage()==1&&company.getMessage()!=null){
+						MessageConfig message = new MessageConfig();
+						message.setMessage(company.getMessage().getMessage());
+						message.setTitle(company.getMessage().getTitle());
+						message.setBelongType(1);
+						message.setType(3);
+						message.setCreateTime(new Date());
+						message.setFkId(company.getId());
+						message.setDataState(1);
+						iMessageConfigMapper.insert(message);
+						company.setMessage(message);
+					}
 					dto.setData(company);
 				}else{
 					dto.setResult("insert_fail");

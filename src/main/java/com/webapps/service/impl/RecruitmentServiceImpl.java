@@ -1,5 +1,6 @@
 package com.webapps.service.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -12,11 +13,13 @@ import com.webapps.common.bean.Page;
 import com.webapps.common.bean.ResultDto;
 import com.webapps.common.entity.BannerConfig;
 import com.webapps.common.entity.Company;
+import com.webapps.common.entity.MessageConfig;
 import com.webapps.common.entity.Picture;
 import com.webapps.common.entity.Recruitment;
 import com.webapps.common.form.RecruitmentRequestForm;
 import com.webapps.mapper.IBannerConfigMapper;
 import com.webapps.mapper.ICompanyMapper;
+import com.webapps.mapper.IMessageConfigMapper;
 import com.webapps.mapper.IPictureMapper;
 import com.webapps.mapper.IRecruitmentMapper;
 import com.webapps.service.IRecruitmentService;
@@ -38,6 +41,9 @@ public class RecruitmentServiceImpl implements IRecruitmentService {
 	
 	@Autowired
 	private IBannerConfigMapper iBannerConfigMapper;
+	
+	@Autowired
+	private IMessageConfigMapper iMessageConfigMapper;
 
 	@Override
 	public ResultDto<RecruitmentRequestForm> saveRecruitment(RecruitmentRequestForm form) {
@@ -46,10 +52,30 @@ public class RecruitmentServiceImpl implements IRecruitmentService {
 		String errorMsg = null;
 		if(form.getId()==null){
 			result = iRecruitmentMapper.insert(form);
+			if(form.getIsMessage()==1&&form.getMessage()!=null){
+				MessageConfig message = new MessageConfig();
+				message.setMessage(form.getMessage().getMessage());
+				message.setTitle(form.getMessage().getTitle());
+				message.setBelongType(1);
+				message.setType(3);
+				message.setCreateTime(new Date());
+				message.setFkId(form.getId());
+				message.setDataState(1);
+				iMessageConfigMapper.insert(message);
+				form.setMessage(message);
+			}
+			dto.setData(form);
 			errorMsg = "新增失败";
 		}else{
 			try {
 				result = iRecruitmentMapper.updateById(form.getId(), form);
+				if(form.getIsMessage()==1&&form.getMessage()!=null){
+					MessageConfig message = iMessageConfigMapper.getById(form.getMessage().getId());
+					message.setMessage(form.getMessage().getMessage());
+					message.setTitle(form.getMessage().getTitle());
+					message.setUpdateTime(new Date());
+					iMessageConfigMapper.updateById(message.getId(), message);
+				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -184,6 +210,12 @@ public class RecruitmentServiceImpl implements IRecruitmentService {
 		if(r!=null&&r.getCompany()!=null&&r.getCompany().getId()!=null){
 			Company c = iCompanyMapper.getById(r.getCompany().getId());
 			r.setCompany(c);
+			if(r.getIsMessage()==1){
+				List<MessageConfig> messages = iMessageConfigMapper.getByFkIdTypeAndBelongType(id, 3, 2);
+				if(CollectionUtils.isNotEmpty(messages)){
+					r.setMessage(messages.get(0));
+				}
+			}
 		}
 		return r;
 	}

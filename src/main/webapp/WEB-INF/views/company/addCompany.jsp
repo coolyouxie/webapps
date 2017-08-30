@@ -189,6 +189,20 @@
 			</div>
 			
 			<div class="form-group">
+				<label class="col-md-2 control-label" for="messageTitle">消息标题：</label>
+				<div class="col-md-4" >
+					<input type="text" id="messageTitle" class="form-control" name="message.title">
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label class="col-md-2 control-label" for="message">消息内容：</label>
+				<div class="col-md-4" >
+					<textarea id="message" class="form-control" name="message.message" rows="5"></textarea>
+				</div>
+			</div>
+			
+			<div class="form-group">
 				<label class="col-md-2 control-label" for="type">公司性质：</label>
 				<div class="col-md-4" >
 					<input type="text" id="type" name="type" class="form-control" placeholder="请输入公司性质">

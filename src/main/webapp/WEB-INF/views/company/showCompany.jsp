@@ -194,6 +194,44 @@
 		</div>
 		
 		<div class="row">
+				<label class="col-md-2 control-label" for="isBanner">Banner展示：</label>
+				<div class="col-md-4" >
+					<select id="isBanner" name="isBanner" class="form-control">
+						<option value="2" <c:if test="${company.isBanner==2}">selected</c:if>>否</option>
+						<option value="1" <c:if test="${company.isBanner==1}">selected</c:if>>是</option>
+					</select>
+					<br/>
+					<c:if test="${company.isBanner==1 and company.bannerConfig.picUrl != null}">
+						<img src="${company.bannerConfig.picUrl}" style="width:120px;" />
+					</c:if>
+				</div>
+			</div>
+			
+			<div class="row">
+				<label class="col-md-2 control-label" for="isMessage">作为信息推送：</label>
+				<div class="col-md-4" >
+					<select id="isMessage" name="isMessage" class="form-control" disabled="disabled">
+						<option value="0" <c:if test="${company.isMessage==0}">selected</c:if>>否</option>
+						<option value="1" <c:if test="${company.isMessage==1}">selected</c:if>>是</option>
+					</select>
+				</div>
+			</div>
+			
+			<div class="row">
+				<label class="col-md-2 control-label" for="messageTitle">消息内容：</label>
+				<div class="col-md-4" >
+					<text id="messageTitle" name="message.title" value="${recruitment.message.title}" readonly>
+				</div>
+			</div>
+			
+			<div class="row">
+				<label class="col-md-2 control-label" for="message">消息内容：</label>
+				<div class="col-md-4" >
+					${recruitment.message.message}
+				</div>
+			</div>
+		
+		<div class="row">
 			<label class="col-md-2 control-label" >公司性质：</label>
 			<div class="col-md-4" >
 				${company.type}

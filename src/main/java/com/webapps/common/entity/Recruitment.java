@@ -64,6 +64,8 @@ public class Recruitment extends Entity{
     private BannerConfig bannerConfig;
     
     private Integer isMessage;
+    
+    private MessageConfig message;
 
     public Company getCompany() {
         return company;
@@ -279,6 +281,14 @@ public class Recruitment extends Entity{
 
 	public void setIsMessage(Integer isMessage) {
 		this.isMessage = isMessage;
+	}
+
+	public MessageConfig getMessage() {
+		return message;
+	}
+
+	public void setMessage(MessageConfig message) {
+		this.message = message;
 	}
 
 }

@@ -134,6 +134,22 @@
 			</div>
 			
 			<div class="form-group">
+				<label class="col-md-2 control-label" for="messageTitle">消息内容：</label>
+				<div class="col-md-4" >
+					<text id="messageTitle" name="message.title" value="${recruitment.message.title}">
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label class="col-md-2 control-label" for="message">消息内容：</label>
+				<div class="col-md-4" >
+					<textarea id="message" name="message.message" rows="5">
+						${recruitment.message.message}
+					</textarea>
+				</div>
+			</div>
+			
+			<div class="form-group">
 				<label class="col-md-2 control-label" for="type">公司性质：</label>
 				<div class="col-md-4" >
 					<input type="text" id="type" name="type" class="form-control" placeholder="请输入公司性质" value="${company.type}">

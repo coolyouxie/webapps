@@ -43,6 +43,8 @@ public class Company extends Entity{
     private BannerConfig bannerConfig;
     
     private Integer isMessage;
+    
+    private MessageConfig message;
 
     public String getName() {
         return name;
@@ -210,6 +212,14 @@ public class Company extends Entity{
 
 	public void setIsMessage(Integer isMessage) {
 		this.isMessage = isMessage;
+	}
+
+	public MessageConfig getMessage() {
+		return message;
+	}
+
+	public void setMessage(MessageConfig message) {
+		this.message = message;
 	}
 
 }

@@ -214,6 +214,20 @@ function showModal(){
 			</div>
 			
 			<div class="form-group">
+				<label class="col-md-2 control-label" for="messageTitle">消息标题：</label>
+				<div class="col-md-4" >
+					<input type="text" id="messageTitle" class="form-control" name="message.title" value="${recruitment.message.title}>
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label class="col-md-2 control-label" for="message">消息内容：</label>
+				<div class="col-md-4" >
+					<textarea id="message" class="form-control" name="message.message" rows="5">${recruitment.message.message}</textarea>
+				</div>
+			</div>
+			
+			<div class="form-group">
 				<label class="col-md-2 control-label" for="cashback">入职期满金额：</label>
 				<div class="col-md-4" >
 					<input class ="form-control" id="cashback" name="cashback" value="${recruitment.cashback}" placeholder="返现金额" >
