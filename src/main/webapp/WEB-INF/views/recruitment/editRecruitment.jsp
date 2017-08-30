@@ -204,6 +204,16 @@ function showModal(){
 			</div>
 			
 			<div class="form-group">
+				<label class="col-md-2 control-label" for="isMessage">作为信息推送：</label>
+				<div class="col-md-4" >
+					<select id="isMessage" name="isMessage" class="form-control">
+						<option value="0" <c:if test="${recruitment.isMessage==0}">selected</c:if>>否</option>
+						<option value="1" <c:if test="${recruitment.isMessage==1}">selected</c:if>>是</option>
+					</select>
+				</div>
+			</div>
+			
+			<div class="form-group">
 				<label class="col-md-2 control-label" for="cashback">入职期满金额：</label>
 				<div class="col-md-4" >
 					<input class ="form-control" id="cashback" name="cashback" value="${recruitment.cashback}" placeholder="返现金额" >

@@ -179,6 +179,16 @@
 			</div>
 			
 			<div class="form-group">
+				<label class="col-md-2 control-label" for="isMessage">作为信息推送：</label>
+				<div class="col-md-4" >
+					<select id="isMessage" name="isMessage" class="form-control">
+						<option value="0" >否</option>
+						<option value="1" >是</option>
+					</select>
+				</div>
+			</div>
+			
+			<div class="form-group">
 				<label class="col-md-2 control-label" for="type">公司性质：</label>
 				<div class="col-md-4" >
 					<input type="text" id="type" name="type" class="form-control" placeholder="请输入公司性质">
