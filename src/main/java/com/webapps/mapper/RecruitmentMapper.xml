@@ -36,7 +36,8 @@
 		<result column="is_banner" jdbcType="DECIMAL" property="isBanner" />
 		<result column="banner_id" jdbcType="DECIMAL" property="bannerConfig.id" />
 		<result column="banner_type" jdbcType="DECIMAL" property="bannerConfig.type" />
-		<result column="pic_url" jdbcType="DECIMAL" property="bannerConfig.picUrl" />
+		<result column="pic_url" jdbcType="VARCHAR" property="bannerConfig.picUrl" />
+		<result column="is_message" jdbcType="DECIMAL" property="isMessage" />
 	</resultMap>
 
 	<sql id="select_columns">
@@ -68,7 +69,8 @@
 		tr.salary_briefs,
 		tr.cashback_briefs,
 		tr.job_briefs,
-		tr.is_banner
+		tr.is_banner,
+		tr.is_message
 	</sql>
 
 	<sql id="insert_columns">
@@ -98,7 +100,8 @@
 		salary_briefs,
 		cashback_briefs,
 		job_briefs,
-		is_banner
+		is_banner,
+		is_message
 	</sql>
 	
 	<select id="getById" resultMap="resultMap">
@@ -233,7 +236,8 @@
 			#{obj.salaryBriefs},
 			#{obj.cashbackBriefs},
 			#{obj.jobBriefs},
-			#{obj.isBanner}
+			#{obj.isBanner},
+			#{obj.isMessage}
 		)
 	</insert>
 	
@@ -265,7 +269,8 @@
 		salary_briefs = #{obj.salaryBriefs},
 		cashback_briefs = #{obj.cashbackBriefs},
 		job_briefs = #{obj.jobBriefs},
-		is_banner = #{obj.isBanner}
+		is_banner = #{obj.isBanner},
+		is_message = #{obj.isMessage}
 		where id=#{id}
 	</update>
 	
