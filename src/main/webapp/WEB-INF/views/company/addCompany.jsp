@@ -151,7 +151,7 @@
 				</div>
 			</div>
 			<div class="form-group">
-				<label class="col-md-2 control-label" for="name">公司地址：</label>
+				<label class="col-md-2 control-label" for="address">公司地址：</label>
 				<div class="col-md-4" >
 					<select id="province" name="province" onchange="loadProvince('city')" >
 					</select>
@@ -161,7 +161,7 @@
 					<select id="area" name="area" >
 						<option value="-1">-请选择-</option>
 					</select>
-					<input type="text" id="name" name="name" class="form-control" placeholder="请输入详细地址" >
+					<input type="text" id="address" name="address" class="form-control" placeholder="请输入详细地址" >
 				</div>
 			</div>
 			

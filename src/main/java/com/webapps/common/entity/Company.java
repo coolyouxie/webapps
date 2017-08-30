@@ -24,6 +24,12 @@ public class Company extends Entity{
     
     private String companySize;
     
+    private String province;
+    
+    private String city;
+    
+    private String area;
+    
     /**
      * 公司性质
      */
@@ -35,6 +41,8 @@ public class Company extends Entity{
     private Integer isBanner;
     
     private BannerConfig bannerConfig;
+    
+    private Integer isMessage;
 
     public String getName() {
         return name;
@@ -170,6 +178,38 @@ public class Company extends Entity{
 
 	public void setBannerConfig(BannerConfig bannerConfig) {
 		this.bannerConfig = bannerConfig;
+	}
+
+	public String getProvince() {
+		return province;
+	}
+
+	public void setProvince(String province) {
+		this.province = province;
+	}
+
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+	public String getArea() {
+		return area;
+	}
+
+	public void setArea(String area) {
+		this.area = area;
+	}
+
+	public Integer getIsMessage() {
+		return isMessage;
+	}
+
+	public void setIsMessage(Integer isMessage) {
+		this.isMessage = isMessage;
 	}
 
 }

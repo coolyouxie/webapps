@@ -49,7 +49,7 @@
 								align : 'center',
 								sortable : false,
 								formatter:function(cellValue,options,rowObject){
-									return '<a href="${ctx}/company/getById?id='+rowObject.id+'" style="color:blue">'+cellValue+'</a>';
+									return '<a href="${ctx}/company/getById?id='+rowObject.company.id+'" style="color:blue">'+cellValue+'</a>';
 								}
 							}, {
 								label : 'recruitment.title',
