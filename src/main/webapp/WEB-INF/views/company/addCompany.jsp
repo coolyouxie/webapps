@@ -153,12 +153,12 @@
 			<div class="form-group">
 				<label class="col-md-2 control-label" for="address">公司地址：</label>
 				<div class="col-md-4" >
-					<select id="province" name="province" onchange="loadProvince('city')" >
+					<select id="province" name="province.id" onchange="loadProvince('city')" >
 					</select>
-					<select id="city" name="city" onchange="loadProvince('area')" >
+					<select id="city" name="city.id" onchange="loadProvince('area')" >
 						<option value="-1">-请选择-</option>
 					</select>
-					<select id="area" name="area" >
+					<select id="area" name="area.id" >
 						<option value="-1">-请选择-</option>
 					</select>
 					<input type="text" id="address" name="address" class="form-control" placeholder="请输入详细地址" >

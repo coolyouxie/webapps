@@ -25,12 +25,11 @@
 		<result column="banner_id" jdbcType="DECIMAL" property="bannerConfig.id" />
 		<result column="banner_type" jdbcType="DECIMAL" property="bannerConfig.type" />
 		<result column="pic_url" jdbcType="VARCHAR" property="bannerConfig.picUrl" />
-		<result column="province" jdbcType="VARCHAR" property="province" />
-		<result column="city" jdbcType="VARCHAR" property="city" />
-		<result column="area" jdbcType="VARCHAR" property="area" />
 		<result column="is_message" jdbcType="DECIMAL" property="isMessage" />
+		<result column="province" jdbcType="VARCHAR" property="province.id" />
+		<result column="city" jdbcType="VARCHAR" property="city.id" />
+		<result column="area" jdbcType="VARCHAR" property="area.id" />
 	</resultMap>
-
 
 	<sql id="select_columns">
 		tc.id ,
@@ -119,17 +118,20 @@
 			<if test="obj.type != null and obj.type !=''">
 				type = #{obj.type},
 			</if>
-			<if test="obj.province != null and obj.province !=''">
-				type = #{obj.province},
+			<if test="obj.province != null and obj.province.id and obj.province.id !=''">
+				province = #{obj.province.id},
 			</if>
-			<if test="obj.city != null and obj.city !=''">
-				type = #{obj.city},
+			<if test="obj.city != null and obj.city.id and obj.city.id !=''">
+				city = #{obj.city.id},
 			</if>
-			<if test="obj.area != null and obj.area !=''">
-				type = #{obj.area},
+			<if test="obj.area != null and obj.area.id and obj.area.id !=''">
+				area = #{obj.area.id},
 			</if>
 			<if test="obj.isMessage != null and obj.isMessage !='' or obj.isMessage==0">
-				type = #{obj.isMessage},
+				is_message = #{obj.isMessage},
+			</if>
+			<if test="obj.address != null and obj.address !=''">
+				address = #{obj.address},
 			</if>
 			update_time = #{obj.updateTime},
 			is_banner = #{obj.isBanner}
@@ -140,6 +142,9 @@
 	<select id="queryCount" resultType="java.lang.Integer">
 		SELECT count(1) FROM t_company tc
 		left join t_banner_config tbc on tc.id = tbc.fk_id and tbc.type=3 and tbc.data_state = 1
+		left join t_province tp on tp.id = tc.province
+		left join t_province tp1 on tp1.id = tc.city
+		left join t_province tp2 on tp2.id = tc.area
 		<trim prefix="WHERE" prefixOverrides="AND">
 			tc.data_state = 1
 			<if test="obj.keyWords !=null and obj.keyWords != ''">
@@ -147,6 +152,9 @@
 			</if>
 			<if test="obj.industryId != null and obj.industryId != ''">
 				and tc.industry_id = #{obj.industryId,jdbcType=DECIMAL}
+			</if>
+			<if test="obj.area != null and obj.area.name != null and obj.area.name != ''">
+				and tp2.name like concat('%',#{obj.area.name},'%')
 			</if>
 		</trim>
 	</select>
@@ -158,9 +166,12 @@
 		<include refid="select_columns" />,
 		tbc.id as banner_id,
 		tbc.pic_url as pic_url,
-		tbc.type as banner_type 
+		tbc.type as banner_type
 		FROM t_company tc
 		left join t_banner_config tbc on tc.id = tbc.fk_id and tbc.type=3 and tbc.data_state = 1
+		left join t_province tp on tp.id = tc.province
+		left join t_province tp1 on tp1.id = tc.city
+		left join t_province tp2 on tp2.id = tc.area
 		<trim prefix="WHERE" prefixOverrides="AND">
 			tc.data_state = 1
 			<if test="obj.name !=null and obj.name != ''">
@@ -171,6 +182,9 @@
 			</if>
 			<if test="obj.industryId != null and obj.industryId != ''">
 				and tc.industry_id = #{obj.industryId,jdbcType=DECIMAL}
+			</if>
+			<if test="obj.area != null and obj.area.name != null and obj.area.name != ''">
+				and tp2.name like concat('%',#{obj.area.name},'%')
 			</if>
 		</trim>
 		order by tc.name
@@ -213,9 +227,9 @@
 			#{obj.type},
 			#{obj.companySize},
 			#{obj.isBanner},
-			#{obj.province},
-			#{obj.city},
-			#{obj.area},
+			#{obj.province.id},
+			#{obj.city.id},
+			#{obj.area.id},
 			#{obj.isMessage}
 		)
 	</insert>

@@ -84,11 +84,27 @@ public class CompanyServiceImpl implements ICompanyService {
 				dto.setResult("update_success");
 				dto.setData(company);
 				if(company.getIsMessage()==1&&company.getMessage()!=null){
-					MessageConfig message = iMessageConfigMapper.getById(company.getMessage().getId());
-					message.setMessage(company.getMessage().getMessage());
-					message.setTitle(company.getMessage().getTitle());
-					message.setUpdateTime(new Date());
-					iMessageConfigMapper.updateById(message.getId(), message);
+					Integer messageId = null;
+					if(company.getMessage()!=null){
+						if(company.getMessage().getId()!=null){
+							MessageConfig message = iMessageConfigMapper.getById(company.getMessage().getId());
+							message.setMessage(company.getMessage().getMessage());
+							message.setTitle(company.getMessage().getTitle());
+							message.setUpdateTime(new Date());
+							iMessageConfigMapper.updateById(message.getId(), message);
+						}else{
+							MessageConfig message = new MessageConfig();
+							message.setMessage(company.getMessage().getMessage());
+							message.setTitle(company.getMessage().getTitle());
+							message.setBelongType(1);
+							message.setType(3);
+							message.setCreateTime(new Date());
+							message.setFkId(company.getId());
+							message.setDataState(1);
+							iMessageConfigMapper.insert(message);
+							company.setMessage(message);
+						}
+					}
 				}
 			}else{
 				dto.setResult("update_fail");

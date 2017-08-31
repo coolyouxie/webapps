@@ -55,6 +55,9 @@
 					});;
 				}
 		});
+		loadProvince("province");
+		loadCityOrArea($("#tmpProvince").val(),"city");
+		loadCityOrArea($("#tmpCity").val(),"area");
 	});
 	
 	function showModal(){
@@ -64,6 +67,91 @@
 	function next(){
 		$("#handleType").val("edit_next");
 		$("#saveForm").submit();
+	}
+	
+	function loadProvince(type){
+		var parentId = 0;
+		var tmpProvince = $("#tmpProvince").val();
+		var tmpCity = $("#tmpCity").val();
+		var tmpArea = $("#tmpArea").val();
+		if(type!="province"){
+			if(type=="city"){
+				parentId = $("#province").val();
+			}else if(type=="area"){
+				parentId = $("#city").val();
+			}
+		}
+		if(type=="city"){
+			if($("#province").val()==-1){
+				$("#city").empty();
+				$("#city").append("<option value='-1'>-请选择-</option>");
+				$("#area").empty();
+				$("#area").append("<option value='-1'>-请选择-</option>");
+				return ;
+			}
+		}
+		if(type=="area"){
+			if($("#city").val()==-1){
+				$("#area").empty();
+				$("#area").append("<option value='-1'>-请选择-</option>");
+				return ;
+			}
+		}
+		$.ajax({
+			url:"${ctx}/province/queryProvinceByParentId",
+			type:"POST",
+			dataType:"JSON",
+			data:{
+				parentId:parentId
+			},
+			success:function(response){
+				if(response&&response.result=="S"){
+					var provinces = response.data;
+					$("#"+type).empty();
+					$("#"+type).append("<option value='-1'>-请选择-</option>");
+					for(var i=0;i<provinces.length;i++){
+						if(tmpProvince==provinces[i].id){
+							$("#"+type).append("<option value='"+provinces[i].id+"' selected='selected'>"+provinces[i].name+"</option>");
+						}else if(tmpCity==provinces[i].id){
+							$("#"+type).append("<option value='"+provinces[i].id+"' selected='selected'>"+provinces[i].name+"</option>");
+						}else if(tmpArea==provinces[i].id){
+							$("#"+type).append("<option value='"+provinces[i].id+"' selected='selected'>"+provinces[i].name+"</option>");
+						}else{
+							$("#"+type).append("<option value='"+provinces[i].id+"'>"+provinces[i].name+"</option>");
+						}
+					}
+				}
+			}
+		})
+	}
+	
+	function loadCityOrArea(parentId,type){
+		var tmpCity = $("#tmpCity").val();
+		var tmpArea = $("#tmpArea").val();
+		$.ajax({
+			url:"${ctx}/province/queryProvinceByParentId",
+			type:"POST",
+			dataType:"JSON",
+			data:{
+				parentId:parentId
+			},
+			success:function(response){
+				if(response&&response.result=="S"){
+					var provinces = response.data;
+					$("#"+type).empty();
+					$("#"+type).append("<option value='-1'>-请选择-</option>");
+					for(var i=0;i<provinces.length;i++){
+						if(tmpCity==provinces[i].id){
+							$("#"+type).append("<option value='"+provinces[i].id+"' selected='selected'>"+provinces[i].name+"</option>");
+						}else if(tmpArea==provinces[i].id){
+							$("#"+type).append("<option value='"+provinces[i].id+"' selected='selected'>"+provinces[i].name+"</option>");
+						}else{
+							$("#"+type).append("<option value='"+provinces[i].id+"'>"+provinces[i].name+"</option>");
+						}
+					}
+				}
+			}
+		})
 	}
 </script>
 </head>
@@ -103,10 +191,28 @@
 			<input type="hidden" id="id" name="id" value="${company.id}">
 			<input type="hidden" id="picUrl" name="bannerConfig.picUrl" value="${company.bannerConfig.picUrl }">
 			<input type="hidden" id="handleType" name="handleType" value="edit_save">
+			<input type="hidden" id="tmpProvince" name="tmpProvince" value="${company.province.id}">
+			<input type="hidden" id="tmpCity" name="tmpCity" value="${company.city.id}">
+			<input type="hidden" id="tmpArea" name="tmpArea" value="${company.area.id}">
 			<div class="form-group">
 				<label class="col-md-2 control-label" for="name">公司名称：</label>
 				<div class="col-md-4" >
 					<input type="text" id="name" name="name" class="form-control" placeholder="请输入公司名称" value="${company.name }">
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label class="col-md-2 control-label" for="address">公司地址：</label>
+				<div class="col-md-4" >
+					<select id="province" name="province.id" onchange="loadProvince('city')" >
+					</select>
+					<select id="city" name="city.id" onchange="loadProvince('area')" >
+						<option value="-1">-请选择-</option>
+					</select>
+					<select id="area" name="area.id" >
+						<option value="-1">-请选择-</option>
+					</select>
+					<input type="text" id="address" name="address" class="form-control" placeholder="请输入详细地址" value="${company.address}">
 				</div>
 			</div>
 			
@@ -134,16 +240,16 @@
 			</div>
 			
 			<div class="form-group">
-				<label class="col-md-2 control-label" for="messageTitle">消息内容：</label>
+				<label class="col-md-2 control-label" for="messageTitle">消息标题：</label>
 				<div class="col-md-4" >
-					<text id="messageTitle" name="message.title" value="${recruitment.message.title}">
+					<input type="text" id="messageTitle" name="message.title" class="form-control" value="${recruitment.message.title}">
 				</div>
 			</div>
 			
 			<div class="form-group">
 				<label class="col-md-2 control-label" for="message">消息内容：</label>
 				<div class="col-md-4" >
-					<textarea id="message" name="message.message" rows="5">
+					<textarea id="message" class="form-control" name="message.message" rows="5">
 						${recruitment.message.message}
 					</textarea>
 				</div>

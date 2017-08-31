@@ -24,11 +24,11 @@ public class Company extends Entity{
     
     private String companySize;
     
-    private String province;
+    private Province province;
     
-    private String city;
+    private Province city;
     
-    private String area;
+    private Province area;
     
     /**
      * 公司性质
@@ -182,27 +182,27 @@ public class Company extends Entity{
 		this.bannerConfig = bannerConfig;
 	}
 
-	public String getProvince() {
+	public Province getProvince() {
 		return province;
 	}
 
-	public void setProvince(String province) {
+	public void setProvince(Province province) {
 		this.province = province;
 	}
 
-	public String getCity() {
+	public Province getCity() {
 		return city;
 	}
 
-	public void setCity(String city) {
+	public void setCity(Province city) {
 		this.city = city;
 	}
 
-	public String getArea() {
+	public Province getArea() {
 		return area;
 	}
 
-	public void setArea(String area) {
+	public void setArea(Province area) {
 		this.area = area;
 	}
 
