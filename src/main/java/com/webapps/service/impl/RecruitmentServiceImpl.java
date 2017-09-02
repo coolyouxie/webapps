@@ -1,6 +1,5 @@
 package com.webapps.service.impl;
 
-import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -52,30 +51,11 @@ public class RecruitmentServiceImpl implements IRecruitmentService {
 		String errorMsg = null;
 		if(form.getId()==null){
 			result = iRecruitmentMapper.insert(form);
-			if(form.getIsMessage()==1&&form.getMessage()!=null){
-				MessageConfig message = new MessageConfig();
-				message.setMessage(form.getMessage().getMessage());
-				message.setTitle(form.getMessage().getTitle());
-				message.setBelongType(1);
-				message.setType(3);
-				message.setCreateTime(new Date());
-				message.setFkId(form.getId());
-				message.setDataState(1);
-				iMessageConfigMapper.insert(message);
-				form.setMessage(message);
-			}
 			dto.setData(form);
 			errorMsg = "新增失败";
 		}else{
 			try {
 				result = iRecruitmentMapper.updateById(form.getId(), form);
-				if(form.getIsMessage()==1&&form.getMessage()!=null){
-					MessageConfig message = iMessageConfigMapper.getById(form.getMessage().getId());
-					message.setMessage(form.getMessage().getMessage());
-					message.setTitle(form.getMessage().getTitle());
-					message.setUpdateTime(new Date());
-					iMessageConfigMapper.updateById(message.getId(), message);
-				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

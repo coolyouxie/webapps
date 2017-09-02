@@ -66,13 +66,6 @@
 				</div>
 			</div>
 			
-			<%-- <div class="form-group">
-				<label class="col-md-2 control-label" for="recruitmentNumber">招聘人数：</label>
-				<div class="col-md-4" >
-					${recruitment.recruitmentNumber}
-				</div>
-			</div> --%>
-			
 			<div class="form-group">
 				<label class="col-md-2 control-label" for="mobile" >手机号：</label>
 				<div class="col-md-4" >

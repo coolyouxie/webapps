@@ -168,6 +168,16 @@
 		    datatype:'json'
 		}).trigger("reloadGrid");
 	}
+	
+	function addRecruitment(){
+		var companyId = $("#companyId").val();
+		window.location.href="${ctx}/recruitment/toAddRecruitmentPage?companyId="+companyId;
+	}
+	
+	function addMessage(){
+		var companyId = $("#companyId").val();
+		window.location.href="${ctx}/messageConfig/toAddMessagePage?fkId="+companyId+"&type=3&belongType=1";
+	}
 </script>
 </head>
 <body>
@@ -178,10 +188,13 @@
 					查看公司信息
 				</h4>
 			</div>
-			<form id="addRecruitment" action="${ctx}/recruitment/toAddRecruitmentPage" method="post">
+			<form id="addRecruitment" method="post">
 				<input type="hidden" id="companyId" name="companyId" value="${company.id}">
 				<div class="col-md-2">
-					<button type="submit" onclick="">新建发布单</button>
+					<button type="button" onclick="addRecruitment()" class="form-control" >新建发布单</button>
+				</div>
+				<div class="col-md-2">
+					<button type="button" onclick="addMessage()" class="form-control" >新建消息</button>
 				</div>
 			</form>
 		</div>

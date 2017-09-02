@@ -62,6 +62,7 @@
 		<form method="post" >
 			<div class="form-group" style="width:1000px;">
 				<input type="hidden" name="belongType" value="${messageConfig.belongType}">
+				<input type="hidden" id="fkId" name="fkId" value="${messageConfig.fkId}" >
 				<label>
 					<span>标题：</span>
 					<input id="title" name="title" value="${messageConfig.title}">
@@ -70,6 +71,7 @@
 					<select id="type" name="type">
 						<option value="1" <c:if test="${messageConfig.type==1}">selected</c:if>>推荐</option>
 						<option value="2" <c:if test="${messageConfig.type==2}">selected</c:if>>分享</option>
+						<option value="3" <c:if test="${messageConfig.type==3}">selected</c:if>>详情</option>
 					</select>
 				</label>
 				<label>

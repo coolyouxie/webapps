@@ -13,6 +13,7 @@ public class AliSmsMsg extends Entity {
 	private String message;
 	private String bizId;
 	private Integer type;
+	private String validateCode;
 
 	public String getSignName() {
 		return signName;
@@ -100,6 +101,14 @@ public class AliSmsMsg extends Entity {
 
 	public void setPhoneNumbers(String phoneNumbers) {
 		this.phoneNumbers = phoneNumbers;
+	}
+
+	public String getValidateCode() {
+		return validateCode;
+	}
+
+	public void setValidateCode(String validateCode) {
+		this.validateCode = validateCode;
 	}
 
 }

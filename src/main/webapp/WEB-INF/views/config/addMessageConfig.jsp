@@ -67,7 +67,8 @@
 				title:$("#title").val(),
 				type:$("#type").val(),
 				message:$("#message").val(),
-				belongType:0
+				fkId:$("#fkId").val(),
+				belongType:$("#belongType").val()
 			},
 			success:function(response){
 				if(response.result=="S"){
@@ -93,15 +94,18 @@
 		</div>
 		
 		<form method="post" >
+			<input type="hidden" id="fkId" value="${fkId}" >
+			<input type="hidden" id="belongType" value="${belongType}" >
 			<div class="form-group" style="width:1000px;">
 				<label>
 					<span>标题：</span>
 					<input id="title" name="title" >
 				</label>
 				<label>
-					<select id="type" name="type">
+					<select id="type" name="type" <c:if test="${type!=null}">disabled="disabled"</c:if>>
 						<option value="1">推荐</option>
 						<option value="2">分享</option>
+						<option value="3" <c:if test="${type==3}">selected</c:if>>详情</option>
 					</select>
 				</label>
 				<br/>

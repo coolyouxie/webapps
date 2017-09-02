@@ -5,7 +5,7 @@
 	<resultMap id="resultMap" type="com.webapps.common.entity.MessageConfig">
 		<id column="ID" jdbcType="DECIMAL" property="id" />
 		<result column="title" jdbcType="VARCHAR" property="title" />
-		<result column="message" jdbcType="VARCHAR" property="picUrl" />
+		<result column="message" jdbcType="VARCHAR" property="message" />
 		<result column="type" jdbcType="DECIMAL" property="type" />
 		<result column="fk_id" jdbcType="DECIMAL" property="fkId" />
 		<result column="company_name" jdbcType="DECIMAL" property="company.name" />

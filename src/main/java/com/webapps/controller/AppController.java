@@ -96,7 +96,12 @@ public class AppController {
 		}
 		return JSONUtil.toJSONObjectString(JSONObject.fromObject(dto));
 	}
-
+	
+	/**
+	 * 填写用户信息，如密码等
+	 * @param params
+	 * @return
+	 */
 	@ResponseBody
 	@RequestMapping(value = "/register", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
 	public String register(@RequestBody String params) {
@@ -121,11 +126,20 @@ public class AppController {
 	 * @return
 	 */
 	@ResponseBody
-	@RequestMapping(value = "/getValidatCode")
-	public String getValidatCode(@RequestBody String params) {
+	@RequestMapping(value = "/getValidateCode")
+	public String getValidateCode(@RequestBody String params) {
 		Gson gson = new Gson();
 		AliSmsMsg asm = gson.fromJson(params, AliSmsMsg.class);
 		ResultDto<AliSmsMsg> dto = iAliSmsMsgService.getAliSmsCode(asm.getPhoneNumbers(), asm.getType());
+		return JSONUtil.toJSONString(JSONUtil.toJSONObject(dto));
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/validateSmsCode")
+	public String validateSmsCode(@RequestBody String params) {
+		Gson gson = new Gson();
+		AliSmsMsg asm = gson.fromJson(params, AliSmsMsg.class);
+		ResultDto<String> dto = iAliSmsMsgService.validateAliSmsCode(asm.getId(), asm.getValidateCode());
 		return JSONUtil.toJSONString(JSONUtil.toJSONObject(dto));
 	}
 

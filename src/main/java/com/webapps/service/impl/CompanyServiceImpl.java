@@ -83,29 +83,6 @@ public class CompanyServiceImpl implements ICompanyService {
 			if("S".equals(dto1.getResult())){
 				dto.setResult("update_success");
 				dto.setData(company);
-				if(company.getIsMessage()==1&&company.getMessage()!=null){
-					Integer messageId = null;
-					if(company.getMessage()!=null){
-						if(company.getMessage().getId()!=null){
-							MessageConfig message = iMessageConfigMapper.getById(company.getMessage().getId());
-							message.setMessage(company.getMessage().getMessage());
-							message.setTitle(company.getMessage().getTitle());
-							message.setUpdateTime(new Date());
-							iMessageConfigMapper.updateById(message.getId(), message);
-						}else{
-							MessageConfig message = new MessageConfig();
-							message.setMessage(company.getMessage().getMessage());
-							message.setTitle(company.getMessage().getTitle());
-							message.setBelongType(1);
-							message.setType(3);
-							message.setCreateTime(new Date());
-							message.setFkId(company.getId());
-							message.setDataState(1);
-							iMessageConfigMapper.insert(message);
-							company.setMessage(message);
-						}
-					}
-				}
 			}else{
 				dto.setResult("update_fail");
 				dto.setErrorMsg("更新公司banner图片失败");
@@ -123,18 +100,6 @@ public class CompanyServiceImpl implements ICompanyService {
 				ResultDto<BannerConfig> dto1 = saveBannerPicture(company);
 				if("S".equals(dto1.getResult())){
 					dto.setResult("insert_success");
-					if(company.getIsMessage()==1&&company.getMessage()!=null){
-						MessageConfig message = new MessageConfig();
-						message.setMessage(company.getMessage().getMessage());
-						message.setTitle(company.getMessage().getTitle());
-						message.setBelongType(1);
-						message.setType(3);
-						message.setCreateTime(new Date());
-						message.setFkId(company.getId());
-						message.setDataState(1);
-						iMessageConfigMapper.insert(message);
-						company.setMessage(message);
-					}
 					dto.setData(company);
 				}else{
 					dto.setResult("insert_fail");

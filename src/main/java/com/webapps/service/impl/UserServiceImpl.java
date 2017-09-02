@@ -1,22 +1,24 @@
 package com.webapps.service.impl;
 
+import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.aliyuncs.dysmsapi.model.v20170525.SendSmsResponse;
-import com.aliyuncs.exceptions.ClientException;
 import com.webapps.common.bean.Page;
 import com.webapps.common.bean.ResultDto;
+import com.webapps.common.entity.AliSmsMsg;
 import com.webapps.common.entity.User;
-import com.webapps.common.entity.UserWallet;
 import com.webapps.common.form.UserRequestForm;
+import com.webapps.common.utils.DateUtil;
 import com.webapps.common.utils.PasswordEncryptUtil;
-import com.webapps.common.utils.SmsUtil;
+import com.webapps.common.utils.PropertyUtil;
+import com.webapps.mapper.IAliSmsMsgMapper;
 import com.webapps.mapper.IUserMapper;
 import com.webapps.mapper.IUserWalletMapper;
 import com.webapps.service.IUserService;
@@ -32,6 +34,9 @@ public class UserServiceImpl implements IUserService {
 	
 	@Autowired
 	private IUserWalletMapper iUserWalletMapper;
+	
+	@Autowired
+	private IAliSmsMsgMapper iAliSmsMsgMapper;
 
 	@Override
 	public Page loadUserList(Page page,UserRequestForm user) throws Exception {
@@ -74,6 +79,7 @@ public class UserServiceImpl implements IUserService {
 			dto.setData(user);
 			return dto;
 		}else{
+			
 			String password = user.getPassword();
 			String token = PasswordEncryptUtil.generateSalt();
 			user.setToken(token);
@@ -97,7 +103,7 @@ public class UserServiceImpl implements IUserService {
 		}
 		return dto;
 	}
-
+	
 	@Override
 	public User getById(Integer id) throws Exception {
 		User user = iUserMapper.getById(id);

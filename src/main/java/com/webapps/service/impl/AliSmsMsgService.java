@@ -11,11 +11,10 @@ import org.springframework.transaction.annotation.Transactional;
 import com.aliyuncs.dysmsapi.model.v20170525.SendSmsRequest;
 import com.aliyuncs.dysmsapi.model.v20170525.SendSmsResponse;
 import com.aliyuncs.exceptions.ClientException;
-import com.webapps.common.bean.Page;
 import com.webapps.common.bean.ResultDto;
 import com.webapps.common.entity.AliSmsMsg;
-import com.webapps.common.entity.User;
-import com.webapps.common.form.UserRequestForm;
+import com.webapps.common.utils.DateUtil;
+import com.webapps.common.utils.PropertyUtil;
 import com.webapps.common.utils.SmsUtil;
 import com.webapps.mapper.IAliSmsMsgMapper;
 import com.webapps.service.IAliSmsMsgService;
@@ -60,6 +59,7 @@ public class AliSmsMsgService implements IAliSmsMsgService {
 			asm.setSmsUpExtendCode(request.getSmsUpExtendCode());
 			asm.setTemplateParam(request.getTemplateParam());
 			asm.setTemplateCode(request.getTemplateCode());
+			asm.setValidateCode((String)resultMap.get("validateCode"));
 			int count = iAliSmsMsgMapper.insert(asm);
 			if(count==1){
 				dto.setResult("S");
@@ -74,7 +74,9 @@ public class AliSmsMsgService implements IAliSmsMsgService {
 			asm.setSmsUpExtendCode(null);
 			asm.setSignName(null);
 			asm.setRequestId(null);
-			dto.setData(asm);
+			AliSmsMsg asm1 = new AliSmsMsg();
+			asm1.setId(asm.getId());
+			dto.setData(asm1);
 		} catch (ClientException e) {
 			e.printStackTrace();
 		}
@@ -83,7 +85,32 @@ public class AliSmsMsgService implements IAliSmsMsgService {
 
 	@Override
 	public ResultDto<String> validateAliSmsCode(Integer aliSmsMsgId, String msgCode) {
-		// TODO Auto-generated method stub
+		ResultDto<String> dto = new ResultDto<String>();
+		AliSmsMsg asm = null;
+		try {
+			asm = iAliSmsMsgMapper.getById(aliSmsMsgId);
+			if(asm==null){
+				dto.setResult("F");
+				dto.setErrorMsg("请先发送验证码");
+				return dto;
+			}
+			int minitus = DateUtil.getMinsBetweenTwoDate(asm.getCreateTime(), new Date());
+			int overtimeMins = Integer.valueOf((String)PropertyUtil.getProperty("code_timeout"));
+			if(minitus>overtimeMins){
+				dto.setErrorMsg("验证码已过期");
+				dto.setResult("F");
+				return dto;
+			}
+			if(!asm.getValidateCode().equals(msgCode.trim())){
+				dto.setErrorMsg("输入难码错误");
+				dto.setResult("F");
+				return dto;
+			}
+			dto.setResult("S");
+			return dto;
+		}catch(Exception e){
+			logger.error("查询验证码异常："+e.getMessage());
+		}
 		return null;
 	}
 

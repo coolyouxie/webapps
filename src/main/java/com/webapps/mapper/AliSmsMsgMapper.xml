@@ -17,15 +17,15 @@
 		<result column="Message" jdbcType="VARCHAR" property="message" />
 		<result column="Biz_Id" jdbcType="VARCHAR" property="bizId" />
 		<result column="type" jdbcType="DECIMAL" property="type" />
-		
+		<result column="validate_code" jdbcType="VARCHAR" property="validateCode" />
 	</resultMap>
 
 	<sql id="select_columns">
-		ID,Phone_Numbers,Sign_Name,Template_Code,Template_Param, sms_UpExtend_Code,out_id,Request_Id,data_state,CREATE_TIME,Code,Message,Biz_Id,type
+		ID,Phone_Numbers,Sign_Name,Template_Code,Template_Param, sms_UpExtend_Code,out_id,Request_Id,data_state,CREATE_TIME,Code,Message,Biz_Id,type,validate_Code
 	</sql>
 
 	<sql id="insert_columns">
-		Phone_Numbers,Sign_Name,Template_Code,Template_Param, sms_UpExtend_Code,out_id,Request_Id,data_state,CREATE_TIME,Code,Message,Biz_Id,type
+		Phone_Numbers,Sign_Name,Template_Code,Template_Param, sms_UpExtend_Code,out_id,Request_Id,data_state,CREATE_TIME,Code,Message,Biz_Id,type,validate_Code
 	</sql>
 	
 	<select id="getById" resultMap="resultMap">
@@ -81,7 +81,7 @@
 	</select>
 	
 	<select id="getByPhoneNumTypeAndState" resultMap="resultMap">
-		select * from t_ali_sms_msg where Phone_Numbers = #{phoneNum} and type = #{type} and data_state = #{dataState}
+		select * from t_ali_sms_msg where Phone_Numbers = #{phoneNum} and type = #{type} and data_state = #{dataState} order by create_time desc
 	</select>
 	
 	<!-- 用于初始化数据时使用 -->
@@ -124,7 +124,8 @@
 			#{obj.code},
 			#{obj.message},
 			#{obj.bizId},
-			#{obj.type}
+			#{obj.type},
+			#{obj.validateCode}
 		)
 	</insert>
 	

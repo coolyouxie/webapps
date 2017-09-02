@@ -85,5 +85,16 @@ public class DateUtil {
 		days = mills.divide(oneDayMills,2,RoundingMode.UP);
 		return days.doubleValue();
 	}
+	
+	public static int getMinsBetweenTwoDate(Date startDate,Date endDate) throws Exception{
+		BigDecimal startMills = new BigDecimal(startDate.getTime());
+		BigDecimal endmills = new BigDecimal(endDate.getTime());
+		BigDecimal mills = endmills.subtract(startMills);
+		BigDecimal oneMinitusMills = new BigDecimal(60000);
+		BigDecimal mins = null;
+		mins = mills.divide(oneMinitusMills,2,RoundingMode.UP);
+		return mins.intValue();
+	}
+	
 
 }

@@ -68,6 +68,7 @@ public class SmsUtil {
 		Map<String,Object> resultMap = new HashMap<String,Object>();
 		resultMap.put("request", request);
 		resultMap.put("response", sendSmsResponse);
+		resultMap.put("validateCode", code);
 		return resultMap;
 	}
 

@@ -27,6 +27,15 @@ public class MessageConfigController {
 		return "/config/messageConfigList";
 	}
 	
+	
+	@RequestMapping(value="/toAddMessagePage")
+	public String toAddMessagePage(Model model,Integer type,Integer fkId,Integer belongType){
+		model.addAttribute("type",type);
+		model.addAttribute("fkId",fkId);
+		model.addAttribute("belongType", belongType);
+		return "/config/addMessageConfig";
+	}
+	
 	@ResponseBody
 	@RequestMapping(value="/loadMessageConfigList")
 	public Page loadMessageConfigList(Model model,Page page,MessageConfigRequestForm form,HttpServletRequest request,HttpServletResponse response){
