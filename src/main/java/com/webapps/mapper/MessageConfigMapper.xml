@@ -13,6 +13,7 @@
 		<result column="data_state" jdbcType="DECIMAL" property="dataState" />
 		<result column="create_time" jdbcType="VARCHAR" property="createTime" />
 		<result column="UPDATE_TIME" jdbcType="VARCHAR" property="updateTime" />
+		<result column="belong_type" jdbcType="DECIMAL" property="belongType" />
 	</resultMap>
 
 	<sql id="select_columns">
@@ -43,11 +44,13 @@
 		SELECT count(1) FROM t_message_config tm
 		<trim prefix="WHERE" prefixOverrides="AND">
 			tm.data_state = 1 
-			<if test="obj.keyWords !=null and obj.keyWords != ''">
-				AND tm.title like concat('%',#{obj.keyWords},'%')
-			</if>
-			<if test="obj.type != null and obj.type != ''">
-				and tm.type = #{obj.type,jdbcType=DECIMAL}
+			<if test="obj!=null and obj!=''">
+				<if test="obj.keyWords !=null and obj.keyWords != ''">
+					AND tm.title like concat('%',#{obj.keyWords},'%')
+				</if>
+				<if test="obj.type != null and obj.type != ''">
+					and tm.type = #{obj.type,jdbcType=DECIMAL}
+				</if>
 			</if>
 		</trim>
 	</select>
@@ -57,21 +60,25 @@
 		<include refid="ORACLE.paginationStart" />
 		SELECT
 		<include refid="select_columns" />,
-		tc.id as company_id,tc.name as company_name,
-		tr.id as recruitment_id,tr.title as recruitment_title
+		tc.id as company_id,
+		tc.name as company_name,
+		tr.id as recruitment_id,
+		tr.title as recruitment_title
 		FROM t_message_config tm 
 		left join t_company tc on tc.id = tm.fk_id and tm.belong_type = 1
 		left join t_recruitment tr on tr.id = tm.fk_id and tm.belong_type = 2
 		<trim prefix="WHERE" prefixOverrides="AND">
 			tm.data_state = 1 
-			<if test="obj.keyWords !=null and obj.keyWords != ''">
-				AND tm.title like concat('%',#{obj.keyWords},'%')
-			</if>
-			<if test="obj.type != null and obj.type != ''">
-				AND tm.type = #{obj.type,jdbcType=DECIMAL}
+			<if test="obj!=null and obj!=''">
+				<if test="obj.keyWords !=null and obj.keyWords != ''">
+					AND tm.title like concat('%',#{obj.keyWords},'%')
+				</if>
+				<if test="obj.type != null and obj.type != ''">
+					and tm.type = #{obj.type,jdbcType=DECIMAL}
+				</if>
 			</if>
 		</trim>
-		order by name
+		order by create_time desc
 		<include refid="ORACLE.paginationEnd" />
 	</select>
 	

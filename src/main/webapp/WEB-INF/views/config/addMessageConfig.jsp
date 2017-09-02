@@ -59,6 +59,10 @@
 	});
 
 	function next(){
+		var belongType = $("#belongType").val().trim();
+		if(!belongType){
+			belongType = 0;
+		}
 		$.ajax({
 			url:"${ctx}/messageConfig/saveMessageConfig",
 			type:"post",
@@ -68,7 +72,7 @@
 				type:$("#type").val(),
 				message:$("#message").val(),
 				fkId:$("#fkId").val(),
-				belongType:$("#belongType").val()
+				belongType:belongType
 			},
 			success:function(response){
 				if(response.result=="S"){
@@ -110,7 +114,7 @@
 				</label>
 				<br/>
 				<label>
-					<textarea rows="5" cols="55" name="message"></textarea>
+					<textarea rows="5" cols="55" id="message"></textarea>
 				</label>
 				<br/>
 				<label>

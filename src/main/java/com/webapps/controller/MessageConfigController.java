@@ -56,7 +56,7 @@ public class MessageConfigController {
 	public String toMessageConfigEditPage(Model model,Integer id,HttpServletRequest request,HttpServletResponse response){
 		try {
 			MessageConfig bc = iMessageConfigService.getById(id);
-			model.addAttribute("bannerConfig", bc);
+			model.addAttribute("messageConfig", bc);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

@@ -190,12 +190,6 @@ public class RecruitmentServiceImpl implements IRecruitmentService {
 		if(r!=null&&r.getCompany()!=null&&r.getCompany().getId()!=null){
 			Company c = iCompanyMapper.getById(r.getCompany().getId());
 			r.setCompany(c);
-			if(r.getIsMessage()==1){
-				List<MessageConfig> messages = iMessageConfigMapper.getByFkIdTypeAndBelongType(id, 3, 2);
-				if(CollectionUtils.isNotEmpty(messages)){
-					r.setMessage(messages.get(0));
-				}
-			}
 		}
 		return r;
 	}

@@ -19,10 +19,12 @@ import com.webapps.common.entity.BannerConfig;
 import com.webapps.common.entity.Company;
 import com.webapps.common.entity.Enrollment;
 import com.webapps.common.entity.FeeConfig;
+import com.webapps.common.entity.MessageConfig;
 import com.webapps.common.entity.Recommend;
 import com.webapps.common.entity.Recruitment;
 import com.webapps.common.entity.User;
 import com.webapps.common.form.BannerConfigRequestForm;
+import com.webapps.common.form.MessageConfigRequestForm;
 import com.webapps.common.form.RecruitmentRequestForm;
 import com.webapps.common.utils.JSONUtil;
 import com.webapps.service.IAliSmsMsgService;
@@ -30,6 +32,7 @@ import com.webapps.service.IBannerConfigService;
 import com.webapps.service.ICompanyService;
 import com.webapps.service.IEnrollmentService;
 import com.webapps.service.IFeeConfigService;
+import com.webapps.service.IMessageConfigService;
 import com.webapps.service.IRecommendService;
 import com.webapps.service.IRecruitmentService;
 import com.webapps.service.IUserService;
@@ -65,6 +68,9 @@ public class AppController {
 	
 	@Autowired
 	private IFeeConfigService iFeeConfigService;
+	
+	@Autowired
+	private IMessageConfigService iMessageConfigService;
 
 	/**
 	 * app端登录接口
@@ -113,11 +119,15 @@ public class AppController {
 		String telephone = jsonObj.getString("telephone");
 		user.setPassword(password);
 		user.setTelephone(telephone);
+		user.setAccount(telephone);
 		ResultDto<User> dto = null;
 		try {
 			ResultDto<String> dto1 = iAliSmsMsgService.validateAliSmsCode(asmId, smsCode);
 			if(dto1.getResult().equals("S")){
 				dto = iUserService.saveUser(user);
+				User user1 = new User();
+				user1.setId(user.getId());
+				dto.setData(user1);
 			}else{
 				return JSONUtil.toJSONString(JSONUtil.toJSONObject(dto1));
 			}
@@ -309,7 +319,7 @@ public class AppController {
 	}
 
 	@ResponseBody
-	@RequestMapping(value = "/getCompanyInfo")
+	@RequestMapping(value = "/getCompanyInfo", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
 	public String getCompanyInfo(@RequestBody String params) {
 		Gson gson = new Gson();
 		ResultDto<Company> dto = new ResultDto<Company>();
@@ -326,7 +336,7 @@ public class AppController {
 	}
 
 	@ResponseBody
-	@RequestMapping(value = "/getFeeConfig")
+	@RequestMapping(value = "/getFeeConfig", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
 	public String getFeeConfig(@RequestBody String params) {
 		ResultDto<List<FeeConfig>> dto = new ResultDto<List<FeeConfig>>();
 		try {
@@ -349,13 +359,27 @@ public class AppController {
 
 	}
 
+	@SuppressWarnings("unchecked")
 	@ResponseBody
-	@RequestMapping(value = "/getMessageConfig")
-	public String getMessageConfig(String params) {
-		
+	@RequestMapping(value = "/getMessageConfig", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
+	public String getMessageConfig(@RequestBody String params) {
+		ResultDto<List<MessageConfig>> dto = new ResultDto<List<MessageConfig>>();
+		JSONObject jsonObj = JSONObject.fromObject(params);
+		Integer rows = jsonObj.getInt("rows");
+		Integer curPage = jsonObj.getInt("page");
 		Page page = new Page();
-//		page.setRows();
-		return null;
+		page.setRows(rows);
+		page.setPage(curPage);
+		page = iMessageConfigService.loadMessageConfigList(page, new MessageConfigRequestForm());
+		if(page!=null){
+			List<MessageConfig> list = page.getResultList();
+			dto.setData(list);
+			dto.setResult("S");
+		}else{
+			dto.setResult("F");
+			dto.setErrorMsg("无更多数据");;
+		}
+		return JSONUtil.toJSONString(JSONObject.fromObject(dto));
 	}
 
 	/**
@@ -367,7 +391,7 @@ public class AppController {
 	@ResponseBody
 	@RequestMapping(value = "/applyCashback")
 	public String applyCashback(String params) {
-
+		
 		return null;
 	}
 

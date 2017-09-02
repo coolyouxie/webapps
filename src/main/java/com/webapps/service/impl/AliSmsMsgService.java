@@ -13,10 +13,12 @@ import com.aliyuncs.dysmsapi.model.v20170525.SendSmsResponse;
 import com.aliyuncs.exceptions.ClientException;
 import com.webapps.common.bean.ResultDto;
 import com.webapps.common.entity.AliSmsMsg;
+import com.webapps.common.entity.User;
 import com.webapps.common.utils.DateUtil;
 import com.webapps.common.utils.PropertyUtil;
 import com.webapps.common.utils.SmsUtil;
 import com.webapps.mapper.IAliSmsMsgMapper;
+import com.webapps.mapper.IUserMapper;
 import com.webapps.service.IAliSmsMsgService;
 
 @Service
@@ -27,11 +29,22 @@ public class AliSmsMsgService implements IAliSmsMsgService {
 	
 	@Autowired
 	private IAliSmsMsgMapper iAliSmsMsgMapper;
+	
+	@Autowired
+	private IUserMapper iUserMapper;
 
 	@Override
 	public ResultDto<AliSmsMsg> getAliSmsCode(String phoneNum,Integer type) {
 		ResultDto<AliSmsMsg> dto = new ResultDto<AliSmsMsg>();
 		try {
+			if(type==1){
+				User user = iUserMapper.queryUserByAccount(phoneNum);
+				if(user!=null&&user.getId()!=null){
+					dto.setResult("F");
+					dto.setErrorMsg("该手机号已被注册");
+					return dto;
+				}
+			}
 			Map<String,Object> resultMap = SmsUtil.sendSms(phoneNum);
 			if(resultMap==null){
 				dto.setResult("F");
@@ -67,15 +80,10 @@ public class AliSmsMsgService implements IAliSmsMsgService {
 				dto.setErrorMsg("短信保存数据库失败，请稍后重试");
 				dto.setResult("F");
 			}
-			asm.setBizId(null);
-			asm.setOutId(null);
-			asm.setTemplateParam(null);
-			asm.setTemplateCode(null);
-			asm.setSmsUpExtendCode(null);
-			asm.setSignName(null);
-			asm.setRequestId(null);
 			AliSmsMsg asm1 = new AliSmsMsg();
 			asm1.setId(asm.getId());
+			asm1.setCreateTime(null);
+			asm1.setUpdateTime(null);
 			dto.setData(asm1);
 		} catch (ClientException e) {
 			e.printStackTrace();

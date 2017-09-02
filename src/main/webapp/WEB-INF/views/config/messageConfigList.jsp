@@ -52,7 +52,7 @@
 								sortable : false,
 								formatter:function(cellValue,options,rowObject){
 									if(rowObject!=null){
-										if(rowObject.type==3){
+										if(rowObject.belongType==1){
 											return '<a href="${ctx}/company/getById?id='+rowObject.fkId+'" style="color:blue;">'+rowObject.company.name+'</a>';
 										}
 									}
@@ -65,7 +65,7 @@
 								sortable : false,
 								formatter:function(cellValue,options,rowObject){
 									if(rowObject){
-										if(rowObject.type==4){
+										if(rowObject.belongType==2&&rowObject.recruitment!=null){
 											return '<a href="${ctx}/recruitment/getById?id='+rowObject.fkId+'" style="color:blue">'+rowObject.recruitment.title+'</a>';
 										}
 									}
@@ -133,7 +133,7 @@
 	
 	function deleteById(id){
 		$.ajax({
-			url:"${ctx}/bannerConfig/deleteBannerConfigById",
+			url:"${ctx}/messageConfig/deleteMessageConfigById",
 			type:"POST",
 			dataType:"JSON",
 			data:{

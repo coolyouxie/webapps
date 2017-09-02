@@ -193,9 +193,9 @@
 				<div class="col-md-2">
 					<button type="button" onclick="addRecruitment()" class="form-control" >新建发布单</button>
 				</div>
-				<div class="col-md-2">
+				<!-- <div class="col-md-2">
 					<button type="button" onclick="addMessage()" class="form-control" >新建消息</button>
-				</div>
+				</div> -->
 			</form>
 		</div>
 		

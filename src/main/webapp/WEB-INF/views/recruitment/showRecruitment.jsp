@@ -23,7 +23,10 @@
 </style>
 
 <script type="text/javascript">
-	
+function addMessage(){
+	var fkId = $("#recruitmentId").val();
+	window.location.href="${ctx}/messageConfig/toAddMessagePage?fkId="+fkId+"&type=3&belongType=2";
+}
 </script>
 </head>
 <body>
@@ -34,8 +37,12 @@
 					发布单详情
 				</h4>
 			</div>
+			<div class="col-md-2">
+				<button type="button" onclick="addMessage()" class="form-control" >新建消息</button>
+			</div>
 		</div>
 		<form id="saveForm" class="form-horizontal" action="${ctx}/recruitment/saveRecruitment"  method="post">
+			<input type="hidden" id="recruitmentId" name="recruitmentId" value="${recruitment.id}">
 			<input type="hidden" id="handleType" name="handleType" value="add">
 			<input type="hidden" id="companyId" name="companyId" value="${recruitment.company.id}" >
 			<div class="form-group">
