@@ -105,11 +105,22 @@ public class AppController {
 	@ResponseBody
 	@RequestMapping(value = "/register", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
 	public String register(@RequestBody String params) {
-		Gson gson = new Gson();
-		User user = gson.fromJson(params, User.class);
+		User user = new User();
+		JSONObject jsonObj = JSONUtil.toJSONObject(params);
+		String smsCode = jsonObj.getString("smsCode");
+		Integer asmId = jsonObj.getInt("asmId");
+		String password = jsonObj.getString("password");
+		String telephone = jsonObj.getString("telephone");
+		user.setPassword(password);
+		user.setTelephone(telephone);
 		ResultDto<User> dto = null;
 		try {
-			dto = iUserService.saveUser(user);
+			ResultDto<String> dto1 = iAliSmsMsgService.validateAliSmsCode(asmId, smsCode);
+			if(dto1.getResult().equals("S")){
+				dto = iUserService.saveUser(user);
+			}else{
+				return JSONUtil.toJSONString(JSONUtil.toJSONObject(dto1));
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			dto = new ResultDto<User>();
@@ -126,7 +137,7 @@ public class AppController {
 	 * @return
 	 */
 	@ResponseBody
-	@RequestMapping(value = "/getValidateCode")
+	@RequestMapping(value = "/getValidateCode", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
 	public String getValidateCode(@RequestBody String params) {
 		Gson gson = new Gson();
 		AliSmsMsg asm = gson.fromJson(params, AliSmsMsg.class);
@@ -135,7 +146,7 @@ public class AppController {
 	}
 	
 	@ResponseBody
-	@RequestMapping(value = "/validateSmsCode")
+	@RequestMapping(value = "/validateSmsCode", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
 	public String validateSmsCode(@RequestBody String params) {
 		Gson gson = new Gson();
 		AliSmsMsg asm = gson.fromJson(params, AliSmsMsg.class);
@@ -341,7 +352,9 @@ public class AppController {
 	@ResponseBody
 	@RequestMapping(value = "/getMessageConfig")
 	public String getMessageConfig(String params) {
-
+		
+		Page page = new Page();
+//		page.setRows();
 		return null;
 	}
 
