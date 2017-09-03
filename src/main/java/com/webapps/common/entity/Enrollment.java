@@ -1,6 +1,7 @@
 package com.webapps.common.entity;
 
-import com.webapps.common.utils.DateUtil;
+import java.math.BigDecimal;
+import java.util.Date;
 
 public class Enrollment extends Entity {
 	
@@ -17,6 +18,36 @@ public class Enrollment extends Entity {
 	private String talkResult;
 	
 	private String remark;
+	
+	private String failedReason;
+	
+	private Date entryDate;
+	
+	private BigDecimal reward;
+
+	public String getFailedReason() {
+		return failedReason;
+	}
+
+	public void setFailedReason(String failedReason) {
+		this.failedReason = failedReason;
+	}
+
+	public Date getEntryDate() {
+		return entryDate;
+	}
+
+	public void setEntryDate(Date entryDate) {
+		this.entryDate = entryDate;
+	}
+
+	public BigDecimal getReward() {
+		return reward;
+	}
+
+	public void setReward(BigDecimal reward) {
+		this.reward = reward;
+	}
 
 	public Integer getState() {
 		return state;

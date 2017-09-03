@@ -12,9 +12,11 @@ import org.springframework.transaction.annotation.Transactional;
 import com.webapps.common.bean.Page;
 import com.webapps.common.bean.ResultDto;
 import com.webapps.common.entity.Recommend;
+import com.webapps.common.entity.User;
 import com.webapps.common.form.RecommendRequestForm;
 import com.webapps.common.utils.DateUtil;
 import com.webapps.mapper.IRecommendMapper;
+import com.webapps.mapper.IUserMapper;
 import com.webapps.service.IRecommendService;
 
 @Service
@@ -25,6 +27,9 @@ public class RecommendServiceImpl implements IRecommendService {
 	
 	@Autowired
 	private IRecommendMapper iRecommendMapper;
+	
+	@Autowired
+	private IUserMapper iUserMapper;
 
 	@Override
 	public Page loadRecommendList(Page page, RecommendRequestForm recommend) throws Exception {
@@ -102,6 +107,12 @@ public class RecommendServiceImpl implements IRecommendService {
 		List<Recommend> list = iRecommendMapper.queryPage(0,1,form);
 		Recommend r = null;
 		try {
+			User user = iUserMapper.queryUserByAccount(r.getMobile());
+			if(user!=null&&user.getId()!=null){
+				dto.setResult("F");
+				dto.setErrorMsg("该用户已注册会员，不可重复推荐");
+				return dto;
+			}
 			if(CollectionUtils.isNotEmpty(list)){
 				r = list.get(0);
 			}else{
@@ -117,7 +128,8 @@ public class RecommendServiceImpl implements IRecommendService {
 			}else{
 				dto = new ResultDto<Recommend>();
 				dto.setResult("F");
-				dto.setErrorMsg("该用户已被推荐");
+				dto.setErrorMsg("该用户还在有效推荐期内，不可重复推荐");
+				return dto;
 			}
 		} catch (Exception e) {
 			logger.error(e.getMessage());

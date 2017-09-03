@@ -17,6 +17,7 @@ import com.webapps.common.bean.ResultDto;
 import com.webapps.common.entity.AliSmsMsg;
 import com.webapps.common.entity.BannerConfig;
 import com.webapps.common.entity.Company;
+import com.webapps.common.entity.EnrollApproval;
 import com.webapps.common.entity.Enrollment;
 import com.webapps.common.entity.FeeConfig;
 import com.webapps.common.entity.MessageConfig;
@@ -30,6 +31,7 @@ import com.webapps.common.utils.JSONUtil;
 import com.webapps.service.IAliSmsMsgService;
 import com.webapps.service.IBannerConfigService;
 import com.webapps.service.ICompanyService;
+import com.webapps.service.IEnrollApprovalService;
 import com.webapps.service.IEnrollmentService;
 import com.webapps.service.IFeeConfigService;
 import com.webapps.service.IMessageConfigService;
@@ -71,6 +73,9 @@ public class AppController {
 	
 	@Autowired
 	private IMessageConfigService iMessageConfigService;
+	
+	@Autowired
+	private IEnrollApprovalService iEnrollApprovalService;
 
 	/**
 	 * app端登录接口
@@ -468,6 +473,28 @@ public class AppController {
 			e.printStackTrace();
 			dto.setResult("F");
 			dto.setErrorMsg("获取数据异常");
+		}
+		return JSONUtil.toJSONString(JSONUtil.toJSONObject(dto));
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/applyApproval", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
+	public String applyApproval(@RequestBody String params) {
+		ResultDto<EnrollApproval> dto = null;
+		logger.info("获取用户信息接口getUserInfo接收参数：" + params);
+		JSONObject obj = JSONUtil.toJSONObject(params);
+		Integer type = obj.getInt("approvaType");
+		try {
+			if(type==1){
+				dto = iEnrollApprovalService.applyEntryApproval(obj);
+			}else if(type==2){
+				dto = iEnrollApprovalService.applyExpireApproval(obj);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			dto.setResult("F");
+			dto.setErrorMsg("发起审核异常");
+			return JSONUtil.toJSONString(JSONUtil.toJSONObject(dto));
 		}
 		return JSONUtil.toJSONString(JSONUtil.toJSONObject(dto));
 	}

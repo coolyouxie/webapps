@@ -128,8 +128,8 @@
 								formatter:function(cellValue,options,rowObject){
 									var result = null;
 									if(rowObject.state==0){
-										result = '<button class="btn btn-primary btn-sm" onclick="enrollApprovalById('+rowObject.id+',1)">通过</button>'+
-										'<button class="btn btn-primary btn-sm" onclick="showModal('+rowObject.id+',2)">不通过</button>';
+										result = '<button class="btn btn-primary btn-sm" onclick="enrollApprovalById('+rowObject.id+',1,"",'+rowObject.type+')">通过</button>'+
+										'<button class="btn btn-primary btn-sm" onclick="showModal('+rowObject.id+',2,'+rowObject.type+')">不通过</button>';
 									}else{
 										result = "已审核";
 									}
@@ -156,7 +156,7 @@
 		}).trigger("reloadGrid");
 	}
 	
-	function enrollApprovalById(id,state,remark){
+	function enrollApprovalById(id,state,remark,approvalType){
 		$.ajax({
 			url:"${ctx}/enrollApproval/enrollApprovalById",
 			type:"POST",
@@ -164,7 +164,8 @@
 			data:{
 				"id":id,
 				"state":state,
-				"remark":remark
+				"remark":remark,
+				"approvalType":approvalType
 			},
 			success:function(response){
 				$('#remarkModal').modal('hide');
@@ -178,9 +179,10 @@
 		});
 	}
 	
-	function showModal(id,state){
+	function showModal(id,state,approvalType){
 		$("#enrollApprovalId").val(id);
 		$("#approvalState").val(state);
+		$("#approvalType").val(approvalType);
 		$('#remarkModal').modal('show');
 	}
 	
@@ -188,13 +190,14 @@
 		var id = $("#enrollApprovalId").val();
 		var state = $("#approvalState").val();
 		var remark = $("#remark").val().trim();
+		var approvalType = $("#approvalType").val();
 		if(state==2){
 			if(!remark){
 				alert("请填写审核不通过原因");
 				return ;
 			}
 		}
-		enrollApprovalById(id,state,remark);
+		enrollApprovalById(id,state,remark,approvalType);
 	}
 	
 </script>
@@ -219,6 +222,7 @@
 <body>
 	<input type="hidden" id="enrollApprovalId" >
 	<input type="hidden" id="approvalState" >
+	<input type="hidden" id="approvalType">
 	<div class="modal fade" id="remarkModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class="modal-dialog">
 			<div class="modal-content">

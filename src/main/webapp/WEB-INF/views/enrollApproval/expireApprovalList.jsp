@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta charset="utf-8" />
-<title>报名管理</title>	
+<title>期满审核</title>	
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" href="${ctx}/js/common/jquery/jquery-ui-1.12.1/jquery-ui.css" type="text/css" />
 <link rel="stylesheet" href="${ctx}/js/common/jquery/jqGrid/css/ui.jqgrid.css" type="text/css" />
@@ -30,7 +30,7 @@
 	var dataGrid = null;
 	jQuery(document).ready(function(){
 		dataGrid = jQuery("#list").jqGrid({
-		    url:"${ctx}/enrollment/loadEnrollmentList",
+		    url:"${ctx}/enrollApproval/loadEnrollApprovalList",
 		    datatype: "json",
 		    mtype : "POST",
 		    height : 650,
@@ -42,28 +42,8 @@
 								total : 'page.total', // json中代表页码总数的数据 
 								repeatitems : false // 如果设为false，则jqGrid在解析json时，会根据name来搜索对应的数据元素（即可以json中元素可以不按顺序）；而所使用的name是来自于colModel中的name设定。   
 							},
-		    colNames : [ '公司名称', '发布单标题', '报名人', '手机号','报名时间','沟通结果','操作'],
+		    colNames : [ '报名人', '手机号','报名时间','入职公司','发布单标题','类型','状态','备注','操作'],
 		    colModel : [ {
-								label : 'company.name',
-								name : 'company.name',
-								align : 'center',
-								sortable : false,
-								formatter:function(cellValue,options,rowObject){
-									if(rowObject.company){
-										return '<a href="${ctx}/company/getById?id='+rowObject.company.id+'" style="color:blue">'+cellValue+'</a>';
-									}else{
-										return '';
-									}
-								}
-							}, {
-								label : 'recruitment.title',
-								name : 'recruitment.title',
-								align : 'center',
-								sortable : false,
-								formatter:function(cellValue,options,rowObject){
-									return '<a href="${ctx}/recruitment/getById?id='+rowObject.recruitment.id+'" style="color:blue">'+cellValue+'</a>';
-								}
-							}, {
 								label : 'user.name',
 								name : 'user.name',
 								align : 'center',
@@ -76,29 +56,83 @@
 								name : 'user.mobile',
 								align : 'center',
 								sortable : false
-							},{
+							}, {
 								label : 'createTimeStr',
 								name : 'createTimeStr',
 								align : 'center',
 								sortable : false
+							}, {
+								label : 'company.name',
+								name : 'company.name',
+								align : 'center',
+								sortable : false,
+								formatter:function(cellValue,options,rowObject){
+									var result = "无";
+									if(rowObject.company){
+										result = '<a href="${ctx}/company/getById?id='+rowObject.company.id+'" style="color:blue">'+cellValue+'</a>';
+									}
+									return result;
+								}
+							}, {
+								label : 'recruitment.title',
+								name : 'recruitment.title',
+								align : 'center',
+								sortable : false,
+								formatter:function(cellValue,options,rowObject){
+									var result = "无";
+									if(rowObject.recruitment){
+										result = '<a href="${ctx}/recruitment/getById?id='+rowObject.company.id+'" style="color:blue">'+cellValue+'</a>';
+									}
+									return result;
+								}
+							}, {
+								label : 'type',
+								name : 'type',
+								align : 'center',
+								sortable : false,
+								formatter:function(cellValue,options,rowObject){
+									var result = null;
+									if(cellValue==1){
+										result = '入职审核';
+									}else if(cellValue==2){
+										result = "期满审核";
+									}
+									return result;
+								}
 							},{
-								label : 'talkResult',
-								name : 'talkResult',
+								label : 'state',
+								name : 'state',
+								align : 'center',
+								sortable : false,
+								formatter:function(cellValue,options,rowObject){
+									var result = null;
+									if(cellValue==0){
+										result = '待审核';
+									}else if(cellValue==1){
+										result = "审核通过";
+									}else if(cellValue==2){
+										result = "审核不通过";
+									}
+									return result;
+								}
+							},{
+								label : 'remark',
+								name : 'remark',
 								align : 'center',
 								sortable : false
-							},{
+							}, {
 								label : 'operate',
 								name : 'operate',
 								align : 'center',
 								sortable : false,
 								formatter:function(cellValue,options,rowObject){
 									var result = null;
-									if(rowObject.isTalked==0){
-										result = "<button id='btn_"+rowObject.id+"' class='btn btn-primary btn-sm' data-toggle='modal' onclick='showModal("+rowObject.id+",1)'>已沟通</button>";
+									if(rowObject.state==0){
+										result = '<button class="btn btn-primary btn-sm" onclick="enrollApprovalById('+rowObject.id+',1)">通过</button>'+
+										'<button class="btn btn-primary btn-sm" onclick="showModal('+rowObject.id+',2)">不通过</button>';
 									}else{
-										result = "已沟通";
+										result = "已审核";
 									}
-									result += "<button id='btn_"+rowObject.id+"' class='btn btn-primary btn-sm' data-toggle='modal' onclick='showModal("+rowObject.id+",2)'>作废</button>";
 									return result;
 								}
 							} ],
@@ -108,7 +142,7 @@
 		    sortname: 'id',
 		    viewrecords: true,
 		    sortorder: "desc",
-		    caption: "报名列表",
+		    caption: "审核列表",
 		    gridComplete : function() { //在此事件中循环为每一行添加日志、废保和查看链接
 				
 			}
@@ -122,79 +156,45 @@
 		}).trigger("reloadGrid");
 	}
 	
-	function deleteById(id){
+	function enrollApprovalById(id,state,remark){
 		$.ajax({
-			url:"${ctx}/company/deleteCompanyById",
+			url:"${ctx}/enrollApproval/enrollApprovalById",
 			type:"POST",
 			dataType:"JSON",
 			data:{
-				"id":id
+				"id":id,
+				"state":state,
+				"remark":remark
 			},
 			success:function(response){
-				alert("删除成功");
-				dataGrid.trigger("reloadGrid");
+				$('#remarkModal').modal('hide');
+				if(response.result=='S'){
+					alert("审核信息更新完成");
+					dataGrid.trigger("reloadGrid");
+				}else{
+					alert(response.errorMsg);
+				}
 			}
 		});
 	}
 	
-	function showModal(id,type){
-		$("#enrollmentId").val(id);
-		$("#handleType").val(type);
-		$('#talkInfo').modal('show');
+	function showModal(id,state){
+		$("#enrollApprovalId").val(id);
+		$("#approvalState").val(state);
+		$('#remarkModal').modal('show');
 	}
 	
-	function updateEnrollmentInfo(){
-		var handleType = $("#handleType").val();
-		if(handleType==1){
-			saveTalkInfo();
-		}else if(handleType==2){
-			//作废报名
-			cancelEnroll();
+	function enrollApprovalByIdWithRemark(){
+		var id = $("#enrollApprovalId").val();
+		var state = $("#approvalState").val();
+		var remark = $("#remark").val().trim();
+		if(state==2){
+			if(!remark){
+				alert("请填写审核不通过原因");
+				return ;
+			}
 		}
-	}
-	
-	function saveTalkInfo(){
-		$.ajax({		
-			url:"${ctx}/enrollment/saveTalkInfo",
-			type:"POST",
-			dataType:"JSON",
-			data:{
-				'id':$("#enrollmentId").val(),
-				'talkResult':$("#talkResult").val(),
-				'isTalked':1
-			},
-			success:function(response){
-				if(response.result=="S"){
-					$('#talkInfo').modal('hide');
-					alert("保存成功");
-					search();
-				}else{
-					alert(response.errorMsg);
-				}
-			}
-		});
-	}
-	
-	function cancelEnroll(){
-		$.ajax({		
-			url:"${ctx}/enrollment/cancelEnroll",
-			type:"POST",
-			dataType:"JSON",
-			data:{
-				'id':$("#enrollmentId").val(),
-				'remark':$("#talkResult").val(),
-				'dataState':0
-			},
-			success:function(response){
-				if(response.result=="S"){
-					$('#talkInfo').modal('hide');
-					alert("保存成功");
-					search();
-				}else{
-					alert(response.errorMsg);
-				}
-			}
-		});
+		enrollApprovalById(id,state,remark);
 	}
 	
 </script>
@@ -217,21 +217,21 @@
 </style>
 </head>
 <body>
-	<input type="hidden" id="enrollmentId" >
-	<input type="hidden" id="handleType" >
-	<div class="modal fade" id="talkInfo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<input type="hidden" id="enrollApprovalId" >
+	<input type="hidden" id="approvalState" >
+	<div class="modal fade" id="remarkModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-					<h4 class="modal-title" id="myModalLabel">沟通结果和备注</h4>
+					<h4 class="modal-title" id="myModalLabel">拒绝原因</h4>
 				</div>
 				<div class="modal-body">
-					<textarea id="talkResult" class="form-control" ></textarea>
+					<textarea id="remark" class="form-control" ></textarea>
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-					<button type="button" class="btn btn-primary" onclick="updateEnrollmentInfo()">提交</button>
+					<button type="button" class="btn btn-primary" onclick="enrollApprovalByIdWithRemark()">提交</button>
 				</div>
 			</div><!-- /.modal-content -->
 		</div><!-- /.modal -->
@@ -272,7 +272,7 @@
 						<input type="text" id="enrollTimeEnd" name="enrollTimeEnd" onClick="WdatePicker({isShowWeek:true})">
 					</label>
 				</div>
-				<div class="col-sm-3">
+				<!-- <div class="col-sm-3">
 					<label>
 						<span>状态:</span>
 						<select id="state" name="state">
@@ -283,7 +283,7 @@
 							<option value="4">已离职</option>
 						</select>
 					</label>
-				</div>
+				</div> -->
 			</div>
 		</form>
 	</div>

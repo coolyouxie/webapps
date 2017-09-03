@@ -18,14 +18,20 @@
 		<result column="create_time" jdbcType="VARCHAR" property="createTime" />
 		<result column="UPDATE_TIME" jdbcType="VARCHAR" property="updateTime" />
 		<result column="remark" jdbcType="VARCHAR" property="remark" />
+		<result column="failed_reason" jdbcType="VARCHAR" property="failedReason" />
+		<result column="entry_date" jdbcType="VARCHAR" property="entryDate" />
+		<result column="reward" jdbcType="DECIMAL" property="reward" />
 	</resultMap>
 
 	<sql id="select_columns">
-		te.ID,te.user_id,te.recruitment_id,te.company_id,te.state, te.data_state,te.CREATE_TIME,te.UPDATE_TIME,te.is_talked,te.talk_result,te.remark
+		te.ID,te.user_id,te.recruitment_id,te.company_id,te.state, te.data_state,
+		te.CREATE_TIME,te.UPDATE_TIME,te.is_talked,te.talk_result,te.remark,te.failed_reason,
+		te.entry_date,te.reward
 	</sql>
 
 	<sql id="insert_columns">
-		user_id,recruitment_id,company_id,state, data_state,CREATE_TIME,is_talked,talk_result
+		user_id,recruitment_id,company_id,state, data_state,CREATE_TIME,is_talked,talk_result,failed_reason,
+		entry_date,reward
 	</sql>
 	
 	<!-- 查询所有 -->
@@ -171,7 +177,10 @@
 			#{obj.dataState},
 			#{obj.createTime},
 			#{obj.isTalked},
-			#{obj.talkResult}
+			#{obj.talkResult},
+			#{obj.failedReason},
+			#{obj.entryDate},
+			#{obj.reward}
 		)
 	</insert>
 	
@@ -186,7 +195,10 @@
 			update_TIME=#{obj.updateTime},
 			is_talked=#{obj.isTalked},
 			talk_result=#{obj.talkResult},
-			remark = #{obj.remark}
+			remark = #{obj.remark},
+			failed_reason = #{obj.failedReason},
+			entry_date = #{obj.entryDate},
+			reward = #{obj.reward}
 		where id=#{id}
 	</update>
 	

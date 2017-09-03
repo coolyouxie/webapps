@@ -21,14 +21,19 @@
 		<result column="data_state" jdbcType="DECIMAL" property="dataState" />
 		<result column="create_time" jdbcType="VARCHAR" property="createTime" />
 		<result column="UPDATE_TIME" jdbcType="VARCHAR" property="updateTime" />
+		<result column="failed_reason" jdbcType="VARCHAR" property="failedReason" />
+		<result column="reward" jdbcType="DECIMAL" property="reward" />
+		<result column="entry_date" jdbcType="VARCHAR" property="entryDate" />
 	</resultMap>
 
 	<sql id="select_columns">
-		tea.ID,tea.state,tea.type, tea.data_state,tea.CREATE_TIME,tea.UPDATE_TIME,tea.operator_id,tea.remark,tea.is_talked,tea.talk_result,tea.enrollment_id
+		tea.ID,tea.state,tea.type, tea.data_state,tea.CREATE_TIME,tea.UPDATE_TIME,
+		tea.operator_id,tea.remark,tea.is_talked,tea.talk_result,tea.enrollment_id,
+		tea.reward,tea.entry_date
 	</sql>
 
 	<sql id="insert_columns">
-		user_id,enrollment_id,company_id,state, data_state,CREATE_TIME,operator_id,remark,type
+		user_id,enrollment_id,company_id,state, data_state,CREATE_TIME,operator_id,remark,type,reward,entry_date
 	</sql>
 	
 	<!-- 查询所有 -->
@@ -189,7 +194,9 @@
 			#{obj.createTime},
 			#{obj.operatorId},
 			#{obj.remark},
-			#{obj.type}
+			#{obj.type},
+			#{obj.reward},
+			#{obj.entryDate}
 		)
 	</insert>
 	
@@ -202,7 +209,9 @@
 			talk_result = #{obj.talkResult},
 			remark = #{obj.remark},
 			data_state = #{obj.dataState},
-			update_time = #{obj.updateTime}
+			update_time = #{obj.updateTime},
+			reward = #{obj.reward},
+			entry_date = #{obj.entryDate}
 		where id = #{id}
 	</update>
 </mapper>

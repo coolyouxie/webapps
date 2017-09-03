@@ -14,6 +14,7 @@ public class UserWallet extends Entity {
 		return fee;
 	}
 
+	
 	public void setFee(BigDecimal fee) {
 		this.fee = fee;
 	}

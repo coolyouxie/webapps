@@ -1,9 +1,13 @@
 package com.webapps.service;
 
+import java.math.BigDecimal;
+
 import com.webapps.common.bean.Page;
 import com.webapps.common.bean.ResultDto;
 import com.webapps.common.entity.EnrollApproval;
 import com.webapps.common.form.EnrollApprovalRequestForm;
+
+import net.sf.json.JSONObject;
 
 public interface IEnrollApprovalService {
 	
@@ -26,5 +30,24 @@ public interface IEnrollApprovalService {
 	public ResultDto<EnrollApproval> approvalById(Integer id,Integer state,String remark)throws Exception;
 	
 	public EnrollApproval getById(Integer id)throws Exception;
+	
+	/**
+	 * 根据等审核记录ID，审核类型（入职、期满等）和审核状态对人员信息进行审核操作
+	 * approvalType		1入职审核，2期满审核
+	 * @param id
+	 * @param state
+	 * @param approvalType
+	 * @param remark
+	 * @return
+	 * @throws Exception
+	 */
+	public ResultDto<EnrollApproval> enrollApproval(Integer id,Integer state,String failedReason,BigDecimal reward)throws Exception;
+	
+	public ResultDto<EnrollApproval> expireApproval(Integer id,Integer state,String failedReason)throws Exception;
+	
+	public ResultDto<EnrollApproval> applyEntryApproval(JSONObject params);
+	
+	public ResultDto<EnrollApproval> applyExpireApproval(JSONObject params);
+	
 
 }

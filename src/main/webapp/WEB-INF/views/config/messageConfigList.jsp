@@ -36,7 +36,7 @@
 								total : 'page.total', // json中代表页码总数的数据 
 								repeatitems : false // 如果设为false，则jqGrid在解析json时，会根据name来搜索对应的数据元素（即可以json中元素可以不按顺序）；而所使用的name是来自于colModel中的name设定。   
 							},
-		    colNames : [ '标题', '公司名称', '发布单', '类型', '新建时间', '操作'],
+		    colNames : [ '标题', '发布单', '类型', '新建时间', '操作'],
 		    colModel : [ {
 								label : 'title',
 								name : 'title',
@@ -44,19 +44,6 @@
 								sortable : false,
 								formatter:function(cellValue,options,rowObject){
 									return '<a href="${ctx}/bannerConfig/getById?id='+rowObject.id+'" style="color:blue">'+cellValue+'</a>';
-								}
-							}, {
-								label : 'companyName',
-								name : 'companyName',
-								align : 'center',
-								sortable : false,
-								formatter:function(cellValue,options,rowObject){
-									if(rowObject!=null){
-										if(rowObject.belongType==1){
-											return '<a href="${ctx}/company/getById?id='+rowObject.fkId+'" style="color:blue;">'+rowObject.company.name+'</a>';
-										}
-									}
-									return "";
 								}
 							}, {
 								label : 'reruitmentTitle',
