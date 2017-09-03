@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,6 +25,8 @@ import net.sf.json.JSONObject;
 @Service
 @Transactional
 public class EnrollApprovalServiceImpl implements IEnrollApprovalService {
+	
+	private Logger logger = Logger.getLogger(EnrollApprovalServiceImpl.class);
 	
 	@Autowired
 	private IEnrollApprovalMapper iEnrollApprovalMapper;
@@ -72,39 +75,46 @@ public class EnrollApprovalServiceImpl implements IEnrollApprovalService {
 	public ResultDto<EnrollApproval> enrollApproval(Integer id, Integer state, 
 			String failedReason,BigDecimal reward) throws Exception {
 		ResultDto<EnrollApproval> dto = new ResultDto<EnrollApproval>();
-		EnrollApproval ea = iEnrollApprovalMapper.getById(id);
-		if(ea==null){
-			dto.setErrorMsg("未找到待审核信息，请刷新页面后再试");
-			dto.setResult("F");
-			return dto;
-		}
-		Enrollment enrollment = iEnrollmentMapper.getById(ea.getEnrollmentId());
-		if(enrollment==null){
-			dto.setErrorMsg("未找到报名信息，请确认后再次审核");
-			dto.setResult("F");
-			return dto;
-		}
-		if(enrollment.getState()==20&&ea.getType()==1){
-			//入职审核
-			if(state==1){
-				enrollment.setState(21);
-				enrollment.setUpdateTime(new Date());
-				ea.setReward(reward);
-				ea.setState(1);
-				ea.setUpdateTime(new Date());
-				ea.setReward(reward);
-			}else{
-				enrollment.setState(22);
-				enrollment.setUpdateTime(new Date());
-				ea.setState(2);
-				ea.setUpdateTime(new Date());
+		try {
+			EnrollApproval ea = iEnrollApprovalMapper.getById(id);
+			if(ea==null){
+				dto.setErrorMsg("未找到待审核信息，请刷新页面后再试");
+				dto.setResult("F");
+				return dto;
+			}
+			Enrollment enrollment = iEnrollmentMapper.getById(ea.getEnrollmentId());
+			if(enrollment==null){
+				dto.setErrorMsg("未找到报名信息，请确认后再次审核");
+				dto.setResult("F");
+				return dto;
+			}
+			if(enrollment.getState()==20&&ea.getType()==1){
+				//入职审核
+				if(state==1){
+					enrollment.setState(21);
+					enrollment.setUpdateTime(new Date());
+					enrollment.setReward(reward);
+					ea.setState(1);
+					ea.setUpdateTime(new Date());
+					ea.setReward(reward);
+				}else{
+					enrollment.setState(22);
+					enrollment.setUpdateTime(new Date());
+					ea.setState(2);
+					ea.setUpdateTime(new Date());
+				}
 				iEnrollmentMapper.updateById(enrollment.getId(), enrollment);
 				iEnrollApprovalMapper.updateById(ea.getId(), ea);
+				dto.setResult("S");
+				return dto;
+			}else{
+				dto.setErrorMsg("审核状态不匹配，请刷新页面后再试");
+				dto.setResult("F");
+				return dto;
 			}
-			dto.setResult("S");
-			return dto;
-		}else{
-			dto.setErrorMsg("审核状态不匹配，请刷新页面后再试");
+		} catch (Exception e) {
+			logger.error("入职审核异常："+e.getMessage());
+			dto.setErrorMsg("入职审核异常");
 			dto.setResult("F");
 			return dto;
 		}
@@ -113,39 +123,48 @@ public class EnrollApprovalServiceImpl implements IEnrollApprovalService {
 	@Override
 	public ResultDto<EnrollApproval> expireApproval(Integer id, Integer state, String failedReason) throws Exception {
 		ResultDto<EnrollApproval> dto = new ResultDto<EnrollApproval>();
-		EnrollApproval ea = iEnrollApprovalMapper.getById(id);
-		if(ea==null){
-			dto.setErrorMsg("未找到待审核信息，请刷新页面后再试");
-			dto.setResult("F");
-			return dto;
-		}
-		Enrollment enrollment = iEnrollmentMapper.getById(ea.getEnrollmentId());
-		if(enrollment==null){
-			dto.setErrorMsg("未找到报名信息，请确认后再次审核");
-			dto.setResult("F");
-			return dto;
-		}
-		if(enrollment.getState()==30&&ea.getType()==2){
-			//入职审核
-			if(state==1){
-				enrollment.setState(21);
-				enrollment.setUpdateTime(new Date());
-				ea.setState(1);
-				ea.setUpdateTime(new Date());
-			}else{
-				enrollment.setState(22);
-				enrollment.setUpdateTime(new Date());
-				enrollment.setFailedReason(failedReason);
-				ea.setState(2);
-				ea.setUpdateTime(new Date());
-				ea.setFailedReason(failedReason);
+		try {
+			EnrollApproval ea = iEnrollApprovalMapper.getById(id);
+			if(ea==null){
+				dto.setErrorMsg("未找到待审核信息，请刷新页面后再试");
+				dto.setResult("F");
+				return dto;
+			}
+			Enrollment enrollment = iEnrollmentMapper.getById(ea.getEnrollmentId());
+			if(enrollment==null){
+				dto.setErrorMsg("未找到报名信息，请确认后再次审核");
+				dto.setResult("F");
+				return dto;
+			}
+			if(enrollment.getState()==30&&ea.getType()==2){
+				//入职审核
+				if(state==1){
+					enrollment.setState(21);
+					enrollment.setUpdateTime(new Date());
+					ea.setState(1);
+					ea.setUpdateTime(new Date());
+					//期满审核通过时，添加一笔金额到t_user_wallet表
+					
+				}else{
+					enrollment.setState(32);
+					enrollment.setUpdateTime(new Date());
+					enrollment.setFailedReason(failedReason);
+					ea.setState(2);
+					ea.setUpdateTime(new Date());
+					ea.setFailedReason(failedReason);
+				}
 				iEnrollmentMapper.updateById(enrollment.getId(), enrollment);
 				iEnrollApprovalMapper.updateById(ea.getId(), ea);
+				dto.setResult("S");
+				return dto;
+			}else{
+				dto.setErrorMsg("审核状态不匹配，请刷新页面后再试");
+				dto.setResult("F");
+				return dto;
 			}
-			dto.setResult("S");
-			return dto;
-		}else{
-			dto.setErrorMsg("审核状态不匹配，请刷新页面后再试");
+		} catch (Exception e) {
+			logger.error("期满审核异常："+e.getMessage());
+			dto.setErrorMsg("期满审核异常");
 			dto.setResult("F");
 			return dto;
 		}
@@ -218,7 +237,7 @@ public class EnrollApprovalServiceImpl implements IEnrollApprovalService {
 				dto.setResult("F");
 				return dto;
 			}
-			enrollment.setState(20);
+			enrollment.setState(30);
 			enrollment.setUpdateTime(new Date());
 			iEnrollmentMapper.updateById(enrollmentId, enrollment);
 			EnrollApproval ea = saveEnrollApprova(null, enrollment,2);

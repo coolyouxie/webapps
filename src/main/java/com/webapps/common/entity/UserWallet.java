@@ -13,7 +13,6 @@ public class UserWallet extends Entity {
 	public BigDecimal getFee() {
 		return fee;
 	}
-
 	
 	public void setFee(BigDecimal fee) {
 		this.fee = fee;

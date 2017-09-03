@@ -128,7 +128,7 @@
 								formatter:function(cellValue,options,rowObject){
 									var result = null;
 									if(rowObject.state==0){
-										result = '<button class="btn btn-primary btn-sm" onclick="enrollApprovalById('+rowObject.id+',1,"",'+rowObject.type+')">通过</button>'+
+										result = '<button class="btn btn-primary btn-sm" onclick="showRewardModal('+rowObject.id+',1,'+rowObject.type+')">通过</button>'+
 										'<button class="btn btn-primary btn-sm" onclick="showModal('+rowObject.id+',2,'+rowObject.type+')">不通过</button>';
 									}else{
 										result = "已审核";
@@ -156,7 +156,7 @@
 		}).trigger("reloadGrid");
 	}
 	
-	function enrollApprovalById(id,state,remark,approvalType){
+	function enrollApprovalById(id,state,remark,approvalType,reward){
 		$.ajax({
 			url:"${ctx}/enrollApproval/enrollApprovalById",
 			type:"POST",
@@ -165,10 +165,12 @@
 				"id":id,
 				"state":state,
 				"remark":remark,
+				"reward":reward,
 				"approvalType":approvalType
 			},
 			success:function(response){
 				$('#remarkModal').modal('hide');
+				$('#rewardModal').modal('hide');
 				if(response.result=='S'){
 					alert("审核信息更新完成");
 					dataGrid.trigger("reloadGrid");
@@ -186,6 +188,13 @@
 		$('#remarkModal').modal('show');
 	}
 	
+	function showRewardModal(id,state,approvalType){
+		$("#enrollApprovalId").val(id);
+		$("#approvalState").val(state);
+		$("#approvalType").val(approvalType);
+		$('#rewardModal').modal('show');
+	}
+	
 	function enrollApprovalByIdWithRemark(){
 		var id = $("#enrollApprovalId").val();
 		var state = $("#approvalState").val();
@@ -197,7 +206,19 @@
 				return ;
 			}
 		}
-		enrollApprovalById(id,state,remark,approvalType);
+		enrollApprovalById(id,state,remark,approvalType,null);
+	}
+	
+	function enrollApprovalByIdWithReward(id,state,approvalType){
+		var id = $("#enrollApprovalId").val();
+		var state = $("#approvalState").val();
+		var reward = $("#reward").val().trim();
+		var approvalType = $("#approvalType").val();
+		if(!reward){
+			alert("请填写入职当天的返费金额");
+			return ;
+		}
+		enrollApprovalById(id,state,null,approvalType,reward);
 	}
 	
 </script>
@@ -240,6 +261,25 @@
 			</div><!-- /.modal-content -->
 		</div><!-- /.modal -->
 	</div>
+	
+	<div class="modal fade" id="rewardModal" tabindex="-1" role="dialog" aria-labelledby="rewardModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="rewardModalLabel">入职当天返费金额</h4>
+				</div>
+				<div class="modal-body">
+					<input type="text" id="reward" class="form-control" >
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+					<button type="button" class="btn btn-primary" onclick="enrollApprovalByIdWithReward()">提交</button>
+				</div>
+			</div><!-- /.modal-content -->
+		</div><!-- /.modal -->
+	</div>
+	
 	<div class="container-fluid">
 		<form id="searchForm">
 			<div class="row" style="margin-bottom:8px">
@@ -281,10 +321,8 @@
 						<span>状态:</span>
 						<select id="state" name="state">
 							<option value="">-请选择-</option>
-							<option value="1">已报名</option>
-							<option value="2">已入职</option>
-							<option value="3">已期满</option>
-							<option value="4">已离职</option>
+							<option value="1">入职审核</option>
+							<option value="2">期满审核</option>
 						</select>
 					</label>
 				</div>

@@ -91,7 +91,6 @@ public class EnrollApprovalController {
 	public String enrollApprovalById(Model model,Integer id,Integer state,String remark,BigDecimal reward,Integer approvalType){
 		ResultDto<EnrollApproval> dto = new ResultDto<EnrollApproval>();
 		try {
-			dto = iEnrollApprovalService.approvalById(id,state,remark);
 			if(approvalType==1){
 				dto = iEnrollApprovalService.enrollApproval(id, state, remark, reward);
 			}else{
