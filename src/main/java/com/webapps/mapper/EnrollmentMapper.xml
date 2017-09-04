@@ -21,6 +21,7 @@
 		<result column="failed_reason" jdbcType="VARCHAR" property="failedReason" />
 		<result column="entry_date" jdbcType="VARCHAR" property="entryDate" />
 		<result column="reward" jdbcType="DECIMAL" property="reward" />
+		<result column="expire_date" jdbcType="DECIMAL" property="recruitment." />
 	</resultMap>
 
 	<sql id="select_columns">

@@ -3,6 +3,8 @@ package com.webapps.common.entity;
 import java.math.BigDecimal;
 
 public class WalletRecord extends Entity {
+	
+	private Integer walletId;
 
 	private BigDecimal fee;
 
@@ -52,6 +54,14 @@ public class WalletRecord extends Entity {
 
 	public void setSourceType(Integer sourceType) {
 		this.sourceType = sourceType;
+	}
+
+	public Integer getWalletId() {
+		return walletId;
+	}
+
+	public void setWalletId(Integer walletId) {
+		this.walletId = walletId;
 	}
 
 }

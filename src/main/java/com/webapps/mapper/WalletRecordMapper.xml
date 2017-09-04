@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.webapps.mapper.IUserWalletMapper">
+	<resultMap id="resultMap" type="com.webapps.common.entity.UserWallet">
+		<id column="ID" jdbcType="DECIMAL" property="id" />
+		<result column="wallet_id" jdbcType="DECIMAL" property="walletId" />
+		<result column="fee" jdbcType="DECIMAL" property="fee" />
+		<result column="type" jdbcType="DECIMAL" property="type" />
+		<result column="state" jdbcType="DECIMAL" property="state" />
+		<result column="operator_id" jdbcType="DECIMAL" property="operatorId" />
+		<result column="remark" jdbcType="VARCHAR" property="remark" />
+		<result column="source_type" jdbcType="DECIMAL" property="sourceType" />
+		<result column="data_state" jdbcType="DECIMAL" property="dataState" />
+		<result column="create_time" jdbcType="VARCHAR" property="createTime" />
+		<result column="UPDATE_TIME" jdbcType="VARCHAR" property="updateTime" />
+	</resultMap>
+
+	<sql id="select_columns">
+		ID,wallet_id,fee,type,state,operator_id,remark,
+		source_type, data_state,CREATE_TIME,UPDATE_TIME
+	</sql>
+
+	<sql id="insert_columns">
+		wallet_id,fee,type,state,operator_id,remark,
+		source_type, data_state,CREATE_TIME
+	</sql>
+	
+	<select id="getById" resultMap="resultMap">
+		select <include refid="select_columns" /> from t_wallet_record where id = #{id}
+	</select>
+	
+	<!-- 查询所有 -->
+	<select id="queryAll" resultMap="resultMap">
+		select <include refid="select_columns" /> from t_wallet_record where data_state = 1
+	</select>
+	
+	<!-- 查询所有 -->
+	<select id="queryByWalletId" resultMap="resultMap">
+		select <include refid="select_columns" /> from t_wallet_record where wallet_id = #{walletId} 
+	</select>
+	
+	<select id="queryCount" resultType="java.lang.Integer">
+		SELECT count(1) FROM t_wallet_record
+			where data_state = 1 
+	</select>
+
+	<select id="queryPage" resultMap="resultMap">
+		<include refid="ORACLE.paginationStart" />
+		SELECT
+		<include refid="select_columns" />
+		FROM t_wallet_record
+		where data_state = 1
+		order by create_time desc
+		<include refid="ORACLE.paginationEnd" />
+	</select>
+	
+	<insert id="insert" useGeneratedKeys="true" keyProperty="obj.id">
+		insert into t_wallet_record
+		(
+			<include refid="insert_columns" />
+		)
+		values
+		(
+			#{obj.walletId},
+			#{obj.fee},
+			#{obj.type},
+			#{obj.state},
+			#{obj.operatorId},
+			#{obj.remark},
+			#{obj.sourceType},
+			#{obj.dataState},
+			#{obj.createTime}
+		)
+	</insert>
+	
+	<update id="updateById">
+		update t_wallet_record set 
+		wallet_id=#{obj.walletId},
+		fee=#{obj.fee},
+		state=#{obj.state},
+		type=#{obj.state},
+		operator_id=#{obj.operatorId},
+		remark = #{obj.remark},
+		source_type = #{obj.sourceType},
+		data_state = #{obj.dataState},
+		update_time=now()
+		where id=#{id}
+	</update>
+</mapper>

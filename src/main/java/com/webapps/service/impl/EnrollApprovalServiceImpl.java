@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,10 +15,20 @@ import com.webapps.common.bean.Page;
 import com.webapps.common.bean.ResultDto;
 import com.webapps.common.entity.EnrollApproval;
 import com.webapps.common.entity.Enrollment;
+import com.webapps.common.entity.FeeConfig;
+import com.webapps.common.entity.Recommend;
+import com.webapps.common.entity.User;
+import com.webapps.common.entity.UserWallet;
 import com.webapps.common.form.EnrollApprovalRequestForm;
 import com.webapps.common.utils.DateUtil;
+import com.webapps.common.utils.PropertyUtil;
 import com.webapps.mapper.IEnrollApprovalMapper;
 import com.webapps.mapper.IEnrollmentMapper;
+import com.webapps.mapper.IFeeConfigMapper;
+import com.webapps.mapper.IRecommendMapper;
+import com.webapps.mapper.IUserMapper;
+import com.webapps.mapper.IUserWalletMapper;
+import com.webapps.mapper.IWalletRecordMapper;
 import com.webapps.service.IEnrollApprovalService;
 
 import net.sf.json.JSONObject;
@@ -33,6 +44,21 @@ public class EnrollApprovalServiceImpl implements IEnrollApprovalService {
 	
 	@Autowired
 	private IEnrollmentMapper iEnrollmentMapper;
+	
+	@Autowired
+	private IWalletRecordMapper iWalletRecordMapper;
+	
+	@Autowired
+	private IUserWalletMapper iUserWalletMapper;
+	
+	@Autowired
+	private IUserMapper iUserMapper;
+	
+	@Autowired
+	private IRecommendMapper iRecommendMapper;
+	
+	@Autowired
+	private IFeeConfigMapper iFeeConfigMapper;
 
 	@Override
 	public Page loadEnrollApprovalList(Page page, EnrollApprovalRequestForm form) throws Exception {
@@ -143,8 +169,8 @@ public class EnrollApprovalServiceImpl implements IEnrollApprovalService {
 					enrollment.setUpdateTime(new Date());
 					ea.setState(1);
 					ea.setUpdateTime(new Date());
-					//期满审核通过时，添加一笔金额到t_user_wallet表
-					
+					//这里还需要将日志记录到t_wallet_record表中
+					saveUserWalletAndRecord(enrollment);
 				}else{
 					enrollment.setState(32);
 					enrollment.setUpdateTime(new Date());
@@ -168,6 +194,79 @@ public class EnrollApprovalServiceImpl implements IEnrollApprovalService {
 			dto.setResult("F");
 			return dto;
 		}
+	}
+	
+	private ResultDto<String> saveUserWalletAndRecord(Enrollment enrollment)throws Exception{
+		ResultDto<String> dto = new ResultDto<String>();
+		//1先保存期满者自己的返费
+		//先找到注册用户信息
+		User user = iUserMapper.getById(enrollment.getUser().getId());
+		if(user==null){
+			dto.setErrorMsg("审核时查询用户信息失败");
+			dto.setResult("F");
+			return dto;
+		}
+		UserWallet uw = iUserWalletMapper.queryByUserId(user.getId());
+		if(uw==null||uw.getId()==null){
+			uw = new UserWallet();
+			uw.setCreateTime(new Date());
+			uw.setDataState(1);
+			uw.setFee(enrollment.getReward());
+			uw.setUserId(user.getId());
+			uw.setState(0);
+			iUserWalletMapper.insert(uw);
+		}else{
+			BigDecimal fee = uw.getFee();
+			BigDecimal reward = enrollment.getReward();
+			fee = fee.add(reward);
+			uw.setFee(fee);
+			uw.setUpdateTime(new Date());
+			iUserWalletMapper.updateById(uw.getId(), uw);
+		}
+		List<Recommend> reList = iRecommendMapper.queryByMobile(user.getTelephone());
+		if(CollectionUtils.isEmpty(reList)){
+			dto.setResult("S");
+			return dto;
+		}
+		Recommend re = reList.get(0);
+		Integer overDays = (Integer) PropertyUtil.getProperty("recommend_over_days");
+		//如果用户注册时间超过了推荐超期天数，则不返费给推荐者
+		Date registerDate = user.getCreateTime();
+		Date recommendDate = re.getCreateTime();
+		double days = DateUtil.getDaysBetweenTwoDates(recommendDate, registerDate);
+		if(days>overDays){
+			dto.setResult("S");
+			return dto;
+		}
+		//如果用户入职后没在规定天数入职成功，也不能返费给推荐者
+		Integer entryOverDays = (Integer) PropertyUtil.getProperty("entry_over_days");
+		Date entryDate = enrollment.getEntryDate();
+		days = DateUtil.getDaysBetweenTwoDates(registerDate, entryDate);
+		if(days>entryOverDays){
+			dto.setResult("S");
+			return dto;
+		}
+		//如果即满足在推荐有效期注册会员，又满足在入职期内成功入职的，则返费给推荐者
+		UserWallet uw1 = iUserWalletMapper.queryByUserId(re.getUser().getId());
+		FeeConfig fc = iFeeConfigMapper.getById(3);
+		if(uw1==null||uw1.getId()==null){
+			uw1 = new UserWallet();
+			uw1.setFee(fc.getFee());
+			uw1.setCreateTime(new Date());
+			uw1.setDataState(1);
+			uw1.setState(0);
+			uw1.setUserId(re.getUser().getId());
+			iUserWalletMapper.insert(uw1);
+			dto.setResult("S");
+			return dto;
+		}
+		BigDecimal fee1 = uw1.getFee();
+		fee1 = fee1.add(fc.getFee());
+		uw1.setFee(fee1);
+		uw1.setUpdateTime(new Date());
+		iUserWalletMapper.updateById(uw1.getId(),uw1);
+		dto.setResult("S");
+		return dto;
 	}
 
 	@Override

@@ -14,4 +14,6 @@ public interface IRecommendMapper extends IBaseMapper<Recommend>,IPageMapper<Rec
 	
 	List<Recommend> queryByUserId(@Param("userId")Integer userId)throws Exception;
 	
+	List<Recommend> queryByMobile(@Param("mobile")String mobile)throws Exception;
+	
 }

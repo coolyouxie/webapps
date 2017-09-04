@@ -46,6 +46,10 @@
 		select <include refid="select_columns" /> from t_recommend tr where user_id = #{userId} and data_state = 1 order by create_time desc
 	</select>
 	
+	<select id="queryByMobile" resultMap="resultMap">
+		select <include refid="select_columns" /> from t_recommend tr where mobile = #{mobile} and data_state = 1 order by create_time desc
+	</select>
+	
 	
 	<!-- 用户推荐时判断被推荐人是否可以被推荐 -->
 	<select id="queryCountForUserRecommend" resultType="java.lang.Integer">
