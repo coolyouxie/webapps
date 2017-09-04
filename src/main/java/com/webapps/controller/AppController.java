@@ -225,22 +225,23 @@ public class AppController {
 	public String getUserEnrollmentList(@RequestBody String params) {
 		JSONObject jsonObj = JSONUtil.toJSONObject(params);
 		Integer userId = jsonObj.getInt("userId");
-		Integer curPage = jsonObj.getInt("page");
-		Integer rows = jsonObj.getInt("rows");
-		EnrollmentRequestForm form = new EnrollmentRequestForm();
-		User user = new User();
-		user.setId(userId);
-		form.setUser(user);
-		Page page  = new Page();
-		page.setRows(rows);
-		page.setPage(curPage);
+//		Integer curPage = jsonObj.getInt("page");
+//		Integer rows = jsonObj.getInt("rows");
+//		EnrollmentRequestForm form = new EnrollmentRequestForm();
+//		User user = new User();
+//		user.setId(userId);
+//		form.setUser(user);
+//		Page page  = new Page();
+//		page.setRows(rows);
+//		page.setPage(curPage);
 		ResultDto<List<Enrollment>> dto = new ResultDto<List<Enrollment>>();
 		try {
-			page = iEnrollmentService.loadEnrollmentList(page, form);
-			List<Enrollment> list = null;
-			if(page!=null){
-				list = page.getResultList();
-			}
+//			page = iEnrollmentService.loadEnrollmentList(page, form);
+			List<Enrollment> list = iEnrollmentService.queryEnrollmentListByUserId(userId);
+//			List<Enrollment> list = null;
+//			if(page!=null){
+//				list = page.getResultList();
+//			}
 			dto.setData(list);
 			dto.setResult("S");
 		} catch (Exception e) {
