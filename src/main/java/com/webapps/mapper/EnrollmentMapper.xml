@@ -63,6 +63,9 @@
 			<if test="obj.company != null and obj.company.name != ''">
 				tc.name like concat('%',#{obj.company.name},'%')
 			</if>
+			<if test="obj.user != null and obj.user.id != null and obj.user.id != ''">
+				tc.name like concat('%',#{obj.company.name},'%')
+			</if>
 		</trim>
 	</select>
 	
@@ -98,6 +101,9 @@
 			<if test="obj.user != null and obj.user.name != null and obj.user.name != ''">
 				and tu.name = #{obj.user.name}
 			</if>
+			<if test="obj.user != null and obj.user.id != null and obj.user.id != ''">
+				and te.user_id = #{obj.user.id}
+			</if>
 			<if test="obj.user != null and obj.user.mobile !=null and obj.user.mobile != ''">
 				and tu.mobile = #{obj.user.mobile}
 			</if>
@@ -130,6 +136,9 @@
 			te.data_state = 1 
 			<if test="obj.state != null and obj.state != ''">
 				and te.state = #{obj.state}
+			</if>
+			<if test="obj.user != null and obj.user.id != null and obj.user.id != ''">
+				and te.user_id = #{obj.user.id}
 			</if>
 			<if test="obj.user != null and obj.user.name != null and obj.user.name != ''">
 				and tu.name = #{obj.user.name}

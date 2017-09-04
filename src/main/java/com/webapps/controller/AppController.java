@@ -25,6 +25,7 @@ import com.webapps.common.entity.Recommend;
 import com.webapps.common.entity.Recruitment;
 import com.webapps.common.entity.User;
 import com.webapps.common.form.BannerConfigRequestForm;
+import com.webapps.common.form.EnrollmentRequestForm;
 import com.webapps.common.form.MessageConfigRequestForm;
 import com.webapps.common.form.RecruitmentRequestForm;
 import com.webapps.common.utils.JSONUtil;
@@ -218,14 +219,28 @@ public class AppController {
 	 * @param params
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	@ResponseBody
 	@RequestMapping(value = "/getUserEnrollmentList", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
 	public String getUserEnrollmentList(@RequestBody String params) {
 		JSONObject jsonObj = JSONUtil.toJSONObject(params);
 		Integer userId = jsonObj.getInt("userId");
+		Integer curPage = jsonObj.getInt("page");
+		Integer rows = jsonObj.getInt("rows");
+		EnrollmentRequestForm form = new EnrollmentRequestForm();
+		User user = new User();
+		user.setId(userId);
+		form.setUser(user);
+		Page page  = new Page();
+		page.setRows(rows);
+		page.setPage(curPage);
 		ResultDto<List<Enrollment>> dto = new ResultDto<List<Enrollment>>();
 		try {
-			List<Enrollment> list = iEnrollmentService.queryEnrollmentListByUserId(userId);
+			page = iEnrollmentService.loadEnrollmentList(page, form);
+			List<Enrollment> list = null;
+			if(page!=null){
+				list = page.getResultList();
+			}
 			dto.setData(list);
 			dto.setResult("S");
 		} catch (Exception e) {
