@@ -31,8 +31,6 @@
             </list>
         </property>
     </bean>
-    
-    <tx:annotation-driven transaction-manager="transactionManager" />
    
 	<import resource = "classpath:applicationContext-business-service-business.xml" />
 

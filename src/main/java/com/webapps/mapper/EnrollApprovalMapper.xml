@@ -33,7 +33,7 @@
 	</sql>
 
 	<sql id="insert_columns">
-		user_id,enrollment_id,company_id,state, data_state,CREATE_TIME,operator_id,remark,type,reward,entry_date
+		user_id,enrollment_id,state, data_state,CREATE_TIME,operator_id,remark,type,reward,entry_date
 	</sql>
 	
 	<!-- 查询所有 -->
@@ -187,8 +187,7 @@
 		values
 		(
 			#{obj.user.id},
-			#{obj.enrollment.id},
-			#{obj.company.id},
+			#{obj.enrollmentId},
 			#{obj.state},
 			#{obj.dataState},
 			#{obj.createTime},

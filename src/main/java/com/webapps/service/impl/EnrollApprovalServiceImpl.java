@@ -7,9 +7,12 @@ import java.util.List;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+import org.mybatis.spring.MyBatisSystemException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import com.webapps.common.bean.Page;
 import com.webapps.common.bean.ResultDto;
@@ -98,6 +101,7 @@ public class EnrollApprovalServiceImpl implements IEnrollApprovalService {
 	}
 
 	@Override
+	@Transactional(propagation = Propagation.REQUIRED,rollbackFor={Exception.class, RuntimeException.class,MyBatisSystemException.class})
 	public ResultDto<EnrollApproval> enrollApproval(Integer id, Integer state, 
 			String failedReason,BigDecimal reward) throws Exception {
 		ResultDto<EnrollApproval> dto = new ResultDto<EnrollApproval>();
@@ -139,6 +143,7 @@ public class EnrollApprovalServiceImpl implements IEnrollApprovalService {
 				return dto;
 			}
 		} catch (Exception e) {
+			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 			logger.error("入职审核异常："+e.getMessage());
 			dto.setErrorMsg("入职审核异常");
 			dto.setResult("F");
@@ -147,6 +152,7 @@ public class EnrollApprovalServiceImpl implements IEnrollApprovalService {
 	}
 
 	@Override
+	@Transactional(propagation = Propagation.REQUIRED,rollbackFor={Exception.class, RuntimeException.class,MyBatisSystemException.class})
 	public ResultDto<EnrollApproval> expireApproval(Integer id, Integer state, String failedReason) throws Exception {
 		ResultDto<EnrollApproval> dto = new ResultDto<EnrollApproval>();
 		try {
@@ -189,6 +195,7 @@ public class EnrollApprovalServiceImpl implements IEnrollApprovalService {
 				return dto;
 			}
 		} catch (Exception e) {
+			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 			logger.error("期满审核异常："+e.getMessage());
 			dto.setErrorMsg("期满审核异常");
 			dto.setResult("F");
@@ -270,6 +277,7 @@ public class EnrollApprovalServiceImpl implements IEnrollApprovalService {
 	}
 
 	@Override
+	@Transactional(propagation = Propagation.REQUIRED,rollbackFor={Exception.class, RuntimeException.class,MyBatisSystemException.class})
 	public ResultDto<EnrollApproval> applyEntryApproval(JSONObject params) {
 		ResultDto<EnrollApproval> dto = new ResultDto<EnrollApproval>();
 		Integer enrollemntId = params.getInt("enrollemntId");
@@ -302,6 +310,7 @@ public class EnrollApprovalServiceImpl implements IEnrollApprovalService {
 				return dto;
 			}
 		} catch (Exception e) {
+			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 			e.printStackTrace();
 			dto.setErrorMsg("发起入职审核申请失败，请稍后重试");
 			dto.setResult("F");
@@ -321,6 +330,7 @@ public class EnrollApprovalServiceImpl implements IEnrollApprovalService {
 	}
 
 	@Override
+	@Transactional(propagation = Propagation.REQUIRED,rollbackFor={Exception.class, RuntimeException.class,MyBatisSystemException.class})
 	public ResultDto<EnrollApproval> applyExpireApproval(JSONObject params) {
 		ResultDto<EnrollApproval> dto = new ResultDto<EnrollApproval>();
 		Integer enrollmentId = params.getInt("enrollmentId");
@@ -344,6 +354,7 @@ public class EnrollApprovalServiceImpl implements IEnrollApprovalService {
 			dto.setData(ea);
 			return dto;
 		} catch (Exception e) {
+			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 			e.printStackTrace();
 			dto.setErrorMsg("发起期满审核申请失败，请稍后重试");
 			dto.setResult("F");
