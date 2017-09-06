@@ -55,17 +55,17 @@
 		left join t_recruitment tr on tr.id = te.recruitment_id 
 		<trim prefix="WHERE" prefixOverrides="AND">
 			<!-- te.data_state = 1 --> 
-			<if test="obj.recruitment != null and obj.recruitment.id != null">
+			<if test="obj.recruitment != null and obj.recruitment.id != null and obj.recruitment.id != ''">
 				and te.recruitment_id = #{obj.recruitment.id}
 			</if>
-			<if test="obj.company != null and obj.company.id != null">
+			<if test="obj.company != null and obj.company.id != null and obj.company.id !='' ">
 				and te.company_id = #{obj.company.id}
 			</if>
-			<if test="obj.company != null and obj.company.name != ''">
-				tc.name like concat('%',#{obj.company.name},'%')
+			<if test="obj.company != null and obj.company.name !=null and obj.company.name != ''">
+				and tc.name like concat('%',#{obj.company.name},'%')
 			</if>
 			<if test="obj.user != null and obj.user.id != null and obj.user.id != ''">
-				tc.name like concat('%',#{obj.company.name},'%')
+				and te.user_id = #{obj.user.id}
 			</if>
 		</trim>
 	</select>
