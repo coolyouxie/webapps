@@ -49,7 +49,10 @@
 								align : 'center',
 								sortable : false,
 								formatter:function(cellValue,options,rowObject){
-									return '<a href="${ctx}/user/getById?id='+rowObject.user.id+'" style="color:blue">'+cellValue+'</a>';
+									if(rowObject.user){
+										return '<a href="${ctx}/user/getById?id='+rowObject.user.id+'" style="color:blue">'+cellValue+'</a>';
+									}
+									return "";
 								}
 							}, {
 								label : 'user.mobile',
