@@ -152,6 +152,7 @@ public class AppController {
 		String phoneNumber = obj.getString("phoneNumber");
 		String password = obj.getString("password");
 		String smsCode = obj.getString("smsCode");
+//		Integer type = obj.getInt("type");
 		ResultDto<String> dto1 = iAliSmsMsgService.validateAliSmsCode(phoneNumber, 2, smsCode);
 		ResultDto<String> dto2 = null;
 		if("S".equals(dto1.getResult())){
