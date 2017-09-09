@@ -9,5 +9,7 @@ public interface IAliSmsMsgService {
 	
 	public ResultDto<String> validateAliSmsCode(Integer aliSmsMsgId,String msgCode);
 	
+	public ResultDto<String> validateAliSmsCode(String phoneNum,Integer type,String msgCode);
+	
 
 }

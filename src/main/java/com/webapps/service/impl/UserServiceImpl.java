@@ -17,6 +17,7 @@ import com.webapps.common.utils.PasswordEncryptUtil;
 import com.webapps.mapper.IAliSmsMsgMapper;
 import com.webapps.mapper.IUserMapper;
 import com.webapps.mapper.IUserWalletMapper;
+import com.webapps.service.IAliSmsMsgService;
 import com.webapps.service.IUserService;
 
 @Service

@@ -15,4 +15,6 @@ public interface IAliSmsMsgMapper extends IBaseMapper<AliSmsMsg>{
 	public List<AliSmsMsg> getByPhoneNumTypeAndState(@Param("phoneNum")String phoneNum,@Param("type")Integer type,@Param("dataState") Integer dataState)throws Exception;
 	
 	public int batchDeleteInLogic(List<BannerConfig> list)throws Exception;
+	
+	public List<AliSmsMsg> queryByPhoneNumType(@Param("phoneNum")String phoneNum,@Param("type")Integer type) throws Exception;
 }

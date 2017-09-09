@@ -37,10 +37,15 @@
 		select <include refid="select_columns" /> from t_ali_sms_msg where data_state = 1 
 	</select>
 	
-	<select id="queryTopNumBanners" resultMap="resultMap">
+	<select id="queryTopNumAliMsg" resultMap="resultMap">
 		<include refid="ORACLE.paginationStart" /> 
 		select <include refid="select_columns" /> from t_ali_sms_msg where data_state = 1 order by create_time desc
 		<include refid="ORACLE.paginationEnd" />
+	</select>
+	
+	<select id="queryByPhoneNumType" resultMap="resultMap">
+		select <include refid="select_columns" />
+		from t_ali_sms_msg where phone_numbers =#{phoneNum} and type=#{type} and data_state = 1 order by id desc
 	</select>
 	
 	<!-- 查询行政区总数 -->

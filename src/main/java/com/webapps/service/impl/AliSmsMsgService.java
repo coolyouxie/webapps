@@ -1,8 +1,10 @@
 package com.webapps.service.impl;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -127,6 +129,39 @@ public class AliSmsMsgService implements IAliSmsMsgService {
 			logger.error("查询验证码异常："+e.getMessage());
 		}
 		return null;
+	}
+
+	@Override
+	public ResultDto<String> validateAliSmsCode(String phoneNum, Integer type, String msgCode) {
+		ResultDto<String> dto = new ResultDto<String>();
+		try {
+			List<AliSmsMsg> list = iAliSmsMsgMapper.getByPhoneNumTypeAndState(phoneNum, type, 1);
+			if(CollectionUtils.isEmpty(list)){
+				dto.setErrorMsg("验证码错误");
+				dto.setResult("F");
+				return dto;
+			}
+			AliSmsMsg asm = list.get(0);
+			int minitus = DateUtil.getMinsBetweenTwoDate(asm.getCreateTime(), new Date());
+			int overtimeMins = Integer.valueOf((String)PropertyUtil.getProperty("code_timeout"));
+			if(minitus>overtimeMins){
+				dto.setErrorMsg("验证码已过期");
+				dto.setResult("F");
+				return dto;
+			}
+			if(!asm.getValidateCode().equals(msgCode.trim())){
+				dto.setErrorMsg("输入难码错误");
+				dto.setResult("F");
+				return dto;
+			}
+			dto.setResult("S");
+			return dto;
+		} catch (Exception e) {
+			e.printStackTrace();
+			dto.setErrorMsg("校验验证码时异常");
+			dto.setResult("F");
+			return dto;
+		}
 	}
 
 }

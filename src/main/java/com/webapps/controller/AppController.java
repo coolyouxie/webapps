@@ -151,8 +151,13 @@ public class AppController {
 		JSONObject obj = JSONObject.fromObject(params);
 		String phoneNumber = obj.getString("phoneNumber");
 		String password = obj.getString("password");
-		ResultDto<String> dto = iUserService.resetPassword(phoneNumber, password);
-		return JSONUtil.toJSONString(JSONObject.fromObject(dto));
+		String smsCode = obj.getString("smsCode");
+		ResultDto<String> dto1 = iAliSmsMsgService.validateAliSmsCode(phoneNumber, 2, smsCode);
+		ResultDto<String> dto2 = null;
+		if("S".equals(dto1.getResult())){
+			dto2 = iUserService.resetPassword(phoneNumber, password);
+		}
+		return JSONUtil.toJSONString(JSONObject.fromObject(dto2));
 	}
 	
 	/**
