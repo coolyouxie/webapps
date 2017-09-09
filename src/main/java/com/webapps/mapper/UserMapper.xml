@@ -78,6 +78,9 @@
 			<if test="obj.password != null and obj.password != '' ">
 				password = #{obj.password,jdbcType=VARCHAR},
 			</if>
+			<if test="obj.token != null and obj.token != '' ">
+				token = #{obj.token,jdbcType=VARCHAR},
+			</if>
 			<if test="obj.age != null and obj.age != ''">
 				age = #{obj.age,jdbcType=DECIMAL},
 			</if>

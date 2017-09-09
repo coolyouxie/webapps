@@ -37,11 +37,17 @@ public class AliSmsMsgService implements IAliSmsMsgService {
 	public ResultDto<AliSmsMsg> getAliSmsCode(String phoneNum,Integer type) {
 		ResultDto<AliSmsMsg> dto = new ResultDto<AliSmsMsg>();
 		try {
+			User user = iUserMapper.queryUserByAccount(phoneNum);
 			if(type==1){
-				User user = iUserMapper.queryUserByAccount(phoneNum);
 				if(user!=null&&user.getId()!=null){
 					dto.setResult("F");
 					dto.setErrorMsg("该手机号已被注册");
+					return dto;
+				}
+			}else if(type==2){
+				if(user==null){
+					dto.setResult("F");
+					dto.setErrorMsg("该手机号还未注册会员信息");
 					return dto;
 				}
 			}
@@ -73,6 +79,7 @@ public class AliSmsMsgService implements IAliSmsMsgService {
 			asm.setTemplateParam(request.getTemplateParam());
 			asm.setTemplateCode(request.getTemplateCode());
 			asm.setValidateCode((String)resultMap.get("validateCode"));
+			asm.setType(type);
 			int count = iAliSmsMsgMapper.insert(asm);
 			if(count==1){
 				dto.setResult("S");

@@ -145,7 +145,17 @@ public class AppController {
 		}
 		return JSONUtil.toJSONString(JSONUtil.toJSONObject(dto));
 	}
-
+	
+	@ResponseBody
+	@RequestMapping(value="/resetPassword", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
+	public String resetPassword(@RequestBody String params){
+		JSONObject obj = JSONObject.fromObject(params);
+		String phoneNumber = obj.getString("phoneNumber");
+		String password = obj.getString("password");
+		ResultDto<String> dto = iUserService.resetPassword(phoneNumber, password);
+		return JSONUtil.toJSONString(JSONObject.fromObject(dto));
+	}
+	
 	/**
 	 * 获取验证码，并保存到数据库
 	 * 

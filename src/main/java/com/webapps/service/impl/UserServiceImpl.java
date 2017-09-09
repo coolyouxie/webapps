@@ -3,7 +3,6 @@ package com.webapps.service.impl;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
@@ -12,12 +11,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.webapps.common.bean.Page;
 import com.webapps.common.bean.ResultDto;
-import com.webapps.common.entity.AliSmsMsg;
 import com.webapps.common.entity.User;
 import com.webapps.common.form.UserRequestForm;
-import com.webapps.common.utils.DateUtil;
 import com.webapps.common.utils.PasswordEncryptUtil;
-import com.webapps.common.utils.PropertyUtil;
 import com.webapps.mapper.IAliSmsMsgMapper;
 import com.webapps.mapper.IUserMapper;
 import com.webapps.mapper.IUserWalletMapper;
@@ -121,6 +117,32 @@ public class UserServiceImpl implements IUserService {
 	@Override
 	public ResultDto<String> getSmsValidateMsg(String phoneNum) {
 		return null;
+	}
+
+	@Override
+	public ResultDto<String> resetPassword(String phoneNum,String password) {
+		ResultDto<String> dto = new ResultDto<String>();
+		User user = iUserMapper.queryUserByAccount(phoneNum);
+		if(user==null){
+			dto.setErrorMsg("会员信息不存在，请先注册");
+			dto.setResult("F");
+			return dto;
+		}
+		String token;
+		try {
+			token = PasswordEncryptUtil.generateSalt();
+			user.setToken(token);
+			String encryptPwd = PasswordEncryptUtil.getEncryptedPassword(password, token);
+			user.setPassword(encryptPwd);
+			user.setUpdateTime(new Date());
+			iUserMapper.updateById(user.getId(), user);
+			dto.setResult("S");
+		} catch (Exception e) {
+			e.printStackTrace();
+			dto.setResult("F");
+			dto.setErrorMsg("修改密码时异常，请稍后再试");
+		}
+		return dto;
 	}
 	
 	

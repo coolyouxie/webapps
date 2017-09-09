@@ -21,5 +21,7 @@ public interface IUserService {
 	
 	public ResultDto<String> getSmsValidateMsg(String phoneNum);
 	
+	public ResultDto<String> resetPassword(String phoneNum,String password);
+	
 
 }
