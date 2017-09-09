@@ -282,6 +282,7 @@ public class EnrollApprovalServiceImpl implements IEnrollApprovalService {
 		ResultDto<EnrollApproval> dto = new ResultDto<EnrollApproval>();
 		Integer enrollemntId = params.getInt("enrollemntId");
 		String entryDateStr = params.getString("entryDate");
+		Integer userId = params.getInt("userId");
 		if(StringUtils.isBlank(entryDateStr)){
 			dto.setErrorMsg("入职日期未填写");
 			dto.setResult("F");
@@ -300,6 +301,9 @@ public class EnrollApprovalServiceImpl implements IEnrollApprovalService {
 				enrollment.setUpdateTime(new Date());
 				enrollment.setEntryDate(entryDate);
 				iEnrollmentMapper.updateById(enrollemntId, enrollment);
+				User user = new User();
+				user.setId(userId);
+				enrollment.setUser(user);
 				EnrollApproval ea = saveEnrollApprova(entryDate, enrollment,1);
 				dto.setResult("S");
 				dto.setData(ea);
@@ -325,6 +329,9 @@ public class EnrollApprovalServiceImpl implements IEnrollApprovalService {
 		ea.setEntryDate(entryDate);
 		ea.setState(0);
 		ea.setType(type);
+		User user = new User();
+		user.setId(enrollment.getUser().getId());
+		ea.setUser(user);
 		iEnrollApprovalMapper.insert(ea);
 		return ea;
 	}
@@ -334,6 +341,7 @@ public class EnrollApprovalServiceImpl implements IEnrollApprovalService {
 	public ResultDto<EnrollApproval> applyExpireApproval(JSONObject params) {
 		ResultDto<EnrollApproval> dto = new ResultDto<EnrollApproval>();
 		Integer enrollmentId = params.getInt("enrollmentId");
+		Integer userId = params.getInt("userId");
 		try {
 			Enrollment enrollment = iEnrollmentMapper.getById(enrollmentId);
 			if(enrollment==null){
@@ -348,6 +356,9 @@ public class EnrollApprovalServiceImpl implements IEnrollApprovalService {
 			}
 			enrollment.setState(30);
 			enrollment.setUpdateTime(new Date());
+			User user = new User();
+			user.setId(userId);
+			enrollment.setUser(user);
 			iEnrollmentMapper.updateById(enrollmentId, enrollment);
 			EnrollApproval ea = saveEnrollApprova(null, enrollment,2);
 			dto.setResult("S");
