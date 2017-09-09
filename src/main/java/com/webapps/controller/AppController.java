@@ -25,7 +25,6 @@ import com.webapps.common.entity.Recommend;
 import com.webapps.common.entity.Recruitment;
 import com.webapps.common.entity.User;
 import com.webapps.common.form.BannerConfigRequestForm;
-import com.webapps.common.form.EnrollmentRequestForm;
 import com.webapps.common.form.MessageConfigRequestForm;
 import com.webapps.common.form.RecruitmentRequestForm;
 import com.webapps.common.utils.JSONUtil;
@@ -229,7 +228,6 @@ public class AppController {
 	 * @param params
 	 * @return
 	 */
-	@SuppressWarnings("unchecked")
 	@ResponseBody
 	@RequestMapping(value = "/getUserEnrollmentList", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
 	public String getUserEnrollmentList(@RequestBody String params) {
