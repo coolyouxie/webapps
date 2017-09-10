@@ -10,8 +10,6 @@ public class EnrollApproval extends Enrollment {
 	
 	private Integer state;
 	
-	private Integer operatorId;
-	
 	private Integer type;
 	
 	private String remark;
@@ -33,14 +31,6 @@ public class EnrollApproval extends Enrollment {
 			return DateUtil.format(this.getCreateTime(), DateUtil.SIMPLE_PATTERN);
 		}
 		return null;
-	}
-
-	public Integer getOperatorId() {
-		return operatorId;
-	}
-
-	public void setOperatorId(Integer operatorId) {
-		this.operatorId = operatorId;
 	}
 
 	public Integer getType() {

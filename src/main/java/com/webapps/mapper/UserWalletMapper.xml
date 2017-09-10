@@ -58,7 +58,7 @@
 			#{obj.userId},
 			#{obj.fee},
 			#{obj.dataState},
-			now()
+			#{obj.createTime}
 		)
 	</insert>
 	

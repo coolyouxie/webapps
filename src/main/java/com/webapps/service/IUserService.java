@@ -13,7 +13,7 @@ public interface IUserService {
 	
 	public int insert(User user)throws Exception;
 	
-	public ResultDto<User> saveUser(User user)throws Exception;
+	public ResultDto<User> saveUser(User user);
 	
 	public User getById(Integer id)throws Exception;
 	

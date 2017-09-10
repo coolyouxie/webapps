@@ -42,7 +42,7 @@
 	</select>
 	
 	<select id="getById" resultMap="resultMap">
-		select <include refid="select_columns" /> from t_enrollment_approval tea where data_state = 1
+		select <include refid="select_columns" /> from t_enrollment_approval tea where data_state = 1 and id=#{id}
 	</select>
 	
 	<select id="queryListByFkId" resultMap="resultMap">

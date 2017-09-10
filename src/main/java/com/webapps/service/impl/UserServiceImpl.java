@@ -1,5 +1,6 @@
 package com.webapps.service.impl;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -7,21 +8,23 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import com.webapps.common.bean.Page;
 import com.webapps.common.bean.ResultDto;
 import com.webapps.common.entity.User;
+import com.webapps.common.entity.UserWallet;
 import com.webapps.common.form.UserRequestForm;
 import com.webapps.common.utils.PasswordEncryptUtil;
 import com.webapps.mapper.IAliSmsMsgMapper;
 import com.webapps.mapper.IUserMapper;
 import com.webapps.mapper.IUserWalletMapper;
-import com.webapps.service.IAliSmsMsgService;
 import com.webapps.service.IUserService;
 
 @Service
-@Transactional
+@Transactional(propagation = Propagation.REQUIRED,rollbackFor={Exception.class, RuntimeException.class})
 public class UserServiceImpl implements IUserService {
 	
 	private static Logger logger = Logger.getLogger(UserServiceImpl.class);
@@ -68,35 +71,50 @@ public class UserServiceImpl implements IUserService {
 	}
 
 	@Override
-	public ResultDto<User> saveUser(User user) throws Exception {
+	public ResultDto<User> saveUser(User user) {
 		ResultDto<User> dto = new ResultDto<User>();
 		dto.setResult("S");
-		if(user.getId()!=null){
-			iUserMapper.updateById(user.getId(), user);
-			dto.setData(user);
-			return dto;
-		}else{
-			
-			String password = user.getPassword();
-			String token = PasswordEncryptUtil.generateSalt();
-			user.setToken(token);
-			String encryptPwd = PasswordEncryptUtil.getEncryptedPassword(password, token);
-			user.setPassword(encryptPwd);
-			try {
-				int result = iUserMapper.insert(user);
-				if(result==0){
+		try {
+			if(user.getId()!=null){
+				iUserMapper.updateById(user.getId(), user);
+				dto.setData(user);
+				return dto;
+			}else{
+				String password = user.getPassword();
+				String token = PasswordEncryptUtil.generateSalt();
+				user.setToken(token);
+				String encryptPwd = PasswordEncryptUtil.getEncryptedPassword(password, token);
+				user.setPassword(encryptPwd);
+				try {
+					int result = iUserMapper.insert(user);
+					if(result==0){
+						dto.setData(user);
+						dto.setResult("F");
+						dto.setErrorMsg("新增失败");
+						return dto;
+					}
+					//会员注册成功后为会员新增钱包信息
+					UserWallet obj = new UserWallet();
+					obj.setCreateTime(new Date());
+					obj.setDataState(1);
+					obj.setFee(new BigDecimal(0));
+					obj.setState(0);
+					obj.setUserId(user.getId());
+					iUserWalletMapper.insert(obj );
+				} catch (DuplicateKeyException e) {
+					TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+					logger.error(e.getMessage());
 					dto.setData(user);
 					dto.setResult("F");
-					dto.setErrorMsg("新增失败");
+					dto.setErrorMsg("该账号已被注册，请更换重试");
 					return dto;
 				}
-			} catch (DuplicateKeyException e) {
-				logger.error(e.getMessage());
-				dto.setData(user);
-				dto.setResult("F");
-				dto.setErrorMsg("该账号已被注册，请更换重试");
-				return dto;
 			}
+		} catch (Exception e) {
+			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+			dto.setResult("F");
+			dto.setErrorMsg("注册会员信息时异常，请稍后重试");
+			return dto;
 		}
 		return dto;
 	}
@@ -145,7 +163,5 @@ public class UserServiceImpl implements IUserService {
 		}
 		return dto;
 	}
-	
-	
 	
 }

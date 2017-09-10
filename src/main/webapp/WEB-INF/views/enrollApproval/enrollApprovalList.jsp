@@ -131,7 +131,7 @@
 								formatter:function(cellValue,options,rowObject){
 									var result = null;
 									if(rowObject.state==0){
-										result = '<button class="btn btn-primary btn-sm" onclick="showRewardModal('+rowObject.id+',1,'+rowObject.type+')">通过</button>'+
+										result = '<button class="btn btn-primary btn-sm" onclick="showModal('+rowObject.id+',1,'+rowObject.type+')">通过</button>'+
 										'<button class="btn btn-primary btn-sm" onclick="showModal('+rowObject.id+',2,'+rowObject.type+')">不通过</button>';
 									}else{
 										result = "已审核";
@@ -188,7 +188,16 @@
 		$("#enrollApprovalId").val(id);
 		$("#approvalState").val(state);
 		$("#approvalType").val(approvalType);
-		$('#remarkModal').modal('show');
+		if(approvalType==1){
+			$('#rewardModal').modal('show');
+		}else if(approvalType==2){
+			if(state==1){
+				enrollApprovalById(id, state, "", approvalType, "");
+			}
+			if(state==2){
+				$('#remarkModal').modal('show');
+			}
+		}
 	}
 	
 	function showRewardModal(id,state,approvalType){

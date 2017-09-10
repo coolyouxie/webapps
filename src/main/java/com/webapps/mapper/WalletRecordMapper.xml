@@ -84,7 +84,7 @@
 		remark = #{obj.remark},
 		source_type = #{obj.sourceType},
 		data_state = #{obj.dataState},
-		update_time=now()
+		update_time = #{obj.updateTime},
 		where id=#{id}
 	</update>
 </mapper>

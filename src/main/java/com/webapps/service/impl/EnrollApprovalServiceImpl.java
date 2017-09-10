@@ -169,7 +169,7 @@ public class EnrollApprovalServiceImpl implements IEnrollApprovalService {
 				return dto;
 			}
 			if(enrollment.getState()==30&&ea.getType()==2){
-				//入职审核
+				//期满审核
 				if(state==1){
 					enrollment.setState(21);
 					enrollment.setUpdateTime(new Date());
@@ -177,6 +177,7 @@ public class EnrollApprovalServiceImpl implements IEnrollApprovalService {
 					ea.setUpdateTime(new Date());
 					//这里还需要将日志记录到t_wallet_record表中
 					saveUserWalletAndRecord(enrollment);
+					
 				}else{
 					enrollment.setState(32);
 					enrollment.setUpdateTime(new Date());
