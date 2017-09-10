@@ -13,6 +13,8 @@ public class ApplyExpenditure extends Entity {
 	private Integer state;
 	
 	private Integer approverId;
+	
+	private String reason;
 
 	public BigDecimal getFee() {
 		return fee;
@@ -53,6 +55,14 @@ public class ApplyExpenditure extends Entity {
 
 	public void setUser(User user) {
 		this.user = user;
+	}
+
+	public String getReason() {
+		return reason;
+	}
+
+	public void setReason(String reason) {
+		this.reason = reason;
 	}
 	
 	

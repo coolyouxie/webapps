@@ -10,17 +10,18 @@
 		<result column="data_state" jdbcType="DECIMAL" property="dataState" />
 		<result column="create_time" jdbcType="VARCHAR" property="createTime" />
 		<result column="UPDATE_TIME" jdbcType="VARCHAR" property="updateTime" />
+		<result column="reason" jdbcType="VARCHAR" property="reason" />
 		<result column="user_id" jdbcType="DECIMAL" property="user.id" />
 		<result column="user_name" jdbcType="VARCHAR" property="user.name" />
 		<result column="user_mobile" jdbcType="VARCHAR" property="user.mobile" />
 	</resultMap>
 
 	<sql id="select_columns">
-		tae.ID,tae.wallet_id,tae.fee, tae.data_state,tae.CREATE_TIME,tae.UPDATE_TIME,tae.approver_id
+		tae.ID,tae.wallet_id,tae.fee, tae.data_state,tae.CREATE_TIME,tae.UPDATE_TIME,tae.approver_id,tae.reason
 	</sql>
 
 	<sql id="insert_columns">
-		wallet_id,type,fee, data_state,CREATE_TIME,approver_id
+		wallet_id,type,fee, data_state,CREATE_TIME,approver_id,reason
 	</sql>
 	
 	<select id="getById" resultMap="resultMap">
@@ -104,7 +105,8 @@
 			#{obj.fee},
 			#{obj.dataState},
 			#{obj.createTime},
-			#{obj.approverId}
+			#{obj.approverId},
+			#{obj.reason}
 		)
 	</insert>
 	
@@ -114,7 +116,8 @@
 		fee=#{obj.fee},
 		type=#{obj.type},
 		update_time=#{obj.updateTime},
-		approver_id = #{obj.approverId}
+		approver_id = #{obj.approverId},
+		reason = #{obj.reason}
 		where id=#{id}
 	</update>
 </mapper>

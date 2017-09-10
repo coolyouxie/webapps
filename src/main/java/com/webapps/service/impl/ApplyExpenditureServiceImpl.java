@@ -1,5 +1,7 @@
 package com.webapps.service.impl;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Date;
 import java.util.List;
 
@@ -44,9 +46,43 @@ public class ApplyExpenditureServiceImpl implements IApplyExpenditureService {
 	}
 
 	@Override
+	@Transactional(propagation = Propagation.REQUIRED,rollbackFor={Exception.class, RuntimeException.class})
 	public ResultDto<String> approveById(Integer id, Integer state, Integer approverId, String reason) {
-		
-		return null;
+		ResultDto<String> dto = new ResultDto<String>();
+		try {
+			ApplyExpenditure ae = iApplyExpenditureMapper.getById(id);
+			if(ae==null){
+				dto.setErrorMsg("未查询申请提现信息");
+				dto.setResult("F");
+				return dto;
+			}
+			if(state==1){
+				//如果审核通过，则需要将用户钱包中的金额减掉
+				UserWallet uw = iUserWalletMapper.getById(ae.getWalletId());
+				BigDecimal applyFee = ae.getFee();
+				BigDecimal walletFee = uw.getFee();
+				BigDecimal leftFee = walletFee.subtract(applyFee).setScale(2, RoundingMode.HALF_UP);
+				uw.setFee(leftFee);
+				uw.setUpdateTime(new Date());
+				iUserWalletMapper.updateById(uw.getId(), uw);
+			}
+			if(state==2){
+				ae.setReason(reason);
+			}
+			ae.setApproverId(approverId);
+			ae.setState(state);
+			ae.setUpdateTime(new Date());
+			iApplyExpenditureMapper.updateById(ae.getId(), ae);
+			dto.setResult("S");
+			return dto;
+		} catch (Exception e) {
+			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+			e.printStackTrace();
+			logger.error("提现审核异常，请稍后重试:"+e.getMessage());
+			dto.setErrorMsg("提现审核异常，请稍后重试");
+			dto.setResult("F");
+			return dto;
+		}
 	}
 
 	@Override
