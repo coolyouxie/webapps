@@ -24,11 +24,13 @@ import com.webapps.common.entity.MessageConfig;
 import com.webapps.common.entity.Recommend;
 import com.webapps.common.entity.Recruitment;
 import com.webapps.common.entity.User;
+import com.webapps.common.entity.UserWallet;
 import com.webapps.common.form.BannerConfigRequestForm;
 import com.webapps.common.form.MessageConfigRequestForm;
 import com.webapps.common.form.RecruitmentRequestForm;
 import com.webapps.common.utils.JSONUtil;
 import com.webapps.service.IAliSmsMsgService;
+import com.webapps.service.IApplyExpenditureService;
 import com.webapps.service.IBannerConfigService;
 import com.webapps.service.ICompanyService;
 import com.webapps.service.IEnrollApprovalService;
@@ -38,6 +40,7 @@ import com.webapps.service.IMessageConfigService;
 import com.webapps.service.IRecommendService;
 import com.webapps.service.IRecruitmentService;
 import com.webapps.service.IUserService;
+import com.webapps.service.IUserWalletService;
 
 import net.sf.json.JSONObject;
 
@@ -76,6 +79,12 @@ public class AppController {
 	
 	@Autowired
 	private IEnrollApprovalService iEnrollApprovalService;
+	
+	@Autowired
+	private IApplyExpenditureService IApplyExpenditureService;
+	
+	@Autowired
+	private IUserWalletService iUserWalletService;
 
 	/**
 	 * app端登录接口
@@ -129,6 +138,8 @@ public class AppController {
 		try {
 			ResultDto<String> dto1 = iAliSmsMsgService.validateAliSmsCode(asmId, smsCode);
 			if(dto1.getResult().equals("S")){
+				//默认APP注册的全部为普通会员
+				user.setUserType(3);
 				dto = iUserService.saveUser(user);
 				User user1 = new User();
 				user1.setId(user.getId());
@@ -416,6 +427,28 @@ public class AppController {
 		}
 		return JSONUtil.toJSONString(JSONObject.fromObject(dto));
 	}
+	
+	/**
+	 * 获取用户钱包信息
+	 * @param params
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/getUserWallet", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
+	public String getUserWallet(@RequestBody String params) {
+		JSONObject obj = JSONObject.fromObject(params);
+		Integer userId = obj.getInt("userId");
+		UserWallet uw = iUserWalletService.getUserWalletByUserId(userId);
+		ResultDto<UserWallet> dto = new ResultDto<UserWallet>();
+		if(uw==null){
+			dto.setErrorMsg("用户钱包信息获取失败");
+			dto.setResult("F");
+		}else{
+			dto.setData(uw);
+			dto.setResult("S");
+		}
+		return JSONUtil.toJSONString(JSONObject.fromObject(dto));
+	}
 
 	/**
 	 * 提现申请
@@ -424,10 +457,13 @@ public class AppController {
 	 * @return
 	 */
 	@ResponseBody
-	@RequestMapping(value = "/applyCashback")
-	public String applyCashback(String params) {
-		
-		return null;
+	@RequestMapping(value = "/applyCashback", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
+	public String applyCashback(@RequestBody String params) {
+		JSONObject obj = JSONObject.fromObject(params);
+		Integer userId = obj.getInt("userId");
+		Integer walletId = obj.getInt("walletId");
+		ResultDto<String> dto = IApplyExpenditureService.applyExpenditure(userId, walletId);
+		return JSONUtil.toJSONString(JSONObject.fromObject(dto));
 	}
 
 	/**

@@ -68,4 +68,25 @@ public class Entity {
 	public void setOperatorId(Integer operatorId) {
 		this.operatorId = operatorId;
 	}
+	
+	public String getUpdateTimeStr(){
+		if(this.getUpdateTime()!=null){
+			return DateUtil.format(this.getCreateTime(), DateUtil.SIMPLE_PATTERN);
+		}
+		return null;
+	}
+	
+	public String getUpdateTimeFullStr(){
+		if(this.getUpdateTime()!=null){
+			return DateUtil.format(this.getUpdateTime(), DateUtil.FULL_PATTERN);
+		}
+		return null;
+	}
+	
+	public String getCreateTimeFullStr(){
+		if(this.getCreateTime()!=null){
+			return DateUtil.format(this.getCreateTime(), DateUtil.FULL_PATTERN);
+		}
+		return null;
+	}
 }

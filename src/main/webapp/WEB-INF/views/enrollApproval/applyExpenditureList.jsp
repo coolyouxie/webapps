@@ -30,7 +30,7 @@
 	var dataGrid = null;
 	jQuery(document).ready(function(){
 		dataGrid = jQuery("#list").jqGrid({
-		    url:"${ctx}/enrollApproval/loadEnrollApprovalList",
+		    url:"${ctx}/applyExpenditure/loadPageList",
 		    datatype: "json",
 		    mtype : "POST",
 		    height : 650,
@@ -81,8 +81,8 @@
 									return result;
 								}
 							}, {
-								label : 'createTimeStr',
-								name : 'createTimeStr',
+								label : 'createTimeFullStr',
+								name : 'createTimeFullStr',
 								align : 'center',
 								sortable : false
 							}, {
@@ -121,9 +121,9 @@
 		}).trigger("reloadGrid");
 	}
 	
-	function enrollApprovalById(id,state,remark){
+	function approvalById(id,state,remark){
 		$.ajax({
-			url:"${ctx}/enrollApproval/enrollApprovalById",
+			url:"${ctx}/applyExpenditure/approvalById",
 			type:"POST",
 			dataType:"JSON",
 			data:{
@@ -144,13 +144,13 @@
 	}
 	
 	function showModal(id,state){
-		$("#enrollApprovalId").val(id);
+		$("#applyExpenditureId").val(id);
 		$("#approvalState").val(state);
 		$('#remarkModal').modal('show');
 	}
 	
-	function enrollApprovalByIdWithRemark(){
-		var id = $("#enrollApprovalId").val();
+	function approvalByIdWithRemark(){
+		var id = $("#applyExpenditureId").val();
 		var state = $("#approvalState").val();
 		var remark = $("#remark").val().trim();
 		if(state==2){
@@ -159,7 +159,7 @@
 				return ;
 			}
 		}
-		enrollApprovalById(id,state,remark);
+		approvalById(id,state,remark);
 	}
 	
 </script>
@@ -182,7 +182,7 @@
 </style>
 </head>
 <body>
-	<input type="hidden" id="enrollApprovalId" >
+	<input type="hidden" id="applyExpenditureId" >
 	<input type="hidden" id="approvalState" >
 	<div class="modal fade" id="remarkModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class="modal-dialog">
@@ -196,7 +196,7 @@
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-					<button type="button" class="btn btn-primary" onclick="enrollApprovalByIdWithRemark()">提交</button>
+					<button type="button" class="btn btn-primary" onclick="approvalByIdWithRemark()">提交</button>
 				</div>
 			</div><!-- /.modal-content -->
 		</div><!-- /.modal -->
@@ -206,13 +206,7 @@
 			<div class="row" style="margin-bottom:8px">
 				<div class="col-sm-3" style="width:255px">
 					<label>
-						<span>公司名称:</span>
-						<input type="text" id="companyName" name="company.name" value="">
-					</label>
-				</div>
-				<div class="col-sm-3" style="width:255px">
-					<label>
-						<span>报名人:</span>
+						<span>会员姓名:</span>
 						<input type="text" id="userName" name="user.name" value="">
 					</label>
 				</div>
@@ -231,24 +225,12 @@
 			<div class="row">
 				<div class="col-sm-4">
 					<label>
-						<span>报名时间:</span>
-						<input type="text" id="enrollTimeStart" name="enrollTimeStart" onClick="WdatePicker({isShowWeek:true})">
+						<span>申请时间:</span>
+						<input type="text" id="applyTimeStart" name="applyTimeStart" onClick="WdatePicker({isShowWeek:true})">
 						-
-						<input type="text" id="enrollTimeEnd" name="enrollTimeEnd" onClick="WdatePicker({isShowWeek:true})">
+						<input type="text" id="applyTimeEnd" name="applyTimeEnd" onClick="WdatePicker({isShowWeek:true})">
 					</label>
 				</div>
-				<!-- <div class="col-sm-3">
-					<label>
-						<span>状态:</span>
-						<select id="state" name="state">
-							<option value="">-请选择-</option>
-							<option value="1">已报名</option>
-							<option value="2">已入职</option>
-							<option value="3">已期满</option>
-							<option value="4">已离职</option>
-						</select>
-					</label>
-				</div> -->
 			</div>
 		</form>
 	</div>

@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.webapps.mapper.IApplyExpenditureMapper">
+	<resultMap id="resultMap" type="com.webapps.common.entity.ApplyExpenditure">
+		<id column="ID" jdbcType="DECIMAL" property="id" />
+		<result column="wallet_id" jdbcType="DECIMAL" property="walletId" />
+		<result column="approver_id" jdbcType="DECIMAL" property="approver_id" />
+		<result column="fee" jdbcType="DECIMAL" property="fee" />
+		<result column="data_state" jdbcType="DECIMAL" property="dataState" />
+		<result column="create_time" jdbcType="VARCHAR" property="createTime" />
+		<result column="UPDATE_TIME" jdbcType="VARCHAR" property="updateTime" />
+		<result column="user_id" jdbcType="DECIMAL" property="user.id" />
+		<result column="user_name" jdbcType="VARCHAR" property="user.name" />
+		<result column="user_mobile" jdbcType="VARCHAR" property="user.mobile" />
+	</resultMap>
+
+	<sql id="select_columns">
+		tae.ID,tae.wallet_id,tae.fee, tae.data_state,tae.CREATE_TIME,tae.UPDATE_TIME,tae.approver_id
+	</sql>
+
+	<sql id="insert_columns">
+		wallet_id,type,fee, data_state,CREATE_TIME,approver_id
+	</sql>
+	
+	<select id="getById" resultMap="resultMap">
+		select <include refid="select_columns" /> from t_apply_expenditure tae where id = #{id}
+	</select>
+	
+	<!-- 查询所有 -->
+	<select id="queryAll" resultMap="resultMap">
+		select <include refid="select_columns" /> from t_apply_expenditure tae where data_state = 1
+	</select>
+	
+	<!-- 查询所有 -->
+	<select id="queryByWalletId" resultMap="resultMap">
+		select <include refid="select_columns" /> from t_apply_expenditure tae where wallet_id = #{walletId} 
+	</select>
+	
+	<select id="queryCount" resultType="java.lang.Integer">
+		SELECT count(1) FROM t_apply_expenditure tae
+		left join t_user_wallet tuw on tuw.id=tae.wallet_id
+		left join t_user tu on tuw.user_id=tu.id
+		<trim prefix="WHERE" prefixOverrides="AND">
+			tae.data_state = 1 
+			<if test="obj.state != null and obj.state != ''">
+				and tae.state = #{obj.state}
+			</if>
+			<if test="obj.user != null and obj.user.name != null and obj.user.name != ''">
+				and tu.name = #{obj.user.name}
+			</if>
+			<if test="obj.user != null and obj.user.mobile !=null and obj.user.mobile != ''">
+				and tu.mobile = #{obj.user.mobile}
+			</if>
+			<if test="obj.applyTimeStart != null and obj.applyTimeStart != ''">
+				and tae.create_time >= #{obj.applyTimeStart}
+			</if>
+			<if test="obj.applyTimeEnd != null and obj.applyTimeEnd != ''">
+				and #{obj.applyTimeEnd} >= tae.create_time
+			</if>
+		</trim>
+	</select>
+
+	<select id="queryPage" resultMap="resultMap">
+		<include refid="ORACLE.paginationStart" />
+		SELECT
+		<include refid="select_columns" />,
+		tu.name as user_name,
+		tu.mobile as user_mobile,
+		tu.id as user_id
+		FROM t_apply_expenditure tae
+		left join t_user_wallet tuw on tuw.id=tae.wallet_id
+		left join t_user tu on tuw.user_id=tu.id
+		<trim prefix="WHERE" prefixOverrides="AND">
+			tae.data_state = 1 
+			<if test="obj.state != null and obj.state != ''">
+				and tae.state = #{obj.state}
+			</if>
+			<if test="obj.user != null and obj.user.name != null and obj.user.name != ''">
+				and tu.name = #{obj.user.name}
+			</if>
+			<if test="obj.user != null and obj.user.mobile !=null and obj.user.mobile != ''">
+				and tu.mobile = #{obj.user.mobile}
+			</if>
+			<if test="obj.applyTimeStart != null and obj.applyTimeStart != ''">
+				and tae.create_time >= #{obj.applyTimeStart}
+			</if>
+			<if test="obj.applyTimeEnd != null and obj.applyTimeEnd != ''">
+				and #{obj.applyTimeEnd} >= tae.create_time
+			</if>
+		</trim>
+		<include refid="ORACLE.paginationEnd" />
+	</select>
+	
+	<insert id="insert" useGeneratedKeys="true" keyProperty="obj.id" parameterType="com.webapps.common.entity.ApplyExpenditure">
+		insert into t_apply_expenditure
+		(
+			<include refid="insert_columns" />
+		)
+		values
+		(
+			#{obj.walletId},
+			#{obj.type},
+			#{obj.fee},
+			#{obj.dataState},
+			#{obj.createTime},
+			#{obj.approverId}
+		)
+	</insert>
+	
+	<update id="updateById">
+		update t_apply_expenditure set 
+		wallet_id=#{obj.walletId},
+		fee=#{obj.fee},
+		type=#{obj.type},
+		update_time=#{obj.updateTime},
+		approver_id = #{obj.approverId}
+		where id=#{id}
+	</update>
+</mapper>

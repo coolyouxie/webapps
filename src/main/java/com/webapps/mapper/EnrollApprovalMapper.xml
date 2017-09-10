@@ -64,7 +64,6 @@
 			<if test="obj.company.name != null and obj.company.name != ''">
 				tc.name like concat('%',#{obj.company.name},'%')
 			</if>
-			<if test=""></if>
 		</trim>
 	</select>
 	
