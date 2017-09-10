@@ -93,7 +93,7 @@
 								formatter:function(cellValue,options,rowObject){
 									var result = null;
 									if(rowObject.state==0){
-										result = '<button class="btn btn-primary btn-sm" onclick="moneyApprovalById('+rowObject.id+',1)">通过</button>'+
+										result = '<button class="btn btn-primary btn-sm" onclick="approvalById('+rowObject.id+',1,'+""+')">通过</button>'+
 										'<button class="btn btn-primary btn-sm" onclick="showModal('+rowObject.id+',2)">不通过</button>';
 									}else{
 										result = "已审核";

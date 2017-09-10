@@ -140,6 +140,7 @@ public class AppController {
 			if(dto1.getResult().equals("S")){
 				//默认APP注册的全部为普通会员
 				user.setUserType(3);
+				user.setMobile(telephone);
 				dto = iUserService.saveUser(user);
 				User user1 = new User();
 				user1.setId(user.getId());

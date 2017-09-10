@@ -17,7 +17,7 @@
 	</resultMap>
 
 	<sql id="select_columns">
-		tae.ID,tae.wallet_id,tae.fee, tae.data_state,tae.CREATE_TIME,tae.UPDATE_TIME,tae.approver_id,tae.reason
+		tae.ID,tae.wallet_id,tae.fee, tae.data_state,tae.CREATE_TIME,tae.UPDATE_TIME,tae.approver_id,tae.reason,tae.state
 	</sql>
 
 	<sql id="insert_columns">
@@ -114,7 +114,7 @@
 		update t_apply_expenditure set 
 		wallet_id=#{obj.walletId},
 		fee=#{obj.fee},
-		type=#{obj.type},
+		state=#{obj.state},
 		update_time=#{obj.updateTime},
 		approver_id = #{obj.approverId},
 		reason = #{obj.reason}

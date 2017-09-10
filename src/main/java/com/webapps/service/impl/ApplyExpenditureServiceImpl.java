@@ -56,18 +56,21 @@ public class ApplyExpenditureServiceImpl implements IApplyExpenditureService {
 				dto.setResult("F");
 				return dto;
 			}
+			UserWallet uw = iUserWalletMapper.getById(ae.getWalletId());
 			if(state==1){
 				//如果审核通过，则需要将用户钱包中的金额减掉
-				UserWallet uw = iUserWalletMapper.getById(ae.getWalletId());
-				BigDecimal applyFee = ae.getFee();
-				BigDecimal walletFee = uw.getFee();
-				BigDecimal leftFee = walletFee.subtract(applyFee).setScale(2, RoundingMode.HALF_UP);
-				uw.setFee(leftFee);
-				uw.setUpdateTime(new Date());
-				iUserWalletMapper.updateById(uw.getId(), uw);
+//				BigDecimal applyFee = ae.getFee();
+//				BigDecimal walletFee = uw.getFee();
+//				BigDecimal leftFee = walletFee.subtract(applyFee).setScale(2, RoundingMode.HALF_UP);
+//				uw.setFee(leftFee);
+//				uw.setUpdateTime(new Date());
+//				iUserWalletMapper.updateById(uw.getId(), uw);
 			}
 			if(state==2){
 				ae.setReason(reason);
+				uw.setFee(ae.getFee());
+				uw.setUpdateTime(new Date());
+				iUserWalletMapper.updateById(uw.getId(), uw);
 			}
 			ae.setApproverId(approverId);
 			ae.setState(state);
@@ -106,6 +109,9 @@ public class ApplyExpenditureServiceImpl implements IApplyExpenditureService {
 				ae.setState(0);
 				ae.setWalletId(uw.getId());
 				iApplyExpenditureMapper.insert(ae);
+				uw.setFee(uw.getFee().subtract(ae.getFee()));
+				uw.setUpdateTime(createTime);
+				iUserWalletMapper.updateById(uw.getId(), uw);
 				dto.setResult("S");
 				return dto;
 			}
@@ -123,6 +129,9 @@ public class ApplyExpenditureServiceImpl implements IApplyExpenditureService {
 			ae.setState(0);
 			ae.setWalletId(uw.getId());
 			iApplyExpenditureMapper.insert(ae);
+			uw.setFee(uw.getFee().subtract(ae.getFee()));
+			uw.setUpdateTime(createTime);
+			iUserWalletMapper.updateById(uw.getId(), uw);
 			dto.setResult("S");
 			return dto;
 		} catch (Exception e) {
