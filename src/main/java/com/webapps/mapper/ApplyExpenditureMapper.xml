@@ -21,7 +21,7 @@
 	</sql>
 
 	<sql id="insert_columns">
-		wallet_id,type,fee, data_state,CREATE_TIME,approver_id,reason
+		wallet_id,fee, data_state,CREATE_TIME,approver_id,reason,state
 	</sql>
 	
 	<select id="getById" resultMap="resultMap">
@@ -101,12 +101,12 @@
 		values
 		(
 			#{obj.walletId},
-			#{obj.type},
 			#{obj.fee},
 			#{obj.dataState},
 			#{obj.createTime},
 			#{obj.approverId},
-			#{obj.reason}
+			#{obj.reason},
+			#{obj.state}
 		)
 	</insert>
 	
