@@ -15,6 +15,7 @@ import com.google.gson.Gson;
 import com.webapps.common.bean.Page;
 import com.webapps.common.bean.ResultDto;
 import com.webapps.common.entity.AliSmsMsg;
+import com.webapps.common.entity.ApplyExpenditure;
 import com.webapps.common.entity.BannerConfig;
 import com.webapps.common.entity.Company;
 import com.webapps.common.entity.EnrollApproval;
@@ -25,6 +26,7 @@ import com.webapps.common.entity.Recommend;
 import com.webapps.common.entity.Recruitment;
 import com.webapps.common.entity.User;
 import com.webapps.common.entity.UserWallet;
+import com.webapps.common.form.ApplyExpenditureRequestForm;
 import com.webapps.common.form.BannerConfigRequestForm;
 import com.webapps.common.form.MessageConfigRequestForm;
 import com.webapps.common.form.RecruitmentRequestForm;
@@ -548,7 +550,7 @@ public class AppController {
 	@RequestMapping(value = "/applyApproval", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
 	public String applyApproval(@RequestBody String params) {
 		ResultDto<EnrollApproval> dto = null;
-		logger.info("获取用户信息接口getUserInfo接收参数：" + params);
+		logger.info("获取用户申请审核接口applyApproval接收参数：" + params);
 		JSONObject obj = JSONUtil.toJSONObject(params);
 		Integer type = obj.getInt("approvaType");
 		try {
@@ -561,6 +563,30 @@ public class AppController {
 			e.printStackTrace();
 			dto.setResult("F");
 			dto.setErrorMsg("发起审核异常");
+			return JSONUtil.toJSONString(JSONUtil.toJSONObject(dto));
+		}
+		return JSONUtil.toJSONString(JSONUtil.toJSONObject(dto));
+	}
+	
+	@ResponseBody
+	@SuppressWarnings("unchecked")
+	@RequestMapping(value = "/applyExpenditureList", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
+	public String applyExpenditureList(@RequestBody String params) {
+		ResultDto<List<ApplyExpenditure>> dto = new ResultDto<List<ApplyExpenditure>>();
+		logger.info("获取用户提现申请接口applyExpenditureList接收参数：" + params);
+		JSONObject obj = JSONUtil.toJSONObject(params);
+		Integer walletId = obj.getInt("walletId");
+		Page page = new Page();
+		try {
+			ApplyExpenditureRequestForm apply = new ApplyExpenditureRequestForm();
+			apply.setWalletId(walletId);
+			page = IApplyExpenditureService.loadPageList(page, apply);
+			dto.setData(page.getResultList());
+			dto.setResult("S");
+		} catch (Exception e) {
+			e.printStackTrace();
+			dto.setResult("F");
+			dto.setErrorMsg("提现记录查询异常");
 			return JSONUtil.toJSONString(JSONUtil.toJSONObject(dto));
 		}
 		return JSONUtil.toJSONString(JSONUtil.toJSONObject(dto));

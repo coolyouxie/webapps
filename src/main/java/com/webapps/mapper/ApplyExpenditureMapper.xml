@@ -33,9 +33,12 @@
 		select <include refid="select_columns" /> from t_apply_expenditure tae where data_state = 1
 	</select>
 	
-	<!-- 查询所有 -->
 	<select id="queryByWalletId" resultMap="resultMap">
 		select <include refid="select_columns" /> from t_apply_expenditure tae where wallet_id = #{walletId} 
+	</select>
+	
+	<select id="queryByWalletIdAndState" resultMap="resultMap">
+		select <include refid="select_columns" /> from t_apply_expenditure tae where wallet_id = #{walletId}  and state=#{state}
 	</select>
 	
 	<select id="queryCount" resultType="java.lang.Integer">

@@ -12,6 +12,8 @@ import com.webapps.common.form.ApplyExpenditureRequestForm;
  */
 public interface IApplyExpenditureMapper extends IBaseMapper<ApplyExpenditure>,IPageMapper<ApplyExpenditure,ApplyExpenditureRequestForm>{
 	
-	List<ApplyExpenditure> queryByWalletId(@Param("walletId")Integer walletId);
+	List<ApplyExpenditure> queryByWalletId(@Param("walletId")Integer walletId)throws Exception;
+	
+	List<ApplyExpenditure> queryByWalletIdAndState(@Param("walletId")Integer walletId,@Param("state")Integer state)throws Exception;
 	
 }

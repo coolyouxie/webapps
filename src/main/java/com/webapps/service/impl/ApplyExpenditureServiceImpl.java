@@ -5,6 +5,7 @@ import java.math.RoundingMode;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.log4j.Logger;
 import org.mybatis.spring.MyBatisSystemException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -101,6 +102,12 @@ public class ApplyExpenditureServiceImpl implements IApplyExpenditureService {
 					dto.setErrorMsg("未找到用户的钱包信息");
 					return dto;
 				}
+				List<ApplyExpenditure> list = iApplyExpenditureMapper.queryByWalletIdAndState(uw.getId(), 0);
+				if(CollectionUtils.isNotEmpty(list)){
+					dto.setErrorMsg("当前已存在待审核的提现申请，请等待审核完成后再次提交");
+					dto.setResult("F");
+					return dto;
+				}
 				Date createTime = new Date();
 				ApplyExpenditure ae = new ApplyExpenditure();
 				ae.setCreateTime(createTime);
@@ -121,6 +128,12 @@ public class ApplyExpenditureServiceImpl implements IApplyExpenditureService {
 				dto.setErrorMsg("未找到用户的钱包信息");
 				return dto;
 			}
+			List<ApplyExpenditure> list = iApplyExpenditureMapper.queryByWalletIdAndState(uw.getId(), 0);
+			if(CollectionUtils.isNotEmpty(list)){
+				dto.setErrorMsg("当前已存在待审核的提现申请，请等待审核完成后再次提交");
+				dto.setResult("F");
+				return dto;
+			}
 			Date createTime = new Date();
 			ApplyExpenditure ae = new ApplyExpenditure();
 			ae.setCreateTime(createTime);
@@ -130,6 +143,8 @@ public class ApplyExpenditureServiceImpl implements IApplyExpenditureService {
 			ae.setWalletId(uw.getId());
 			iApplyExpenditureMapper.insert(ae);
 			uw.setFee(uw.getFee().subtract(ae.getFee()));
+			//提交审核
+			uw.setState(1);
 			uw.setUpdateTime(createTime);
 			iUserWalletMapper.updateById(uw.getId(), uw);
 			dto.setResult("S");
