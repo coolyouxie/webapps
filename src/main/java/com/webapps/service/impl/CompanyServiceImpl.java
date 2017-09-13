@@ -58,12 +58,12 @@ public class CompanyServiceImpl implements ICompanyService {
 		if(company!=null){
 			List<Picture> pics = iPictureMapper.queryListByFkId(company.getId());
 			company.setPictures(pics);
-			if(company.getIsMessage()==1){
-				List<MessageConfig> messages = iMessageConfigMapper.getByFkIdTypeAndBelongType(id, 3, 2);
-				if(CollectionUtils.isNotEmpty(messages)){
-					company.setMessage(messages.get(0));
-				}
-			}
+//			if(company.getIsMessage()==1){
+//				List<MessageConfig> messages = iMessageConfigMapper.getByFkIdTypeAndBelongType(id, 3, 2);
+//				if(CollectionUtils.isNotEmpty(messages)){
+//					company.setMessage(messages.get(0));
+//				}
+//			}
 		}
 		
 		return company;
