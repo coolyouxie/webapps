@@ -16,6 +16,7 @@ import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import com.webapps.common.bean.Page;
 import com.webapps.common.bean.ResultDto;
+import com.webapps.common.entity.BillRecord;
 import com.webapps.common.entity.EnrollApproval;
 import com.webapps.common.entity.Enrollment;
 import com.webapps.common.entity.FeeConfig;
@@ -25,6 +26,7 @@ import com.webapps.common.entity.UserWallet;
 import com.webapps.common.form.EnrollApprovalRequestForm;
 import com.webapps.common.utils.DateUtil;
 import com.webapps.common.utils.PropertyUtil;
+import com.webapps.mapper.IBillRecordMapper;
 import com.webapps.mapper.IEnrollApprovalMapper;
 import com.webapps.mapper.IEnrollmentMapper;
 import com.webapps.mapper.IFeeConfigMapper;
@@ -62,6 +64,9 @@ public class EnrollApprovalServiceImpl implements IEnrollApprovalService {
 	
 	@Autowired
 	private IFeeConfigMapper iFeeConfigMapper;
+	
+	@Autowired
+	private IBillRecordMapper iBillRecordMapper;
 
 	@Override
 	public Page loadEnrollApprovalList(Page page, EnrollApprovalRequestForm form) throws Exception {
@@ -223,6 +228,8 @@ public class EnrollApprovalServiceImpl implements IEnrollApprovalService {
 			uw.setUserId(user.getId());
 			uw.setState(0);
 			iUserWalletMapper.insert(uw);
+			//保存账单记录
+			saveBillRecrod(enrollment, uw);
 		}else{
 			BigDecimal fee = uw.getFee();
 			BigDecimal reward = enrollment.getReward();
@@ -230,6 +237,7 @@ public class EnrollApprovalServiceImpl implements IEnrollApprovalService {
 			uw.setFee(fee);
 			uw.setUpdateTime(new Date());
 			iUserWalletMapper.updateById(uw.getId(), uw);
+			saveBillRecrod(enrollment, uw);
 		}
 		List<Recommend> reList = iRecommendMapper.queryByMobile(user.getTelephone());
 		if(CollectionUtils.isEmpty(reList)){
@@ -265,6 +273,7 @@ public class EnrollApprovalServiceImpl implements IEnrollApprovalService {
 			uw1.setState(0);
 			uw1.setUserId(re.getUser().getId());
 			iUserWalletMapper.insert(uw1);
+			saveBillRecrod(enrollment, uw1);
 			dto.setResult("S");
 			return dto;
 		}
@@ -273,8 +282,24 @@ public class EnrollApprovalServiceImpl implements IEnrollApprovalService {
 		uw1.setFee(fee1);
 		uw1.setUpdateTime(new Date());
 		iUserWalletMapper.updateById(uw1.getId(),uw1);
+		saveBillRecrod(enrollment, uw1);
 		dto.setResult("S");
 		return dto;
+	}
+
+	/**
+	 * 保存期满审核成功后的返费账单信息
+	 * @param enrollment
+	 * @param uw
+	 */
+	private void saveBillRecrod(Enrollment enrollment, UserWallet uw) {
+		BillRecord br = new BillRecord();
+		br.setFee(enrollment.getReward());
+		br.setType(3);
+		br.setDataState(1);
+		br.setWalletId(uw.getId());
+		br.setCreateTime(new Date());
+		iBillRecordMapper.insert(br);
 	}
 
 	@Override
@@ -370,6 +395,22 @@ public class EnrollApprovalServiceImpl implements IEnrollApprovalService {
 			e.printStackTrace();
 			dto.setErrorMsg("发起期满审核申请失败，请稍后重试");
 			dto.setResult("F");
+			return dto;
+		}
+	}
+
+	@Override
+	public ResultDto<List<EnrollApproval>> queryByUserIdTypeAndState(Integer userId, Integer type, Integer state) {
+		ResultDto<List<EnrollApproval>> dto = new ResultDto<List<EnrollApproval>>();
+		try {
+			List<EnrollApproval> list = iEnrollApprovalMapper.queryByUserIdTypeAndState(userId, type, state);
+			dto.setData(list);
+			dto.setResult("S");
+			return dto;
+		} catch (Exception e) {
+			e.printStackTrace();
+			dto.setResult("F");
+			dto.setErrorMsg("查询期满审核账单异常");
 			return dto;
 		}
 	}

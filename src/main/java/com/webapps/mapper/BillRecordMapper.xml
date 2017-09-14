@@ -4,7 +4,7 @@
 <mapper namespace="com.webapps.mapper.IBillRecordMapper">
 	<resultMap id="resultMap" type="com.webapps.common.entity.BillRecord">
 		<id column="ID" jdbcType="DECIMAL" property="id" />
-		<result column="user_id" jdbcType="DECIMAL" property="userId" />
+		<result column="wallet_id" jdbcType="DECIMAL" property="walletId" />
 		<result column="type" jdbcType="DECIMAL" property="type" />
 		<result column="fee" jdbcType="DECIMAL" property="fee" />
 		<result column="data_state" jdbcType="DECIMAL" property="dataState" />
@@ -13,11 +13,11 @@
 	</resultMap>
 
 	<sql id="select_columns">
-		ID,user_id,type,fee, data_state,CREATE_TIME,UPDATE_TIME
+		ID,wallet_id,type,fee, data_state,CREATE_TIME,UPDATE_TIME
 	</sql>
 
 	<sql id="insert_columns">
-		user_id,type,fee, data_state,CREATE_TIME
+		wallet_id,type,fee, data_state,CREATE_TIME
 	</sql>
 	
 	<select id="getById" resultMap="resultMap">
@@ -30,22 +30,22 @@
 	</select>
 	
 	<!-- 查询所有 -->
-	<select id="queryByUserId" resultMap="resultMap">
-		select <include refid="select_columns" /> from t_bill_record where user_id = #{userId} 
+	<select id="queryBywalletId" resultMap="resultMap">
+		select <include refid="select_columns" /> from t_bill_record where wallet_id = #{walletId} 
 	</select>
 	
 	<!-- 根据行政区等查询 -->
-	<select id="queryByUserIdAndType" resultMap="resultMap">
-		select <include refid="select_columns" /> from t_bill_record where type = #{type} and user_id = #{userId}
+	<select id="queryBywalletIdAndType" resultMap="resultMap">
+		select <include refid="select_columns" /> from t_bill_record where type = #{type} and wallet_id = #{walletId}
 	</select>
 	
-	<select id="sumFeeByUserIdAndType" resultType="java.math.BigDecimal">
+	<select id="sumFeeBywalletIdAndType" resultType="java.math.BigDecimal">
 		select sum(fee) from t_bill_record where type=#{type}
 	</select>
 	
 	<select id="queryCount" resultType="java.lang.Integer">
 		SELECT count(1) FROM t_bill_record
-			where data_state = 1 and user_id = #{obj.userId}
+			where data_state = 1 and wallet_id = #{obj.walletId}
 	</select>
 
 	<select id="queryPage" resultMap="resultMap">
@@ -53,7 +53,7 @@
 		SELECT
 		<include refid="select_columns" />
 		FROM t_bill_record
-		where user_id = #{obj.userId}
+		where wallet_id = #{obj.walletId}
 		order by create_time desc
 		<include refid="ORACLE.paginationEnd" />
 	</select>
@@ -65,7 +65,7 @@
 		)
 		values
 		(
-			#{obj.userId},
+			#{obj.walletId},
 			#{obj.type},
 			#{obj.fee},
 			#{obj.dataState},
@@ -75,7 +75,7 @@
 	
 	<update id="updateById">
 		update t_bill_record set 
-		user_id=#{obj.userId},
+		wallet_id=#{obj.walletId},
 		fee=#{obj.fee},
 		type=#{obj.type},
 		update_time=now()

@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 
 public class BillRecord extends Entity {
 
-	private Integer userId;
+	private Integer walletId;
 	
 	private BigDecimal fee;
 	
@@ -18,20 +18,20 @@ public class BillRecord extends Entity {
 		this.fee = fee;
 	}
 
-	public Integer getUserId() {
-		return userId;
-	}
-
-	public void setUserId(Integer userId) {
-		this.userId = userId;
-	}
-
 	public Integer getType() {
 		return type;
 	}
 
 	public void setType(Integer type) {
 		this.type = type;
+	}
+
+	public Integer getWalletId() {
+		return walletId;
+	}
+
+	public void setWalletId(Integer walletId) {
+		this.walletId = walletId;
 	}
 	
 	

@@ -568,6 +568,11 @@ public class AppController {
 		return JSONUtil.toJSONString(JSONUtil.toJSONObject(dto));
 	}
 	
+	/**
+	 * 查询提现记录
+	 * @param params
+	 * @return
+	 */
 	@ResponseBody
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/applyExpenditureList", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
@@ -582,6 +587,32 @@ public class AppController {
 			apply.setWalletId(walletId);
 			page = IApplyExpenditureService.loadPageList(page, apply);
 			dto.setData(page.getResultList());
+			dto.setResult("S");
+		} catch (Exception e) {
+			e.printStackTrace();
+			dto.setResult("F");
+			dto.setErrorMsg("提现记录查询异常");
+			return JSONUtil.toJSONString(JSONUtil.toJSONObject(dto));
+		}
+		return JSONUtil.toJSONString(JSONUtil.toJSONObject(dto));
+	}
+	
+	/**
+	 * 查询进账记录
+	 * @param params
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/expireApprovalSuccessList", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
+	public String expireApprovalSuccessList(@RequestBody String params) {
+		logger.info("获取用户期满审核通过接口expireApprovalSuccessList接收参数：" + params);
+		ResultDto<List<EnrollApproval>> dto = new ResultDto<List<EnrollApproval>>();
+		JSONObject obj = JSONUtil.toJSONObject(params);
+		Integer userId = obj.getInt("userId");
+		Page page = new Page();
+		try {
+			dto = iEnrollApprovalService.queryByUserIdTypeAndState(userId, 2, 1);
+			ApplyExpenditureRequestForm apply = new ApplyExpenditureRequestForm();
 			dto.setResult("S");
 		} catch (Exception e) {
 			e.printStackTrace();

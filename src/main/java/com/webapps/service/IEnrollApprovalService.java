@@ -1,6 +1,7 @@
 package com.webapps.service;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import com.webapps.common.bean.Page;
 import com.webapps.common.bean.ResultDto;
@@ -48,6 +49,8 @@ public interface IEnrollApprovalService {
 	public ResultDto<EnrollApproval> applyEntryApproval(JSONObject params);
 	
 	public ResultDto<EnrollApproval> applyExpireApproval(JSONObject params);
+	
+	public ResultDto<List<EnrollApproval>> queryByUserIdTypeAndState(Integer userId,Integer type,Integer state);
 	
 
 }

@@ -1,7 +1,5 @@
 package com.webapps.service.impl;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.Date;
 import java.util.List;
 
@@ -17,9 +15,12 @@ import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import com.webapps.common.bean.Page;
 import com.webapps.common.bean.ResultDto;
 import com.webapps.common.entity.ApplyExpenditure;
+import com.webapps.common.entity.BillRecord;
+import com.webapps.common.entity.Enrollment;
 import com.webapps.common.entity.UserWallet;
 import com.webapps.common.form.ApplyExpenditureRequestForm;
 import com.webapps.mapper.IApplyExpenditureMapper;
+import com.webapps.mapper.IBillRecordMapper;
 import com.webapps.mapper.IUserWalletMapper;
 import com.webapps.service.IApplyExpenditureService;
 
@@ -34,6 +35,9 @@ public class ApplyExpenditureServiceImpl implements IApplyExpenditureService {
 	
 	@Autowired
 	private IUserWalletMapper iUserWalletMapper;
+	
+	@Autowired
+	private IBillRecordMapper iBillRecordMapper;
 
 	@Override
 	public Page loadPageList(Page page, ApplyExpenditureRequestForm apply) {
@@ -66,6 +70,8 @@ public class ApplyExpenditureServiceImpl implements IApplyExpenditureService {
 //				uw.setFee(leftFee);
 //				uw.setUpdateTime(new Date());
 //				iUserWalletMapper.updateById(uw.getId(), uw);
+				//审核通过后记录账单信息
+				this.saveBillRecrod(ae, uw);
 			}
 			if(state==2){
 				ae.setReason(reason);
@@ -87,6 +93,21 @@ public class ApplyExpenditureServiceImpl implements IApplyExpenditureService {
 			dto.setResult("F");
 			return dto;
 		}
+	}
+	
+	/**
+	 * 保存期满审核成功后的返费账单信息
+	 * @param enrollment
+	 * @param uw
+	 */
+	private void saveBillRecrod(ApplyExpenditure ae, UserWallet uw) {
+		BillRecord br = new BillRecord();
+		br.setFee(ae.getFee());
+		br.setType(-1);
+		br.setDataState(1);
+		br.setWalletId(uw.getId());
+		br.setCreateTime(new Date());
+		iBillRecordMapper.insert(br);
 	}
 
 	@Override

@@ -67,6 +67,10 @@
 		</trim>
 	</select>
 	
+	<select id="queryByUserIdTypeAndState" resultMap="resultMap">
+		select * from t_enrollment_approval where user_id=#{userId} and type=#{type} and state = #{state}
+	</select>
+	
 	<select id="countByFkIds" resultMap="resultMap">
 		select conut(1) from t_enrollment_approval tea 
 		left join t_enrollment te on te.id = tea.enrollment_id
