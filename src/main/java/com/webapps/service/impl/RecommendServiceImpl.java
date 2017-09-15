@@ -102,12 +102,13 @@ public class RecommendServiceImpl implements IRecommendService {
 	@Override
 	public ResultDto<Recommend> userRecommend(Recommend recommend) {
 		RecommendRequestForm form = new RecommendRequestForm();
-		ResultDto<Recommend> dto = null;
+		ResultDto<Recommend> dto = new ResultDto<Recommend>();
 		form.setMobile(recommend.getMobile());
 		List<Recommend> list = iRecommendMapper.queryPage(0,1,form);
 		Recommend r = null;
 		try {
-			User user = iUserMapper.queryUserByAccount(r.getMobile());
+			//先根据传入的被推荐人手机号查询用户表，如果能查到数据说明该用户已注册
+			User user = iUserMapper.queryUserByAccount(recommend.getMobile());
 			if(user!=null&&user.getId()!=null){
 				dto.setResult("F");
 				dto.setErrorMsg("该用户已注册会员，不可重复推荐");
@@ -119,6 +120,7 @@ public class RecommendServiceImpl implements IRecommendService {
 				dto = saveRecommend(recommend);
 				return dto;
 			}
+			//如果被推荐人之前被推荐过，则要判断之前最近一条推荐记录是否在有效期内，目前为20天
 			Date now = new Date();
 			double days = DateUtil.getDaysBetweenTwoDates(r.getCreateTime(), now);
 			if(days>20){
