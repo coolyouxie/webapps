@@ -169,7 +169,8 @@
 				"state":state,
 				"remark":remark,
 				"reward":reward,
-				"approvalType":approvalType
+				"approvalType":approvalType,
+				"type":$("#type").val()
 			},
 			success:function(response){
 				$('#remarkModal').modal('hide');
@@ -328,13 +329,23 @@
 						<input type="text" id="enrollTimeEnd" name="enrollTimeEnd" onClick="WdatePicker({isShowWeek:true})">
 					</label>
 				</div>
-				<div class="col-sm-3">
+				<div class="col-sm-2">
+					<label>
+						<span>类型:</span>
+						<select id="type" name="type">
+							<option value="">-请选择-</option>
+							<option value="1">入职审核</option>
+							<option value="2">期满审核</option>
+						</select>
+					</label>
+				</div>
+				<div class="col-sm-2">
 					<label>
 						<span>状态:</span>
 						<select id="state" name="state">
 							<option value="">-请选择-</option>
-							<option value="1">入职审核</option>
-							<option value="2">期满审核</option>
+							<option value="1">通过</option>
+							<option value="2">不通过</option>
 						</select>
 					</label>
 				</div>
