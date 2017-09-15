@@ -169,8 +169,7 @@
 				"state":state,
 				"remark":remark,
 				"reward":reward,
-				"approvalType":approvalType,
-				"type":$("#type").val()
+				"approvalType":approvalType
 			},
 			success:function(response){
 				$('#remarkModal').modal('hide');

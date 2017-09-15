@@ -33,6 +33,7 @@ import com.webapps.common.form.BillRecordRequestForm;
 import com.webapps.common.form.MessageConfigRequestForm;
 import com.webapps.common.form.RecruitmentRequestForm;
 import com.webapps.common.utils.JSONUtil;
+import com.webapps.common.utils.PropertyUtil;
 import com.webapps.service.IAliSmsMsgService;
 import com.webapps.service.IApplyExpenditureService;
 import com.webapps.service.IBannerConfigService;
@@ -649,6 +650,27 @@ public class AppController {
 			e.printStackTrace();
 			dto.setResult("F");
 			dto.setErrorMsg("推荐费记录查询异常");
+			return JSONUtil.toJSONString(JSONUtil.toJSONObject(dto));
+		}
+		return JSONUtil.toJSONString(JSONUtil.toJSONObject(dto));
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/getContactInfo", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
+	public String getContactInfo() {
+		ResultDto<JSONObject> dto = new ResultDto<JSONObject>();
+		try {
+			JSONObject obj = new JSONObject();
+			String weiXin = (String) PropertyUtil.getProperty("weiXin");
+			String telephone = (String) PropertyUtil.getProperty("telephone");
+			obj.put("weiXin", weiXin);
+			obj.put("telephone", telephone);
+			dto.setData(obj);
+			dto.setResult("S");
+		} catch (Exception e) {
+			e.printStackTrace();
+			dto.setResult("F");
+			dto.setErrorMsg("查询联系方式异常");
 			return JSONUtil.toJSONString(JSONUtil.toJSONObject(dto));
 		}
 		return JSONUtil.toJSONString(JSONUtil.toJSONObject(dto));
