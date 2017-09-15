@@ -17,6 +17,7 @@ import com.webapps.common.bean.ResultDto;
 import com.webapps.common.entity.AliSmsMsg;
 import com.webapps.common.entity.ApplyExpenditure;
 import com.webapps.common.entity.BannerConfig;
+import com.webapps.common.entity.BillRecord;
 import com.webapps.common.entity.Company;
 import com.webapps.common.entity.EnrollApproval;
 import com.webapps.common.entity.Enrollment;
@@ -28,12 +29,14 @@ import com.webapps.common.entity.User;
 import com.webapps.common.entity.UserWallet;
 import com.webapps.common.form.ApplyExpenditureRequestForm;
 import com.webapps.common.form.BannerConfigRequestForm;
+import com.webapps.common.form.BillRecordRequestForm;
 import com.webapps.common.form.MessageConfigRequestForm;
 import com.webapps.common.form.RecruitmentRequestForm;
 import com.webapps.common.utils.JSONUtil;
 import com.webapps.service.IAliSmsMsgService;
 import com.webapps.service.IApplyExpenditureService;
 import com.webapps.service.IBannerConfigService;
+import com.webapps.service.IBillRecordService;
 import com.webapps.service.ICompanyService;
 import com.webapps.service.IEnrollApprovalService;
 import com.webapps.service.IEnrollmentService;
@@ -87,6 +90,9 @@ public class AppController {
 	
 	@Autowired
 	private IUserWalletService iUserWalletService;
+	
+	@Autowired
+	private IBillRecordService iBillRecordService;
 
 	/**
 	 * app端登录接口
@@ -609,15 +615,40 @@ public class AppController {
 		ResultDto<List<EnrollApproval>> dto = new ResultDto<List<EnrollApproval>>();
 		JSONObject obj = JSONUtil.toJSONObject(params);
 		Integer userId = obj.getInt("userId");
-		Page page = new Page();
 		try {
 			dto = iEnrollApprovalService.queryByUserIdTypeAndState(userId, 2, 1);
-			ApplyExpenditureRequestForm apply = new ApplyExpenditureRequestForm();
 			dto.setResult("S");
 		} catch (Exception e) {
 			e.printStackTrace();
 			dto.setResult("F");
 			dto.setErrorMsg("提现记录查询异常");
+			return JSONUtil.toJSONString(JSONUtil.toJSONObject(dto));
+		}
+		return JSONUtil.toJSONString(JSONUtil.toJSONObject(dto));
+	}
+	
+	@ResponseBody
+	@SuppressWarnings("unchecked")
+	@RequestMapping(value = "/loanBillRecordList", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
+	public String loanBillRecordList(@RequestBody String params) {
+		logger.info("获取用户期满审核通过接口expireApprovalSuccessList接收参数：" + params);
+		ResultDto<List<BillRecord>> dto = new ResultDto<List<BillRecord>>();
+		JSONObject obj = JSONUtil.toJSONObject(params);
+		Integer walletId = obj.getInt("walletId");
+		BillRecordRequestForm form = new BillRecordRequestForm();
+		form.setWalletId(walletId);
+		form.setType(1);
+		Page page = new Page();
+		page.setPage(1);
+		page.setEndRow(10);
+		try {
+			page = iBillRecordService.loadPageList(page, form);
+			dto.setResult("S");
+			dto.setData(page.getResultList());
+		} catch (Exception e) {
+			e.printStackTrace();
+			dto.setResult("F");
+			dto.setErrorMsg("推荐费记录查询异常");
 			return JSONUtil.toJSONString(JSONUtil.toJSONObject(dto));
 		}
 		return JSONUtil.toJSONString(JSONUtil.toJSONObject(dto));

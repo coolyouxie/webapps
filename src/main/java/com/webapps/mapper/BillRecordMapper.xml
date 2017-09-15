@@ -45,7 +45,15 @@
 	
 	<select id="queryCount" resultType="java.lang.Integer">
 		SELECT count(1) FROM t_bill_record
-			where data_state = 1 and wallet_id = #{obj.walletId}
+		<trim prefix="WHERE" prefixOverrides="AND">
+			data_state = 1 
+			<if test="obj.type != null and obj.type != ''">
+				and type = #{obj.type}
+			</if>
+			<if test="obj.walletId != null and obj.walletId != ''">
+				and wallet_id = #{obj.walletId}
+			</if>
+		</trim>
 	</select>
 
 	<select id="queryPage" resultMap="resultMap">
@@ -53,7 +61,15 @@
 		SELECT
 		<include refid="select_columns" />
 		FROM t_bill_record
-		where wallet_id = #{obj.walletId}
+		<trim prefix="WHERE" prefixOverrides="AND">
+			data_state = 1 
+			<if test="obj.type != null and obj.type != ''">
+				and type = #{obj.type}
+			</if>
+			<if test="obj.walletId != null and obj.walletId != ''">
+				and wallet_id = #{obj.walletId}
+			</if>
+		</trim>
 		order by create_time desc
 		<include refid="ORACLE.paginationEnd" />
 	</select>

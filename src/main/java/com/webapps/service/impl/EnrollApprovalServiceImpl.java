@@ -182,7 +182,6 @@ public class EnrollApprovalServiceImpl implements IEnrollApprovalService {
 					ea.setUpdateTime(new Date());
 					//这里还需要将日志记录到t_wallet_record表中
 					saveUserWalletAndRecord(enrollment);
-					
 				}else{
 					enrollment.setState(32);
 					enrollment.setUpdateTime(new Date());
