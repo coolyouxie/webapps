@@ -27,7 +27,7 @@
 	</resultMap>
 
 	<sql id="select_columns">
-		tea.ID,tea.state,tea.type, tea.data_state,tea.CREATE_TIME,tea.UPDATE_TIME,
+		tea.ID,tea.user_id,tea.state,tea.type, tea.data_state,tea.CREATE_TIME,tea.UPDATE_TIME,
 		tea.operator_id,tea.remark,tea.is_talked,tea.talk_result,tea.enrollment_id,
 		tea.reward,tea.entry_date
 	</sql>

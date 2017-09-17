@@ -154,7 +154,7 @@
 	
 	function search(){
 		dataGrid.jqGrid("setGridParam",{
-		    postData:$("#searchForm").serialize(),
+		    postData:$("#searchForm").serialize()+"&rows=50&page=1",
 		    page:1
 		}).trigger("reloadGrid");
 	}
@@ -188,15 +188,14 @@
 		$("#enrollApprovalId").val(id);
 		$("#approvalState").val(state);
 		$("#approvalType").val(approvalType);
-		if(approvalType==1){
-			$('#rewardModal').modal('show');
-		}else if(approvalType==2){
-			if(state==1){
+		if(state==1){
+			if(approvalType==1){
+				$('#rewardModal').modal('show');
+			}else{
 				enrollApprovalById(id, state, "", approvalType, "");
 			}
-			if(state==2){
-				$('#remarkModal').modal('show');
-			}
+		}else if(state==2){
+			$('#remarkModal').modal('show');
 		}
 	}
 	

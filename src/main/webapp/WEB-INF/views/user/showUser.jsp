@@ -27,7 +27,7 @@
 
 <script type="text/javascript">
 	jQuery(document).ready(function(){
-		dataGrid = jQuery("#list").jqGrid({
+		/* var dataGrid = jQuery("#list").jqGrid({
 		    url:"${ctx}/billRecord/loadBillRecordByUserId",
 		    datatype: "json",
 		    mtype : "POST",
@@ -83,7 +83,7 @@
 		    gridComplete : function() { //在此事件中循环为每一行添加日志、废保和查看链接
 								
 			}
-		});
+		}); */
 	});
 </script>
 </head>

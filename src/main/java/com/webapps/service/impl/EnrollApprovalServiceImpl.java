@@ -123,6 +123,18 @@ public class EnrollApprovalServiceImpl implements IEnrollApprovalService {
 				dto.setResult("F");
 				return dto;
 			}
+			User user = null;
+			if(enrollment.getUser()==null||enrollment.getUser().getId()==null){
+				dto.setErrorMsg("审核时部分信息未找到");
+				dto.setResult("F");
+				return dto;
+			}
+			user = iUserMapper.getById(enrollment.getUser().getId());
+			if(user==null){
+				dto.setErrorMsg("审核时获取用户信息失败");
+				dto.setResult("F");
+				return dto;
+			}
 			if(enrollment.getState()==20&&ea.getType()==1){
 				//入职审核
 				if(state==1){
@@ -132,6 +144,10 @@ public class EnrollApprovalServiceImpl implements IEnrollApprovalService {
 					ea.setState(1);
 					ea.setUpdateTime(new Date());
 					ea.setReward(reward);
+					//更新用户状态到已入职
+					user.setCurrentState(2);
+					user.setUpdateTime(new Date());
+					iUserMapper.updateById(user.getId(), user);
 				}else{
 					enrollment.setState(22);
 					enrollment.setUpdateTime(new Date());
@@ -173,6 +189,19 @@ public class EnrollApprovalServiceImpl implements IEnrollApprovalService {
 				dto.setResult("F");
 				return dto;
 			}
+			User user = null;
+			if(enrollment.getUser()==null||enrollment.getUser().getId()==null){
+				dto.setErrorMsg("审核时部分信息未找到");
+				dto.setResult("F");
+				return dto;
+				
+			}
+			user = iUserMapper.getById(enrollment.getUser().getId());
+			if(user==null){
+				dto.setErrorMsg("审核时获取用户信息失败");
+				dto.setResult("F");
+				return dto;
+			}
 			if(enrollment.getState()==30&&ea.getType()==2){
 				//期满审核
 				if(state==1){
@@ -182,6 +211,10 @@ public class EnrollApprovalServiceImpl implements IEnrollApprovalService {
 					ea.setUpdateTime(new Date());
 					//这里还需要将日志记录到t_wallet_record表中
 					saveUserWalletAndRecord(enrollment);
+					//更新用户状态到已期满
+					user.setUpdateTime(new Date());
+					user.setCurrentState(3);
+					iUserMapper.updateById(user.getId(), user);
 				}else{
 					enrollment.setState(32);
 					enrollment.setUpdateTime(new Date());

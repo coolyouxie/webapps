@@ -93,10 +93,10 @@
 								sortable : false,
 								formatter:function(cellValue,options,rowObject){
 									var result = null;
-									if(rowObject.isTalked==0){
-										result = "<button id='btn_"+rowObject.id+"' class='btn btn-primary btn-sm' data-toggle='modal' onclick='showModal("+rowObject.id+",1)'>已沟通</button>";
-									}else{
-										result = "已沟通";
+									if(rowObject.isTalked<=0){
+										result = "<button id='btn_"+rowObject.id+"' class='btn btn-primary btn-sm' data-toggle='modal' onclick='showModal("+rowObject.id+",1)'>沟通</button>&nbsp;&nbsp;&nbsp;&nbsp;";
+									}else if(rowObject.isTalked==1){
+										result = "已沟通&nbsp;&nbsp;&nbsp;&nbsp;";
 									}
 									result += "<button id='btn_"+rowObject.id+"' class='btn btn-primary btn-sm' data-toggle='modal' onclick='showModal("+rowObject.id+",2)'>作废</button>";
 									return result;
@@ -116,8 +116,9 @@
 	});
 	
 	function search(){
+		var params = $("#searchForm").serialize();
 		dataGrid.jqGrid("setGridParam",{
-		    postData:$("#searchForm").serialize(),
+		    postData:params+"&rows=50&page=1",
 		    page:1
 		}).trigger("reloadGrid");
 	}

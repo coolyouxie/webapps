@@ -26,12 +26,13 @@
 		<result column="UPDATE_TIME" jdbcType="VARCHAR" property="updateTime" />
 		<result column="user_wallet_id" jdbcType="DECIMAL" property="userWallet.id" />
 		<result column="user_wallet_fee" jdbcType="DECIMAL" property="userWallet.fee" />
+		<result column="current_state" jdbcType="DECIMAL" property="currentState" />
 	</resultMap>
 
 	<sql id="select_columns">
 		tu.ID,tu.account,tu.password,tu.token,tu.name,tu. gender,tu. age,tu. telephone,tu. mobile,
 		tu.qq,tu.weiXin,tu.email,tu.home_Address,tu.address,tu.id_card_no,tu.user_type,tu.login_State,
-		tu.education_Id,tu.data_state,tu.CREATE_TIME,tu.UPDATE_TIME
+		tu.education_Id,tu.data_state,tu.CREATE_TIME,tu.UPDATE_TIME,current_state
 	</sql>
 
 	<sql id="insert_columns">
@@ -53,7 +54,8 @@
 		login_State,
 		education_Id,
 		data_state,
-		CREATE_TIME
+		CREATE_TIME,
+		current_state
 	</sql>
 
 	<select id="getById" resultMap="resultMap">
@@ -83,6 +85,9 @@
 			</if>
 			<if test="obj.age != null and obj.age != ''">
 				age = #{obj.age,jdbcType=DECIMAL},
+			</if>
+			<if test="obj.currentState != null and obj.currentState != '' or obj.currentState == 0">
+				current_state = #{obj.currentState,jdbcType=DECIMAL},
 			</if>
 			weiXin = #{obj.weiXin,jdbcType=VARCHAR},
 			email = #{obj.email,jdbcType=VARCHAR},

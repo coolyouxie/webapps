@@ -49,7 +49,10 @@
 	</select>
 	
 	<select id="queryListByFkId" resultMap="resultMap">
-		select <include refid="select_columns" />,tc.name company_name,tr.title recruitment_title 
+		select <include refid="select_columns" />,
+		tc.name as company_name,
+		tc.id as company_id,
+		tr.title as recruitment_title 
 		from t_enrollment te 
 		left join t_company tc on tc.id=te.company_id
 		left join t_recruitment tr on tr.id = te.recruitment_id 
@@ -68,6 +71,7 @@
 				and te.user_id = #{obj.user.id}
 			</if>
 		</trim>
+		order by te.id desc
 	</select>
 	
 	<select id="countByFkIds" resultType="java.lang.Integer">

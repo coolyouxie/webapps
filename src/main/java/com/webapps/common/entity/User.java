@@ -40,6 +40,11 @@ public class User extends Entity{
     private String token;
     
     private UserWallet userWallet;
+    
+    /**
+     * 0:用户未报名，1用户报名未入职，2用户已入职，3用户已期满，4用户已离职
+     */
+    private Integer currentState;
 
     public String getAccount() {
         return account;
@@ -183,6 +188,14 @@ public class User extends Entity{
 
 	public void setUserWallet(UserWallet userWallet) {
 		this.userWallet = userWallet;
+	}
+
+	public Integer getCurrentState() {
+		return currentState;
+	}
+
+	public void setCurrentState(Integer currentState) {
+		this.currentState = currentState;
 	}
 
 }

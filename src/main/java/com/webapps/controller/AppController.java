@@ -143,6 +143,7 @@ public class AppController {
 		user.setPassword(password);
 		user.setTelephone(telephone);
 		user.setAccount(telephone);
+		user.setCurrentState(0);
 		ResultDto<User> dto = null;
 		try {
 			ResultDto<String> dto1 = iAliSmsMsgService.validateAliSmsCode(asmId, smsCode);
@@ -260,23 +261,9 @@ public class AppController {
 	public String getUserEnrollmentList(@RequestBody String params) {
 		JSONObject jsonObj = JSONUtil.toJSONObject(params);
 		Integer userId = jsonObj.getInt("userId");
-//		Integer curPage = jsonObj.getInt("page");
-//		Integer rows = jsonObj.getInt("rows");
-//		EnrollmentRequestForm form = new EnrollmentRequestForm();
-//		User user = new User();
-//		user.setId(userId);
-//		form.setUser(user);
-//		Page page  = new Page();
-//		page.setRows(rows);
-//		page.setPage(curPage);
 		ResultDto<List<Enrollment>> dto = new ResultDto<List<Enrollment>>();
 		try {
-//			page = iEnrollmentService.loadEnrollmentList(page, form);
 			List<Enrollment> list = iEnrollmentService.queryEnrollmentListByUserId(userId);
-//			List<Enrollment> list = null;
-//			if(page!=null){
-//				list = page.getResultList();
-//			}
 			dto.setData(list);
 			dto.setResult("S");
 		} catch (Exception e) {
@@ -356,6 +343,11 @@ public class AppController {
 		return result;
 	}
 
+	/**
+	 * 获取发布单详情
+	 * @param params
+	 * @return
+	 */
 	@ResponseBody
 	@RequestMapping(value = "/getRecruitmentDetail", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
 	public String getRecruitmentDetail(@RequestBody String params) {
@@ -374,6 +366,11 @@ public class AppController {
 		return JSONUtil.toJSONString(JSONUtil.toJSONObject(dto));
 	}
 
+	/**
+	 * 获取公司详情信息
+	 * @param params
+	 * @return
+	 */
 	@ResponseBody
 	@RequestMapping(value = "/getCompanyInfo", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
 	public String getCompanyInfo(@RequestBody String params) {
@@ -391,6 +388,11 @@ public class AppController {
 		return JSONUtil.toJSONString(JSONUtil.toJSONObject(dto));
 	}
 
+	/**
+	 * 获取金额配置信息
+	 * @param params
+	 * @return
+	 */
 	@ResponseBody
 	@RequestMapping(value = "/getFeeConfig", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
 	public String getFeeConfig(@RequestBody String params) {
@@ -407,6 +409,11 @@ public class AppController {
 		return JSONUtil.toJSONString(JSONUtil.toJSONObject(dto));
 	}
 
+	/**
+	 * 获取banner配置
+	 * @param params
+	 * @return
+	 */
 	@ResponseBody
 	@RequestMapping(value = "/getBannerConfig", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
 	public String getBannerConfig(@RequestBody String params) {
@@ -415,6 +422,11 @@ public class AppController {
 
 	}
 
+	/**
+	 * 获取消息配置
+	 * @param params
+	 * @return
+	 */
 	@SuppressWarnings("unchecked")
 	@ResponseBody
 	@RequestMapping(value = "/getMessageConfig", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
@@ -663,8 +675,10 @@ public class AppController {
 			JSONObject obj = new JSONObject();
 			String weiXin = (String) PropertyUtil.getProperty("weiXin");
 			String telephone = (String) PropertyUtil.getProperty("telephone");
+			String qq = (String) PropertyUtil.getProperty("qq");
 			obj.put("weiXin", weiXin);
 			obj.put("telephone", telephone);
+			obj.put("telephone", qq);
 			dto.setData(obj);
 			dto.setResult("S");
 		} catch (Exception e) {

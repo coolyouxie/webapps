@@ -34,9 +34,6 @@ public class UserServiceImpl implements IUserService {
 	
 	@Autowired
 	private IUserWalletMapper iUserWalletMapper;
-	
-	@Autowired
-	private IAliSmsMsgMapper iAliSmsMsgMapper;
 
 	@Override
 	public Page loadUserList(Page page,UserRequestForm user) throws Exception {

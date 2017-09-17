@@ -1,23 +1,21 @@
 package com.webapps.service.impl;
 
+import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.webapps.common.bean.Page;
 import com.webapps.common.bean.ResultDto;
-import com.webapps.common.entity.Company;
 import com.webapps.common.entity.Enrollment;
-import com.webapps.common.entity.Recruitment;
 import com.webapps.common.entity.User;
 import com.webapps.common.form.EnrollmentRequestForm;
-import com.webapps.common.utils.JSONUtil;
 import com.webapps.mapper.IEnrollmentMapper;
+import com.webapps.mapper.IUserMapper;
 import com.webapps.service.IEnrollmentService;
-
-import net.sf.json.JSONObject;
 
 @Service
 @Transactional
@@ -25,6 +23,9 @@ public class EnrollmentServiceImpl implements IEnrollmentService {
 	
 	@Autowired
 	private IEnrollmentMapper iEnrollmentMapper;
+	
+	@Autowired
+	private IUserMapper iUserMapper;
 
 	@Override
 	public Page loadEnrollmentList(Page page, EnrollmentRequestForm enrollment) throws Exception {
@@ -99,7 +100,7 @@ public class EnrollmentServiceImpl implements IEnrollmentService {
 	@Override
 	public ResultDto<Enrollment> userEnroll(Enrollment em) throws Exception {
 		ResultDto<Enrollment> dto = null;
-		em.setIsTalked(-1);
+		em.setIsTalked(0);
 		em.setState(1);
 		em.setDataState(1);
 		int count = iEnrollmentMapper.countByFkIds(em);
@@ -109,7 +110,20 @@ public class EnrollmentServiceImpl implements IEnrollmentService {
 			dto.setResult("F");
 			return dto;
 		}
+		EnrollmentRequestForm form = new EnrollmentRequestForm();
+		form.setUser(em.getUser());
+		List<Enrollment> list = iEnrollmentMapper.queryListByFkId(form);
+		User user = null;
+		if(CollectionUtils.isNotEmpty(list)){
+			Enrollment em1 = list.get(0);
+			user = iUserMapper.getById(em.getUser().getId());
+			if(em1.getState()==4||user.getCurrentState()==0){
+				user.setUpdateTime(new Date());
+				user.setCurrentState(1);
+			}
+		}
 		int result = iEnrollmentMapper.insert(em);
+		iUserMapper.updateById(user.getId(),user);
 		if(result == 1){
 			dto = new ResultDto<Enrollment>();
 			dto.setData(em);

@@ -160,7 +160,7 @@
 			params.educationId=educationId;
 		}
 		dataGrid.jqGrid("setGridParam",{
-		    postData:$("#searchForm").serialize(),
+		    postData:$("#searchForm").serialize()+"&rows=50&page=1",
 		    page:1
 		}).trigger("reloadGrid");
 	}
