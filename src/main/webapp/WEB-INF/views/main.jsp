@@ -30,6 +30,6 @@
 	}); 
 </script>
 </head>
-<body>
+<body style="padding-right:40px;">
 
 </body>

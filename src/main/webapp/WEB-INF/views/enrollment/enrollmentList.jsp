@@ -33,15 +33,15 @@
 		    url:"${ctx}/enrollment/loadEnrollmentList",
 		    datatype: "json",
 		    mtype : "POST",
-		    height : 650,
-		    width : 950,
+		    height : 'auto',
+		    width : 'auto',
 		    jsonReader : {
 								root : "resultList", // json中代表实际模型数据的入口
 								page : "page.page", // json中代表当前页码的数据   
 								records : "page.records", // json中代表数据行总数的数据   
 								total : 'page.total', // json中代表页码总数的数据 
 								repeatitems : false // 如果设为false，则jqGrid在解析json时，会根据name来搜索对应的数据元素（即可以json中元素可以不按顺序）；而所使用的name是来自于colModel中的name设定。   
-							},
+						},
 		    colNames : [ '公司名称', '发布单标题', '报名人', '手机号','报名时间','沟通结果','操作'],
 		    colModel : [ {
 								label : 'company.name',
@@ -103,8 +103,8 @@
 								}
 							} ],
 		    pager: '#pager',
-		    rowNum:50,
-		    rowList:[50,100,200],
+		    rowNum:15,
+		    rowList:[15,30,50],
 		    sortname: 'id',
 		    viewrecords: true,
 		    sortorder: "desc",
@@ -118,7 +118,7 @@
 	function search(){
 		var params = $("#searchForm").serialize();
 		dataGrid.jqGrid("setGridParam",{
-		    postData:params+"&rows=50&page=1",
+		    postData:params+"&rows="+dataGrid.jqGrid('getGridParam', 'rowNum')+"&page=1",
 		    page:1
 		}).trigger("reloadGrid");
 	}
@@ -237,35 +237,30 @@
 			</div><!-- /.modal-content -->
 		</div><!-- /.modal -->
 	</div>
-	<div class="container-fluid">
+	<div class="container-fluid" style="padding-right: 15px;">
 		<form id="searchForm">
 			<div class="row" style="margin-bottom:8px">
-				<div class="col-sm-3" style="width:255px">
+				<div class="col-sm-4">
 					<label>
 						<span>公司名称:</span>
 						<input type="text" id="companyName" name="company.name" value="">
 					</label>
 				</div>
-				<div class="col-sm-3" style="width:255px">
+				<div class="col-sm-4">
 					<label>
 						<span>报名人:</span>
 						<input type="text" id="userName" name="user.name" value="">
 					</label>
 				</div>
-				<div class="col-sm-3" style="width:255px">
+				<div class="col-sm-4">
 					<label>
 						<span>手机号:</span>
 						<input type="text" id="userMobile" name="user.mobile" value="">
 					</label>
 				</div>
-				<div class="col-sm-1" style="text-align:right;width:200px">
-					<button type='button' class="btn btn-primary btn-sm" data-toggle="modal" onclick="search()">
-						查询
-					</button>
-				</div>
 			</div>
 			<div class="row">
-				<div class="col-sm-4">
+				<div class="col-sm-6">
 					<label>
 						<span>报名时间:</span>
 						<input type="text" id="enrollTimeStart" name="enrollTimeStart" onClick="WdatePicker({isShowWeek:true})">
@@ -285,10 +280,15 @@
 						</select>
 					</label>
 				</div>
+				<div class="col-sm-1" style="text-align:right;width:200px">
+					<button type='button' class="btn btn-primary btn-sm" data-toggle="modal" onclick="search()">
+						查询
+					</button>
+				</div>
 			</div>
 		</form>
+		<table id="list"></table>
+		<div id="pager"></div>
 	</div>
-	<table id="list"></table>
-	<div id="pager"></div>
 </body>
 </html>

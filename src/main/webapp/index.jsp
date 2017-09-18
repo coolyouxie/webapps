@@ -62,8 +62,8 @@
 					</ul>
 				</div>
 				
-				<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-					<iframe name="mainContainer" width="100%" height="800px" style="margin-bottom:20px;" frameborder="0" scrolling="auto">
+				<div class="col-sm-10 col-md-offset-2 main" style="padding: 20px 0 0 0;">
+					<iframe name="mainContainer" width="100%" height="540px" style="margin-bottom:20px;" frameborder="0" scrolling="auto">
 					</iframe>
 				</div>
 			</div>

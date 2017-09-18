@@ -31,8 +31,8 @@
 		    url:"${ctx}/recruitment/loadRecruitmentList",
 		    datatype: "json",
 		    mtype : "POST",
-		    height : 650,
-		    width : 950,
+		    height : 'auto',
+		    width : 1080,
 		    jsonReader : {
 								root : "resultList", // json中代表实际模型数据的入口
 								page : "page.page", // json中代表当前页码的数据   
@@ -182,8 +182,8 @@
 								}
 							} ],
 		    pager: '#pager',
-		    rowNum:50,
-		    rowList:[50,100,200],
+		    rowNum:15,
+		    rowList:[15,30,50],
 		    sortname: 'id',
 		    viewrecords: true,
 		    sortorder: "desc",
@@ -255,7 +255,7 @@
 						<input type="text" id="title" name="title">
 					</label>
 				</div>
-				<div class="col-md-3" >
+				<div class="col-md-4" >
 					<label>
 						<span>招工类型:</span>
 						<select id="publishType" name="publishType" >
@@ -278,7 +278,7 @@
 				</div>
 			</div>
 			<div class="row">
-				<div class="col-md-6" style="width:435px">
+				<div class="col-md-6">
 					<label>
 						<span>发布时间:</span>
 						<input type="text" id="publishTimeStart" name="publishTimeStart" onclick="WdatePicker({isShowWeek:true})" style="widht:100px">
@@ -286,6 +286,7 @@
 						<input type="text" id="publishTimeEnd" name="publishTimeEnd" onclick="WdatePicker({isShowWeek:true})" style="widht:100px">
 					</label>
 				</div>
+				<div class="col-md-2"></div>
 				<div class="col-md-2">
 					<button type='button' class="btn btn-primary btn-sm" data-toggle="modal" onclick="search()">
 						查询
