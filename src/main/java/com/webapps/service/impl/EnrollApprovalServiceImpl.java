@@ -33,7 +33,6 @@ import com.webapps.mapper.IFeeConfigMapper;
 import com.webapps.mapper.IRecommendMapper;
 import com.webapps.mapper.IUserMapper;
 import com.webapps.mapper.IUserWalletMapper;
-import com.webapps.mapper.IWalletRecordMapper;
 import com.webapps.service.IEnrollApprovalService;
 
 import net.sf.json.JSONObject;
@@ -153,6 +152,7 @@ public class EnrollApprovalServiceImpl implements IEnrollApprovalService {
 					ea.setState(2);
 					ea.setUpdateTime(new Date());
 				}
+				ea.setOperatorId(approverId);
 				iEnrollmentMapper.updateById(enrollment.getId(), enrollment);
 				iEnrollApprovalMapper.updateById(ea.getId(), ea);
 				dto.setResult("S");
@@ -222,6 +222,7 @@ public class EnrollApprovalServiceImpl implements IEnrollApprovalService {
 					ea.setUpdateTime(new Date());
 					ea.setFailedReason(failedReason);
 				}
+				ea.setOperatorId(approverId);
 				iEnrollmentMapper.updateById(enrollment.getId(), enrollment);
 				iEnrollApprovalMapper.updateById(ea.getId(), ea);
 				dto.setResult("S");
