@@ -145,6 +145,15 @@ public class EnrollApprovalServiceImpl implements IEnrollApprovalService {
 					//更新用户状态到已入职
 					user.setCurrentState(2);
 					user.setUpdateTime(new Date());
+					//先将之前牌入职审核通过和期满审核通过的审核记录状态个性为已离职状态
+					List<Enrollment> list = iEnrollmentMapper.queryListByUserIdAndState(user.getId());
+					if(CollectionUtils.isNotEmpty(list)){
+						for(Enrollment em :list){
+							em.setState(4);
+							em.setUpdateTime(new Date());
+						}
+						iEnrollmentMapper.batchUpdate(list);
+					}
 					iUserMapper.updateById(user.getId(), user);
 				}else{
 					enrollment.setState(22);
@@ -193,7 +202,6 @@ public class EnrollApprovalServiceImpl implements IEnrollApprovalService {
 				dto.setErrorMsg("审核时部分信息未找到");
 				dto.setResult("F");
 				return dto;
-				
 			}
 			user = iUserMapper.getById(enrollment.getUser().getId());
 			if(user==null){
@@ -204,7 +212,7 @@ public class EnrollApprovalServiceImpl implements IEnrollApprovalService {
 			if(enrollment.getState()==30&&ea.getType()==2){
 				//期满审核
 				if(state==1){
-					enrollment.setState(21);
+					enrollment.setState(31);
 					enrollment.setUpdateTime(new Date());
 					ea.setState(1);
 					ea.setUpdateTime(new Date());
@@ -213,6 +221,15 @@ public class EnrollApprovalServiceImpl implements IEnrollApprovalService {
 					//更新用户状态到已期满
 					user.setUpdateTime(new Date());
 					user.setCurrentState(3);
+					//先将之前牌入职审核通过和期满审核通过的审核记录状态个性为已离职状态
+					List<Enrollment> list = iEnrollmentMapper.queryListByUserIdAndState(user.getId());
+					if(CollectionUtils.isNotEmpty(list)){
+						for(Enrollment em :list){
+							em.setState(4);
+							em.setUpdateTime(new Date());
+						}
+						iEnrollmentMapper.batchUpdate(list);
+					}
 					iUserMapper.updateById(user.getId(), user);
 				}else{
 					enrollment.setState(32);

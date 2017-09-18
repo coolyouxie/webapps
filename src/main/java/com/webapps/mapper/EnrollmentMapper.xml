@@ -90,9 +90,12 @@
 		</trim>
 	</select>
 	
+	<select id="queryListByUserIdAndState" resultMap="resultMap">
+		select 
+		<include refid="select_columns" />
+		from t_enrollment te where te.state in (21,31) and te.user_id = #{userId}
+	</select>
 	
-	
-	<!-- 查询行政区总数 -->
 	<select id="queryCount" resultType="java.lang.Integer">
 		SELECT count(1) from t_enrollment te 
 		left join t_company tc on tc.id=te.company_id
@@ -236,5 +239,16 @@
 			remark=#{obj.remark},
 			data_state=#{obj.talkResult}
 		where id=#{id}
+	</update>
+	
+	<update id="batchUpdate">
+		<foreach collection="list" item="item" index="index" open="" close="" separator=";">
+			update t_enrollment
+			<set>
+				state=#{item.state},
+				update_time = #{item.timeUpdate}
+			</set>
+			where id = #{item.id}
+         </foreach>
 	</update>
 </mapper>
