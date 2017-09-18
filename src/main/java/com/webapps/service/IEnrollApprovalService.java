@@ -28,7 +28,7 @@ public interface IEnrollApprovalService {
 	 * @return
 	 * @throws Exception
 	 */
-	public ResultDto<EnrollApproval> approvalById(Integer id,Integer state,String remark)throws Exception;
+	public ResultDto<EnrollApproval> approvalById(Integer id,Integer state,String remark,Integer approverId)throws Exception;
 	
 	public EnrollApproval getById(Integer id)throws Exception;
 	
@@ -42,9 +42,11 @@ public interface IEnrollApprovalService {
 	 * @return
 	 * @throws Exception
 	 */
-	public ResultDto<EnrollApproval> enrollApproval(Integer id,Integer state,String failedReason,BigDecimal reward)throws Exception;
+	public ResultDto<EnrollApproval> enrollApproval(Integer id,Integer state,String failedReason,
+			BigDecimal reward,Integer approverId)throws Exception;
 	
-	public ResultDto<EnrollApproval> expireApproval(Integer id,Integer state,String failedReason)throws Exception;
+	public ResultDto<EnrollApproval> expireApproval(Integer id,Integer state,String failedReason,
+			Integer approverId)throws Exception;
 	
 	public ResultDto<EnrollApproval> applyEntryApproval(JSONObject params);
 	

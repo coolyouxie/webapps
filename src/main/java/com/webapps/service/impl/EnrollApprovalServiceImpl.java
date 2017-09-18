@@ -51,9 +51,6 @@ public class EnrollApprovalServiceImpl implements IEnrollApprovalService {
 	private IEnrollmentMapper iEnrollmentMapper;
 	
 	@Autowired
-	private IWalletRecordMapper iWalletRecordMapper;
-	
-	@Autowired
 	private IUserWalletMapper iUserWalletMapper;
 	
 	@Autowired
@@ -83,11 +80,13 @@ public class EnrollApprovalServiceImpl implements IEnrollApprovalService {
 	 * approvalType：1入职审核，2期满审核
 	 */
 	@Override
-	public ResultDto<EnrollApproval> approvalById(Integer id,Integer state,String remark) throws Exception {
+	public ResultDto<EnrollApproval> approvalById(Integer id,Integer state,String remark,Integer approverId) throws Exception {
 		ResultDto<EnrollApproval> dto = new ResultDto<EnrollApproval>();
 		EnrollApproval ea = iEnrollApprovalMapper.getById(id);
 		ea.setState(state);
 		ea.setRemark(remark);
+		//审核操作人id
+		ea.setOperatorId(approverId);
 		int result = iEnrollApprovalMapper.updateById(id, ea);
 		dto.setData(ea);
 		if(result == 1){
@@ -108,7 +107,7 @@ public class EnrollApprovalServiceImpl implements IEnrollApprovalService {
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED,rollbackFor={Exception.class, RuntimeException.class,MyBatisSystemException.class})
 	public ResultDto<EnrollApproval> enrollApproval(Integer id, Integer state, 
-			String failedReason,BigDecimal reward) throws Exception {
+			String failedReason,BigDecimal reward,Integer approverId) throws Exception {
 		ResultDto<EnrollApproval> dto = new ResultDto<EnrollApproval>();
 		try {
 			EnrollApproval ea = iEnrollApprovalMapper.getById(id);
@@ -174,7 +173,7 @@ public class EnrollApprovalServiceImpl implements IEnrollApprovalService {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED,rollbackFor={Exception.class, RuntimeException.class,MyBatisSystemException.class})
-	public ResultDto<EnrollApproval> expireApproval(Integer id, Integer state, String failedReason) throws Exception {
+	public ResultDto<EnrollApproval> expireApproval(Integer id, Integer state, String failedReason,Integer approverId) throws Exception {
 		ResultDto<EnrollApproval> dto = new ResultDto<EnrollApproval>();
 		try {
 			EnrollApproval ea = iEnrollApprovalMapper.getById(id);

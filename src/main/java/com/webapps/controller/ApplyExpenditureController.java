@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.webapps.common.bean.Page;
 import com.webapps.common.bean.ResultDto;
+import com.webapps.common.entity.User;
 import com.webapps.common.form.ApplyExpenditureRequestForm;
 import com.webapps.common.utils.JSONUtil;
 import com.webapps.service.IApplyExpenditureService;
@@ -30,15 +31,16 @@ public class ApplyExpenditureController {
 	
 	@ResponseBody
 	@RequestMapping(value="/loadPageList")
-	public Page loadPageList(Page page,ApplyExpenditureRequestForm form){
+	public Page loadPageList(Page page,ApplyExpenditureRequestForm form,HttpServletRequest request){
 		page = iApplyExpenditureService.loadPageList(page, form);
 		return page;
 	}
 	
 	@ResponseBody
 	@RequestMapping(value="/approvalById")
-	public String approvalById(Integer id,Integer state,String reason){
-		ResultDto<String> dto = iApplyExpenditureService.approveById(id, state, null, reason);
+	public String approvalById(Integer id,Integer state,String reason,HttpServletRequest request){
+		User user = (User) request.getSession().getAttribute("user");
+		ResultDto<String> dto = iApplyExpenditureService.approveById(id, state, user.getId(), reason);
 		return JSONUtil.toJSONString(JSONObject.fromObject(dto));
 	}
 

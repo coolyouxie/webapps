@@ -15,6 +15,7 @@ import com.webapps.common.bean.Page;
 import com.webapps.common.bean.ResultDto;
 import com.webapps.common.entity.EnrollApproval;
 import com.webapps.common.entity.Enrollment;
+import com.webapps.common.entity.User;
 import com.webapps.common.form.EnrollApprovalRequestForm;
 import com.webapps.common.utils.JSONUtil;
 import com.webapps.service.IEnrollApprovalService;
@@ -88,13 +89,15 @@ public class EnrollApprovalController {
 	
 	@ResponseBody
 	@RequestMapping(value="/enrollApprovalById")
-	public String enrollApprovalById(Model model,Integer id,Integer state,String remark,BigDecimal reward,Integer approvalType){
+	public String enrollApprovalById(Model model,Integer id,Integer state,String remark,
+			BigDecimal reward,Integer approvalType,HttpServletRequest request){
 		ResultDto<EnrollApproval> dto = new ResultDto<EnrollApproval>();
+		User user = (User)request.getSession().getAttribute("user");
 		try {
 			if(approvalType==1){
-				dto = iEnrollApprovalService.enrollApproval(id, state, remark, reward);
+				dto = iEnrollApprovalService.enrollApproval(id, state, remark, reward,user.getId());
 			}else{
-				dto = iEnrollApprovalService.expireApproval(id, state, remark);
+				dto = iEnrollApprovalService.expireApproval(id, state, remark,user.getId());
 			}
 		} catch (Exception e) {
 			dto.setResult("F");

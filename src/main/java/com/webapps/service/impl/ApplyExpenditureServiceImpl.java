@@ -16,7 +16,6 @@ import com.webapps.common.bean.Page;
 import com.webapps.common.bean.ResultDto;
 import com.webapps.common.entity.ApplyExpenditure;
 import com.webapps.common.entity.BillRecord;
-import com.webapps.common.entity.Enrollment;
 import com.webapps.common.entity.UserWallet;
 import com.webapps.common.form.ApplyExpenditureRequestForm;
 import com.webapps.mapper.IApplyExpenditureMapper;
@@ -63,13 +62,6 @@ public class ApplyExpenditureServiceImpl implements IApplyExpenditureService {
 			}
 			UserWallet uw = iUserWalletMapper.getById(ae.getWalletId());
 			if(state==1){
-				//如果审核通过，则需要将用户钱包中的金额减掉
-//				BigDecimal applyFee = ae.getFee();
-//				BigDecimal walletFee = uw.getFee();
-//				BigDecimal leftFee = walletFee.subtract(applyFee).setScale(2, RoundingMode.HALF_UP);
-//				uw.setFee(leftFee);
-//				uw.setUpdateTime(new Date());
-//				iUserWalletMapper.updateById(uw.getId(), uw);
 				//审核通过后记录账单信息
 				this.saveBillRecrod(ae, uw);
 			}

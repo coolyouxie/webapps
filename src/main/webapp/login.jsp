@@ -14,8 +14,8 @@
 	<link rel="stylesheet" href="${ctx}/js/common/amazeUI/assets/css/amazeui.min.css" />
 	<link rel="stylesheet" href="${ctx}/js/common/amazeUI/assets/css/admin.css">
 	<link rel="stylesheet" href="${ctx}/js/common/amazeUI/assets/css/app.css">
-	
 	<script src="${ctx}/js/jquery/jQuery-1.12.4.0.js"></script>
+	<script src="${ctx}/js/jquery/jquery.cookie.js"></script>
 	<script src="${ctx}/js/common/amazeUI/assets/js/amazeui.min.js"></script>
 	<script src="${ctx}/js/common/amazeUI/assets/js/app.js"></script>
 	
@@ -34,21 +34,6 @@
 		        $("#pwdId").val($.cookie("password"));
 	        }
 			
-			$.ajax({
-	            url: "${ctx}/login/getCopyright.json",
-	            type: 'GET',
-	            dataType: "json",
-	            data: null,
-	            success: function(data) {
-	                if(data && data.result == "S"){
-	                	$("#sys_verion").html(data.resultVo.version);
-	                	$("#sys_copyright").html(data.resultVo.copyright);
-	                }else{
-	                }
-	            },
-	            error: function() {
-	            }
-	        });
 		});
 		
 		function saveUser(){
@@ -66,7 +51,7 @@
 	        }
 		}
 		
-	    function Code(obj){		   
+	    function Code(obj){
 	        obj.src= "${ctx}/login" + "/getValidatorImage?d=" + new Date().getTime();     
 	    }
 	    function login(){
@@ -97,7 +82,6 @@
 
 
 <body data-type="login" onload="Code(loginForm.yzImg);">
-
 	<div class="am-g myapp-login">
 		<div class="myapp-login-logo-block  tpl-login-max">
 			<div class="myapp-login-logo-text">
@@ -132,14 +116,11 @@
 	</div>
 	<script>
 		window.onload = function(){
+			//如果是iframe内部session过期时需要将登录页面强制弹出显示到顶层
 			if(window.top!=null && window.top.document.URL!=document.URL){
 				top.location.href = window.href;
 				window.top.location= document.URL;
 			}
-			var w = document.documentElement.clientHeight;
-			var w_top = (w-540)/2;
-			var login = document.getElementById('login');
-			login.setAttribute('style','margin-top:'+w_top+'px');
 		}
 	</script>
 </body>
