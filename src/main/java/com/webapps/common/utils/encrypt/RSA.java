@@ -4,7 +4,10 @@ package com.webapps.common.utils.encrypt;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.security.KeyFactory;
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
@@ -12,6 +15,8 @@ import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 
 import javax.crypto.Cipher;
+import javax.crypto.KeyGenerator;
+import javax.crypto.SecretKey;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,6 +31,7 @@ public class RSA {
      * RSA最大加密明文大小 
      */  
     private static final int MAX_ENCRYPT_BLOCK = 117; 
+    
 	/**
 	 * @param algorithm
 	 * @param ins
@@ -42,7 +48,6 @@ public class RSA {
 		return keyFactory.generatePublic(x509);
 	}
 
-
 	/**
 	* 得到私钥
 	* @param key 密钥字符串（经过base64编码）
@@ -50,13 +55,10 @@ public class RSA {
 	*/
 	public static PrivateKey getPrivateKey(String key) throws Exception {
 		byte[] keyBytes;
-		
 		keyBytes = Base64.decode(key);
 		PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(keyBytes);
-		
 		KeyFactory keyFactory = KeyFactory.getInstance(ALGORITHM);
 		PrivateKey privateKey = keyFactory.generatePrivate(keySpec);
-		
 		return privateKey;
 	}
 	
@@ -70,19 +72,14 @@ public class RSA {
 	public static String encrypt(String content, String publickey) {
 		try {
 			PublicKey pubkey = getPublicKeyFromX509(ALGORITHM, publickey);
-
 			Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
 			cipher.init(Cipher.ENCRYPT_MODE, pubkey);
-
 			byte output[] = content.getBytes("UTF-8");
-//			byte[] output = cipher.doFinal(plaintext);
-//			String s = new String(Base64.encode(output));
-
-			int inputLen = output.length;  
-	        ByteArrayOutputStream out = new ByteArrayOutputStream();  
-	        int offSet = 0;  
-	        byte[] cache;  
-	        int i = 0;  
+			int inputLen = output.length;
+	        ByteArrayOutputStream out = new ByteArrayOutputStream();
+	        int offSet = 0;
+	        byte[] cache;
+	        int i = 0;
 	        // 对数据分段加密  
 	        while (inputLen - offSet > 0) {  
 	            if (inputLen - offSet > MAX_ENCRYPT_BLOCK) {  
@@ -96,19 +93,13 @@ public class RSA {
 	        }  
 	        byte[] encryptedData = out.toByteArray();  
 	        out.close();  
-	        
-
 			String s = new String(Base64.encode(encryptedData));
-			
-			
 			return s;
-
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
 		}
 	}
-
 	
 	/**
 	 * 用私钥解密
@@ -119,19 +110,15 @@ public class RSA {
 	 */
 	public static String decrypt(String content, String privateKey) throws Exception {
         PrivateKey prikey = getPrivateKey(privateKey);
-
         Cipher cipher = Cipher.getInstance(ALGORITHM);
         cipher.init(Cipher.DECRYPT_MODE, prikey);
-
         InputStream ins = new ByteArrayInputStream(Base64.decode(content));
         ByteArrayOutputStream writer = new ByteArrayOutputStream();
         //rsa解密的字节大小最多是128，将需要解密的内容，按128位拆开解密
         byte[] buf = new byte[128];
         int bufl;
-
         while ((bufl = ins.read(buf)) != -1) {
             byte[] block = null;
-
             if (buf.length == bufl) {
                 block = buf;
             } else {
@@ -140,12 +127,11 @@ public class RSA {
                     block[i] = buf[i];
                 }
             }
-
             writer.write(cipher.doFinal(block));
         }
-
         return new String(writer.toByteArray(), "utf-8");
     }
+	
 	/**
 	 * 使用私钥签名字符串
 	 * @param content：待签名的字符串
@@ -172,7 +158,6 @@ public class RSA {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
 		return null;
 	}
 
@@ -187,12 +172,8 @@ public class RSA {
 		try {
 			KeyFactory keyFactory = KeyFactory.getInstance("RSA");
 			byte[] encodedKey = Base64.decode(publicKey);
-			PublicKey pubKey = keyFactory
-					.generatePublic(new X509EncodedKeySpec(encodedKey));
-
-			java.security.Signature signature = java.security.Signature
-					.getInstance(SIGN_ALGORITHMS);
-
+			PublicKey pubKey = keyFactory.generatePublic(new X509EncodedKeySpec(encodedKey));
+			java.security.Signature signature = java.security.Signature.getInstance(SIGN_ALGORITHMS);
 			signature.initVerify(pubKey);
 			signature.update(content.getBytes("utf-8"));
 			logger.info("doCheck content : "+content);
@@ -203,7 +184,6 @@ public class RSA {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
 		return false;
 	}
 
@@ -232,62 +212,65 @@ public class RSA {
 	}
 	
 	
-	/*public static void main(String[] args) {
-		String str= "-954872223";
-      String privatekey= "MIICdwIBADANBgkqhkiG9w0BAQEFAASCAmEwggJdAgEAAoGBAMkwOyyarMoCEcyZKo6cY8kCcQIJHBv2nn64L5/v/cNAp5gpj9kIvdrimgt7H4bYg/RQCR+kVEaWqNcdu1mJxVZpUZHPbxs+nliaIe3e0Y50ff4RoLjsA9fj+zSRa0m8j4nZxv+DNiKCsax3heqLEszoa5rvd+WVjALAdYYUKXFLAgMBAAECgYBhCOMxgzSdhdwB20n8WI+ELqpEuhIVpqARLFLECCNTngZ3TGx12FKBlNOJgAvXpOwX1NZhrYd8OEQc5NksuVc0mBEZCi1xvRV1DNe23mCZp5Qq4kWPd+o5ymPx272RKjvB2A+WoUcseriV10qbVVs8wxqDhnwrrA6KLxqxkYzIwQJBAO4oKglqc0GQX5ZuObhea9tcihzePe5CG+c/qGZPx/p3I/I+XW/4K/dpk6zysQONwHlwdPL7lZI55ZbXk5nqMeECQQDYQwNu6wYPzVV2LsL6iIxtAkz0v3xlh/26xt4sQxyOIg0oUmestfehU5Oc7w/WEzNWkYyPQeS7eSH7/QoqPiCrAkEAm6FdjxekR+Ubwgc36vaxDwGTM7g7ylYjO+QKnQlnypJOyD/e+Yu4146DtZJHAOaCMBnAIwUrQgpZsVAhIYS8oQJAVLDBqnFNmWifHD4pyzUoURRCkOJgU96Sxc9VeF3708mP/4dt5FwKktoJB78zI3G3fCJZukxix+wjG+y3S12zKwJBANcLQZdGW8ogdvK/71VFuKl18EUHHrPQJRGdVfdm5RXsP0mk+d6tq7mv0f0aHD9Gmze6hL4w5QTG6eoc5cVhehg=";
-      String pubkey = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDJMDssmqzKAhHMmSqOnGPJAnECCRwb9p5+uC+f7/3DQKeYKY/ZCL3a4poLex+G2IP0UAkfpFRGlqjXHbtZicVWaVGRz28bPp5YmiHt3tGOdH3+EaC47APX4/s0kWtJvI+J2cb/gzYigrGsd4XqixLM6Gua73fllYwCwHWGFClxSwIDAQAB";
-		
-		try {
-			String encrypt = encrypt(str, pubkey);
-			System.out.println(encrypt);
-				System.out.println(decrypt("G3EWxEDzCENbQPbblEhw7j/s4x3zsO/mBpzeI/LMZA8w7MGi9v0oMopoyfe/uUpWMYlDF8KA3lOAfn7fB+siHofJ3SiGnIam4QuzkOYEEcgrN4VV636fvqfgm4ZU9sRZwFJmhgy+Wsk+rE7J7yx/YN1iOPXbhP4Hko+l4DUBf7E=", privatekey));
-			
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	 
-		
-		 *  {"coId":92048,"endTime":"2017-07-24 22:57:48","mark":"发票作废手续费","peiId":37,"perId":69099,
-		 *  "perName":"孙克航","rmb":"10","startTime":"2017-07-24 22:57:48"}
-		 * 
-		 
-		JSONObject json = new JSONObject();
-		try {
-		json.put("coId", 92048);
-		json.put("endTime","2017-07-24 22:57:48" );
-		json.put("mark", "发票作废手续费");
-		json.put("peiId",37);
-		json.put("perId", 69099);
-		json.put("perName","孙克航");
-		json.put("rmb","10" );
-		json.put("startTime", "2017-07-24 22:57:48");
-		String accountJson = RSA.encrypt(json.toString(), "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDeGR+6e5iZ+JbBZizreFFbBZQV4vylof2Fu0oLroJZoO+BN2al6IEmB84IeEovBEaKgkVbfNe6ohRpgXOop+zxMQaZK0pTZuKaz7H+gRofFUSzeXZd8CbSQr8KYN/SpejmHSmenHQqEGUHNWftbfoa8QaUEfr7TEgF/NSs6+DauwIDAQAB");
-		System.out.println(decrypt(accountJson, "MIICdgIBADANBgkqhkiG9w0BAQEFAASCAmAwggJcAgEAAoGBAN4ZH7p7mJn4lsFmLOt4UVsFlBXi/KWh/YW7Sguuglmg74E3ZqXogSYHzgh4Si8ERoqCRVt817qiFGmBc6in7PExBpkrSlNm4prPsf6BGh8VRLN5dl3wJtJCvwpg39Kl6OYdKZ6cdCoQZQc1Z+1t+hrxBpQR+vtMSAX81Kzr4Nq7AgMBAAECgYA01FsUu7OX5GbPyCMlO7B2a0RHVH/uUjMA7YT2dGMzOLHf1bLIAh8+UZrzrtFOj8DLz6L52R9jmIwscIt3ccJNR4DC/A+lZEkZ6n2m14fRAayYiP0mPE6xdQFzGsTD0PjbtSwHHn6DJ6KdilPMnlp0FJUH85+JxzyPTEYBGf/cyQJBAO8GhuoG0vB5XP3REkgtaqtwkWgKLGpA4Jj750iStdoA1Ju02bDU6TgUepv5WRHLRHksJWhBTktllmPAU2L1/L0CQQDt3tu8ww8nKurUoM5yUxYIfI1POSJf5jXqz4ik25yQDeSkB0eyAQB4DbnTdg1nJszkxweBtrJkvXpfmR03pXjXAkBLIrkcLaL3Np81phfiGmyykYMTukb164jubhjo5j1F1wb+Hx5jCLp7B2z3RK1r+4J9uJPVrtmmt7tLhfRwYjTdAkEAg1bcCVvCkCPYSdMIaoOJ1OHAvI+VdVINTzuL/UrtJXUmW5NReO2orqEVi7bRK7V2yJNEh9Cyq4EbgpFuWn1ZPQJADVZZBaTcglKyT+KCm0y34IxUe2+4Y8c3fNK05cl7y6T3dNMg4+0ljh+jQCuEqZgcJZ+g4fOm+3lNdxDykQ8YJA=="));
-		System.out.println(accountJson);
-		String result = HttpUtil.htttpPostJson("http://192.168.1.236:1999/services/billManageService/makeBill", accountJson);
-		System.out.println(result);
-		}catch(Exception e){
-			e.printStackTrace();
-		}
-	}*/
-	
-	
 	public static void main(String[] args){
-		String publicKeyStr = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDeGR+6e5iZ+JbBZizreFFbBZQV4vylof2Fu0oLroJZoO+BN2al6IEmB84IeEovBEaKgkVbfNe6ohRpgXOop+zxMQaZK0pTZuKaz7H+gRofFUSzeXZd8CbSQr8KYN/SpejmHSmenHQqEGUHNWftbfoa8QaUEfr7TEgF/NSs6+DauwIDAQAB";
-		String privateKeyStr = "MIICdgIBADANBgkqhkiG9w0BAQEFAASCAmAwggJcAgEAAoGBAN4ZH7p7mJn4lsFmLOt4UVsFlBXi/KWh/YW7Sguuglmg74E3ZqXogSYHzgh4Si8ERoqCRVt817qiFGmBc6in7PExBpkrSlNm4prPsf6BGh8VRLN5dl3wJtJCvwpg39Kl6OYdKZ6cdCoQZQc1Z+1t+hrxBpQR+vtMSAX81Kzr4Nq7AgMBAAECgYA01FsUu7OX5GbPyCMlO7B2a0RHVH/uUjMA7YT2dGMzOLHf1bLIAh8+UZrzrtFOj8DLz6L52R9jmIwscIt3ccJNR4DC/A+lZEkZ6n2m14fRAayYiP0mPE6xdQFzGsTD0PjbtSwHHn6DJ6KdilPMnlp0FJUH85+JxzyPTEYBGf/cyQJBAO8GhuoG0vB5XP3REkgtaqtwkWgKLGpA4Jj750iStdoA1Ju02bDU6TgUepv5WRHLRHksJWhBTktllmPAU2L1/L0CQQDt3tu8ww8nKurUoM5yUxYIfI1POSJf5jXqz4ik25yQDeSkB0eyAQB4DbnTdg1nJszkxweBtrJkvXpfmR03pXjXAkBLIrkcLaL3Np81phfiGmyykYMTukb164jubhjo5j1F1wb+Hx5jCLp7B2z3RK1r+4J9uJPVrtmmt7tLhfRwYjTdAkEAg1bcCVvCkCPYSdMIaoOJ1OHAvI+VdVINTzuL/UrtJXUmW5NReO2orqEVi7bRK7V2yJNEh9Cyq4EbgpFuWn1ZPQJADVZZBaTcglKyT+KCm0y34IxUe2+4Y8c3fNK05cl7y6T3dNMg4+0ljh+jQCuEqZgcJZ+g4fOm+3lNdxDykQ8YJA==";
-		String str = "测试123456";
+//		try {
+//			KeyPair kp = EncryptUtil.getDefaultKeyPair(EncryptAlgorithm.RSA);
+//			PublicKey key1 = kp.getPublic();
+//			PrivateKey key2 = kp.getPrivate();
+//			String keyStr1 = Base64.encode(key1.getEncoded());
+//			String keyStr2 = Base64.encode(key2.getEncoded());
+//			System.out.println("publicKey:"+keyStr1);
+//			System.out.println("privateKey:"+keyStr2);
+//		} catch (Exception e1) {
+//			e1.printStackTrace();
+//		}
+		
+//		String serverPubKey = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCHjtVGMmt2CyOy/bbE7F5gW6ympHnA9DECuFDTDQW9wNiU/oVPx+5+dSD6vuj/v0lwCyH0U1TEwXBygc+8k88qT+qWTwIlmygm5rRtsBzdUjKLxxr8Tn7axla55a7Nh9y0J4bdMGgz737yKtpDUxmlPfiM47agrkUi4CuRO745tQIDAQAB";
+//		String serverPriKey = "MIICdQIBADANBgkqhkiG9w0BAQEFAASCAl8wggJbAgEAAoGBAIeO1UYya3YLI7L9tsTsXmBbrKakecD0MQK4UNMNBb3A2JT+hU/H7n51IPq+6P+/SXALIfRTVMTBcHKBz7yTzypP6pZPAiWbKCbmtG2wHN1SMovHGvxOftrGVrnlrs2H3LQnht0waDPvfvIq2kNTGaU9+IzjtqCuRSLgK5E7vjm1AgMBAAECgYBa9F5rpEbwRFcmsQ+iH8rPMpOsmG1NJ0t/PLaWdYVlpXBswD4oosiGNwby14e0md+newDEU+lrvzM40ZrWOALmsP7qWEb9ERybEXnMUPgeJl/72KYgzLn0ByKEQhdUesYt8cAgdoYD7SiuImqs0wtd+iXDn19UYrTi/r+WGcX0HQJBAMw6gcyepJpKrMpqJ25UFTYO+27moC19Y+LdTgSONe6fS9w8p0YZRgdsIV9Y3gCW05WKxu+OANpmIQeVOZGhwMsCQQCp6+uBbpYnOgHEv8soRtPp34SUt0tZ+pWjePuEGRufrMX7526BN5BihlXAaQlCO3YsAIARkIzEWUcFsliQlR9/AkAUZ7QYUbF4iQWCo+CUsWn9ILoWdoyCfwi/3gSxh9Pzp47YzmaYJmZMz4z2DdcAkBFL27XMsY98QsACFfLOji7JAkBPn6ON1To7S21EuvMB/p6SuxCvd2yxz0CLh8ekUPemzRlBP2OC3XylDnnkXdPe22o2mE1q7ado4sTrIHVr2tUVAkBlVwD125aIxTvzFgf5t6fiOUpAT6Zotu9gGHEN5AanwhOG3WoEatZewZYwFKbk4VVQKsgNboSJOyetQn+Flh7n";
+//		syso
+		String test = "Y6k05epYzS3Zej0pVWtffbHw1FFsQrW7lRS8QwKml55yQAnQ9ucXMypbOX9TiZhn/uxXT8X+fR3IzgfXITKF4EoaKrSYuY/vjQ5sTcp5MSwmEdoPekctUpg817r7UytgITGXK0g5ERqb5XEXi66g15pCq38Ifn1sH1z4zKePR7k=";
+		String test1 = "abcd";
 		try {
-			PublicKey publickKey = RSA.getPublicKeyFromX509("RSA", publicKeyStr);
-			PrivateKey privateKey = RSA.getPrivateKey(privateKeyStr);
-			//公钥加密
-			String b1 = RSA.encrypt(str,publicKeyStr);
-			System.out.println("enc="+b1);
-//			//私钥解密
-			String b2 = RSA.decrypt("pV21y5RfqUJ8S7qusfmV05n7FxxZhhWPRGYdy38RvInUOn10menamGDjO2/knMJwibYkEtwO1xZY6sWcvVlus/jXdap9UUWMbW+KQn3h0rw/EtYZcuZCYULFPtb44aK57smXy9dmehx7prdo5B1yfrTtrceVhniTRzETLrwjBnmbRvrTQEneC4uRhqXI/4lzZLFA6FN0xfMkPgHhhxOYQmpvo1wZJpYLcRcg3PNliaxAdLS2Txv6UAR2fDbTR9FR5+xum6DIUMQ4o5+1aAP+5BKmft0yZaGVRA4cb9f4AtvpZvJ1WHCaXYKf+vyksT3g0ZnznxR2kCnRq89J1bGwYiqPHrbPkJHuWE6HwWOsVvLFO+6dyQVF0rr263nqzuJgf59avmOdW4qOaTPGnqHrLDQkuzCcZjgnSfrjF4DoqwKSvkkBwfQfrgPjASkdrLJQ7T4PnGNTB5YD9m/A7nb5u1OZ7F8ctcrvq+0tC17nHBoOxEuqVHU93i0+vEbetnDYZ5p+tcGwPt9P5KDZGgNrKsiv8UGSlBlzSeyLJe1boew5rqtU3i8a+yO/DHMI6Rq8Yrhf8F0HOp6pFofQ34tzWedbMuaAc+sPRrObT3F6gPb/UVBpI3uaRZy5Dv7nQEqZtcNerZCr+Iv7rmNtk/S+fufPWMzeKN6JKOnWuYJRBSs=",privateKeyStr);
-			System.out.println("dec="+b2);
-		} catch (NoSuchAlgorithmException e) {
+			System.out.println(test1);
+			System.out.println(Base64.encode(EncryptStringUtils.hex2byte(test1.getBytes())));
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
+		
+		
+		String serverPubKey = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQChls8YN8El6EOH40xkRI2NV+wEaZv1h+de7cQzE/gSn5E//Jeql0MQizmwkdAnueBWa+mam+kNdeWV8dx7/0z6iUulCJOiLkYGBRYbaKbGAbD4hRchNAciS2d6U6aq4cDJ9+LDA3QfjFJY/4Bmf6E0Nnh1FTQWYzrOl+UFPxbVvwIDAQAB";
+		String serverPriKey = "MIICdwIBADANBgkqhkiG9w0BAQEFAASCAmEwggJdAgEAAoGBAKGWzxg3wSXoQ4fjTGREjY1X7ARpm/WH517txDMT+BKfkT/8l6qXQxCLObCR0Ce54FZr6Zqb6Q115ZXx3Hv/TPqJS6UIk6IuRgYFFhtopsYBsPiFFyE0ByJLZ3pTpqrhwMn34sMDdB+MUlj/gGZ/oTQ2eHUVNBZjOs6X5QU/FtW/AgMBAAECgYEAlidQS73LgpEg544Et4uoSbZwv+zvGqpuCp1A2wHsXEngrCfpO4ERtbbaJcRpO/ESkNv4GE5WssZiUAKOkr665PpxRQNWgm6LiEjiscNL6KyfckrjRGcZbxmX/hJLP9WNLN36zzW8CGKR8a30J25YFYu5W9hHO8qJRoTcrFLnvBECQQDq5w7BAPucViwBnOzkYbc7rsG41ast/TrlE489uylCblL82tsS24v+QuUYiD0F7uorF3FQwZl3QSmwEziVauPJAkEAsBobxfmxONK+/ID1wjQ3xzTI4f++YDVV46BltK/8Yh/4+6Ve9NURHcl8UYQ/gkyZM1kUeW2Qrysr9OaMTU7hRwJAA6RBXkydmfbcB8pfActiA9LZvfvSA4yBdTuwZMyZ/yWms7TQ4KH2saJn2tGB4K2rg6+BWjcmIesoskoZ/ncBwQJAeP7nWEZwOu+qI8njkbTZIjklUQqr3mSnB8g8OUK1sSHwq857CNOgeAvpLAUmsbs5g+tPwwLB52lNQW5qte9dnwJBALSqOYjlTvFDJ++xRJFEuIE/tjaLDBsmJxG66KFgOmghK++cPtO9qDoLwD5cPosNF74umimK67dV76QhZfDs5S0=";
+		
+		
+		String appPubKey = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQChls8YN8El6EOH40xkRI2NV+wEaZv1h+de7cQzE/gSn5E//Jeql0MQizmwkdAnueBWa+mam+kNdeWV8dx7/0z6iUulCJOiLkYGBRYbaKbGAbD4hRchNAciS2d6U6aq4cDJ9+LDA3QfjFJY/4Bmf6E0Nnh1FTQWYzrOl+UFPxbVvwIDAQAB";
+		String testStr = "hello world!你好，世界！";
+		PrivateKey priKey;
+		try {
+			priKey = RSA.getPrivateKey(serverPriKey);
+			PublicKey pubKey = RSA.getPublicKeyFromX509("RSA", serverPubKey);
+			KeyGenerator kg = KeyGenerator.getInstance("AES");
+			kg.init(128);
+			SecretKey sk = kg.generateKey();
+			String randomKey = Base64.encode(sk.getEncoded());
+			testStr = EncryptStringUtils.bin2hex(AESEncrypt.encrypt(testStr, randomKey));
+			System.out.println("加密结果："+testStr);
+			randomKey = EncryptUtil.asymmEncry("MkhJMskuuc7Gey3e", priKey, EncryptAlgorithm.RSA);
+			System.out.println("AES密钥加密结果："+randomKey);
+			System.out.println("APP-AES："+Base64.encode(EncryptStringUtils.hex2byte(randomKey.getBytes())));
+			randomKey = EncryptUtil.asymmDecry(EncryptStringUtils.bin2hex("gKHsbuDQzWemdCqjC50ZuhiK+N/tB61K7B/3Py+U9O+Gbtwpe3CfZkHDlvqQKKyN8tDes1fintzvwFwv14UMo/GG309Y+a0I5mP8y8jzfP5odlPHRQpbDYB54buhzZO10sLx7Ev3JlnrJLdLYpaPsf+gWio3O91jDWzu4JyJRU0="), pubKey, EncryptAlgorithm.RSA);
+			System.out.println("AES密钥解密结果："+randomKey);
+			testStr = AESEncrypt.decrypt(EncryptStringUtils.hex2bin(testStr), randomKey);
+			System.out.println("解密结果："+testStr);
+		} catch (Exception e) {
 			e.printStackTrace();
+		}
+		
+		String data = "a04HSkXyxt8p75IMjsMWs9kl8XnQdzyLW9royURk6x2uJ8Tp/el+XsmRpujk+hvr82B/Cp9NhudvP0eAaVYaLKVPzxIwKjU394iFC6yxagM=";
+		data = EncryptStringUtils.bin2hex(data);
+		try {
+			PublicKey pubKey = RSA.getPublicKeyFromX509("RSA", appPubKey);
+			byte[] t = EncryptUtil.decryt(EncryptStringUtils.bin2hex(data).getBytes(), pubKey, EncryptAlgorithm.RSA);
+			System.out.println("解密结果："+data);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
