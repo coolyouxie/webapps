@@ -3,10 +3,6 @@
 
 .idea/artifacts/webapps_war_exploded.xml
 
-target/classes/applicationContext-business-service-business.xml
-
-.idea/workspace.xml
-
 .idea/workspace.xml
 
 target/**
