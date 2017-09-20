@@ -30,12 +30,14 @@ public class FeeConfigController {
 			List<FeeConfig> list = iFeeConfigService.queryAll();
 			if(CollectionUtils.isNotEmpty(list)){
 				for(FeeConfig fc:list){
-					if(fc.getType()==1){
-						model.addAttribute("cashback", fc);
-					}else if(fc.getType()==2){
-						model.addAttribute("redPackets", fc);
-					}else if(fc.getType()==3){
-						model.addAttribute("recommendFee", fc);
+					if(fc.getType()!=null) {
+						if (fc.getType() == 1) {
+							model.addAttribute("cashback", fc);
+						} else if (fc.getType() == 2) {
+							model.addAttribute("redPackets", fc);
+						} else if (fc.getType() == 3) {
+							model.addAttribute("recommendFee", fc);
+						}
 					}
 				}
 			}
@@ -48,7 +50,6 @@ public class FeeConfigController {
 	/**
 	 * 新增或更新发布单信息
 	 * @param model
-	 * @param recruitment
 	 * @param request
 	 * @param response
 	 * @return

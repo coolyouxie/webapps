@@ -179,6 +179,15 @@ public class RecruitmentServiceImpl implements IRecruitmentService {
 		int endRow = page.getEndRow();
 		int count = iRecruitmentMapper.queryCount(form);
 		List<Recruitment> list = iRecruitmentMapper.queryPage(startRow, endRow, form);
+		//查询发布单对应公司信息，并取公司信息中的图片作为发布单列表图片
+		if(CollectionUtils.isNotEmpty(list)){
+			for(Recruitment recruitment:list){
+				List<Picture> pictures = iPictureMapper.queryListByFkIdAndType(recruitment.getCompany().getId(),1);
+				if(CollectionUtils.isNotEmpty(pictures)){
+					recruitment.setPicUrl(pictures.get(0).getPicUrl());
+				}
+			}
+		}
 		page.setResultList(list);
 		page.setRecords(count);
 		return page;

@@ -490,14 +490,9 @@ public class AppController {
 
 	/**
 	 * 查询所有Banner信息
-	 * 
-	 * @param model
-	 * @param request
-	 * @param response
 	 * @return
 	 */
 	@ResponseBody
-	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/queryBannerConfig", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
 	public String queryBannerConfig() {
 		ResultDto<List<BannerConfig>> dto = new ResultDto<List<BannerConfig>>();
