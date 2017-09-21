@@ -119,7 +119,7 @@ public class AliSmsMsgService implements IAliSmsMsgService {
 				return dto;
 			}
 			if(!asm.getValidateCode().equals(msgCode.trim())){
-				dto.setErrorMsg("输入难码错误");
+				dto.setErrorMsg("验证码错误");
 				dto.setResult("F");
 				return dto;
 			}
