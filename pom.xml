@@ -271,6 +271,13 @@
 				</includes>
 				<filtering>false</filtering>
 			</resource>
+			<resource>
+				<directory>src/main/resources</directory>
+				<includes>
+					<include>*.xml</include>
+					<include>*.properties</include>
+				</includes>
+			</resource>
 		</resources>
 	</build>
 </project>
