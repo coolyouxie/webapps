@@ -23,3 +23,5 @@ out/artifacts/webapps_war_exploded/META-INF/MANIFEST.MF
 .settings/org.eclipse.core.resources.prefs
 
 .settings/.jsdtscope
+
+.settings/org.eclipse.wst.validation.prefs
