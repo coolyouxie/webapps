@@ -73,8 +73,16 @@ public class UserServiceImpl implements IUserService {
 		dto.setResult("S");
 		try {
 			if(user.getId()!=null){
-				iUserMapper.updateById(user.getId(), user);
-				dto.setData(user);
+				User user1 = iUserMapper.getById(user.getId());
+				user1.setTelephone(user.getTelephone());
+				user1.setName(user.getName());
+				user1.setGender(user.getGender());
+				user1.setAge(user.getAge());
+				user1.setIdCardNo(user.getIdCardNo());
+				user1.setQq(user.getQq());
+				user1.setWeiXin(user.getWeiXin());
+				iUserMapper.updateById(user1.getId(), user1);
+				dto.setData(user1);
 				return dto;
 			}else{
 				String password = user.getPassword();
