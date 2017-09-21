@@ -114,9 +114,9 @@ public class EnrollmentServiceImpl implements IEnrollmentService {
 		form.setUser(em.getUser());
 		List<Enrollment> list = iEnrollmentMapper.queryListByFkId(form);
 		User user = null;
+		user = iUserMapper.getById(em.getUser().getId());
 		if(CollectionUtils.isNotEmpty(list)){
 			Enrollment em1 = list.get(0);
-			user = iUserMapper.getById(em.getUser().getId());
 			if(em1.getState()==4||user.getCurrentState()==0){
 				user.setUpdateTime(new Date());
 				user.setCurrentState(1);

@@ -67,6 +67,11 @@ public class Recruitment extends Entity{
     
     private MessageConfig message;
 
+    /**
+     * 用于APP发布单列表展示使用的图片地址，目前使用的是发布单对应公司的首页图片
+     */
+    private String picUrl;
+    
     public String getPicUrl() {
         return picUrl;
     }
@@ -74,11 +79,6 @@ public class Recruitment extends Entity{
     public void setPicUrl(String picUrl) {
         this.picUrl = picUrl;
     }
-
-    /**
-     * 用于APP发布单列表展示使用的图片地址，目前使用的是发布单对应公司的首页图片
-     */
-    private String picUrl;
 
     public Company getCompany() {
         return company;

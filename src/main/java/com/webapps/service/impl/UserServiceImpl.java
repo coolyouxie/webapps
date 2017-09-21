@@ -91,6 +91,7 @@ public class UserServiceImpl implements IUserService {
 				String encryptPwd = PasswordEncryptUtil.getEncryptedPassword(password, token);
 				user.setPassword(encryptPwd);
 				try {
+					user.setCurrentState(0);
 					int result = iUserMapper.insert(user);
 					if(result==0){
 						dto.setData(user);

@@ -206,7 +206,8 @@
 			#{obj.loginState},
 			#{obj.educationId},
 			#{obj.dataState},
-			#{obj.createTime}
+			#{obj.createTime},
+			#{obj.currentState}
 		)
 	</insert>
 </mapper>
