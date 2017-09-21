@@ -13,3 +13,13 @@ target/**
 
 .classpath
 *.project
+
+out/artifacts/webapps_war_exploded/META-INF/MANIFEST.MF
+
+.settings/org.eclipse.wst.validation.prefs
+
+.settings/org.eclipse.wst.jsdt.ui.superType.name
+
+.settings/org.eclipse.core.resources.prefs
+
+.settings/.jsdtscope
