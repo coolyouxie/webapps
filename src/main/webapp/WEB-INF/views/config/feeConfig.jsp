@@ -48,7 +48,8 @@
 			data:{
 				title:title,
 				fee:fee,
-				id:id
+				id:id,
+				type:type
 			},
 			success:function(response){
 				if(response.result=="S"){
