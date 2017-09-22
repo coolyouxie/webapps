@@ -18,7 +18,6 @@ public class EncryptStringUtils {
         String tmp = "";
         for (int n = 0; n < b.length; n++) {
             //整数转成十六进制表示
-
             tmp = (java.lang.Integer.toHexString(b[n] & 0XFF));
             if (tmp.length() == 1) {
                 hs = hs + "0" + tmp;

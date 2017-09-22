@@ -316,15 +316,12 @@ public class EncryptUtil {
 	public static byte[] encryt(byte[] plainText, Key key, EncryptAlgorithm alg) throws Exception {
 		Cipher cipher = Cipher.getInstance(alg.getAlgorithm());
 		cipher.init(Cipher.ENCRYPT_MODE, key);
-		StringBuilder sb = new StringBuilder();
 		byte[] dataReturn = null;
 		for(int i=0;i<plainText.length;i+=117){
 			byte[] doFinal = cipher.doFinal(ArrayUtils.subarray(plainText, i,  
-                    i + 100));  
-            sb.append(new String(doFinal));  
+                    i + 100));
             dataReturn = ArrayUtils.addAll(dataReturn, doFinal);
 		}
-//		return cipher.doFinal(plainText);
 		return dataReturn;
 	}
 
