@@ -699,15 +699,45 @@ public class AppController {
 	@RequestMapping(value = "/getUserState", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
 	public String getUserState(@RequestBody String params) {
 		logger.info("获取用户期满审核通过接口expireApprovalSuccessList接收参数：" + params);
-		ResultDto<List<BillRecord>> dto = new ResultDto<List<BillRecord>>();
+		ResultDto<JSONObject> dto = new ResultDto<JSONObject>();
 		JSONObject obj = JSONUtil.toJSONObject(params);
 		Integer userId = obj.getInt("userId");
 		try{
 			User user = iUserService.getById(userId);
 			List<Enrollment> list = iEnrollmentService.queryEnrollmentListByUserId(userId);
+			Enrollment em = null;
+			String reason = "";
+			Integer currentState = user.getCurrentState();
+			if(CollectionUtils.isNotEmpty(list)){
+				for(Enrollment temp:list){
+					if(temp.getState()==21||temp.getState()==31){
+						em = temp;
+						break;
+					}
+				}
+				for(Enrollment temp:list){
+					if(temp.getState()==22||temp.getState()==32){
+						reason = temp.getFailedReason();
+						break;
+					}
+				}
+				if(list.get(0).getState()==21||list.get(0).getState()==31
+						||list.get(0).getState()==1){
+					reason = "";
+				}
+			}
+			JSONObject result = new JSONObject();
+			result.put("currentState",currentState);
+			result.put("enrollment",em);
+			result.put("reason",reason);
+			dto.setResult("S");
+			dto.setData(result);
+			return JSONUtil.toJSONString(JSONObject.fromObject(dto));
 		}catch (Exception e){
-
+			e.printStackTrace();
+			dto.setResult("F");
+			dto.setErrorMsg("获取用户状态时异常");
+			return JSONUtil.toJSONString(JSONObject.fromObject(dto));
 		}
-		return JSONUtil.toJSONString(JSONUtil.toJSONObject(dto));
 	}
 }

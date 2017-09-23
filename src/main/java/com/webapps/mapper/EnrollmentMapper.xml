@@ -102,6 +102,10 @@
 		<include refid="select_columns" />
 		from t_enrollment te where te.state = 1 and te.user_id = #{userId} and te.id != #{id} and data_state=1
 	</select>
+
+	<select id="getCurrentStateEnrollmentByUserId" resultMap="resultMap">
+		select * from t_enrollment where user_id = #{userId} and data_state = 1 order by update_time DESC
+	</select>
 	
 	<select id="queryCount" resultType="java.lang.Integer">
 		SELECT count(1) from t_enrollment te 
