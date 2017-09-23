@@ -129,7 +129,7 @@
 			data:{
 				"id":id,
 				"state":state,
-				"remark":remark
+				"reason":remark
 			},
 			success:function(response){
 				$('#remarkModal').modal('hide');

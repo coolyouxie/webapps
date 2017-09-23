@@ -2,6 +2,7 @@ package com.webapps.controller;
 
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -144,6 +145,7 @@ public class AppController {
 		user.setTelephone(telephone);
 		user.setAccount(telephone);
 		user.setCurrentState(0);
+		user.setIsPayedRecommendFee(0);
 		ResultDto<User> dto = null;
 		try {
 			ResultDto<String> dto1 = iAliSmsMsgService.validateAliSmsCode(asmId, smsCode);
@@ -702,7 +704,7 @@ public class AppController {
 		Integer userId = obj.getInt("userId");
 		try{
 			User user = iUserService.getById(userId);
-
+			List<Enrollment> list = iEnrollmentService.queryEnrollmentListByUserId(userId);
 		}catch (Exception e){
 
 		}

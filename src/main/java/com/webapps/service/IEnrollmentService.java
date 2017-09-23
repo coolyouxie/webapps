@@ -32,4 +32,11 @@ public interface IEnrollmentService {
 	public ResultDto<Enrollment> updateEnrollment(EnrollmentRequestForm form);
 	
 	public ResultDto<Enrollment> cancelEnroll(EnrollmentRequestForm form);
+
+	/**
+	 * 根据用户ID查询用户当前有效的报名信息（这里的有效指的是用户入职审核通过和期满审核通过的最近的一条记录）
+	 * @param userId
+	 * @return
+	 */
+	public Enrollment getCurrentStateEnrollmentByUserId(Integer userId);
 }

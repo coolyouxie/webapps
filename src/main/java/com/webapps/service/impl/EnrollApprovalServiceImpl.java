@@ -283,7 +283,7 @@ public class EnrollApprovalServiceImpl implements IEnrollApprovalService {
 			uw.setState(0);
 			iUserWalletMapper.insert(uw);
 			//保存账单记录
-			saveBillRecrod(enrollment, uw);
+			saveBillRecrod(enrollment, uw,3,null);
 		}else{
 			BigDecimal fee = uw.getFee();
 			BigDecimal reward = enrollment.getReward();
@@ -291,7 +291,12 @@ public class EnrollApprovalServiceImpl implements IEnrollApprovalService {
 			uw.setFee(fee);
 			uw.setUpdateTime(new Date());
 			iUserWalletMapper.updateById(uw.getId(), uw);
-			saveBillRecrod(enrollment, uw);
+			saveBillRecrod(enrollment, uw,3,null);
+		}
+		if(user.getIsPayedRecommendFee()==1){
+			//如果已经支付过推荐费，则不需要再次支付
+			dto.setResult("S");
+			return dto;
 		}
 		List<Recommend> reList = iRecommendMapper.queryByMobile(user.getTelephone());
 		if(CollectionUtils.isEmpty(reList)){
@@ -305,16 +310,15 @@ public class EnrollApprovalServiceImpl implements IEnrollApprovalService {
 		Date recommendDate = re.getCreateTime();
 		double days = DateUtil.getDaysBetweenTwoDates(recommendDate, registerDate);
 		if(days>overDays){
-			dto.setResult("S");
-			return dto;
+			//更新用户推荐费为已支付
+			return updateUserIsPayedRecommedFee(dto, user);
 		}
 		//如果用户入职后没在规定天数入职成功，也不能返费给推荐者
 		Integer entryOverDays = Integer.valueOf((String)PropertyUtil.getProperty("entry_over_days"));
 		Date entryDate = enrollment.getEntryDate();
 		days = DateUtil.getDaysBetweenTwoDates(registerDate, entryDate);
 		if(days>entryOverDays){
-			dto.setResult("S");
-			return dto;
+			return updateUserIsPayedRecommedFee(dto, user);
 		}
 		//如果即满足在推荐有效期注册会员，又满足在入职期内成功入职的，则返费给推荐者
 		UserWallet uw1 = iUserWalletMapper.queryByUserId(re.getUser().getId());
@@ -333,16 +337,29 @@ public class EnrollApprovalServiceImpl implements IEnrollApprovalService {
 			uw1.setState(0);
 			uw1.setUserId(re.getUser().getId());
 			iUserWalletMapper.insert(uw1);
-			saveBillRecrod(enrollment, uw1);
-			dto.setResult("S");
-			return dto;
+			saveBillRecrod(enrollment, uw1,1,fc);
+			//更新用户推荐费为已支付
+			return updateUserIsPayedRecommedFee(dto, user);
 		}
 		BigDecimal fee1 = uw1.getFee();
 		fee1 = fee1.add(fc.getFee());
 		uw1.setFee(fee1);
 		uw1.setUpdateTime(new Date());
 		iUserWalletMapper.updateById(uw1.getId(),uw1);
-		saveBillRecrod(enrollment, uw1);
+		//更新用户推荐费为已支付
+		user.setIsPayedRecommendFee(1);
+		user.setUpdateTime(new Date());
+		iUserMapper.updateById(user.getId(),user);
+		saveBillRecrod(enrollment, uw1,1,fc);
+		dto.setResult("S");
+		return dto;
+	}
+
+	private ResultDto<String> updateUserIsPayedRecommedFee(ResultDto<String> dto, User user) throws Exception {
+		//更新用户推荐费为已支付
+		user.setIsPayedRecommendFee(1);
+		user.setUpdateTime(new Date());
+		iUserMapper.updateById(user.getId(),user);
 		dto.setResult("S");
 		return dto;
 	}
@@ -351,11 +368,16 @@ public class EnrollApprovalServiceImpl implements IEnrollApprovalService {
 	 * 保存期满审核成功后的返费账单信息
 	 * @param enrollment
 	 * @param uw
+	 * @param type :-1提现支出，1推荐收入，2红包收入，3期满返费
 	 */
-	private void saveBillRecrod(Enrollment enrollment, UserWallet uw) {
+	private void saveBillRecrod(Enrollment enrollment, UserWallet uw,Integer type,FeeConfig fc) {
 		BillRecord br = new BillRecord();
-		br.setFee(enrollment.getReward());
-		br.setType(3);
+		if(type==3){
+			br.setFee(enrollment.getReward());
+		}else{
+			br.setFee(fc.getFee());
+		}
+		br.setType(type);
 		br.setDataState(1);
 		br.setWalletId(uw.getId());
 		br.setCreateTime(new Date());

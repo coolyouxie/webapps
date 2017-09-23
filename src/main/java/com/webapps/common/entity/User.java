@@ -46,6 +46,16 @@ public class User extends Entity{
      */
     private Integer currentState;
 
+    public Integer getIsPayedRecommendFee() {
+        return isPayedRecommendFee;
+    }
+
+    public void setIsPayedRecommendFee(Integer isPayedRecommendFee) {
+        this.isPayedRecommendFee = isPayedRecommendFee;
+    }
+
+    private Integer isPayedRecommendFee;
+
     public String getAccount() {
         return account;
     }

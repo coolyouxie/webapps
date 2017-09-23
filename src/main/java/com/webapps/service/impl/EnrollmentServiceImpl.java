@@ -177,4 +177,9 @@ public class EnrollmentServiceImpl implements IEnrollmentService {
 		return dto;
 	}
 
+	@Override
+	public Enrollment getCurrentStateEnrollmentByUserId(Integer userId) {
+		return null;
+	}
+
 }
