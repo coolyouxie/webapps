@@ -159,7 +159,7 @@
 		}).trigger("reloadGrid");
 	}
 	
-	function enrollApprovalById(id,state,remark,approvalType,reward){
+	function enrollApprovalById(id,state,remark,approvalType,reward,cashbackDays){
 		$.ajax({
 			url:"${ctx}/enrollApproval/enrollApprovalById",
 			type:"POST",
@@ -169,7 +169,8 @@
 				"state":state,
 				"remark":remark,
 				"reward":reward,
-				"approvalType":approvalType
+				"approvalType":approvalType,
+				"cashbackDays":cashbackDays
 			},
 			success:function(response){
 				$('#remarkModal').modal('hide');
@@ -225,11 +226,12 @@
 		var state = $("#approvalState").val();
 		var reward = $("#reward").val().trim();
 		var approvalType = $("#approvalType").val();
+		var cashbackDays = $("#cashbackDays").val();
 		if(!reward){
 			alert("请填写入职当天的返费金额");
 			return ;
 		}
-		enrollApprovalById(id,state,null,approvalType,reward);
+		enrollApprovalById(id,state,null,approvalType,reward,cashbackDays);
 	}
 	
 </script>
@@ -278,10 +280,11 @@
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-					<h4 class="modal-title" id="rewardModalLabel">入职当天返费金额</h4>
+					<h4 class="modal-title" id="rewardModalLabel">入职当天返费金额及期满天数</h4>
 				</div>
 				<div class="modal-body">
-					<input type="text" id="reward" class="form-control" >
+					<label>返费金额：<input type="text" id="reward" class="form-control" ></label>
+					<label>期满天数<input type="text" id="cashbackDays" class="form-control" ></label>
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>

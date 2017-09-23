@@ -23,5 +23,4 @@ public interface IUserService {
 	
 	public ResultDto<String> resetPassword(String phoneNum,String password);
 	
-
 }

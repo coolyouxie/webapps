@@ -32,9 +32,9 @@
 	
 	<!-- 查询所有 -->
 	<select id="queryAllByDataState" resultMap="resultMap">
-		select <include refid="select_columns" /> from t_fee_config
+		select * from t_fee_config
 		<if test="dataState != null and dataState != ''">
-			where data_State = dataState 
+			where data_State = #{dataState}
 		</if>
 	</select>
 	

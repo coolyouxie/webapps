@@ -5,7 +5,7 @@
 	<resultMap id="resultMap" type="com.webapps.common.entity.ApplyExpenditure">
 		<id column="ID" jdbcType="DECIMAL" property="id" />
 		<result column="wallet_id" jdbcType="DECIMAL" property="walletId" />
-		<result column="approver_id" jdbcType="DECIMAL" property="approver_id" />
+		<result column="approver_id" jdbcType="DECIMAL" property="approverId" />
 		<result column="fee" jdbcType="DECIMAL" property="fee" />
 		<result column="data_state" jdbcType="DECIMAL" property="dataState" />
 		<result column="create_time" jdbcType="VARCHAR" property="createTime" />

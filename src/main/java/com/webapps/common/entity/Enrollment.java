@@ -25,6 +25,8 @@ public class Enrollment extends Entity {
 	
 	private BigDecimal reward;
 
+	private Integer cashbackDays;
+
 	public String getFailedReason() {
 		return failedReason;
 	}
@@ -103,6 +105,14 @@ public class Enrollment extends Entity {
 
 	public void setRemark(String remark) {
 		this.remark = remark;
+	}
+
+	public Integer getCashbackDays() {
+		return cashbackDays;
+	}
+
+	public void setCashbackDays(Integer cashbackDays) {
+		this.cashbackDays = cashbackDays;
 	}
 
 }

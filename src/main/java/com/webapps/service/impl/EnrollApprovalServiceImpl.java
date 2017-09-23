@@ -103,10 +103,9 @@ public class EnrollApprovalServiceImpl implements IEnrollApprovalService {
 		return ea;
 	}
 
-	@Override
 	@Transactional(propagation = Propagation.REQUIRED,rollbackFor={Exception.class, RuntimeException.class,MyBatisSystemException.class})
 	public ResultDto<EnrollApproval> enrollApproval(Integer id, Integer state, 
-			String failedReason,BigDecimal reward,Integer approverId) throws Exception {
+			String failedReason,BigDecimal reward,Integer approverId,Integer cashbackDays) throws Exception {
 		ResultDto<EnrollApproval> dto = new ResultDto<EnrollApproval>();
 		try {
 			EnrollApproval ea = iEnrollApprovalMapper.getById(id);
@@ -139,25 +138,29 @@ public class EnrollApprovalServiceImpl implements IEnrollApprovalService {
 					enrollment.setState(21);
 					enrollment.setUpdateTime(new Date());
 					enrollment.setReward(reward);
+					enrollment.setCashbackDays(cashbackDays);
 					ea.setState(1);
 					ea.setUpdateTime(new Date());
 					ea.setReward(reward);
+					ea.setCashbackDays(cashbackDays);
 					//更新用户状态到已入职
 					user.setCurrentState(2);
 					user.setUpdateTime(new Date());
 					//先将之前牌入职审核通过和期满审核通过的审核记录状态个性为已离职状态
-					List<Enrollment> list = iEnrollmentMapper.queryListByUserIdAndState(user.getId());
+					List<Enrollment> list = iEnrollmentMapper.queryListByUserIdStateAndId(user.getId(),id);
 					if(CollectionUtils.isNotEmpty(list)){
 						for(Enrollment em :list){
-							em.setState(4);
+							em.setDataState(0);
 							em.setUpdateTime(new Date());
 						}
-						iEnrollmentMapper.batchUpdate(list);
+						iEnrollmentMapper.batchUpdateToDelete(list);
 					}
 					iUserMapper.updateById(user.getId(), user);
 				}else{
 					enrollment.setState(22);
+					enrollment.setFailedReason(failedReason);
 					enrollment.setUpdateTime(new Date());
+					ea.setFailedReason(failedReason);
 					ea.setState(2);
 					ea.setUpdateTime(new Date());
 				}
@@ -216,20 +219,21 @@ public class EnrollApprovalServiceImpl implements IEnrollApprovalService {
 					enrollment.setUpdateTime(new Date());
 					ea.setState(1);
 					ea.setUpdateTime(new Date());
+					ea.setReward(enrollment.getReward());
 					//这里还需要将日志记录到t_wallet_record表中
 					saveUserWalletAndRecord(enrollment);
 					//更新用户状态到已期满
 					user.setUpdateTime(new Date());
 					user.setCurrentState(3);
 					//先将之前牌入职审核通过和期满审核通过的审核记录状态个性为已离职状态
-					List<Enrollment> list = iEnrollmentMapper.queryListByUserIdAndState(user.getId());
-					if(CollectionUtils.isNotEmpty(list)){
-						for(Enrollment em :list){
-							em.setState(4);
-							em.setUpdateTime(new Date());
-						}
-						iEnrollmentMapper.batchUpdate(list);
-					}
+//					List<Enrollment> list = iEnrollmentMapper.queryListByUserIdAndState(user.getId());
+//					if(CollectionUtils.isNotEmpty(list)){
+//						for(Enrollment em :list){
+//							em.setState(4);
+//							em.setUpdateTime(new Date());
+//						}
+//						iEnrollmentMapper.batchUpdate(list);
+//					}
 					iUserMapper.updateById(user.getId(), user);
 				}else{
 					enrollment.setState(32);
@@ -252,6 +256,7 @@ public class EnrollApprovalServiceImpl implements IEnrollApprovalService {
 		} catch (Exception e) {
 			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 			logger.error("期满审核异常："+e.getMessage());
+			e.printStackTrace();
 			dto.setErrorMsg("期满审核异常");
 			dto.setResult("F");
 			return dto;
@@ -294,7 +299,7 @@ public class EnrollApprovalServiceImpl implements IEnrollApprovalService {
 			return dto;
 		}
 		Recommend re = reList.get(0);
-		Integer overDays = (Integer) PropertyUtil.getProperty("recommend_over_days");
+		Integer overDays = Integer.valueOf((String)PropertyUtil.getProperty("recommend_over_days"));
 		//如果用户注册时间超过了推荐超期天数，则不返费给推荐者
 		Date registerDate = user.getCreateTime();
 		Date recommendDate = re.getCreateTime();
@@ -304,7 +309,7 @@ public class EnrollApprovalServiceImpl implements IEnrollApprovalService {
 			return dto;
 		}
 		//如果用户入职后没在规定天数入职成功，也不能返费给推荐者
-		Integer entryOverDays = (Integer) PropertyUtil.getProperty("entry_over_days");
+		Integer entryOverDays = Integer.valueOf((String)PropertyUtil.getProperty("entry_over_days"));
 		Date entryDate = enrollment.getEntryDate();
 		days = DateUtil.getDaysBetweenTwoDates(registerDate, entryDate);
 		if(days>entryOverDays){
@@ -313,7 +318,13 @@ public class EnrollApprovalServiceImpl implements IEnrollApprovalService {
 		}
 		//如果即满足在推荐有效期注册会员，又满足在入职期内成功入职的，则返费给推荐者
 		UserWallet uw1 = iUserWalletMapper.queryByUserId(re.getUser().getId());
-		FeeConfig fc = iFeeConfigMapper.getById(3);
+		List<FeeConfig> fcList = iFeeConfigMapper.queryAllByDataState(1);
+		FeeConfig fc = null;
+		for (FeeConfig temp:fcList){
+			if(temp.getType()==3){
+				fc = temp;
+			}
+		}
 		if(uw1==null||uw1.getId()==null){
 			uw1 = new UserWallet();
 			uw1.setFee(fc.getFee());
@@ -424,7 +435,7 @@ public class EnrollApprovalServiceImpl implements IEnrollApprovalService {
 				dto.setResult("F");
 				return dto;
 			}
-			if(enrollment.getState()!=21&&enrollment.getState()==32){
+			if(enrollment.getState()!=21&&enrollment.getState()!=32){
 				dto.setErrorMsg("报名信息不是已入职状态，不可审核");
 				dto.setResult("F");
 				return dto;

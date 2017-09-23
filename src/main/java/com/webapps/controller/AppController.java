@@ -356,6 +356,8 @@ public class AppController {
 		ResultDto<Recruitment> dto = new ResultDto<Recruitment>();
 		try {
 			Recruitment r = iRecruitmentService.getById(id);
+			Company company = iCompanyService.getById(r.getCompany().getId());
+			r.setCompany(company);
 			dto.setData(r);
 			dto.setResult("S");
 		} catch (Exception e) {
@@ -685,4 +687,25 @@ public class AppController {
 		return JSONUtil.toJSONString(JSONUtil.toJSONObject(dto));
 	}
 
+	/**
+	 * 获取用户状态
+	 * @param params
+	 * @return
+	 */
+	@ResponseBody
+	@SuppressWarnings("unchecked")
+	@RequestMapping(value = "/getUserState", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
+	public String getUserState(@RequestBody String params) {
+		logger.info("获取用户期满审核通过接口expireApprovalSuccessList接收参数：" + params);
+		ResultDto<List<BillRecord>> dto = new ResultDto<List<BillRecord>>();
+		JSONObject obj = JSONUtil.toJSONObject(params);
+		Integer userId = obj.getInt("userId");
+		try{
+			User user = iUserService.getById(userId);
+
+		}catch (Exception e){
+
+		}
+		return JSONUtil.toJSONString(JSONUtil.toJSONObject(dto));
+	}
 }

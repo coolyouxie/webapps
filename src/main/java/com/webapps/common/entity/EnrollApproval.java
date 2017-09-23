@@ -15,8 +15,6 @@ public class EnrollApproval extends Enrollment {
 	private String remark;
 	
 	private String failedReason;
-	
-	private BigDecimal reward;
 
 	public Integer getState() {
 		return state;
@@ -63,14 +61,6 @@ public class EnrollApproval extends Enrollment {
 
 	public void setFailedReason(String failedReason) {
 		this.failedReason = failedReason;
-	}
-
-	public BigDecimal getReward() {
-		return reward;
-	}
-
-	public void setReward(BigDecimal reward) {
-		this.reward = reward;
 	}
 
 }

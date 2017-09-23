@@ -15,16 +15,13 @@ public interface IEnrollApprovalService {
 	/**
 	 * 分页查询报名、入职、期满、离职等状态的审核记录
 	 * @param page
-	 * @param ea
-	 * @param approvalType 审核状态，1入职审核，2期满审核
 	 * @return
 	 * @throws Exception
 	 */
 	public Page loadEnrollApprovalList(Page page,EnrollApprovalRequestForm form)throws Exception;
 	
 	/**
-	 * 
-	 * @param ea
+	 *
 	 * @return
 	 * @throws Exception
 	 */
@@ -37,13 +34,11 @@ public interface IEnrollApprovalService {
 	 * approvalType		1入职审核，2期满审核
 	 * @param id
 	 * @param state
-	 * @param approvalType
-	 * @param remark
 	 * @return
 	 * @throws Exception
 	 */
 	public ResultDto<EnrollApproval> enrollApproval(Integer id,Integer state,String failedReason,
-			BigDecimal reward,Integer approverId)throws Exception;
+			BigDecimal reward,Integer approverId,Integer cashbackDays)throws Exception;
 	
 	public ResultDto<EnrollApproval> expireApproval(Integer id,Integer state,String failedReason,
 			Integer approverId)throws Exception;

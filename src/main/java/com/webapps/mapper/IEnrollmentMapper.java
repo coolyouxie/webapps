@@ -23,5 +23,8 @@ public interface IEnrollmentMapper extends IBaseMapper<Enrollment>,IPageMapper<E
 	public List<Enrollment> queryListByUserIdAndState(@Param("userId")Integer userId)throws Exception;
 	
 	public void batchUpdate(@Param("list")List<Enrollment> list)throws Exception;
-	
+
+	public List<Enrollment> queryListByUserIdStateAndId(@Param("userId")Integer user,@Param("id")Integer id)throws Exception;
+
+	public int batchUpdateToDelete(List<Enrollment> list);
 }

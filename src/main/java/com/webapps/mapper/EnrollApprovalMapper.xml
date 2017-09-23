@@ -24,16 +24,18 @@
 		<result column="failed_reason" jdbcType="VARCHAR" property="failedReason" />
 		<result column="reward" jdbcType="DECIMAL" property="reward" />
 		<result column="entry_date" jdbcType="VARCHAR" property="entryDate" />
+		<result column="cashback_days" jdbcType="DECIMAL" property="cashbackDays" />
 	</resultMap>
 
 	<sql id="select_columns">
 		tea.ID,tea.user_id,tea.state,tea.type, tea.data_state,tea.CREATE_TIME,tea.UPDATE_TIME,
 		tea.operator_id,tea.remark,tea.is_talked,tea.talk_result,tea.enrollment_id,
-		tea.reward,tea.entry_date
+		tea.reward,tea.entry_date,tea.cashback_days
 	</sql>
 
 	<sql id="insert_columns">
-		user_id,enrollment_id,state, data_state,CREATE_TIME,operator_id,remark,type,reward,entry_date
+		user_id,enrollment_id,state, data_state,CREATE_TIME,operator_id,
+		remark,type,reward,entry_date,cashback_days
 	</sql>
 	
 	<!-- 查询所有 -->
@@ -198,7 +200,8 @@
 			#{obj.remark},
 			#{obj.type},
 			#{obj.reward},
-			#{obj.entryDate}
+			#{obj.entryDate},
+			#{obj.cashbackDays}
 		)
 	</insert>
 	
@@ -213,7 +216,8 @@
 			data_state = #{obj.dataState},
 			update_time = #{obj.updateTime},
 			reward = #{obj.reward},
-			entry_date = #{obj.entryDate}
+			entry_date = #{obj.entryDate},
+			cashback_days = #{obj.cashbackDays}
 		where id = #{id}
 	</update>
 </mapper>

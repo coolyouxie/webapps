@@ -61,10 +61,10 @@
 		tc.id as company_id,tc.name as company_name,
 		tr.id as recruitment_id,tr.title as recruitment_title
 		FROM t_banner_config tbc 
-		left join t_company tc on tc.id = tbc.fk_id and tbc.type = 3
-		left join t_recruitment tr on tr.id = tbc.fk_id and tbc.type = 4
+		left join t_company tc on tc.id = tbc.fk_id and tbc.type = 3 and tc.is_banner =1
+		LEFT join t_recruitment tr on tr.id = tbc.fk_id and tbc.type = 4 and tr.is_banner =1
 		<trim prefix="WHERE" prefixOverrides="AND">
-			tbc.data_state = 1 
+			tbc.data_state = 1
 			<if test="obj.keyWords !=null and obj.keyWords != ''">
 				AND tbc.title like concat('%',#{obj.keyWords},'%')
 			</if>

@@ -78,6 +78,7 @@ public class RecruitmentServiceImpl implements IRecruitmentService {
 	
 	private ResultDto<BannerConfig> saveBannerForRecruitment(RecruitmentRequestForm form){
 		ResultDto<BannerConfig> dto = new ResultDto<BannerConfig>();
+		dto.setResult("S");
 		try {
 			List<BannerConfig> list = iBannerConfigMapper.getByFkIdAndType(form.getId(), 4);
 			if(CollectionUtils.isNotEmpty(list)){
@@ -103,28 +104,30 @@ public class RecruitmentServiceImpl implements IRecruitmentService {
 				}
 				return dto;
 			}
-			BannerConfig bc = new BannerConfig();
-			bc.setUpdateTime(null);
-			bc.setDataState(1);
-			bc.setPicUrl(form.getBannerConfig().getPicUrl());
-			bc.setFkId(form.getId());
-			bc.setTitle(form.getTitle());
-			bc.setType(4);
-			int result = iBannerConfigMapper.insert(bc);
-			if(result==1){
-				dto.setResult("S");
-				dto.setData(bc);
-			}else{
-				dto.setErrorMsg("保存发布单banner信息出错");
-				dto.setResult("F");
+			if(form.getIsBanner()==1){
+				BannerConfig bc = new BannerConfig();
+				bc.setUpdateTime(null);
+				bc.setDataState(1);
+				bc.setPicUrl(form.getBannerConfig().getPicUrl());
+				bc.setFkId(form.getId());
+				bc.setTitle(form.getTitle());
+				bc.setType(4);
+				int result = iBannerConfigMapper.insert(bc);
+				if(result==1){
+					dto.setResult("S");
+					dto.setData(bc);
+				}else{
+					dto.setErrorMsg("保存发布单banner信息出错");
+					dto.setResult("F");
+				}
 			}
 			return dto;
 		} catch (Exception e) {
 			logger.error("保存或更新发布单banner信息异常："+e.getMessage());
 			dto.setResult("F");
 			dto.setErrorMsg("保存或更新发布单banner信息异常");
+			return dto;
 		}
-		return null;
 	}
 	
 	@SuppressWarnings("unused")
