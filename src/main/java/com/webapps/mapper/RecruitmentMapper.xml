@@ -23,7 +23,6 @@
 		<result column="cashback_for_broker" jdbcType="DECIMAL" property="cashbackForBroker" />
 		<result column="create_time" jdbcType="VARCHAR" property="createTime" />
 		<result column="update_time" jdbcType="VARCHAR" property="updateTime" />
-		<result column="cashback_days" jdbcType="DECIMAL" property="cashbackDays" />
 		<result column="data_state" jdbcType="DECIMAL" property="dataState" />
 		<result column="publish_type" jdbcType="DECIMAL" property="publishType" />
 		<result column="mobile" jdbcType="VARCHAR" property="mobile" />
@@ -38,6 +37,7 @@
 		<result column="banner_type" jdbcType="DECIMAL" property="bannerConfig.type" />
 		<result column="pic_url" jdbcType="VARCHAR" property="bannerConfig.picUrl" />
 		<result column="is_message" jdbcType="DECIMAL" property="isMessage" />
+		<result column="company_address" jdbcType="VARCHAR" property="company.address" />
 	</resultMap>
 
 	<sql id="select_columns">
@@ -160,6 +160,7 @@
 		SELECT
 		<include refid="select_columns" />,
 		tc.name as company_name,
+		tc.address as company_address,
 		tbc.fk_id as banner_id,
 		tbc.pic_url as pic_url,
 		tbc.type as banner_type

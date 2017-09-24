@@ -154,23 +154,29 @@
 	
 	function search(){
 		dataGrid.jqGrid("setGridParam",{
-		    postData:$("#searchForm").serialize()+"&rows=50&page=1",
+		    postData:$("#searchForm").serialize()+"&rows="+dataGrid.jqGrid('getGridParam', 'rowNum')+"&page=1",
 		    page:1
 		}).trigger("reloadGrid");
 	}
 	
 	function enrollApprovalById(id,state,remark,approvalType,reward,cashbackDays){
+	    var cashbackData = getCashbackData();
+	    if((!cashbackData||cashbackData.length==0)&&approvalType==1){
+	        alert("请输入期满返额金额和天数");
+	        return;
+		}
 		$.ajax({
 			url:"${ctx}/enrollApproval/enrollApprovalById",
 			type:"POST",
 			dataType:"JSON",
+            traditional: true,//必须指定为true
 			data:{
 				"id":id,
 				"state":state,
 				"remark":remark,
 				"reward":reward,
 				"approvalType":approvalType,
-				"cashbackDays":cashbackDays
+				"cashbackData":getCashbackData()
 			},
 			success:function(response){
 				$('#remarkModal').modal('hide');
@@ -224,16 +230,29 @@
 	function enrollApprovalByIdWithReward(id,state,approvalType){
 		var id = $("#enrollApprovalId").val();
 		var state = $("#approvalState").val();
-		var reward = $("#reward").val().trim();
+		//var reward = $("#reward").val().trim();
 		var approvalType = $("#approvalType").val();
-		var cashbackDays = $("#cashbackDays").val();
-		if(!reward){
-			alert("请填写入职当天的返费金额");
-			return ;
-		}
-		enrollApprovalById(id,state,null,approvalType,reward,cashbackDays);
+		//var cashbackDays = $("#cashbackDays").val();
+//		if(!reward){
+//			alert("请填写入职当天的返费金额");
+//			return ;
+//		}
+		enrollApprovalById(id,state,null,approvalType,null,null);
 	}
-	
+
+	function getCashbackData() {
+	    var cashbackData = [];
+		for(var i=0;i<5;i++){
+			var reward = $("#reward"+i).val();
+			var cashbackDays = $("#cashbackDays"+i).val();
+			if(reward!=null&&cashbackDays!=null){
+			    if(reward&&cashbackDays){
+                    cashbackData.push(reward+":"+cashbackDays);
+				}
+			}
+		}
+		return cashbackData;
+    }
 </script>
 <style>
 	.input-group-sm {
@@ -283,8 +302,50 @@
 					<h4 class="modal-title" id="rewardModalLabel">入职当天返费金额及期满天数</h4>
 				</div>
 				<div class="modal-body">
-					<label>返费金额：<input type="text" id="reward" class="form-control" ></label>
-					<label>期满天数<input type="text" id="cashbackDays" class="form-control" ></label>
+					<label>
+						返费金额：
+						<input type="text" id="reward0" class="form-control" style="display: inline-block;width: 60%;">
+					</label>
+					<label>
+						期满天数：
+						<input type="text" id="cashbackDays0" class="form-control" style="display: inline-block;width: 60%;">
+					</label>
+
+					<label>
+						返费金额：
+						<input type="text" id="reward1" class="form-control" style="display: inline-block;width: 60%;">
+					</label>
+					<label>
+						期满天数：
+						<input type="text" id="cashbackDays1" class="form-control" style="display: inline-block;width: 60%;">
+					</label>
+
+					<label>
+						返费金额：
+						<input type="text" id="reward2" class="form-control" style="display: inline-block;width: 60%;">
+					</label>
+					<label>
+						期满天数：
+						<input type="text" id="cashbackDays2" class="form-control" style="display: inline-block;width: 60%;">
+					</label>
+
+					<label>
+						返费金额：
+						<input type="text" id="reward3" class="form-control" style="display: inline-block;width: 60%;">
+					</label>
+					<label>
+						期满天数：
+						<input type="text" id="cashbackDays3" class="form-control" style="display: inline-block;width: 60%;">
+					</label>
+
+					<label>
+						返费金额：
+						<input type="text" id="reward4" class="form-control" style="display: inline-block;width: 60%;">
+					</label>
+					<label>
+						期满天数：
+						<input type="text" id="cashbackDays4" class="form-control" style="display: inline-block;width: 60%;">
+					</label>
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
@@ -325,9 +386,9 @@
 				<div class="col-sm-4">
 					<label>
 						<span>报名时间:</span>
-						<input type="text" id="enrollTimeStart" name="enrollTimeStart" onClick="WdatePicker({isShowWeek:true})">
+						<input type="text" id="enrollTimeStart" name="enrollTimeStart" onClick="WdatePicker({isShowWeek:true})" style="width: 122px;">
 						-
-						<input type="text" id="enrollTimeEnd" name="enrollTimeEnd" onClick="WdatePicker({isShowWeek:true})">
+						<input type="text" id="enrollTimeEnd" name="enrollTimeEnd" onClick="WdatePicker({isShowWeek:true})" style="width: 122px;">
 					</label>
 				</div>
 				<div class="col-sm-2">

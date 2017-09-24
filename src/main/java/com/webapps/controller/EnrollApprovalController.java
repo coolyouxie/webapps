@@ -89,13 +89,13 @@ public class EnrollApprovalController {
 	
 	@ResponseBody
 	@RequestMapping(value="/enrollApprovalById")
-	public String enrollApprovalById(Model model,Integer id,Integer state,String remark,
-			BigDecimal reward,Integer approvalType,Integer cashbackDays,HttpServletRequest request){
+	public String enrollApprovalById(Model model,Integer id,Integer state,String remark,Integer approvalType,String[] cashbackData,HttpServletRequest request){
 		ResultDto<EnrollApproval> dto = new ResultDto<EnrollApproval>();
 		User user = (User)request.getSession().getAttribute("user");
 		try {
 			if(approvalType==1){
-				dto = iEnrollApprovalService.enrollApproval(id, state, remark, reward,user.getId(),cashbackDays);
+//				dto = iEnrollApprovalService.enrollApproval(id, state, remark, reward,user.getId(),cashbackDays);
+				dto = iEnrollApprovalService.entryApproveById(id,state,remark,user.getId(),cashbackData);
 			}else{
 				dto = iEnrollApprovalService.expireApproval(id, state, remark,user.getId());
 			}

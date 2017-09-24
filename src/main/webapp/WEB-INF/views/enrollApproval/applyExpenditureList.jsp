@@ -226,9 +226,9 @@
 				<div class="col-sm-4">
 					<label>
 						<span>申请时间:</span>
-						<input type="text" id="applyTimeStart" name="applyTimeStart" onClick="WdatePicker({isShowWeek:true})">
+						<input type="text" id="applyTimeStart" name="applyTimeStart" onClick="WdatePicker({isShowWeek:true})" style="width: 120px;">
 						-
-						<input type="text" id="applyTimeEnd" name="applyTimeEnd" onClick="WdatePicker({isShowWeek:true})">
+						<input type="text" id="applyTimeEnd" name="applyTimeEnd" onClick="WdatePicker({isShowWeek:true})" style="width: 120px;">
 					</label>
 				</div>
 			</div>

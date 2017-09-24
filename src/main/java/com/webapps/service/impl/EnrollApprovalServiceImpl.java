@@ -1,9 +1,12 @@
 package com.webapps.service.impl;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.webapps.common.entity.*;
+import com.webapps.mapper.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -16,23 +19,9 @@ import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import com.webapps.common.bean.Page;
 import com.webapps.common.bean.ResultDto;
-import com.webapps.common.entity.BillRecord;
-import com.webapps.common.entity.EnrollApproval;
-import com.webapps.common.entity.Enrollment;
-import com.webapps.common.entity.FeeConfig;
-import com.webapps.common.entity.Recommend;
-import com.webapps.common.entity.User;
-import com.webapps.common.entity.UserWallet;
 import com.webapps.common.form.EnrollApprovalRequestForm;
 import com.webapps.common.utils.DateUtil;
 import com.webapps.common.utils.PropertyUtil;
-import com.webapps.mapper.IBillRecordMapper;
-import com.webapps.mapper.IEnrollApprovalMapper;
-import com.webapps.mapper.IEnrollmentMapper;
-import com.webapps.mapper.IFeeConfigMapper;
-import com.webapps.mapper.IRecommendMapper;
-import com.webapps.mapper.IUserMapper;
-import com.webapps.mapper.IUserWalletMapper;
 import com.webapps.service.IEnrollApprovalService;
 
 import net.sf.json.JSONObject;
@@ -63,6 +52,9 @@ public class EnrollApprovalServiceImpl implements IEnrollApprovalService {
 	
 	@Autowired
 	private IBillRecordMapper iBillRecordMapper;
+
+	@Autowired
+	private IEnrollmentExtraMapper iEnrollmentExtraMapper;
 
 	@Override
 	public Page loadEnrollApprovalList(Page page, EnrollApprovalRequestForm form) throws Exception {
@@ -148,21 +140,10 @@ public class EnrollApprovalServiceImpl implements IEnrollApprovalService {
 					user.setUpdateTime(new Date());
 					//先将之前牌入职审核通过和期满审核通过的审核记录状态个性为已离职状态
 					List<Enrollment> list = iEnrollmentMapper.queryListByUserIdStateAndId(user.getId(),id);
-					if(CollectionUtils.isNotEmpty(list)){
-						for(Enrollment em :list){
-							em.setDataState(0);
-							em.setUpdateTime(new Date());
-						}
-						iEnrollmentMapper.batchUpdateToDelete(list);
-					}
+					cancelOldEnrollment(list);
 					iUserMapper.updateById(user.getId(), user);
 				}else{
-					enrollment.setState(22);
-					enrollment.setFailedReason(failedReason);
-					enrollment.setUpdateTime(new Date());
-					ea.setFailedReason(failedReason);
-					ea.setState(2);
-					ea.setUpdateTime(new Date());
+					approvalFailed(failedReason, ea, enrollment);
 				}
 				ea.setOperatorId(approverId);
 				iEnrollmentMapper.updateById(enrollment.getId(), enrollment);
@@ -493,6 +474,186 @@ public class EnrollApprovalServiceImpl implements IEnrollApprovalService {
 			e.printStackTrace();
 			dto.setResult("F");
 			dto.setErrorMsg("查询期满审核账单异常");
+			return dto;
+		}
+	}
+
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED,rollbackFor={Exception.class, RuntimeException.class})
+	public ResultDto<EnrollApproval> entryApproveById(Integer id, Integer state, String failedReason,
+													  Integer approverId, String[] cashbackData) {
+		ResultDto<EnrollApproval> dto = new ResultDto<EnrollApproval>();
+		try {
+			EnrollApproval ea = iEnrollApprovalMapper.getById(id);
+			if(ea==null){
+				dto.setErrorMsg("未找到待审核信息，请刷新页面后再试");
+				dto.setResult("F");
+				return dto;
+			}
+			Enrollment em = iEnrollmentMapper.getById(ea.getEnrollmentId());
+			if(em==null){
+				dto.setErrorMsg("未找到报名信息，请确认后再次审核");
+				dto.setResult("F");
+				return dto;
+			}
+			User user = null;
+			if(em.getUser()==null||em.getUser().getId()==null){
+				dto.setErrorMsg("入职审核时用户信息未找到");
+				dto.setResult("F");
+				return dto;
+			}
+			user = iUserMapper.getById(em.getUser().getId());
+			if(user==null){
+				dto.setErrorMsg("审核时获取用户信息失败");
+				dto.setResult("F");
+				return dto;
+			}
+			if(em.getState()==20&&ea.getType()==1){
+				//入职审核
+				if(state==1){
+					approvalSuccess(id, ea, em, user);
+					createEnrollmentExtraInfo(cashbackData, em);
+				}else{
+					approvalFailed(failedReason, ea, em);
+				}
+				ea.setOperatorId(approverId);
+				iEnrollmentMapper.updateById(em.getId(), em);
+				iEnrollApprovalMapper.updateById(ea.getId(), ea);
+				dto.setResult("S");
+				return dto;
+			}else{
+				dto.setErrorMsg("审核状态不匹配，请刷新页面后再试");
+				dto.setResult("F");
+				return dto;
+			}
+		} catch (Exception e) {
+			//异常时回滚事务
+			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+			//打印异常信息
+			logger.error("入职审核异常");
+			e.printStackTrace();
+			//返回失败结果
+			dto.setErrorMsg("入职审核异常");
+			dto.setResult("F");
+			return dto;
+		}
+	}
+
+	/**
+	 * 生成分阶段期满返费信息
+	 * @param cashbackData
+	 * @param em
+	 */
+	private void createEnrollmentExtraInfo(String[] cashbackData, Enrollment em) {
+		Date createDate = new Date();
+		//生成分阶段的返费信息
+		for(int i=0;i<cashbackData.length;i++){
+            String data = cashbackData[i];
+            String[] dataArray = data.split(":");
+            BigDecimal fee = new BigDecimal(dataArray[0]);
+            Integer cashbackDays = Integer.valueOf(dataArray[1]);
+            EnrollmentExtra ee = new EnrollmentExtra();
+            ee.setFee(fee);
+            ee.setEnrollmentId(em.getId());
+            ee.setCashbackDays(cashbackDays);
+            ee.setDataState(1);
+            ee.setCreateTime(createDate);
+            ee.setState(0);
+            iEnrollmentExtraMapper.insert(ee);
+        }
+	}
+
+	/**
+	 * 入职审核不通过的情况
+	 * @param failedReason
+	 * @param ea
+	 * @param em
+	 */
+	private void approvalFailed(String failedReason, EnrollApproval ea, Enrollment em) {
+		em.setState(22);
+		em.setFailedReason(failedReason);
+		em.setUpdateTime(new Date());
+		ea.setFailedReason(failedReason);
+		ea.setState(2);
+		ea.setUpdateTime(new Date());
+	}
+
+	/**
+	 * 入职审核通过的情况
+	 * @param id
+	 * @param ea
+	 * @param em
+	 * @param user
+	 * @throws Exception
+	 */
+	private void approvalSuccess(Integer id, EnrollApproval ea, Enrollment em, User user) throws Exception {
+		em.setState(21);
+		em.setUpdateTime(new Date());
+		BigDecimal reward = new BigDecimal(0);
+		em.setReward(reward);
+		ea.setState(1);
+		ea.setUpdateTime(new Date());
+		ea.setReward(reward);
+		//更新用户状态到已入职
+		user.setCurrentState(2);
+		user.setUpdateTime(new Date());
+		//先将之前牌入职审核通过和期满审核通过的审核记录状态个性为已离职状态
+		List<Enrollment> list = iEnrollmentMapper.queryListByUserIdStateAndId(user.getId(),id);
+		cancelOldEnrollment(list);
+		iUserMapper.updateById(user.getId(), user);
+	}
+
+	/**
+	 * 入职审核通过后取消之前的所有报名状态的报名记录
+	 * @param list
+	 */
+	private void cancelOldEnrollment(List<Enrollment> list) {
+		if(CollectionUtils.isNotEmpty(list)){
+            for(Enrollment em1 :list){
+                em1.setDataState(0);
+                em1.setUpdateTime(new Date());
+            }
+            iEnrollmentMapper.batchUpdateToDelete(list);
+        }
+	}
+
+	@Override
+	public ResultDto<EnrollApproval> applyExpireApprovalWithCashbackDays(JSONObject params) {
+		ResultDto<EnrollApproval> dto = new ResultDto<EnrollApproval>();
+		Integer enrollmentId = params.getInt("enrollmentId");
+		Integer userId = params.getInt("userId");
+		Integer cashbackDays = params.getInt("cashbackDays");
+		try {
+
+
+			Enrollment enrollment = iEnrollmentMapper.getById(enrollmentId);
+			if(enrollment==null){
+				dto.setErrorMsg("报名信息无效，请稍后重试");
+				dto.setResult("F");
+				return dto;
+			}
+
+			if(enrollment.getState()!=21&&enrollment.getState()!=32){
+				dto.setErrorMsg("报名信息不是已入职状态，不可审核");
+				dto.setResult("F");
+				return dto;
+			}
+
+			enrollment.setState(30);
+			enrollment.setUpdateTime(new Date());
+			User user = new User();
+			user.setId(userId);
+			enrollment.setUser(user);
+			iEnrollmentMapper.updateById(enrollmentId, enrollment);
+			EnrollApproval ea = saveEnrollApprova(null, enrollment,2);
+			dto.setResult("S");
+			dto.setData(ea);
+			return dto;
+		} catch (Exception e) {
+			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+			e.printStackTrace();
+			dto.setErrorMsg("发起期满审核申请失败，请稍后重试");
+			dto.setResult("F");
 			return dto;
 		}
 	}
