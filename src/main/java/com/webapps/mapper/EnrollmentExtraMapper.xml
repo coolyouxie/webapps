@@ -51,6 +51,12 @@
 		where data_state = 1 and enrollment_id = #{enrollmentId} and state = #{state}
 	</select>
 
+	<select id="queryListByEnrollmentIdStateAndCashbackDays" resultMap="resultMap">
+		select <include refid="select_columns" /> from t_enrollment_extra
+		where data_state = 1 and enrollment_id = #{enrollmentId} and state = #{state} and #{cashbackDays} > cashback_days
+		ORDER BY cashback_days ASC
+	</select>
+
 	<!-- 用于初始化数据时使用 -->
 	<update id="batchUpdateToDelete">
 		<foreach collection="list" item="item" index="index" open="" close="" separator=";">
@@ -67,7 +73,7 @@
 		update t_enrollment_extra set data_state = 0 where id = #{id,jdbcType=DECIMAL}
 	</update>
 	
-	<insert id="insert" useGeneratedKeys="true" keyProperty="obj.id" parameterType="com.webapps.common.entity.Enrollment">
+	<insert id="insert" useGeneratedKeys="true" keyProperty="obj.id" parameterType="com.webapps.common.entity.EnrollmentExtra">
 		insert into t_enrollment_extra
 		(
 			<include refid="insert_columns" />

@@ -95,9 +95,12 @@ public class EnrollApprovalController {
 		try {
 			if(approvalType==1){
 //				dto = iEnrollApprovalService.enrollApproval(id, state, remark, reward,user.getId(),cashbackDays);
+				//使用新的分阶段期满返费入职审核
 				dto = iEnrollApprovalService.entryApproveById(id,state,remark,user.getId(),cashbackData);
 			}else{
-				dto = iEnrollApprovalService.expireApproval(id, state, remark,user.getId());
+//				dto = iEnrollApprovalService.expireApproval(id, state, remark,user.getId());
+				//使用新的分阶段期满审核方法
+				dto = iEnrollApprovalService.expireApprovalById(id, state, remark,user.getId());
 			}
 		} catch (Exception e) {
 			dto.setResult("F");

@@ -15,4 +15,8 @@ public interface IEnrollmentExtraMapper extends IBaseMapper<EnrollmentExtra>,IPa
 
     public List<EnrollmentExtra> queryListByEnrollmentIdAndState(@Param("enrollmentId") Integer enrollmentId,
                                                          @Param("state") Integer state) throws Exception;
+
+    public List<EnrollmentExtra> queryListByEnrollmentIdStateAndCashbackDays(@Param("enrollmentId") Integer enrollmentId,
+                                                                             @Param("state") Integer state,
+                                                                             @Param("cashbackDays")Integer cashbackDays)throws Exception;
 }

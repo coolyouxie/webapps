@@ -68,4 +68,16 @@ public interface IEnrollApprovalService {
 	 */
 	public ResultDto<EnrollApproval> entryApproveById(Integer id,Integer state,String failedReason,
 											  Integer approverId,String[] cashbackData);
+
+	/**
+	 * 分阶段期满审核
+	 * @param id
+	 * @param state
+	 * @param failedReason
+	 * @param approverId
+	 * @return
+	 * @throws Exception
+	 */
+	public ResultDto<EnrollApproval> expireApprovalById(Integer id,Integer state,String failedReason,
+														Integer approverId)throws Exception;;
 }

@@ -574,7 +574,7 @@ public class AppController {
 		try {
 			if(type==1){
 				dto = iEnrollApprovalService.applyEntryApproval(obj);
-			}else if(type==2){
+			}else if(type==2) {
 				dto = iEnrollApprovalService.applyExpireApproval(obj);
 			}
 		} catch (Exception e) {
