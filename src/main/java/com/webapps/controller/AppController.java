@@ -10,7 +10,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.google.gson.Gson;
 import com.webapps.common.bean.Page;
@@ -677,7 +679,7 @@ public class AppController {
 			String qq = (String) PropertyUtil.getProperty("qq");
 			obj.put("weiXin", weiXin);
 			obj.put("telephone", telephone);
-			obj.put("telephone", qq);
+			obj.put("qq", qq);
 			dto.setData(obj);
 			dto.setResult("S");
 		} catch (Exception e) {
@@ -695,7 +697,6 @@ public class AppController {
 	 * @return
 	 */
 	@ResponseBody
-	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/getUserState", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
 	public String getUserState(@RequestBody String params) {
 		logger.info("获取用户期满审核通过接口expireApprovalSuccessList接收参数：" + params);
@@ -739,5 +740,15 @@ public class AppController {
 			dto.setErrorMsg("获取用户状态时异常");
 			return JSONUtil.toJSONString(JSONObject.fromObject(dto));
 		}
+	}
+	
+	
+	
+	@ResponseBody
+	@RequestMapping(value="/uploadImg")
+	public String uploadImg(@RequestParam(value = "file", required = true) MultipartFile file,@RequestParam("param")String param){
+		System.out.println(param);
+		ResultDto<String> dto = new ResultDto<String>();
+		return JSONUtil.toJSONString(JSONObject.fromObject(dto));
 	}
 }
