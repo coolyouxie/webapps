@@ -1,5 +1,6 @@
 package com.webapps.service.impl;
 
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.Date;
@@ -10,10 +11,14 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+import org.mybatis.spring.MyBatisSystemException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
@@ -30,6 +35,9 @@ import com.webapps.service.IPictureService;
 public class PictureServiceImpl implements IPictureService {
 	
 	Logger logger = Logger.getLogger(PictureServiceImpl.class);
+	
+	private static final String bankCardDir = "bankCardPics";
+	private static final String idCardDir = "idCardPics";
 	
 	@Autowired
 	private IPictureMapper iPictureMapper;
@@ -143,6 +151,143 @@ public class PictureServiceImpl implements IPictureService {
 	public ResultDto<Picture> savePicture(PictureRequestForm form) {
 		
 		return null;
+	}
+
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED,rollbackFor={Exception.class, RuntimeException.class,MyBatisSystemException.class})
+	public ResultDto<String> uploadImgForApp(MultipartFile[] files, String userId) {
+		ResultDto<String> dto = new ResultDto<String>();
+		String failedPics = "";
+		try {
+			if(files!=null&&files.length>0){
+				for(int i=0;i<files.length;i++){
+					MultipartFile file = files[i];
+					String contentType = file.getContentType();
+			        String fileType = contentType.substring(contentType.indexOf("/") + 1);
+					String originalName = file.getOriginalFilename();
+					//bankCard_1:银行卡正面，bankCard_2:银行卡反面,idCard_1:身份证正面,idCard_2:身份证反面，具体内容请参考下面这个数组中的内容
+					String[] fileNameAndType = originalName.split("_");
+					String dirName = fileNameAndType[0];//文件名作为文件夹名使用
+					String type = fileNameAndType[1];
+					File destFile = null;
+					String destFilePath = (String)PropertyUtil.getProperty("FileUpload_Path");
+					File dir = null;
+					if(StringUtils.isNotBlank(dirName)){
+						//取文件名作为文件夹名
+						dir = new File(destFilePath + dirName);
+						if(!dir.exists()){
+				        	dir.mkdirs();
+				        }
+					}
+					//组装目标文件路径
+					destFilePath +=  dir.getAbsolutePath() + File.separator + new Date().getTime() + "." + fileType;
+					//保存源文件到目标文件
+					destFile = new File(destFilePath);
+					file.transferTo(destFile);
+					String projectPath = (String) PropertyUtil.getProperty("WebApp_Path");
+					String picUrl = projectPath+"fileupload/"+dirName+File.separator+destFile.getName();
+					dto = saveBankAndIdCardPic(picUrl, dirName, type, userId);
+					if("F".equals(dto.getResult())){
+						failedPics += dirName+"_"+type+",";
+					}
+				}
+			}
+			String errorMsg = "上传";
+			if(StringUtils.isNotBlank(failedPics)){
+				if(failedPics.contains("bankCard_1")){
+					errorMsg += " 银行卡正面图片 ";
+				}
+				if(failedPics.contains("bankCard_2")){
+					errorMsg += " 银行卡反面图片  ";
+				}
+				if(failedPics.contains("idCard_1")){
+					errorMsg += " 身份证正面图片 ";
+				}
+				if(failedPics.contains("idCard_2")){
+					errorMsg += " 身份证反面图片 ";
+				}
+				errorMsg +=" 失败";
+				dto.setErrorMsg(errorMsg);
+				dto.setResult("F");
+				return dto;
+			}
+			dto.setResult("S");
+			return dto;
+		} catch (Exception e) {
+			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+			logger.error("保存图片时异常，请稍后重试");
+			e.printStackTrace();
+			dto.setErrorMsg("保存图片时异常，请稍后重试");
+			dto.setResult("F");
+			return dto;
+		}
+	}
+	
+	private ResultDto<String> saveBankAndIdCardPic(String picUrl,String fileName,String type,String userId)throws Exception{
+		ResultDto<String> dto = new ResultDto<String>();
+		Integer uId = Integer.valueOf(userId);
+		int count = 0;
+		String remark = null;
+		if(fileName.contains("bankCard")){
+			if("1".equals(type)){
+				remark = "银行卡正面";
+				count = saveOrUpdateBandAndIdCardPic(picUrl, uId, count,51,remark);
+			}else{
+				remark = "银行卡反面";
+				count = saveOrUpdateBandAndIdCardPic(picUrl, uId, count,52,remark);
+			}
+		}else if(fileName.contains("idCard")){
+			if("1".equals(type)){
+				remark = "身份证正面";
+				count = saveOrUpdateBandAndIdCardPic(picUrl, uId, count,41,remark);
+			}else{
+				remark = "身份证反面";
+				count = saveOrUpdateBandAndIdCardPic(picUrl, uId, count,52,remark);
+			}
+		}
+		
+		if(count==1){
+			dto.setResult("S");
+		}else{
+			dto.setErrorMsg("保存用户身份证或银行卡图片失败");
+			dto.setResult("F");
+		}
+		return dto;
+	}
+
+	private int saveOrUpdateBandAndIdCardPic(String picUrl, Integer uId,int count,int type,String remark) throws Exception {
+		List<Picture> pList = iPictureMapper.queryListByFkIdAndType(uId,51);
+		 Picture p = null;
+		if(CollectionUtils.isEmpty(pList)){
+			count = insertPicture(picUrl, uId, type, remark);
+		}
+		if(pList.size()==1){
+			p = pList.get(0);
+			p.setRemark(remark);
+			p.setType(type);
+			p.setPicUrl(picUrl);
+			p.setUpdateTime(new Date());
+			count = iPictureMapper.updateById(p.getId(), p);
+		}else{
+			//删除之前全部的老数据，再插入新数据
+			iPictureMapper.batchDeleteInLogic(pList);
+			count = insertPicture(picUrl, uId, type, remark);
+		}
+		return count;
+	}
+
+	private int insertPicture(String picUrl, Integer uId, int type, String remark) {
+		int count;
+		Picture p;
+		p = new Picture();
+		p.setRemark(remark);
+		p.setType(type);
+		p.setPicUrl(picUrl);
+		p.setCreateTime(new Date());
+		p.setDataState(1);
+		p.setFkId(uId);
+		count = iPictureMapper.insert(p);
+		return count;
 	}
 
 }

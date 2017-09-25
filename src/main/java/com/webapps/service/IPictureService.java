@@ -4,6 +4,8 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import com.webapps.common.bean.Page;
 import com.webapps.common.bean.ResultDto;
 import com.webapps.common.entity.Picture;
@@ -33,5 +35,7 @@ public interface IPictureService {
 	public Page loadPictureList(Page page ,PictureRequestForm form);
 	
 	public ResultDto<String> uploadBannerPicture(HttpServletRequest request);
+	
+	public ResultDto<String> uploadImgForApp(MultipartFile[] files,String userId);
 	
 }

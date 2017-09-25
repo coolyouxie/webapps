@@ -46,6 +46,7 @@ import com.webapps.service.IEnrollApprovalService;
 import com.webapps.service.IEnrollmentService;
 import com.webapps.service.IFeeConfigService;
 import com.webapps.service.IMessageConfigService;
+import com.webapps.service.IPictureService;
 import com.webapps.service.IRecommendService;
 import com.webapps.service.IRecruitmentService;
 import com.webapps.service.IUserService;
@@ -97,6 +98,9 @@ public class AppController {
 	
 	@Autowired
 	private IBillRecordService iBillRecordService;
+	
+	@Autowired
+	private IPictureService iPictureService;
 
 	/**
 	 * app端登录接口
@@ -742,13 +746,12 @@ public class AppController {
 		}
 	}
 	
-	
-	
 	@ResponseBody
-	@RequestMapping(value="/uploadImg")
-	public String uploadImg(@RequestParam(value = "file", required = true) MultipartFile file,@RequestParam("param")String param){
-		System.out.println(param);
-		ResultDto<String> dto = new ResultDto<String>();
+	@RequestMapping(value="/uploadImg", produces = "text/html;charset=UTF-8")
+	public String uploadImg(@RequestParam(value = "file", required = true) MultipartFile[] files,
+			@RequestParam("userId")String userId){
+		ResultDto<String> dto = null;
+		dto = iPictureService.uploadImgForApp(files, userId);
 		return JSONUtil.toJSONString(JSONObject.fromObject(dto));
 	}
 }

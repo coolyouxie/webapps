@@ -32,7 +32,11 @@
 	</select>
 	
 	<select id="queryByType" resultMap="resultMap">
-		select <include refid="select_columns" /> from t_picture where type = #{type}
+		select <include refid="select_columns" /> from t_picture where type = #{type} and data_state = 1
+	</select>
+	
+	<select id="queryByFkIdType" resultMap="resultMap">
+		select <include refid="select_columns" /> from t_picture where type = #{type} and fk_id=#{fkId} and data_state = 1
 	</select>
 	
 	<select id="queryListByFkId" resultMap="resultMap">
