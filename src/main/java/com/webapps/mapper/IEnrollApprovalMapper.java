@@ -20,6 +20,12 @@ public interface IEnrollApprovalMapper extends IBaseMapper<EnrollApproval>,IPage
 	
 	public int countByFkIds(@Param("obj")EnrollApproval em)throws Exception;
 	
-	public List<EnrollApproval> queryByUserIdTypeAndState(@Param("userId")Integer userId,@Param("type")Integer type , @Param("state")Integer state)throws Exception;
-	
+	public List<EnrollApproval> queryByUserIdTypeAndState(@Param("userId")Integer userId,
+														  @Param("type")Integer type ,
+														  @Param("state")Integer state)throws Exception;
+
+	public List<EnrollApproval> queryByUserIdEnrollmentIdTypeAndState(@Param("userId")Integer userId,
+																	  @Param("EnrollmentId")Integer enrollmentId,
+																	  @Param("type")Integer type ,
+																	  @Param("state")Integer state)throws Exception;
 }

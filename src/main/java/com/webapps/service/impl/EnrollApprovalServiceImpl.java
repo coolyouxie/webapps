@@ -568,7 +568,7 @@ public class EnrollApprovalServiceImpl implements IEnrollApprovalService {
 		ResultDto<EnrollApproval> dto = new ResultDto<EnrollApproval>();
 		Integer enrollmentId = params.getInt("enrollmentId");
 		Integer userId = params.getInt("userId");
-		Integer cashbackDays = params.getInt("cashbackDays");
+		Date today = new Date();
 		try {
 			Enrollment enrollment = iEnrollmentMapper.getById(enrollmentId);
 			if(enrollment==null){
@@ -581,6 +581,10 @@ public class EnrollApprovalServiceImpl implements IEnrollApprovalService {
 				dto.setResult("F");
 				return dto;
 			}
+			//计算当前时间与入职时间的天数差，获取期满审核申请的期满天数
+			Integer cashbackDays = -1;
+			cashbackDays = new Double(DateUtil.getDaysBetweenTwoDates(enrollment.getEntryDate(),today)).intValue();
+			//要判断该用户之前是否存已申请但未审核通过的期满返费申请，如果有且未支付，则逻辑删除
 			List<EnrollmentExtra> extraList = iEnrollmentExtraMapper.queryListByEnrollmentIdStateAndCashbackDays(
 					enrollmentId,0,cashbackDays);
 			if(CollectionUtils.isEmpty(extraList)){
@@ -588,6 +592,7 @@ public class EnrollApprovalServiceImpl implements IEnrollApprovalService {
 				dto.setErrorMsg("无可用的期满待审核信息，请确认输入的期满天是否有效");
 				return dto;
 			}
+
 			int maxCashbackDays = -1;
 			for(EnrollmentExtra extra:extraList){
 				if(extra.getCashbackDays()>maxCashbackDays){
@@ -599,14 +604,59 @@ public class EnrollApprovalServiceImpl implements IEnrollApprovalService {
 			}else {
 				enrollment.setState(50);
 			}
-			enrollment.setUpdateTime(new Date());
 			User user = new User();
 			user.setId(userId);
 			enrollment.setUser(user);
 			iEnrollmentMapper.updateById(enrollmentId, enrollment);
-			EnrollApproval ea = saveEnrollApprova(null, enrollment,2,null,null);
+
+			//找到该用户之前的期满审核申请记录
+			List<EnrollApproval> list = iEnrollApprovalMapper.queryByUserIdEnrollmentIdTypeAndState(userId,enrollmentId,2,0);
+			if(CollectionUtils.isEmpty(list)){
+				//将之前发起的期满申请待审核记录更新为无效状态
+				for(EnrollApproval temp :list){
+					temp.setUpdateTime(new Date());
+					temp.setDataState(0);
+					iEnrollApprovalMapper.updateById(temp.getId(),temp);
+				}
+			}
+			//如果期满天数内只有一条记录则以这条记录发起一次期满审核
+			Integer cashbackDaysForApproval = 0;
+			if(extraList.size()==1){
+				EnrollmentExtra extra = extraList.get(0);
+				BigDecimal fee = extra.getFee();
+				cashbackDaysForApproval = extra.getCashbackDays();
+				EnrollApproval ea = new EnrollApproval();
+				ea.setType(2);
+				ea.setReward(fee);
+				ea.setCashbackDays(cashbackDaysForApproval);
+				ea.setDataState(1);
+				ea.setCreateTime(new Date());
+				ea.setEnrollmentId(enrollmentId);
+				ea.setState(0);
+				ea.setUser(user);
+				iEnrollApprovalMapper.insert(ea);
+				dto.setResult("S");
+				return dto;
+			}
+			//如果期满天数内有多条记录，则需要将这些记录的金额相加作为一条期满审核记录
+			BigDecimal fee = new BigDecimal(0);
+			for(EnrollmentExtra extra:extraList){
+				fee.add(extra.getFee());
+				if(cashbackDaysForApproval<extra.getCashbackDays()){
+					cashbackDaysForApproval = extra.getCashbackDays();
+				}
+			}
+			EnrollApproval ea = new EnrollApproval();
+			ea.setType(2);
+			ea.setReward(fee);
+			ea.setCashbackDays(cashbackDaysForApproval);
+			ea.setDataState(1);
+			ea.setCreateTime(new Date());
+			ea.setEnrollmentId(enrollmentId);
+			ea.setUser(user);
+			ea.setState(0);
+			iEnrollApprovalMapper.insert(ea);
 			dto.setResult("S");
-			dto.setData(ea);
 			return dto;
 		} catch (Exception e) {
 			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
@@ -667,6 +717,7 @@ public class EnrollApprovalServiceImpl implements IEnrollApprovalService {
 				//入职审核
 				if(state==1){
 					approvalSuccess(id, ea, em, user);
+					updateHistoryEnrollment(em.getUser().getId());
 					createEnrollmentExtraInfo(cashbackData, em);
 				}else{
 					approvalFailed(failedReason, ea, em);
@@ -691,6 +742,22 @@ public class EnrollApprovalServiceImpl implements IEnrollApprovalService {
 			dto.setErrorMsg("入职审核异常");
 			dto.setResult("F");
 			return dto;
+		}
+	}
+
+	private void updateHistoryEnrollment(Integer userId){
+		try {
+			List<Enrollment> list = iEnrollmentMapper.queryListByUserIdAndState(userId);
+			if(CollectionUtils.isNotEmpty(list)){
+				for(Enrollment e:list){
+					e.setUpdateTime(new Date());
+					e.setIsHistory(1);
+				}
+				iEnrollmentMapper.batchUpdateToHistory(list);
+			}
+		} catch (Exception e) {
+			logger.error("更新历史报名信息状态失败");
+			e.printStackTrace();
 		}
 	}
 
@@ -879,7 +946,7 @@ public class EnrollApprovalServiceImpl implements IEnrollApprovalService {
 					ea.setUpdateTime(new Date());
 					//更新分阶段期满返费信息状态
 					List<EnrollmentExtra> extraList = iEnrollmentExtraMapper.queryListByEnrollmentIdStateAndCashbackDays(
-							enrollment.getId(),0,ea.getCashbackDays());
+							enrollment.getId(),0,ea.getCashbackDays()+1);
 					BigDecimal fee = new BigDecimal(0);
 					if(CollectionUtils.isNotEmpty(extraList)){
 						for(EnrollmentExtra extra:extraList){

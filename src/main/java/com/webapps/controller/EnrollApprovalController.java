@@ -109,7 +109,5 @@ public class EnrollApprovalController {
 		}
 		return JSONUtil.toJSONString(JSONUtil.toJSONObject(dto));
 	}
-	
-	
 
 }

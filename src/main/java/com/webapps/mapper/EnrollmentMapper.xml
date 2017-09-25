@@ -97,6 +97,13 @@
 		from t_enrollment te where te.state in (21,31) and te.user_id = #{userId}
 	</select>
 
+	<select id="queryListByUserIdAndStateNew" resultMap="resultMap">
+		select
+		<include refid="select_columns" />
+		from t_enrollment te where te.state =#{state} and te.user_id = #{userId}
+	</select>
+
+
 	<select id="queryListByUserIdStateAndId" resultMap="resultMap">
 		select
 		<include refid="select_columns" />
@@ -263,5 +270,16 @@
 			</set>
 			where id = #{item.id}
          </foreach>
+	</update>
+
+	<update id="batchUpdateToHistory">
+		<foreach collection="list" item="item" index="index" open="" close="" separator=";">
+			update t_enrollment
+			<set>
+				is_history=#{item.isHistory},
+				update_time = #{item.timeUpdate}
+			</set>
+			where id = #{item.id}
+		</foreach>
 	</update>
 </mapper>

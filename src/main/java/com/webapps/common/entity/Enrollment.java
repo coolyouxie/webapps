@@ -27,6 +27,8 @@ public class Enrollment extends Entity {
 
 	private Integer cashbackDays;
 
+	private Integer isHistory;
+
 	public String getFailedReason() {
 		return failedReason;
 	}
@@ -115,4 +117,11 @@ public class Enrollment extends Entity {
 		this.cashbackDays = cashbackDays;
 	}
 
+	public Integer getIsHistory() {
+		return isHistory;
+	}
+
+	public void setIsHistory(Integer isHistory) {
+		this.isHistory = isHistory;
+	}
 }
