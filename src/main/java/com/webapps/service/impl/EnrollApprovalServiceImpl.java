@@ -611,7 +611,7 @@ public class EnrollApprovalServiceImpl implements IEnrollApprovalService {
 
 			//找到该用户之前的期满审核申请记录
 			List<EnrollApproval> list = iEnrollApprovalMapper.queryByUserIdEnrollmentIdTypeAndState(userId,enrollmentId,2,0);
-			if(CollectionUtils.isEmpty(list)){
+			if(CollectionUtils.isNotEmpty(list)){
 				//将之前发起的期满申请待审核记录更新为无效状态
 				for(EnrollApproval temp :list){
 					temp.setUpdateTime(new Date());
@@ -641,7 +641,7 @@ public class EnrollApprovalServiceImpl implements IEnrollApprovalService {
 			//如果期满天数内有多条记录，则需要将这些记录的金额相加作为一条期满审核记录
 			BigDecimal fee = new BigDecimal(0);
 			for(EnrollmentExtra extra:extraList){
-				fee.add(extra.getFee());
+				fee = fee.add(extra.getFee());
 				if(cashbackDaysForApproval<extra.getCashbackDays()){
 					cashbackDaysForApproval = extra.getCashbackDays();
 				}

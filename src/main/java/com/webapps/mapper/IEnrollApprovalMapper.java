@@ -25,7 +25,7 @@ public interface IEnrollApprovalMapper extends IBaseMapper<EnrollApproval>,IPage
 														  @Param("state")Integer state)throws Exception;
 
 	public List<EnrollApproval> queryByUserIdEnrollmentIdTypeAndState(@Param("userId")Integer userId,
-																	  @Param("EnrollmentId")Integer enrollmentId,
+																	  @Param("enrollmentId")Integer enrollmentId,
 																	  @Param("type")Integer type ,
 																	  @Param("state")Integer state)throws Exception;
 }
