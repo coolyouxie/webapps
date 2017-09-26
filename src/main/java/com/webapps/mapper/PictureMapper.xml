@@ -102,6 +102,15 @@
 		update t_picture set data_state = 0 where id = #{id,jdbcType=DECIMAL}
 	</update>
 	
+	<update id="updateById">
+		update t_picture 
+		set 
+		data_state = #{obj.dataState},
+		pic_url = #{obj.picUrl},
+		update_time = #{obj.updateTime}
+		where id = #{id,jdbcType=DECIMAL}
+	</update>
+	
 	<insert id="insert" useGeneratedKeys="true" keyProperty="obj.id" parameterType="com.webapps.common.entity.Picture">
 		insert into t_picture
 		(
