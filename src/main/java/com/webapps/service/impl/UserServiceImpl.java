@@ -49,10 +49,14 @@ public class UserServiceImpl implements IUserService {
 	@Override
 	public User login(User user) throws Exception {
 		String account = user.getAccount();
-		User user1 = iUserMapper.queryUserByAccount(account);
 		String tempPwd = user.getPassword();
-		String salt = user1.getToken();
+		User user1 = iUserMapper.queryUserByAccount(account);
+		if(user1==null){
+			return null;
+		}
+		String salt = null;
 		if(user1!=null){
+			salt = user1.getToken();
 			boolean flag = PasswordEncryptUtil.authenticate(tempPwd, user1.getPassword(),salt);
 			if(flag){
 				return user1;

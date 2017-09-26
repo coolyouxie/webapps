@@ -180,7 +180,7 @@ public class PictureServiceImpl implements IPictureService {
 				        }
 					}
 					//组装目标文件路径
-					destFilePath +=  dir.getAbsolutePath() + File.separator + new Date().getTime() + "." + fileType;
+					destFilePath =  dir.getAbsolutePath() + File.separator + new Date().getTime() + "." + fileType;
 					//保存源文件到目标文件
 					destFile = new File(destFilePath);
 					file.transferTo(destFile);
@@ -260,6 +260,7 @@ public class PictureServiceImpl implements IPictureService {
 		 Picture p = null;
 		if(CollectionUtils.isEmpty(pList)){
 			count = insertPicture(picUrl, uId, type, remark);
+			return count;
 		}
 		if(pList.size()==1){
 			p = pList.get(0);

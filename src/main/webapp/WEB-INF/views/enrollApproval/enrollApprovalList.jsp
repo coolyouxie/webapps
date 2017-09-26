@@ -159,9 +159,9 @@
 		}).trigger("reloadGrid");
 	}
 	
-	function enrollApprovalById(id,state,remark,approvalType,reward,cashbackDays){
+	function enrollApprovalById(id,state,remark,approvalType,reward){
 	    var cashbackData = getCashbackData();
-	    if((!cashbackData||cashbackData.length==0)&&approvalType==1){
+	    if((!cashbackData||cashbackData.length==0)&&approvalType==1&&state==1){
 	        alert("请输入期满返额金额和天数");
 	        return;
 		}
@@ -199,7 +199,7 @@
 			if(approvalType==1){
 				$('#rewardModal').modal('show');
 			}else{
-				enrollApprovalById(id, state, "", approvalType, "");
+				enrollApprovalById(id, state, "", approvalType);
 			}
 		}else if(state==2){
 			$('#remarkModal').modal('show');
@@ -224,20 +224,14 @@
 				return ;
 			}
 		}
-		enrollApprovalById(id,state,remark,approvalType,null);
+		enrollApprovalById(id,state,remark,approvalType);
 	}
 	
 	function enrollApprovalByIdWithReward(id,state,approvalType){
 		var id = $("#enrollApprovalId").val();
 		var state = $("#approvalState").val();
-		//var reward = $("#reward").val().trim();
 		var approvalType = $("#approvalType").val();
-		//var cashbackDays = $("#cashbackDays").val();
-//		if(!reward){
-//			alert("请填写入职当天的返费金额");
-//			return ;
-//		}
-		enrollApprovalById(id,state,null,approvalType,null,null);
+		enrollApprovalById(id,state,null,approvalType,null);
 	}
 
 	function getCashbackData() {
