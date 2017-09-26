@@ -772,8 +772,8 @@ public class EnrollApprovalServiceImpl implements IEnrollApprovalService {
 		for(int i=0;i<cashbackData.length;i++){
             String data = cashbackData[i];
             String[] dataArray = data.split(":");
-            BigDecimal fee = new BigDecimal(dataArray[0]);
-            Integer cashbackDays = Integer.valueOf(dataArray[1]);
+            Integer cashbackDays = Integer.valueOf(dataArray[0]);
+            BigDecimal fee = new BigDecimal(dataArray[1]);
             EnrollmentExtra ee = new EnrollmentExtra();
             ee.setFee(fee);
             ee.setEnrollmentId(em.getId());
