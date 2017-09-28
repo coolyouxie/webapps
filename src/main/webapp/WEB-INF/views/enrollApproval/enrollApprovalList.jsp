@@ -300,7 +300,7 @@
 						期满天数：
 						<select id="cashbackDays0" class="form-control" style="display: inline-block;width: 60%;">
 							<option>请选择天数</option>
-							<% for(int i=1;i<=60;i++){%>
+							<% for(int i=1;i<=120;i++){%>
 								<option value="<%=i%>"><%=i%></option>
 							<%}%>
 						</select>
@@ -314,7 +314,7 @@
 						期满天数：
 						<select id="cashbackDays1" class="form-control" style="display: inline-block;width: 60%;">
 							<option>请选择天数</option>
-							<% for(int i=1;i<=60;i++){%>
+							<% for(int i=1;i<=120;i++){%>
 								<option value="<%=i%>"><%=i%></option>
 							<%}%>
 						</select>
@@ -328,7 +328,7 @@
 						期满天数：
 						<select id="cashbackDays2" class="form-control" style="display: inline-block;width: 60%;">
 							<option>请选择天数</option>
-							<% for(int i=1;i<=60;i++){%>
+							<% for(int i=1;i<=120;i++){%>
 								<option value="<%=i%>"><%=i%></option>
 							<%}%>
 						</select>
@@ -342,7 +342,7 @@
 						期满天数：
 						<select id="cashbackDays3" class="form-control" style="display: inline-block;width: 60%;">
 							<option>请选择天数</option>
-							<% for(int i=1;i<=60;i++){%>
+							<% for(int i=1;i<=120;i++){%>
 								<option value="<%=i%>"><%=i%></option>
 							<%}%>
 						</select>
@@ -356,7 +356,7 @@
 						期满天数：
 						<select id="cashbackDays4" class="form-control" style="display: inline-block;width: 60%;">
 							<option>请选择天数</option>
-							<% for(int i=1;i<=60;i++){%>
+							<% for(int i=1;i<=120;i++){%>
 								<option value="<%=i%>"><%=i%></option>
 							<%}%>
 						</select>

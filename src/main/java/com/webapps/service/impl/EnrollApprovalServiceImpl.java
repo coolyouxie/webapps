@@ -957,6 +957,7 @@ public class EnrollApprovalServiceImpl implements IEnrollApprovalService {
 						}
 					}
 					//这里还需要将日志记录到t_wallet_record表中
+					fee = ea.getReward();//这里是用来测试的数据，可能会做进一步修改
 					saveUserWalletAndRecord(enrollment,fee);
 					//更新用户状态到已期满
 					user.setUpdateTime(new Date());
