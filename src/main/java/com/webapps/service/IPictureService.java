@@ -37,5 +37,7 @@ public interface IPictureService {
 	public ResultDto<String> uploadBannerPicture(HttpServletRequest request);
 	
 	public ResultDto<String> uploadImgForApp(MultipartFile[] files,String userId);
+
+	public List<Picture> queryUserPictures(Integer userId);
 	
 }

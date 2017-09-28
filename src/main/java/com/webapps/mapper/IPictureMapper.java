@@ -21,5 +21,6 @@ public interface IPictureMapper extends IBaseMapper<Picture>,IPageMapper<Picture
 	public int deleteInLogicByPicture(@Param("obj")Picture obj)throws Exception;
 	
 	public List<Picture> queryByFkIdType(@Param("fkId")Integer fkId,@Param("type")Integer type)throws Exception;
-	
+
+	public List<Picture> queryUserPictures(@Param("userId")Integer userId)throws Exception;
 }

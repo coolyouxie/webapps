@@ -222,7 +222,18 @@ public class PictureServiceImpl implements IPictureService {
 			return dto;
 		}
 	}
-	
+
+	@Override
+	public List<Picture> queryUserPictures(Integer userId) {
+		try {
+			List<Picture> list = iPictureMapper.queryUserPictures(userId);
+			return list;
+		} catch (Exception e) {
+			logger.error("context",e);
+		}
+		return null;
+	}
+
 	private ResultDto<String> saveBankAndIdCardPic(String picUrl,String fileName,String type,String userId)throws Exception{
 		ResultDto<String> dto = new ResultDto<String>();
 		Integer uId = Integer.valueOf(userId);

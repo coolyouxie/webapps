@@ -1,5 +1,7 @@
 package com.webapps.common.entity;
 
+import java.util.List;
+
 /**
  * Created by xieshuai on 2017-6-27.
  */
@@ -46,6 +48,10 @@ public class User extends Entity{
      */
     private Integer currentState;
 
+    private Integer isPayedRecommendFee;
+
+    private List<Picture> pictures;
+
     public Integer getIsPayedRecommendFee() {
         return isPayedRecommendFee;
     }
@@ -53,8 +59,6 @@ public class User extends Entity{
     public void setIsPayedRecommendFee(Integer isPayedRecommendFee) {
         this.isPayedRecommendFee = isPayedRecommendFee;
     }
-
-    private Integer isPayedRecommendFee;
 
     public String getAccount() {
         return account;
@@ -208,4 +212,11 @@ public class User extends Entity{
 		this.currentState = currentState;
 	}
 
+    public List<Picture> getPictures() {
+        return pictures;
+    }
+
+    public void setPictures(List<Picture> pictures) {
+        this.pictures = pictures;
+    }
 }

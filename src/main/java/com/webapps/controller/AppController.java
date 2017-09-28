@@ -2,6 +2,7 @@ package com.webapps.controller;
 
 import java.util.List;
 
+import com.webapps.common.entity.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -17,19 +18,6 @@ import org.springframework.web.multipart.MultipartFile;
 import com.google.gson.Gson;
 import com.webapps.common.bean.Page;
 import com.webapps.common.bean.ResultDto;
-import com.webapps.common.entity.AliSmsMsg;
-import com.webapps.common.entity.ApplyExpenditure;
-import com.webapps.common.entity.BannerConfig;
-import com.webapps.common.entity.BillRecord;
-import com.webapps.common.entity.Company;
-import com.webapps.common.entity.EnrollApproval;
-import com.webapps.common.entity.Enrollment;
-import com.webapps.common.entity.FeeConfig;
-import com.webapps.common.entity.MessageConfig;
-import com.webapps.common.entity.Recommend;
-import com.webapps.common.entity.Recruitment;
-import com.webapps.common.entity.User;
-import com.webapps.common.entity.UserWallet;
 import com.webapps.common.form.ApplyExpenditureRequestForm;
 import com.webapps.common.form.BannerConfigRequestForm;
 import com.webapps.common.form.BillRecordRequestForm;
@@ -117,6 +105,8 @@ public class AppController {
 		User user = gson.fromJson(params, User.class);
 		try {
 			user = iUserService.login(user);
+			List<Picture> pictures = iPictureService.queryUserPictures(user.getId());
+			user.setPictures(pictures);
 			if (user != null) {
 				user.setPassword(null);
 				dto.setData(user);

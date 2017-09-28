@@ -296,49 +296,74 @@
 					<h4 class="modal-title" id="rewardModalLabel">入职当天返费金额及期满天数</h4>
 				</div>
 				<div class="modal-body">
+					<label style="width: 205px;">
+						期满天数：
+						<select id="cashbackDays0" class="form-control" style="display: inline-block;width: 60%;">
+							<option>请选择天数</option>
+							<% for(int i=1;i<=60;i++){%>
+								<option value="<%=i%>"><%=i%></option>
+							<%}%>
+						</select>
+					</label>
 					<label>
 						返费金额：
 						<input type="text" id="reward0" class="form-control" style="display: inline-block;width: 60%;">
 					</label>
-					<label>
-						期满天数：
-						<input type="text" id="cashbackDays0" class="form-control" style="display: inline-block;width: 60%;">
-					</label>
 
+					<label style="width: 205px;">
+						期满天数：
+						<select id="cashbackDays1" class="form-control" style="display: inline-block;width: 60%;">
+							<option>请选择天数</option>
+							<% for(int i=1;i<=60;i++){%>
+								<option value="<%=i%>"><%=i%></option>
+							<%}%>
+						</select>
+					</label>
 					<label>
 						返费金额：
 						<input type="text" id="reward1" class="form-control" style="display: inline-block;width: 60%;">
 					</label>
-					<label>
-						期满天数：
-						<input type="text" id="cashbackDays1" class="form-control" style="display: inline-block;width: 60%;">
-					</label>
 
+					<label style="width: 205px;">
+						期满天数：
+						<select id="cashbackDays2" class="form-control" style="display: inline-block;width: 60%;">
+							<option>请选择天数</option>
+							<% for(int i=1;i<=60;i++){%>
+								<option value="<%=i%>"><%=i%></option>
+							<%}%>
+						</select>
+					</label>
 					<label>
 						返费金额：
 						<input type="text" id="reward2" class="form-control" style="display: inline-block;width: 60%;">
 					</label>
-					<label>
-						期满天数：
-						<input type="text" id="cashbackDays2" class="form-control" style="display: inline-block;width: 60%;">
-					</label>
 
+					<label style="width: 205px;">
+						期满天数：
+						<select id="cashbackDays3" class="form-control" style="display: inline-block;width: 60%;">
+							<option>请选择天数</option>
+							<% for(int i=1;i<=60;i++){%>
+								<option value="<%=i%>"><%=i%></option>
+							<%}%>
+						</select>
+					</label>
 					<label>
 						返费金额：
 						<input type="text" id="reward3" class="form-control" style="display: inline-block;width: 60%;">
 					</label>
-					<label>
-						期满天数：
-						<input type="text" id="cashbackDays3" class="form-control" style="display: inline-block;width: 60%;">
-					</label>
 
+					<label style="width: 205px;">
+						期满天数：
+						<select id="cashbackDays4" class="form-control" style="display: inline-block;width: 60%;">
+							<option>请选择天数</option>
+							<% for(int i=1;i<=60;i++){%>
+								<option value="<%=i%>"><%=i%></option>
+							<%}%>
+						</select>
+					</label>
 					<label>
 						返费金额：
 						<input type="text" id="reward4" class="form-control" style="display: inline-block;width: 60%;">
-					</label>
-					<label>
-						期满天数：
-						<input type="text" id="cashbackDays4" class="form-control" style="display: inline-block;width: 60%;">
 					</label>
 				</div>
 				<div class="modal-footer">

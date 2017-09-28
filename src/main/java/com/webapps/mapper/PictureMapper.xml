@@ -48,6 +48,10 @@
 		where fk_id = #{fkId} and data_state = 1 and type = #{type}
 		order by create_time desc
 	</select>
+
+	<select id="queryUserPictures" resultMap="resultMap">
+		SELECT * from t_picture where fk_id = #{userId} and type in(41,42,51,52)
+	</select>
 	
 	<!-- 查询行政区总数 -->
 	<select id="queryCount" resultType="java.lang.Integer">
