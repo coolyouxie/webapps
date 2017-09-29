@@ -38,6 +38,6 @@ public interface IPictureService {
 	
 	public ResultDto<String> uploadImgForApp(MultipartFile[] files,String userId);
 
-	public List<Picture> queryUserPictures(Integer userId);
+	public ResultDto<List<Picture>> queryUserPictures(Integer userId);
 	
 }

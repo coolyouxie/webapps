@@ -224,14 +224,30 @@ public class PictureServiceImpl implements IPictureService {
 	}
 
 	@Override
-	public List<Picture> queryUserPictures(Integer userId) {
+	public ResultDto<List<Picture>> queryUserPictures(Integer userId) {
+		ResultDto<List<Picture>> dto = new ResultDto<List<Picture>>();
 		try {
 			List<Picture> list = iPictureMapper.queryUserPictures(userId);
-			return list;
+			if(CollectionUtils.isEmpty(list)){
+				dto.setResult("E");
+				dto.setErrorMsg("未上传图片");
+				return dto;
+			}
+			if(list.size()<4){
+				dto.setData(list);
+				dto.setResult("L");
+				dto.setErrorMsg("部分图片未上传");
+				return dto;
+			}
+			dto.setResult("S");
+			dto.setData(list);
+			return dto;
 		} catch (Exception e) {
 			logger.error("context",e);
+			dto.setResult("F");
+			dto.setErrorMsg("查询用户图片异常，请稍后再试。");
+			return dto;
 		}
-		return null;
 	}
 
 	private ResultDto<String> saveBankAndIdCardPic(String picUrl,String fileName,String type,String userId)throws Exception{

@@ -759,10 +759,8 @@ public class AppController {
 	public String getUserPictures(@RequestBody String params){
 		JSONObject obj = JSONObject.fromObject(params);
 		Integer userId = obj.getInt("userId");
-		ResultDto<List<Picture>> dto = new ResultDto<List<Picture>>();
-		List<Picture> pictures = iPictureService.queryUserPictures(userId);
-		dto.setData(pictures);
-		dto.setResult("S");
+		ResultDto<List<Picture>> dto = null;
+		dto = iPictureService.queryUserPictures(userId);
 		return JSONUtil.toJSONString(JSONObject.fromObject(dto));
 	}
 }
