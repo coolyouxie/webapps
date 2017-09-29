@@ -734,6 +734,12 @@ public class AppController {
 		}
 	}
 	
+	/**
+	 * app端保存和更新图片
+	 * @param files
+	 * @param userId
+	 * @return
+	 */
 	@ResponseBody
 	@RequestMapping(value="/uploadImg", produces = "text/html;charset=UTF-8")
 	public String uploadImg(@RequestParam(value = "file", required = true) MultipartFile[] files,
@@ -743,6 +749,11 @@ public class AppController {
 		return JSONUtil.toJSONString(JSONObject.fromObject(dto));
 	}
 	
+	/**
+	 * 获取用户图片
+	 * @param params
+	 * @return
+	 */
 	@ResponseBody
 	@RequestMapping(value="/getUserPictures",produces = "text/html;charset=UTF-8")
 	public String getUserPictures(@RequestBody String params){
