@@ -105,8 +105,6 @@ public class AppController {
 		User user = gson.fromJson(params, User.class);
 		try {
 			user = iUserService.login(user);
-			List<Picture> pictures = iPictureService.queryUserPictures(user.getId());
-			user.setPictures(pictures);
 			if (user != null) {
 				user.setPassword(null);
 				dto.setData(user);
@@ -742,6 +740,18 @@ public class AppController {
 			@RequestParam("userId")String userId){
 		ResultDto<String> dto = null;
 		dto = iPictureService.uploadImgForApp(files, userId);
+		return JSONUtil.toJSONString(JSONObject.fromObject(dto));
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="/getUserPictures",produces = "text/html;charset=UTF-8")
+	public String getUserPictures(@RequestBody String params){
+		JSONObject obj = JSONObject.fromObject(params);
+		Integer userId = obj.getInt("userId");
+		ResultDto<List<Picture>> dto = new ResultDto<List<Picture>>();
+		List<Picture> pictures = iPictureService.queryUserPictures(userId);
+		dto.setData(pictures);
+		dto.setResult("S");
 		return JSONUtil.toJSONString(JSONObject.fromObject(dto));
 	}
 }
