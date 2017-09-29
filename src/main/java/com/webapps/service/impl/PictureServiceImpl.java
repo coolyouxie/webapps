@@ -269,7 +269,7 @@ public class PictureServiceImpl implements IPictureService {
 				count = saveOrUpdateBandAndIdCardPic(picUrl, uId, count,41,remark);
 			}else{
 				remark = "身份证反面";
-				count = saveOrUpdateBandAndIdCardPic(picUrl, uId, count,52,remark);
+				count = saveOrUpdateBandAndIdCardPic(picUrl, uId, count,42,remark);
 			}
 		}
 		
