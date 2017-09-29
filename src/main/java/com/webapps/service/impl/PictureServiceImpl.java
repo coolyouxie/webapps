@@ -283,7 +283,7 @@ public class PictureServiceImpl implements IPictureService {
 	}
 
 	private int saveOrUpdateBandAndIdCardPic(String picUrl, Integer uId,int count,int type,String remark) throws Exception {
-		List<Picture> pList = iPictureMapper.queryListByFkIdAndType(uId,51);
+		List<Picture> pList = iPictureMapper.queryListByFkIdAndType(uId,type);
 		 Picture p = null;
 		if(CollectionUtils.isEmpty(pList)){
 			count = insertPicture(picUrl, uId, type, remark);
