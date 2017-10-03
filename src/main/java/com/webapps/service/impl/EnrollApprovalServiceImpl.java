@@ -952,12 +952,14 @@ public class EnrollApprovalServiceImpl implements IEnrollApprovalService {
 						for(EnrollmentExtra extra:extraList){
 							extra.setState(1);
 							extra.setUpdateTime(new Date());
-							fee.add(extra.getFee());
+							fee = fee.add(extra.getFee());
 							iEnrollmentExtraMapper.updateById(extra.getId(),extra);
 						}
 					}
 					//这里还需要将日志记录到t_wallet_record表中
-					fee = ea.getReward();//这里是用来测试的数据，可能会做进一步修改
+					if(fee.compareTo(new BigDecimal(0))==0){
+						fee = ea.getReward();//这里是用来测试的数据，可能会做进一步修改
+					}
 					saveUserWalletAndRecord(enrollment,fee);
 					//更新用户状态到已期满
 					user.setUpdateTime(new Date());
