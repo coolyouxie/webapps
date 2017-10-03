@@ -3,6 +3,7 @@ package com.webapps.controller;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import com.webapps.common.entity.Picture;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,8 +16,11 @@ import com.webapps.common.bean.ResultDto;
 import com.webapps.common.entity.User;
 import com.webapps.common.form.UserRequestForm;
 import com.webapps.service.IUserService;
+import com.webapps.service.IPictureService;
 
 import net.sf.json.util.JSONUtils;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("user")
@@ -24,6 +28,10 @@ public class UserController {
 	
 	@Autowired
 	private IUserService iUserService;
+
+	@Autowired
+	private  IPictureService iPictureService;
+
 	
 	@RequestMapping("/toUserListPage")
 	public ModelAndView toUserListPage(HttpServletRequest request){
@@ -95,6 +103,10 @@ public class UserController {
 		if(id!=null){
 			try {
 				User user = iUserService.getById(id);
+				ResultDto<List<Picture>> dto = iPictureService.queryUserPictures(id);
+				if (null!=dto&&!"F".equals(dto.getResult())){
+					user.setPictures(dto.getData());
+				}
 				model.addAttribute("user", user);
 			} catch (Exception e) {
 				e.printStackTrace();

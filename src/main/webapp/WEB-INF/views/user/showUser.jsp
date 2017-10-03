@@ -126,21 +126,14 @@
 				${user.mobile}
 			</div>
 		</div>
-			
+
 		<div class="row">
-			<label class="col-md-2 control-label" for="gender">性别：</label>
+			<label class="col-md-2 control-label" for="gender">证件图片：</label>
 			<div class="col-md-3" >
-				<select id="gender" name="gender" class="form-control" disabled="disabled">
-					<option value="0" <c:if test="${user.gender==0}">selected</c:if>>女</option>
-					<option value="1" <c:if test="${user.gender==1}">selected</c:if>>男</option>
-				</select>
-			</div>
-		</div>
-			
-		<div class="row">
-			<label class="col-md-2 control-label" for="age">年龄：</label>
-			<div class="col-md-3" >
-				${user.age}
+				<c:forEach var="item" items="${user.pictures}" varStatus="status">
+					<img src="${item.picUrl}" style="width:240px;" />
+				</c:forEach>
+
 			</div>
 		</div>
 		
