@@ -745,19 +745,14 @@ public class EnrollApprovalServiceImpl implements IEnrollApprovalService {
 		}
 	}
 
-	private void updateHistoryEnrollment(Integer userId,Integer emId){
-		try {
-			List<Enrollment> list = iEnrollmentMapper.queryListByUserIdAndState(userId,emId);
-			if(CollectionUtils.isNotEmpty(list)){
-				for(Enrollment e:list){
-					e.setUpdateTime(new Date());
-					e.setIsHistory(1);
-				}
-				iEnrollmentMapper.batchUpdateToHistory(list);
+	private void updateHistoryEnrollment(Integer userId,Integer emId) throws Exception{
+		List<Enrollment> list = iEnrollmentMapper.queryListByUserIdAndState(userId,emId);
+		if(CollectionUtils.isNotEmpty(list)){
+			for(Enrollment e:list){
+				e.setUpdateTime(new Date());
+				e.setIsHistory(1);
 			}
-		} catch (Exception e) {
-			logger.error("更新历史报名信息状态失败");
-			e.printStackTrace();
+			iEnrollmentMapper.batchUpdateToHistory(list);
 		}
 	}
 

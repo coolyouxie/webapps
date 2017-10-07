@@ -23,17 +23,18 @@
 		<result column="reward" jdbcType="DECIMAL" property="reward" />
 		<result column="expire_date" jdbcType="DECIMAL" property="expireDate" />
 		<result column="cashback_days" jdbcType="DECIMAL" property="cashbackDays" />
+		<result column="is_history" jdbcType="DECIMAL" property="isHistory" />
 	</resultMap>
 
 	<sql id="select_columns">
 		te.ID,te.user_id,te.recruitment_id,te.company_id,te.state, te.data_state,
 		te.CREATE_TIME,te.UPDATE_TIME,te.is_talked,te.talk_result,te.remark,te.failed_reason,
-		te.entry_date,te.reward,te.cashback_days
+		te.entry_date,te.reward,te.cashback_days,te.is_history
 	</sql>
 
 	<sql id="insert_columns">
 		user_id,recruitment_id,company_id,state, data_state,CREATE_TIME,is_talked,talk_result,failed_reason,
-		entry_date,reward,cashback_days
+		entry_date,reward,cashback_days,is_history
 	</sql>
 	
 	<select id="getById" resultMap="resultMap">
@@ -266,7 +267,7 @@
 			update t_enrollment
 			<set>
 				state=#{item.state},
-				update_time = #{item.timeUpdate}
+				update_time = #{item.updateTime}
 			</set>
 			where id = #{item.id}
          </foreach>
@@ -277,7 +278,7 @@
 			update t_enrollment
 			<set>
 				is_history=#{item.isHistory},
-				update_time = #{item.timeUpdate}
+				update_time = #{item.updateTime}
 			</set>
 			where id = #{item.id}
 		</foreach>

@@ -30,5 +30,5 @@ public interface IEnrollmentMapper extends IBaseMapper<Enrollment>,IPageMapper<E
 
 	public int batchUpdateToDelete(List<Enrollment> list);
 
-	public int batchUpdateToHistory(List<Enrollment> list);
+	public int batchUpdateToHistory(@Param("list") List<Enrollment> list);
 }
