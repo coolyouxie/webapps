@@ -717,7 +717,7 @@ public class EnrollApprovalServiceImpl implements IEnrollApprovalService {
 				//入职审核
 				if(state==1){
 					approvalSuccess(id, ea, em, user);
-					updateHistoryEnrollment(em.getUser().getId());
+					updateHistoryEnrollment(em.getUser().getId(),em.getId());
 					createEnrollmentExtraInfo(cashbackData, em);
 				}else{
 					approvalFailed(failedReason, ea, em);
@@ -745,9 +745,9 @@ public class EnrollApprovalServiceImpl implements IEnrollApprovalService {
 		}
 	}
 
-	private void updateHistoryEnrollment(Integer userId){
+	private void updateHistoryEnrollment(Integer userId,Integer emId){
 		try {
-			List<Enrollment> list = iEnrollmentMapper.queryListByUserIdAndState(userId);
+			List<Enrollment> list = iEnrollmentMapper.queryListByUserIdAndState(userId,emId);
 			if(CollectionUtils.isNotEmpty(list)){
 				for(Enrollment e:list){
 					e.setUpdateTime(new Date());

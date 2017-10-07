@@ -94,7 +94,7 @@
 	<select id="queryListByUserIdAndState" resultMap="resultMap">
 		select 
 		<include refid="select_columns" />
-		from t_enrollment te where te.state in (20,21,30,31,50) and te.user_id = #{userId}
+		from t_enrollment te where te.user_id = #{userId} and id != #{emId}
 	</select>
 
 	<select id="queryListByUserIdAndStateNew" resultMap="resultMap">

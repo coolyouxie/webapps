@@ -20,7 +20,7 @@ public interface IEnrollmentMapper extends IBaseMapper<Enrollment>,IPageMapper<E
 	
 	public int cancelEnroll(@Param("obj")EnrollmentRequestForm em,@Param("id")Integer id)throws Exception;
 	
-	public List<Enrollment> queryListByUserIdAndState(@Param("userId")Integer userId)throws Exception;
+	public List<Enrollment> queryListByUserIdAndState(@Param("userId")Integer userId,@Param("emId")Integer emId)throws Exception;
 
 	public List<Enrollment> queryListByUserIdAndStateNew(@Param("userId")Integer userId,@Param("state")Integer state)throws Exception;
 	
