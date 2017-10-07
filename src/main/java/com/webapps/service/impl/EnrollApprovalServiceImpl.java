@@ -585,16 +585,22 @@ public class EnrollApprovalServiceImpl implements IEnrollApprovalService {
 			Integer cashbackDays = -1;
 			cashbackDays = new Double(DateUtil.getDaysBetweenTwoDates(enrollment.getEntryDate(),today)).intValue();
 			//要判断该用户之前是否存已申请但未审核通过的期满返费申请，如果有且未支付，则逻辑删除
-			List<EnrollmentExtra> extraList = iEnrollmentExtraMapper.queryListByEnrollmentIdStateAndCashbackDays(
-					enrollmentId,0,cashbackDays);
-			if(CollectionUtils.isEmpty(extraList)){
+			List<EnrollmentExtra> extraList0 = iEnrollmentExtraMapper.queryListByEnrollmentIdAndState(
+					enrollmentId,0);
+			List<EnrollmentExtra> extraList = new ArrayList<EnrollmentExtra>();
+			if(CollectionUtils.isEmpty(extraList0)){
 				dto.setResult("F");
 				dto.setErrorMsg("无可用的期满待审核信息，请确认输入的期满天是否有效");
 				return dto;
 			}
 
 			int maxCashbackDays = -1;
-			for(EnrollmentExtra extra:extraList){
+			for(EnrollmentExtra extra:extraList0){
+				//把期满天数内的数据取出
+				if(extra.getCashbackDays()<cashbackDays){
+					extraList.add(extra);
+				}
+				//找到最后一次期满天数
 				if(extra.getCashbackDays()>maxCashbackDays){
 					maxCashbackDays = extra.getCashbackDays();
 				}
@@ -626,6 +632,7 @@ public class EnrollApprovalServiceImpl implements IEnrollApprovalService {
 				BigDecimal fee = extra.getFee();
 				cashbackDaysForApproval = extra.getCashbackDays();
 				EnrollApproval ea = new EnrollApproval();
+				ea.setEntryDate(enrollment.getEntryDate());
 				ea.setType(2);
 				ea.setReward(fee);
 				ea.setCashbackDays(cashbackDaysForApproval);
@@ -648,6 +655,7 @@ public class EnrollApprovalServiceImpl implements IEnrollApprovalService {
 			}
 			EnrollApproval ea = new EnrollApproval();
 			ea.setType(2);
+			ea.setEntryDate(enrollment.getEntryDate());
 			ea.setReward(fee);
 			ea.setCashbackDays(cashbackDaysForApproval);
 			ea.setDataState(1);

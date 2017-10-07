@@ -1,5 +1,7 @@
 package com.webapps.common.entity;
 
+import com.webapps.common.utils.DateUtil;
+
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -123,5 +125,12 @@ public class Enrollment extends Entity {
 
 	public void setIsHistory(Integer isHistory) {
 		this.isHistory = isHistory;
+	}
+
+	public String getEntryDateStr(){
+		if(this.entryDate!=null){
+			return DateUtil.format(this.entryDate,"yyyy-MM-dd");
+		}
+		return null;
 	}
 }
