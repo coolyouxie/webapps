@@ -52,6 +52,8 @@ public class User extends Entity{
 
     private List<Picture> pictures;
 
+    private String bankCardNum;
+
     public Integer getIsPayedRecommendFee() {
         return isPayedRecommendFee;
     }
@@ -218,5 +220,13 @@ public class User extends Entity{
 
     public void setPictures(List<Picture> pictures) {
         this.pictures = pictures;
+    }
+
+    public String getBankCardNum() {
+        return bankCardNum;
+    }
+
+    public void setBankCardNum(String bankCardNum) {
+        this.bankCardNum = bankCardNum;
     }
 }
