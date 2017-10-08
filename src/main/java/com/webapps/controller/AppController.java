@@ -3,6 +3,7 @@ package com.webapps.controller;
 import java.util.List;
 
 import com.webapps.common.entity.*;
+import com.webapps.mapper.IEnrollmentExtraMapper;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -89,6 +90,9 @@ public class AppController {
 	
 	@Autowired
 	private IPictureService iPictureService;
+
+	@Autowired
+	private IEnrollmentExtraMapper iEnrollmentExtraMapper;
 
 	/**
 	 * app端登录接口
@@ -762,5 +766,24 @@ public class AppController {
 		ResultDto<List<Picture>> dto = null;
 		dto = iPictureService.queryUserPictures(userId);
 		return JSONUtil.toJSONString(JSONObject.fromObject(dto));
+	}
+
+	@ResponseBody
+	@RequestMapping(value = "/getEnrollmentExtraInfo",produces = "text/html;charset=UTF-8")
+	public String getEnrollmentextraInfo(@RequestBody String params){
+		JSONObject obj = JSONObject.fromObject(params);
+		Integer emId = obj.getInt("enrollmentId");
+		ResultDto<List<EnrollmentExtra>> dto = new ResultDto<List<EnrollmentExtra>>();
+		try {
+			List<EnrollmentExtra> list = iEnrollmentExtraMapper.queryListByEnrollmentId(emId);
+			dto.setData(list);
+			dto.setResult("S");
+			return(JSONUtil.toJSONString(JSONObject.fromObject(dto)));
+		} catch (Exception e) {
+			e.printStackTrace();
+			dto.setErrorMsg("报名扩展信息查询异常");
+			dto.setResult("F");
+			return(JSONUtil.toJSONString(JSONObject.fromObject(dto)));
+		}
 	}
 }
