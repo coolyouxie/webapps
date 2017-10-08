@@ -221,7 +221,8 @@
 			#{obj.failedReason},
 			#{obj.entryDate},
 			#{obj.reward},
-			#{obj.cashbackDays}
+			#{obj.cashbackDays},
+			#{obj.isHistory}
 		)
 	</insert>
 	
