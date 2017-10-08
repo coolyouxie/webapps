@@ -85,6 +85,7 @@ public class UserServiceImpl implements IUserService {
 				user1.setIdCardNo(user.getIdCardNo());
 				user1.setQq(user.getQq());
 				user1.setWeiXin(user.getWeiXin());
+				user1.setBankCardNum(user.getBankCardNum());
 				iUserMapper.updateById(user1.getId(), user1);
 				dto.setData(user1);
 				return dto;
