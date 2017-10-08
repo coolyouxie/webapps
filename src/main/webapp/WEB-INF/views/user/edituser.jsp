@@ -59,8 +59,15 @@
 				<div class="col-md-3" >
 					<input type="text" id="idCardNo" name="idCardNo" class="form-control" placeholder="请输入身份证号" value="${user.idCardNo}">
 				</div>
-			</div>	
-			
+			</div>
+
+			<div class="form-group">
+				<label class="col-md-2 control-label" for="bankCardNum">银行卡号：</label>
+					<div class="col-md-3" >
+						<input type="text" id="bankCardNum" name="bankCardNum" class="form-control" placeholder="请输入银行卡号" value="${user.bankCardNum}">
+					</div>
+			</div>
+
 			<div class="form-group">
 				<label class="col-md-2 control-label" for="mobile">手机号：</label>
 				<div class="col-md-3" >

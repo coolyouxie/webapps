@@ -30,100 +30,69 @@
 		    height:650,
 		    width:950,
 		    jsonReader : {
-								root : "resultList", // json中代表实际模型数据的入口
-								page : "page.page", // json中代表当前页码的数据   
-								records : "page.records", // json中代表数据行总数的数据   
-								total : 'page.total', // json中代表页码总数的数据 
-								repeatitems : false // 如果设为false，则jqGrid在解析json时，会根据name来搜索对应的数据元素（即可以json中元素可以不按顺序）；而所使用的name是来自于colModel中的name设定。   
-							},
-		    colNames : [ '姓名', '手机号', '性别', '身份证号', '微信号', 'QQ号','总金额', '操作' ],
+				root : "resultList", // json中代表实际模型数据的入口
+				page : "page.page", // json中代表当前页码的数据
+				records : "page.records", // json中代表数据行总数的数据
+				total : 'page.total', // json中代表页码总数的数据
+				repeatitems : false // 如果设为false，则jqGrid在解析json时，会根据name来搜索对应的数据元素（即可以json中元素可以不按顺序）；而所使用的name是来自于colModel中的name设定。
+			},
+		    colNames : [ '姓名', '手机号', '性别', '身份证号','银行卡号', '微信号', 'QQ号','总金额', '操作' ],
 		    colModel : [ {
-								label : 'name',
-								name : 'name',
-								align : 'center',
-								sortable : false,
-								formatter:function(cellValue,options,rowObject){
-									return '<a href="${ctx}/user/getById?id='+rowObject.id+'" style="color:blue">'+cellValue+'</a>';
-								}
-							}, {
-								label : 'mobile',
-								name : 'mobile',
-								align : 'center',
-								sortable : false
-							}, {
-								label : 'gender',
-								name : 'gender',
-								align : 'center',
-								sortable : false,
-								formatter:function(cellValue,options,rowObject){
-									if(cellValue==1){
-										return '男';
-									}else{
-										return '女';
-									}
-								}
-							}, {
-								label : 'idCardNo',
-								name : 'idCardNo',
-								align : 'center',
-								sortable : false
-							}, {
-								label : 'weiXin',
-								name : 'weiXin',
-								align : 'center',
-								sortable : false
-								/* formatter:function(cellValue,options,rowObject){
-									if(cellValue==1){
-										return '超级管理员';
-									}else if(cellValue==2){
-										return '普通管理员';
-									}else if(cellValue==3){
-										return '个人用户';
-									}else if(cellValue==4){
-										return '企业用户';
-									}
-								} */
-							}, {
-								label : 'qq',
-								name : 'qq',
-								align : 'center',
-								sortable : false
-								/* formatter:function(cellValue,options,rowObject){
-									if(cellValue==1){
-										return '小学';
-									}else if(cellValue==2){
-										return '初中';
-									}else if(cellValue==3){
-										return '高中';
-									}else if(cellValue==4){
-										return '中专';
-									}else if(cellValue==5){
-										return '职高';
-									}else if(cellValue==6){
-										return '大专';
-									}else if(cellValue==7){
-										return '本科';
-									}else if(cellValue==8){
-										return '硕士';
-									}else if(cellValue==9){
-										return '博士';
-									}else if(cellValue==10){
-										return '博士后';
-									}else if(!cellValue){
-										return "未填写";
-									}
-								} */
-							},{
-								label:'userWallet.fee',
-								name:'userWallet.fee',
-								align:'center',
-								sortable:false
-							},{
-								label : 'operate',
-								name : 'operate',
-								align : 'center',
-								sortable : false
-							} ],
+				label : 'name',
+				name : 'name',
+				align : 'center',
+				sortable : false,
+				formatter:function(cellValue,options,rowObject){
+					return '<a href="${ctx}/user/getById?id='+rowObject.id+'" style="color:blue">'+cellValue+'</a>';
+				}
+			}, {
+				label : 'mobile',
+				name : 'mobile',
+				align : 'center',
+				sortable : false
+			}, {
+				label : 'gender',
+				name : 'gender',
+				align : 'center',
+				sortable : false,
+				formatter:function(cellValue,options,rowObject){
+					if(cellValue==1){
+						return '男';
+					}else{
+						return '女';
+					}
+				}
+			}, {
+				label : 'idCardNo',
+				name : 'idCardNo',
+				align : 'center',
+				sortable : false
+			}, {
+				label : 'bankCardNum',
+				name : 'bankCardNum',
+				align : 'center',
+				sortable : false
+			}, {
+				label : 'weiXin',
+				name : 'weiXin',
+				align : 'center',
+				sortable : false
+			}, {
+				label : 'qq',
+				name : 'qq',
+				align : 'center',
+				sortable : false
+			},{
+				label:'userWallet.fee',
+				name:'userWallet.fee',
+				align:'center',
+				sortable:false
+			},{
+				label : 'operate',
+				name : 'operate',
+				align : 'center',
+				sortable : false
+			} ],
 		    pager: '#pager',
 		    rowNum:50,
 		    rowList:[50,100,200],
@@ -132,16 +101,16 @@
 		    sortorder: "desc",
 		    caption: "人员列表",
 		    gridComplete : function() { //在此事件中循环为每一行添加日志、废保和查看链接
-								var ids = jQuery("#list").jqGrid('getDataIDs');
-								for ( var i = 0; i < ids.length; i++) {
-									var id = ids[i];
-									var rowData = $('#list').jqGrid('getRowData', id);
-									operateClick = '<a href="${ctx}/user/toUserInfoPage?type=edit&id='+id+'" style="color:blue">编辑</a> <a href="#" style="color:blue" onclick="deleteById('+ id + ')" >删除</a>';
-									jQuery("#list").jqGrid('setRowData', id, {
-										operate : operateClick
-									});
-								}
-							}
+				var ids = jQuery("#list").jqGrid('getDataIDs');
+				for ( var i = 0; i < ids.length; i++) {
+					var id = ids[i];
+					var rowData = $('#list').jqGrid('getRowData', id);
+					var	operateClick = '<a href="${ctx}/user/toUserInfoPage?type=edit&id='+id+'" style="color:blue">编辑</a> <a href="#" style="color:blue" onclick="deleteById('+ id + ')" >删除</a>';
+					jQuery("#list").jqGrid('setRowData', id, {
+						operate : operateClick
+					});
+				}
+			}
 		});
 	});
 	

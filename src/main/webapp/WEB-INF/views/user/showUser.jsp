@@ -118,7 +118,14 @@
 			<div class="col-md-3" >
 				${user.idCardNo}
 			</div>
-		</div>	
+		</div>
+
+		<div class="row">
+			<label class="col-md-2 control-label" >银行卡号：</label>
+			<div class="col-md-3" >
+				${user.bankCardNum}
+			</div>
+		</div>
 			
 		<div class="row">
 			<label class="col-md-2 control-label" for="mobile">手机号：</label>
@@ -133,7 +140,6 @@
 				<c:forEach var="item" items="${user.pictures}" varStatus="status">
 					<img src="${item.picUrl}" style="width:240px;" />
 				</c:forEach>
-
 			</div>
 		</div>
 		
