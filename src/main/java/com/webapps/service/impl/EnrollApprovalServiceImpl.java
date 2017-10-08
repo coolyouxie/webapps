@@ -589,12 +589,6 @@ public class EnrollApprovalServiceImpl implements IEnrollApprovalService {
 			List<EnrollmentExtra> extraList0 = iEnrollmentExtraMapper.queryListByEnrollmentIdAndState(
 					enrollmentId,0);
 			List<EnrollmentExtra> extraList = new ArrayList<EnrollmentExtra>();
-			if(CollectionUtils.isEmpty(extraList0)){
-				dto.setResult("F");
-				dto.setErrorMsg("无可用的期满待审核信息，请确认输入的期满天是否有效");
-				return dto;
-			}
-
 			int maxCashbackDays = -1;
 			for(EnrollmentExtra extra:extraList0){
 				//把期满天数内的数据取出
@@ -605,6 +599,12 @@ public class EnrollApprovalServiceImpl implements IEnrollApprovalService {
 				if(extra.getCashbackDays()>maxCashbackDays){
 					maxCashbackDays = extra.getCashbackDays();
 				}
+			}
+			//如果期满天数内没有满足条件的记录则返回失败
+			if(CollectionUtils.isEmpty(extraList)){
+				dto.setResult("F");
+				dto.setErrorMsg("未匹配到期满日期");
+				return dto;
 			}
 			if(cashbackDays>maxCashbackDays){
 				enrollment.setState(30);
