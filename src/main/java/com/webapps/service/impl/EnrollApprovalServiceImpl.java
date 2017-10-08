@@ -576,7 +576,8 @@ public class EnrollApprovalServiceImpl implements IEnrollApprovalService {
 				dto.setResult("F");
 				return dto;
 			}
-			if(enrollment.getState()!=21&&enrollment.getState()!=32){
+			if(enrollment.getState()!=21&&enrollment.getState()!=32&&enrollment.getState()!=50
+					&&enrollment.getState()!=51&&enrollment.getState()!=52){
 				dto.setErrorMsg("报名信息不是已入职状态，不可审核");
 				dto.setResult("F");
 				return dto;
