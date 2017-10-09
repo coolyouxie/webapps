@@ -60,8 +60,10 @@
 						<li><a href="${ctx}/enrollApproval/toEnrollApprovalListPage" target="mainContainer">会员状态审核列表</a></li>
 						<li><a href="${ctx}/applyExpenditure/toApplyExpenditureListPage" target="mainContainer">会员提现审核列表</a></li>
 					</ul>
+					<ul class="nav nav-sidebar">
+						<li><a href="${ctx}/appServer/toSharePage">分享页面</a></li>
+					</ul>
 				</div>
-				
 				<div class="col-sm-10 col-md-offset-2 main" style="padding: 20px 0 0 0;">
 					<iframe name="mainContainer" width="100%" height="540px" style="margin-bottom:20px;" frameborder="0" scrolling="auto">
 					</iframe>

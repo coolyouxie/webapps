@@ -786,4 +786,9 @@ public class AppController {
 			return(JSONUtil.toJSONString(JSONObject.fromObject(dto)));
 		}
 	}
+	
+	@RequestMapping(value="/toSharePage")
+	public String toSharePage(){
+		return "/common/share";
+	}
 }
