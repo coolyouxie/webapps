@@ -46,19 +46,18 @@
 
 <footer style="background-color:#ffffff">
     <div class="content" style="color:#000">
-        <div class="btnlogo"><img src="${ctx}/css/images/logo.png" style='width:40px'/><span>我的天才网</span></div>
+        <div class="btnlogo"><img src="${ctx}/img/timg-3.jpeg" style="max-width:100%;overflow:hidden;"/></div>
+        <h1>好东西，要分享</h1>
         <div class="w1div">
             <ul data-am-widget="gallery" class="am-gallery am-avg-sm-1 am-avg-md-1 am-avg-lg-1 am-gallery-overlay" >
                 <li class="w2">
                     <div class="am-gallery-item">
-                        <a href="${ctx}/css/amazeUI/Temp-images/dd.jpg">
-                            <img src="${ctx}/css/amazeUI/Temp-images/dd.jpg" />
-                        </a>
+                        <img src="${ctx}/img/1507555053.png" />
                     </div>
                 </li>
             </ul>
         </div>
-        <p>天才网<br>© 2017 天才信息科技股份有限公司.</p>
+        <p>嘉聘网<br>© 2017 嘉聘信息科技股份有限公司.</p>
     </div>
 </footer>
 </body>
