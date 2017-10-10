@@ -233,7 +233,7 @@ public class PictureServiceImpl implements IPictureService {
 				dto.setErrorMsg("未上传图片");
 				return dto;
 			}
-			if(list.size()<4){
+			if(list.size()<3){
 				dto.setData(list);
 				dto.setResult("L");
 				dto.setErrorMsg("部分图片未上传");
