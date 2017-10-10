@@ -327,6 +327,7 @@ public class AppController {
 		if (StringUtils.isNotBlank(companyName)) {
 			Company company = new Company();
 			company.setName(companyName);
+			form.setPublishType(publishType);
 			form.setCompany(company);
 		}
 		try {
