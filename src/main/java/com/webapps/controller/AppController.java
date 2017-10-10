@@ -324,10 +324,10 @@ public class AppController {
 		page.setPage(currentPage);
 		page.setRows(rows);
 		RecruitmentRequestForm form = new RecruitmentRequestForm();
+		form.setPublishType(publishType);
 		if (StringUtils.isNotBlank(companyName)) {
 			Company company = new Company();
 			company.setName(companyName);
-			form.setPublishType(publishType);
 			form.setCompany(company);
 		}
 		try {

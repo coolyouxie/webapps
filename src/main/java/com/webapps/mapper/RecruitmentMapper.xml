@@ -171,10 +171,10 @@
 			<if test="obj.title !=null and obj.title != ''">
 				AND tr.title like concat('%',#{obj.title},'%')
 			</if>
-			<if test="obj.company != null and obj.company.id != null">
+			<if test="obj.company != null and obj.company.id != null and obj.company.id != ''">
 				and tr.company_id = #{obj.company.id,jdbcType=DECIMAL}
 			</if>
-			<if test="obj.company != null and obj.company.name != null">
+			<if test="obj.company != null and obj.company.name != null and obj.company.name != ''">
 				and tc.name like concat('%',#{obj.company.name},'%')
 			</if>
 			<if test="obj.type != null and obj.type != ''">
