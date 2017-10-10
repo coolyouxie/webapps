@@ -318,13 +318,15 @@ public class AppController {
 		JSONObject jsonObj = JSONUtil.toJSONObject(params);
 		int currentPage = jsonObj.getInt("page");
 		int rows = jsonObj.getInt("rows");
-		Integer publishType = jsonObj.getInt("publishType");
+		RecruitmentRequestForm form = new RecruitmentRequestForm();
+		if(jsonObj.containsKey("publishType")){
+			Integer publishType = jsonObj.getInt("publishType");
+			form.setPublishType(publishType);
+		}
 		String companyName = jsonObj.getString("companyName");
 		Page page = new Page();
 		page.setPage(currentPage);
 		page.setRows(rows);
-		RecruitmentRequestForm form = new RecruitmentRequestForm();
-		form.setPublishType(publishType);
 		if (StringUtils.isNotBlank(companyName)) {
 			Company company = new Company();
 			company.setName(companyName);
