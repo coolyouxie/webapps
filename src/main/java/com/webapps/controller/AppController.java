@@ -318,6 +318,7 @@ public class AppController {
 		JSONObject jsonObj = JSONUtil.toJSONObject(params);
 		int currentPage = jsonObj.getInt("page");
 		int rows = jsonObj.getInt("rows");
+		int publishType = jsonObj.getInt("publishType");
 		String companyName = jsonObj.getString("companyName");
 		Page page = new Page();
 		page.setPage(currentPage);

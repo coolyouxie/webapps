@@ -170,7 +170,7 @@
 				and #{obj.enrollTimeEnd} >= tea.create_time
 			</if>
 		</trim>
-		order by tea.create_time asc
+		order by tea.create_time desc
 		<include refid="ORACLE.paginationEnd" />
 	</select>
 	

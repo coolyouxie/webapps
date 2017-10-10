@@ -96,6 +96,7 @@
 				and #{obj.applyTimeEnd} >= tae.create_time
 			</if>
 		</trim>
+		order by tae.create_time desc
 		<include refid="ORACLE.paginationEnd" />
 	</select>
 	
