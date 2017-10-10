@@ -321,7 +321,9 @@ public class AppController {
 		RecruitmentRequestForm form = new RecruitmentRequestForm();
 		if(jsonObj.containsKey("publishType")){
 			Integer publishType = jsonObj.getInt("publishType");
-			form.setPublishType(publishType);
+			if(publishType!=0){
+				form.setPublishType(publishType);
+			}
 		}
 		String companyName = jsonObj.getString("companyName");
 		Page page = new Page();
