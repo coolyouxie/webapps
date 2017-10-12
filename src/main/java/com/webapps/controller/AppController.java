@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.webapps.common.entity.*;
 import com.webapps.mapper.IEnrollmentExtraMapper;
+import net.sf.json.JSON;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -42,6 +43,8 @@ import com.webapps.service.IUserService;
 import com.webapps.service.IUserWalletService;
 
 import net.sf.json.JSONObject;
+
+import javax.xml.stream.util.StreamReaderDelegate;
 
 @Controller
 @RequestMapping(value = "appServer")
@@ -796,5 +799,19 @@ public class AppController {
 	@RequestMapping(value="/toSharePage")
 	public String toSharePage(){
 		return "/common/share";
+	}
+
+	@ResponseBody
+	@RequestMapping(value = "/appVersion",produces = "text/html;charset=UTF-8")
+	public String appVersion(){
+		String iosVersion = (String)PropertyUtil.getProperty("iosVersion");
+		String androidVersion = (String)PropertyUtil.getProperty("androidVersion");
+		ResultDto<JSONObject> dto = new ResultDto<JSONObject>();
+		JSONObject obj = new JSONObject();
+		obj.put("iosVersion",iosVersion);
+		obj.put("androidVersion",androidVersion);
+		dto.setData(obj);
+		dto.setResult("S");
+		return JSONUtil.toJSONString(JSONObject.fromObject(dto));
 	}
 }

@@ -755,11 +755,15 @@ public class EnrollApprovalServiceImpl implements IEnrollApprovalService {
 	}
 
 	private void updateHistoryEnrollment(Integer userId,Integer emId) throws Exception{
-		List<Enrollment> list = iEnrollmentMapper.queryListByUserIdAndState(userId,emId);
+		List<Enrollment> list = iEnrollmentMapper.queryListByUserIdAndState(userId,-1);
 		if(CollectionUtils.isNotEmpty(list)){
 			for(Enrollment e:list){
+				if(emId.equals(e.getId())){
+					e.setIsHistory(0);
+				}else {
+					e.setIsHistory(1);
+				}
 				e.setUpdateTime(new Date());
-				e.setIsHistory(1);
 			}
 			iEnrollmentMapper.batchUpdateToHistory(list);
 		}
