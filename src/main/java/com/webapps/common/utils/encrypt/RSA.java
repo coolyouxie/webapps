@@ -233,6 +233,7 @@ public class RSA {
 		String data = "gKHsbuDQzWemdCqjC50ZuhiK+N/tB61K7B/3Py+U9O+Gbtwpe3CfZkHDlvqQKKyN8tDes1fintzvwFwv14UMo/GG309Y+a0I5mP8y8jzfP5odlPHRQpbDYB54buhzZO10sLx7Ev3JlnrJLdLYpaPsf+gWio3O91jDWzu4JyJRU0=";
 		try {
 			System.out.println(AESEncrypt.encrypt("{\"data\":\"test\"}", "Jt0bS1HfPB2mEIhK"));
+			System.out.println(AESEncrypt.decrypt(Base64.decode("ElikWpVxo4ftrqOe3Sd9TQ=="), AESEncrypt.getKeyBytes("Jt0bS1HfPB2mEIhK")));
 												   
 			String testStr1 = RSA.encrypt(testStr, appPubKey);
 			System.out.println(testStr1);
@@ -250,8 +251,6 @@ public class RSA {
 			System.out.println(testStr);
 			testStr = EncryptUtil.asymmDecry(testStr, priKey, EncryptAlgorithm.RSA);
 			System.out.println(testStr);
-			
-			
 			
 //			KeyGenerator kg = KeyGenerator.getInstance("AES");
 //			kg.init(128);
