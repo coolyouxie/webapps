@@ -806,10 +806,14 @@ public class AppController {
 	public String appVersion(){
 		String iosVersion = (String)PropertyUtil.getProperty("iosVersion");
 		String androidVersion = (String)PropertyUtil.getProperty("androidVersion");
+		String iosUrl = (String)PropertyUtil.getProperty("iosUrl");
+		String androidUrl = (String)PropertyUtil.getProperty("androidUrl");
 		ResultDto<JSONObject> dto = new ResultDto<JSONObject>();
 		JSONObject obj = new JSONObject();
 		obj.put("iosVersion",iosVersion);
 		obj.put("androidVersion",androidVersion);
+		obj.put("iosUrl",iosUrl);
+		obj.put("androidUrl",androidUrl);
 		dto.setData(obj);
 		dto.setResult("S");
 		return JSONUtil.toJSONString(JSONObject.fromObject(dto));
