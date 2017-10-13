@@ -174,8 +174,7 @@
 		<include refid="ORACLE.paginationEnd" />
 	</select>
 	
-	<!-- 用于初始化数据时使用 -->
-	<update id="batchUpdateToDelete">
+	<update id="batchDeleteInLogic">
 		<foreach collection="list" item="item" index="index" open="" close="" separator=";">
 			update t_enrollment_approval
 			<set>

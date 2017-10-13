@@ -606,6 +606,15 @@ public class EnrollApprovalServiceImpl implements IEnrollApprovalService {
 				dto.setErrorMsg("未匹配到期满日期");
 				return dto;
 			}
+			//找到之前所有申请但未审核的期满审核申请记录，将其置为删除状态
+			List<EnrollApproval> eaList = iEnrollApprovalMapper.queryByUserIdEnrollmentIdTypeAndState(enrollment.getUser().getId(), enrollmentId, 2, 0);
+			if(CollectionUtils.isNotEmpty(eaList)){
+				for(EnrollApproval ea:eaList){
+					ea.setDataState(0);
+					ea.setUpdateTime(new Date());
+				}
+				iEnrollApprovalMapper.batchDeleteInLogic(eaList);
+			}
 			if(cashbackDays>maxCashbackDays){
 				enrollment.setState(30);
 			}else {

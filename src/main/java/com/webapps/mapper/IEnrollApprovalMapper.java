@@ -4,12 +4,8 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
-import com.webapps.common.entity.ApplyExpenditure;
 import com.webapps.common.entity.EnrollApproval;
-import com.webapps.common.entity.Enrollment;
 import com.webapps.common.form.EnrollApprovalRequestForm;
-import com.webapps.common.form.EnrollmentRequestForm;
-import com.webapps.common.form.EnrollmentResponseForm;
 
 /**
  * Created by xieshuai on 2017-6-28.
@@ -28,4 +24,6 @@ public interface IEnrollApprovalMapper extends IBaseMapper<EnrollApproval>,IPage
 																	  @Param("enrollmentId")Integer enrollmentId,
 																	  @Param("type")Integer type ,
 																	  @Param("state")Integer state)throws Exception;
+	
+	public int batchDeleteInLogic(List<EnrollApproval> list)throws Exception;
 }
