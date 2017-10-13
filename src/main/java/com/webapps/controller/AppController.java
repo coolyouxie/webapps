@@ -1,50 +1,25 @@
 package com.webapps.controller;
 
-import java.util.List;
-
+import com.google.gson.Gson;
+import com.webapps.common.bean.Page;
+import com.webapps.common.bean.ResultDto;
 import com.webapps.common.entity.*;
+import com.webapps.common.form.*;
+import com.webapps.common.utils.JSONUtil;
+import com.webapps.common.utils.PropertyUtil;
 import com.webapps.mapper.IEnrollmentExtraMapper;
-import net.sf.json.JSON;
+import com.webapps.service.*;
+import net.sf.json.JSONObject;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.google.gson.Gson;
-import com.webapps.common.bean.Page;
-import com.webapps.common.bean.ResultDto;
-import com.webapps.common.form.ApplyExpenditureRequestForm;
-import com.webapps.common.form.BannerConfigRequestForm;
-import com.webapps.common.form.BillRecordRequestForm;
-import com.webapps.common.form.MessageConfigRequestForm;
-import com.webapps.common.form.RecruitmentRequestForm;
-import com.webapps.common.utils.JSONUtil;
-import com.webapps.common.utils.PropertyUtil;
-import com.webapps.service.IAliSmsMsgService;
-import com.webapps.service.IApplyExpenditureService;
-import com.webapps.service.IBannerConfigService;
-import com.webapps.service.IBillRecordService;
-import com.webapps.service.ICompanyService;
-import com.webapps.service.IEnrollApprovalService;
-import com.webapps.service.IEnrollmentService;
-import com.webapps.service.IFeeConfigService;
-import com.webapps.service.IMessageConfigService;
-import com.webapps.service.IPictureService;
-import com.webapps.service.IRecommendService;
-import com.webapps.service.IRecruitmentService;
-import com.webapps.service.IUserService;
-import com.webapps.service.IUserWalletService;
+import java.util.List;
 
-import net.sf.json.JSONObject;
-
-import javax.xml.stream.util.StreamReaderDelegate;
 
 @Controller
 @RequestMapping(value = "appServer")
