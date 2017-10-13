@@ -58,7 +58,7 @@ public class AppController {
 	private IEnrollApprovalService iEnrollApprovalService;
 	
 	@Autowired
-	private IApplyExpenditureService IApplyExpenditureService;
+	private IApplyExpenditureService iApplyExpenditureService;
 	
 	@Autowired
 	private IUserWalletService iUserWalletService;
@@ -470,7 +470,7 @@ public class AppController {
 		JSONObject obj = JSONObject.fromObject(params);
 		Integer userId = obj.getInt("userId");
 		Integer walletId = obj.getInt("walletId");
-		ResultDto<String> dto = IApplyExpenditureService.applyExpenditure(userId, walletId);
+		ResultDto<String> dto = iApplyExpenditureService.applyExpenditure(userId, walletId);
 		return JSONUtil.toJSONString(JSONObject.fromObject(dto));
 	}
 
@@ -585,7 +585,7 @@ public class AppController {
 		try {
 			ApplyExpenditureRequestForm apply = new ApplyExpenditureRequestForm();
 			apply.setWalletId(walletId);
-			page = IApplyExpenditureService.loadPageList(page, apply);
+			page = iApplyExpenditureService.loadPageList(page, apply);
 			dto.setData(page.getResultList());
 			dto.setResult("S");
 		} catch (Exception e) {
