@@ -89,7 +89,7 @@
 								formatter:function(cellValue,options,rowObject){
 									var result = "无";
 									if(rowObject.recruitment){
-										result = '<a href="${ctx}/recruitment/getById?id='+rowObject.company.id+'" style="color:blue">'+cellValue+'</a>';
+										result = '<a href="${ctx}/recruitment/getById?id='+rowObject.recruitment.id+'" style="color:blue">'+cellValue+'</a>';
 									}
 									return result;
 								}

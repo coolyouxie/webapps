@@ -783,12 +783,16 @@ public class AppController {
 		String androidVersion = (String)PropertyUtil.getProperty("androidVersion");
 		String iosUrl = (String)PropertyUtil.getProperty("iosUrl");
 		String androidUrl = (String)PropertyUtil.getProperty("androidUrl");
+		String iosUpdateLog = (String)PropertyUtil.getProperty("iosUpdateLog");
+		String androidUpdateLog = (String)PropertyUtil.getProperty("androidUpdateLog");
 		ResultDto<JSONObject> dto = new ResultDto<JSONObject>();
 		JSONObject obj = new JSONObject();
 		obj.put("iosVersion",iosVersion);
 		obj.put("androidVersion",androidVersion);
 		obj.put("iosUrl",iosUrl);
 		obj.put("androidUrl",androidUrl);
+		obj.put("iosUpdateLog",iosUpdateLog);
+		obj.put("androidUpdateLog",androidUpdateLog);
 		dto.setData(obj);
 		dto.setResult("S");
 		return JSONUtil.toJSONString(JSONObject.fromObject(dto));

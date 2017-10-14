@@ -41,10 +41,10 @@
 								label : 'title',
 								name : 'title',
 								align : 'center',
-								sortable : false,
-								formatter:function(cellValue,options,rowObject){
-									return '<a href="${ctx}/bannerConfig/getById?id='+rowObject.id+'" style="color:blue">'+cellValue+'</a>';
-								}
+								sortable : false
+								<%--formatter:function(cellValue,options,rowObject){--%>
+									<%--return '<a href="${ctx}/bannerConfig/getById?id='+rowObject.id+'" style="color:blue">'+cellValue+'</a>';--%>
+								<%--}--%>
 							}, {
 								label : 'picUrl',
 								name : 'picUrl',
