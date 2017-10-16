@@ -30,7 +30,7 @@
 	<sql id="select_columns">
 		tea.ID,tea.user_id,tea.state,tea.type, tea.data_state,tea.CREATE_TIME,tea.UPDATE_TIME,
 		tea.operator_id,tea.remark,tea.is_talked,tea.talk_result,tea.enrollment_id,
-		tea.reward,tea.entry_date,tea.cashback_days
+		tea.reward,tea.entry_date,tea.cashback_days,tea.failed_Reason
 	</sql>
 
 	<sql id="insert_columns">
@@ -218,6 +218,7 @@
 			is_talked = #{obj.isTalked},
 			talk_result = #{obj.talkResult},
 			remark = #{obj.remark},
+			failed_reason = #{obj.failedReason},
 			data_state = #{obj.dataState},
 			update_time = #{obj.updateTime},
 			reward = #{obj.reward},
