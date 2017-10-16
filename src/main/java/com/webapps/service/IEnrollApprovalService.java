@@ -5,8 +5,9 @@ import java.util.List;
 
 import com.webapps.common.bean.Page;
 import com.webapps.common.bean.ResultDto;
+import com.webapps.common.dto.EntryDetailDto;
 import com.webapps.common.entity.EnrollApproval;
-import com.webapps.common.entity.Enrollment;
+import com.webapps.common.entity.EnrollmentExtra;
 import com.webapps.common.form.EnrollApprovalRequestForm;
 
 import net.sf.json.JSONObject;
@@ -79,5 +80,8 @@ public interface IEnrollApprovalService {
 	 * @throws Exception
 	 */
 	public ResultDto<EnrollApproval> expireApprovalById(Integer id,Integer state,String failedReason,
-														Integer approverId)throws Exception;;
+														Integer approverId)throws Exception;
+	
+	public EntryDetailDto loadEntryDetail(Integer enrollApprovalId)throws Exception;
+														
 }

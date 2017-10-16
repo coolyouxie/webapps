@@ -134,12 +134,15 @@
 								align : 'center',
 								sortable : false,
 								formatter:function(cellValue,options,rowObject){
-									var result = null;
+									var result = "";
 									if(rowObject.state==0){
 										result = '<button class="btn btn-primary btn-sm" onclick="showModal('+rowObject.id+',1,'+rowObject.type+')">通过</button>'+
 										'<button class="btn btn-primary btn-sm" onclick="showModal('+rowObject.id+',2,'+rowObject.type+')">不通过</button>';
 									}else{
 										result = "已审核";
+									}
+									if(rowObject.type==2){
+										result += '<a class="btn btn-primary btn-sm" onclick="toEntryDetail('+rowObject.id+')">期满信息</a>';
 									}
 									return result;
 								}
@@ -252,6 +255,10 @@
 		}
 		return cashbackData;
     }
+	
+	function toEntryDetail(id){
+		window.location.href="${ctx}/enrollApproval/getEntryDetailById?id="+id;
+	}
 </script>
 <style>
 	.input-group-sm {

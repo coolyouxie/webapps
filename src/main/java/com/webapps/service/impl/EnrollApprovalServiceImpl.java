@@ -19,6 +19,7 @@ import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import com.webapps.common.bean.Page;
 import com.webapps.common.bean.ResultDto;
+import com.webapps.common.dto.EntryDetailDto;
 import com.webapps.common.form.EnrollApprovalRequestForm;
 import com.webapps.common.utils.DateUtil;
 import com.webapps.common.utils.PropertyUtil;
@@ -55,6 +56,12 @@ public class EnrollApprovalServiceImpl implements IEnrollApprovalService {
 
 	@Autowired
 	private IEnrollmentExtraMapper iEnrollmentExtraMapper;
+	
+	@Autowired
+	private ICompanyMapper iCompanyMapper;
+	
+	@Autowired
+	private IRecruitmentMapper iRecruitmentMapper;
 
 	@Override
 	public Page loadEnrollApprovalList(Page page, EnrollApprovalRequestForm form) throws Exception {
@@ -578,7 +585,7 @@ public class EnrollApprovalServiceImpl implements IEnrollApprovalService {
 			}
 			if(enrollment.getState()!=21&&enrollment.getState()!=32&&enrollment.getState()!=50
 					&&enrollment.getState()!=51&&enrollment.getState()!=52){
-				dto.setErrorMsg("报名信息不是已入职状态，不可审核");
+				dto.setErrorMsg("信息状态不符或已发起申请，请勿重复发起");
 				dto.setResult("F");
 				return dto;
 			}
@@ -1015,6 +1022,24 @@ public class EnrollApprovalServiceImpl implements IEnrollApprovalService {
 			dto.setResult("F");
 			return dto;
 		}
+	}
+
+	@Override
+	public EntryDetailDto loadEntryDetail(Integer enrollApprovalId) throws Exception {
+		EntryDetailDto dto = new EntryDetailDto();
+		EnrollApproval ea = iEnrollApprovalMapper.getById(enrollApprovalId);
+		Enrollment enrollment = iEnrollmentMapper.getById(ea.getEnrollmentId());
+		List<EnrollmentExtra> list = iEnrollmentExtraMapper.queryListByEnrollmentId(ea.getEnrollmentId());
+		User user = iUserMapper.getById(enrollment.getUser().getId());
+		Company company = iCompanyMapper.getById(enrollment.getCompany().getId());
+		Recruitment recruitment = iRecruitmentMapper.getById(enrollment.getRecruitment().getId());
+		dto.setCompany(company);
+		dto.setEnrollApproval(ea);
+		dto.setEnrollment(enrollment);
+		dto.setExtraList(list);
+		dto.setRecruitment(recruitment);
+		dto.setUser(user);
+		return dto;
 	}
 
 }

@@ -1,6 +1,6 @@
 package com.webapps.controller;
 
-import java.math.BigDecimal;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -13,8 +13,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.webapps.common.bean.Page;
 import com.webapps.common.bean.ResultDto;
+import com.webapps.common.dto.EntryDetailDto;
 import com.webapps.common.entity.EnrollApproval;
 import com.webapps.common.entity.Enrollment;
+import com.webapps.common.entity.EnrollmentExtra;
 import com.webapps.common.entity.User;
 import com.webapps.common.form.EnrollApprovalRequestForm;
 import com.webapps.common.utils.JSONUtil;
@@ -108,6 +110,17 @@ public class EnrollApprovalController {
 			e.printStackTrace();
 		}
 		return JSONUtil.toJSONString(JSONUtil.toJSONObject(dto));
+	}
+	
+	@RequestMapping(value="/getEntryDetailById")
+	public String getEntryDetailById(Model model,Integer id){
+		try {
+			EntryDetailDto dto = iEnrollApprovalService.loadEntryDetail(id);
+			model.addAttribute("dto", dto);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "/enrollApproval/entryDetail";
 	}
 
 }

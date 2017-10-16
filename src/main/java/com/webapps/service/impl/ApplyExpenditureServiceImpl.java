@@ -1,5 +1,6 @@
 package com.webapps.service.impl;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -66,8 +67,14 @@ public class ApplyExpenditureServiceImpl implements IApplyExpenditureService {
 				this.saveBillRecrod(ae, uw);
 			}
 			if(state==2){
+				//如果审批没有通过则还原钱包金额
 				ae.setReason(reason);
-				uw.setFee(ae.getFee());
+				BigDecimal leftFee = uw.getFee();
+				if(leftFee==null){
+					leftFee = new BigDecimal(0);
+				}
+				BigDecimal totalFee = leftFee.add(ae.getFee());
+				uw.setFee(totalFee);
 				uw.setUpdateTime(new Date());
 				iUserWalletMapper.updateById(uw.getId(), uw);
 			}
