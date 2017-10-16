@@ -11,7 +11,7 @@
     </bean>
     <tx:annotation-driven transaction-manager="transactionManager" />
     
-	<bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource" destroy-method="shutdown">
+	<bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource" destroy-method="close">
 		<property name="driverClassName" value="${hikaricp.driverClassName}"/>
         <property name="jdbcUrl" value="${hikaricp.url}"/>
         <property name="username" value="${hikaricp.username}"/>
