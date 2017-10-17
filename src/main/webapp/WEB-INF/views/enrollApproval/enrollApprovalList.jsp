@@ -141,7 +141,7 @@
 									}else{
 										result = "已审核  ";
 									}
-									if(rowObject.type==2){
+									if(rowObject.state!=0){
 										result += '  <a class="btn btn-primary btn-sm" onclick="toEntryDetail('+rowObject.id+')">期满信息</a>';
 									}
 									return result;
