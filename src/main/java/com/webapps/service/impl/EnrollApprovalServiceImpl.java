@@ -515,6 +515,12 @@ public class EnrollApprovalServiceImpl implements IEnrollApprovalService {
 		try {
 			Enrollment enrollment = iEnrollmentMapper.getById(enrollemntId);
 			if(enrollment!=null){
+				User user = iUserMapper.getById(userId);
+				if(StringUtils.isBlank(user.getName())||StringUtils.isBlank(user.getIdCardNo())){
+					dto.setErrorMsg("请先在用户信息页面填写姓名和身份证号");
+					dto.setResult("F");
+					return dto;
+				}
 				if(enrollment.getState()!=1&&enrollment.getState()!=22){
 					dto.setErrorMsg("报名信息不是入职待审核状态，不可审核");
 					dto.setResult("F");
@@ -524,9 +530,6 @@ public class EnrollApprovalServiceImpl implements IEnrollApprovalService {
 				enrollment.setUpdateTime(new Date());
 				enrollment.setEntryDate(entryDate);
 				iEnrollmentMapper.updateById(enrollemntId, enrollment);
-				User user = new User();
-				user.setId(userId);
-				enrollment.setUser(user);
 				EnrollApproval ea = saveEnrollApprova(entryDate, enrollment,1,null,null);
 				dto.setResult("S");
 				dto.setData(ea);

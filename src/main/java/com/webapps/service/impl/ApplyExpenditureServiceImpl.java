@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.mybatis.spring.MyBatisSystemException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,10 +18,12 @@ import com.webapps.common.bean.Page;
 import com.webapps.common.bean.ResultDto;
 import com.webapps.common.entity.ApplyExpenditure;
 import com.webapps.common.entity.BillRecord;
+import com.webapps.common.entity.User;
 import com.webapps.common.entity.UserWallet;
 import com.webapps.common.form.ApplyExpenditureRequestForm;
 import com.webapps.mapper.IApplyExpenditureMapper;
 import com.webapps.mapper.IBillRecordMapper;
+import com.webapps.mapper.IUserMapper;
 import com.webapps.mapper.IUserWalletMapper;
 import com.webapps.service.IApplyExpenditureService;
 
@@ -38,6 +41,9 @@ public class ApplyExpenditureServiceImpl implements IApplyExpenditureService {
 	
 	@Autowired
 	private IBillRecordMapper iBillRecordMapper;
+	
+	@Autowired
+	private IUserMapper iUserMapper;
 
 	@Override
 	public Page loadPageList(Page page, ApplyExpenditureRequestForm apply) {
@@ -115,6 +121,12 @@ public class ApplyExpenditureServiceImpl implements IApplyExpenditureService {
 		ResultDto<String> dto = new ResultDto<String>();
 		UserWallet uw = null;
 		try {
+			User user = iUserMapper.getById(userId);
+			if(user!=null&&StringUtils.isBlank(user.getBankCardNum())){
+				dto.setResult("F");
+				dto.setErrorMsg("请填写银行卡号，否则无法申请提现");
+				return dto;
+			}
 			if(walletId==null||walletId==-1){
 				uw = iUserWalletMapper.queryByUserId(userId);
 				if(uw==null){

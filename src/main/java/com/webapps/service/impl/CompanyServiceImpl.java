@@ -56,14 +56,8 @@ public class CompanyServiceImpl implements ICompanyService {
 	public Company getById(Integer id) throws Exception {
 		Company company = iCompanyMapper.getById(id);
 		if(company!=null){
-			List<Picture> pics = iPictureMapper.queryListByFkId(company.getId());
+			List<Picture> pics = iPictureMapper.queryByFkIdTypes(company.getId(),"1,2,3");
 			company.setPictures(pics);
-//			if(company.getIsMessage()==1){
-//				List<MessageConfig> messages = iMessageConfigMapper.getByFkIdTypeAndBelongType(id, 3, 2);
-//				if(CollectionUtils.isNotEmpty(messages)){
-//					company.setMessage(messages.get(0));
-//				}
-//			}
 		}
 		
 		return company;

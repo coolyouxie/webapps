@@ -39,6 +39,10 @@
 		select <include refid="select_columns" /> from t_picture where type = #{type} and fk_id=#{fkId} and data_state = 1
 	</select>
 	
+	<select id="queryByFkIdTypes" resultMap="resultMap">
+		select <include refid="select_columns" /> from t_picture where type in (#{type}) and fk_id=#{fkId} and data_state = 1
+	</select>
+	
 	<select id="queryListByFkId" resultMap="resultMap">
 		select <include refid="select_columns" /> from t_picture where fk_id = #{fk_id} and data_state = 1
 	</select>
