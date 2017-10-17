@@ -14,6 +14,7 @@
 		<result column="user_id" jdbcType="DECIMAL" property="user.id" />
 		<result column="user_name" jdbcType="VARCHAR" property="user.name" />
 		<result column="user_mobile" jdbcType="VARCHAR" property="user.mobile" />
+		<result column="id_card_no" jdbcType="VARCHAR" property="user.idCardNo" />
 	</resultMap>
 
 	<sql id="select_columns">
@@ -71,7 +72,8 @@
 		<include refid="select_columns" />,
 		tu.name as user_name,
 		tu.mobile as user_mobile,
-		tu.id as user_id
+		tu.id as user_id,
+		tu.id_card_no as id_card_no
 		FROM t_apply_expenditure tae
 		left join t_user_wallet tuw on tuw.id=tae.wallet_id
 		left join t_user tu on tuw.user_id=tu.id
