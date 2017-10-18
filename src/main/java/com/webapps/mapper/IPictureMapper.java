@@ -24,5 +24,5 @@ public interface IPictureMapper extends IBaseMapper<Picture>,IPageMapper<Picture
 
 	public List<Picture> queryUserPictures(@Param("userId")Integer userId)throws Exception;
 	
-	public List<Picture> queryByFkIdTypes(@Param("fkId")Integer fkId,@Param("types")String types)throws Exception;
+	public List<Picture> queryByFkIdTypes(@Param("fkId")Integer fkId,@Param("types")Integer[] types)throws Exception;
 }

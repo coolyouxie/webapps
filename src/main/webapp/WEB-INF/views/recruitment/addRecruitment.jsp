@@ -104,7 +104,7 @@
 			<div class="form-group">
 				<label class="col-md-2 control-label" for="">公司名称：</label>
 				<div class="col-md-4" >
-					<label class="col-md-2 control-label" >${company.name}</label>
+					<label class="col-md-8 control-label" >${company.name}</label>
 				</div>
 			</div>
 			

@@ -1,6 +1,5 @@
 package com.webapps.service.impl;
 
-import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -14,12 +13,10 @@ import com.webapps.common.bean.Page;
 import com.webapps.common.bean.ResultDto;
 import com.webapps.common.entity.BannerConfig;
 import com.webapps.common.entity.Company;
-import com.webapps.common.entity.MessageConfig;
 import com.webapps.common.entity.Picture;
 import com.webapps.common.form.CompanyRequestForm;
 import com.webapps.mapper.IBannerConfigMapper;
 import com.webapps.mapper.ICompanyMapper;
-import com.webapps.mapper.IMessageConfigMapper;
 import com.webapps.mapper.IPictureMapper;
 import com.webapps.service.ICompanyService;
 
@@ -29,6 +26,8 @@ public class CompanyServiceImpl implements ICompanyService {
 	
 	private static Logger logger = Logger.getLogger(CompanyServiceImpl.class);
 	
+	private static Integer[] picTypes = new Integer[]{1,2,3};
+	
 	@Autowired
 	private ICompanyMapper iCompanyMapper;
 	
@@ -37,9 +36,6 @@ public class CompanyServiceImpl implements ICompanyService {
 	
 	@Autowired
 	private IBannerConfigMapper iBannerConfigMapper;
-	
-	@Autowired
-	private IMessageConfigMapper iMessageConfigMapper;
 
 	@Override
 	public Page loadCompanyList(Page page, CompanyRequestForm company) throws Exception {
@@ -56,7 +52,7 @@ public class CompanyServiceImpl implements ICompanyService {
 	public Company getById(Integer id) throws Exception {
 		Company company = iCompanyMapper.getById(id);
 		if(company!=null){
-			List<Picture> pics = iPictureMapper.queryByFkIdTypes(company.getId(),"1,2,3");
+			List<Picture> pics = iPictureMapper.queryByFkIdTypes(company.getId(),picTypes);
 			company.setPictures(pics);
 		}
 		

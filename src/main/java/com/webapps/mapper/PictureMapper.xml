@@ -40,7 +40,14 @@
 	</select>
 	
 	<select id="queryByFkIdTypes" resultMap="resultMap">
-		select <include refid="select_columns" /> from t_picture where type in (#{type}) and fk_id=#{fkId} and data_state = 1
+		select <include refid="select_columns" /> 
+		from t_picture 
+		where type in 
+		<foreach collection="types" item="item" open="(" separator=","
+				close=")">
+			#{item}
+	   </foreach>
+		and fk_id=#{fkId} and data_state = 1
 	</select>
 	
 	<select id="queryListByFkId" resultMap="resultMap">
