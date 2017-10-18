@@ -42,7 +42,7 @@
 								total : 'page.total', // json中代表页码总数的数据 
 								repeatitems : false // 如果设为false，则jqGrid在解析json时，会根据name来搜索对应的数据元素（即可以json中元素可以不按顺序）；而所使用的name是来自于colModel中的name设定。   
 							},
-		    colNames : [ '姓名', '手机号','身份证号','提现金额','状态',"申请时间",'备注','操作'],
+		    colNames : [ '姓名', '手机号','身份证号','银行卡号','提现金额','状态',"申请时间",'备注','操作'],
 		    colModel : [ {
 								label : 'user.name',
 								name : 'user.name',
@@ -59,6 +59,11 @@
 							}, {
 								label : 'user.idCardNo',
 								name : 'user.idCardNo',
+								align : 'center',
+								sortable : false
+							}, {
+								label : 'user.bankCardNum',
+								name : 'user.bankCardNum',
 								align : 'center',
 								sortable : false
 							}, {

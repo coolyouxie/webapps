@@ -30,21 +30,7 @@ public interface IEnrollApprovalService {
 	public ResultDto<EnrollApproval> approvalById(Integer id,Integer state,String remark,Integer approverId)throws Exception;
 	
 	public EnrollApproval getById(Integer id)throws Exception;
-	
-	/**
-	 * 根据等审核记录ID，审核类型（入职、期满等）和审核状态对人员信息进行审核操作
-	 * approvalType		1入职审核，2期满审核
-	 * @param id
-	 * @param state
-	 * @return
-	 * @throws Exception
-	 */
-	public ResultDto<EnrollApproval> enrollApproval(Integer id,Integer state,String failedReason,
-			BigDecimal reward,Integer approverId,Integer cashbackDays)throws Exception;
-	
-	public ResultDto<EnrollApproval> expireApproval(Integer id,Integer state,String failedReason,
-			Integer approverId)throws Exception;
-	
+
 	public ResultDto<EnrollApproval> applyEntryApproval(JSONObject params);
 	
 	public ResultDto<EnrollApproval> applyExpireApproval(JSONObject params);

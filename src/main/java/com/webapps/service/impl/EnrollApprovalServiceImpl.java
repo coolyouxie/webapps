@@ -1,12 +1,15 @@
 package com.webapps.service.impl;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
+import com.webapps.common.bean.Page;
+import com.webapps.common.bean.ResultDto;
+import com.webapps.common.dto.EntryDetailDto;
 import com.webapps.common.entity.*;
+import com.webapps.common.form.EnrollApprovalRequestForm;
+import com.webapps.common.utils.DateUtil;
+import com.webapps.common.utils.PropertyUtil;
 import com.webapps.mapper.*;
+import com.webapps.service.IEnrollApprovalService;
+import net.sf.json.JSONObject;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -17,15 +20,10 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
-import com.webapps.common.bean.Page;
-import com.webapps.common.bean.ResultDto;
-import com.webapps.common.dto.EntryDetailDto;
-import com.webapps.common.form.EnrollApprovalRequestForm;
-import com.webapps.common.utils.DateUtil;
-import com.webapps.common.utils.PropertyUtil;
-import com.webapps.service.IEnrollApprovalService;
-
-import net.sf.json.JSONObject;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 @Service
 @Transactional
@@ -59,7 +57,7 @@ public class EnrollApprovalServiceImpl implements IEnrollApprovalService {
 	
 	@Autowired
 	private ICompanyMapper iCompanyMapper;
-	
+
 	@Autowired
 	private IRecruitmentMapper iRecruitmentMapper;
 
@@ -101,247 +99,7 @@ public class EnrollApprovalServiceImpl implements IEnrollApprovalService {
 		EnrollApproval ea = iEnrollApprovalMapper.getById(id);
 		return ea;
 	}
-
-	@Transactional(propagation = Propagation.REQUIRED,rollbackFor={Exception.class, RuntimeException.class,MyBatisSystemException.class})
-	public ResultDto<EnrollApproval> enrollApproval(Integer id, Integer state, 
-			String failedReason,BigDecimal reward,Integer approverId,Integer cashbackDays) throws Exception {
-		ResultDto<EnrollApproval> dto = new ResultDto<EnrollApproval>();
-		try {
-			EnrollApproval ea = iEnrollApprovalMapper.getById(id);
-			if(ea==null){
-				dto.setErrorMsg("未找到待审核信息，请刷新页面后再试");
-				dto.setResult("F");
-				return dto;
-			}
-			Enrollment enrollment = iEnrollmentMapper.getById(ea.getEnrollmentId());
-			if(enrollment==null){
-				dto.setErrorMsg("未找到报名信息，请确认后再次审核");
-				dto.setResult("F");
-				return dto;
-			}
-			User user = null;
-			if(enrollment.getUser()==null||enrollment.getUser().getId()==null){
-				dto.setErrorMsg("审核时部分信息未找到");
-				dto.setResult("F");
-				return dto;
-			}
-			user = iUserMapper.getById(enrollment.getUser().getId());
-			if(user==null){
-				dto.setErrorMsg("审核时获取用户信息失败");
-				dto.setResult("F");
-				return dto;
-			}
-			if(enrollment.getState()==20&&ea.getType()==1){
-				//入职审核
-				if(state==1){
-					enrollment.setState(21);
-					enrollment.setUpdateTime(new Date());
-					enrollment.setReward(reward);
-					enrollment.setCashbackDays(cashbackDays);
-					ea.setState(1);
-					ea.setUpdateTime(new Date());
-					ea.setReward(reward);
-					ea.setCashbackDays(cashbackDays);
-					//更新用户状态到已入职
-					user.setCurrentState(2);
-					user.setUpdateTime(new Date());
-					//先将之前牌入职审核通过和期满审核通过的审核记录状态个性为已离职状态
-					List<Enrollment> list = iEnrollmentMapper.queryListByUserIdStateAndId(user.getId(),id);
-					cancelOldEnrollment(list);
-					iUserMapper.updateById(user.getId(), user);
-				}else{
-					approvalFailed(failedReason, ea, enrollment);
-				}
-				ea.setOperatorId(approverId);
-				iEnrollmentMapper.updateById(enrollment.getId(), enrollment);
-				iEnrollApprovalMapper.updateById(ea.getId(), ea);
-				dto.setResult("S");
-				return dto;
-			}else{
-				dto.setErrorMsg("审核状态不匹配，请刷新页面后再试");
-				dto.setResult("F");
-				return dto;
-			}
-		} catch (Exception e) {
-			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-			logger.error("入职审核异常："+e.getMessage());
-			dto.setErrorMsg("入职审核异常");
-			dto.setResult("F");
-			return dto;
-		}
-	}
-
-	@Override
-	@Transactional(propagation = Propagation.REQUIRED,rollbackFor={Exception.class, RuntimeException.class,MyBatisSystemException.class})
-	public ResultDto<EnrollApproval> expireApproval(Integer id, Integer state, String failedReason,Integer approverId) throws Exception {
-		ResultDto<EnrollApproval> dto = new ResultDto<EnrollApproval>();
-		try {
-			EnrollApproval ea = iEnrollApprovalMapper.getById(id);
-			if(ea==null){
-				dto.setErrorMsg("未找到待审核信息，请刷新页面后再试");
-				dto.setResult("F");
-				return dto;
-			}
-			Enrollment enrollment = iEnrollmentMapper.getById(ea.getEnrollmentId());
-			if(enrollment==null){
-				dto.setErrorMsg("未找到报名信息，请确认后再次审核");
-				dto.setResult("F");
-				return dto;
-			}
-			User user = null;
-			if(enrollment.getUser()==null||enrollment.getUser().getId()==null){
-				dto.setErrorMsg("审核时部分信息未找到");
-				dto.setResult("F");
-				return dto;
-			}
-			user = iUserMapper.getById(enrollment.getUser().getId());
-			if(user==null){
-				dto.setErrorMsg("审核时获取用户信息失败");
-				dto.setResult("F");
-				return dto;
-			}
-			if(enrollment.getState()==30&&ea.getType()==2){
-				//期满审核
-				if(state==1){
-					enrollment.setState(31);
-					enrollment.setUpdateTime(new Date());
-					ea.setState(1);
-					ea.setUpdateTime(new Date());
-					ea.setReward(enrollment.getReward());
-					//这里还需要将日志记录到t_wallet_record表中
-					saveUserWalletAndRecord(enrollment);
-					//更新用户状态到已期满
-					user.setUpdateTime(new Date());
-					user.setCurrentState(3);
-					//先将之前牌入职审核通过和期满审核通过的审核记录状态个性为已离职状态
-//					List<Enrollment> list = iEnrollmentMapper.queryListByUserIdAndState(user.getId());
-//					if(CollectionUtils.isNotEmpty(list)){
-//						for(Enrollment em :list){
-//							em.setState(4);
-//							em.setUpdateTime(new Date());
-//						}
-//						iEnrollmentMapper.batchUpdate(list);
-//					}
-					iUserMapper.updateById(user.getId(), user);
-				}else{
-					enrollment.setState(32);
-					enrollment.setUpdateTime(new Date());
-					enrollment.setFailedReason(failedReason);
-					ea.setState(2);
-					ea.setUpdateTime(new Date());
-					ea.setFailedReason(failedReason);
-				}
-				ea.setOperatorId(approverId);
-				iEnrollmentMapper.updateById(enrollment.getId(), enrollment);
-				iEnrollApprovalMapper.updateById(ea.getId(), ea);
-				dto.setResult("S");
-				return dto;
-			}else{
-				dto.setErrorMsg("审核状态不匹配，请刷新页面后再试");
-				dto.setResult("F");
-				return dto;
-			}
-		} catch (Exception e) {
-			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-			logger.error("期满审核异常："+e.getMessage());
-			e.printStackTrace();
-			dto.setErrorMsg("期满审核异常");
-			dto.setResult("F");
-			return dto;
-		}
-	}
 	
-	private ResultDto<String> saveUserWalletAndRecord(Enrollment enrollment)throws Exception{
-		ResultDto<String> dto = new ResultDto<String>();
-		//1先保存期满者自己的返费
-		//先找到注册用户信息
-		User user = iUserMapper.getById(enrollment.getUser().getId());
-		if(user==null){
-			dto.setErrorMsg("审核时查询用户信息失败");
-			dto.setResult("F");
-			return dto;
-		}
-		UserWallet uw = iUserWalletMapper.queryByUserId(user.getId());
-		if(uw==null||uw.getId()==null){
-			uw = new UserWallet();
-			uw.setCreateTime(new Date());
-			uw.setDataState(1);
-			uw.setFee(enrollment.getReward());
-			uw.setUserId(user.getId());
-			uw.setState(0);
-			iUserWalletMapper.insert(uw);
-			//保存账单记录
-			saveBillRecrod(enrollment, uw,3,null);
-		}else{
-			BigDecimal fee = uw.getFee();
-			BigDecimal reward = enrollment.getReward();
-			fee = fee.add(reward);
-			uw.setFee(fee);
-			uw.setUpdateTime(new Date());
-			iUserWalletMapper.updateById(uw.getId(), uw);
-			saveBillRecrod(enrollment, uw,3,null);
-		}
-		if(user.getIsPayedRecommendFee()==1){
-			//如果已经支付过推荐费，则不需要再次支付
-			dto.setResult("S");
-			return dto;
-		}
-		List<Recommend> reList = iRecommendMapper.queryByMobile(user.getTelephone());
-		if(CollectionUtils.isEmpty(reList)){
-			dto.setResult("S");
-			return dto;
-		}
-		Recommend re = reList.get(0);
-		Integer overDays = Integer.valueOf((String)PropertyUtil.getProperty("recommend_over_days"));
-		//如果用户注册时间超过了推荐超期天数，则不返费给推荐者
-		Date registerDate = user.getCreateTime();
-		Date recommendDate = re.getCreateTime();
-		double days = DateUtil.getDaysBetweenTwoDates(recommendDate, registerDate);
-		if(days>overDays){
-			//更新用户推荐费为已支付
-			return updateUserIsPayedRecommedFee(dto, user);
-		}
-		//如果用户入职后没在规定天数入职成功，也不能返费给推荐者
-		Integer entryOverDays = Integer.valueOf((String)PropertyUtil.getProperty("entry_over_days"));
-		Date entryDate = enrollment.getEntryDate();
-		days = DateUtil.getDaysBetweenTwoDates(registerDate, entryDate);
-		if(days>entryOverDays){
-			return updateUserIsPayedRecommedFee(dto, user);
-		}
-		//如果即满足在推荐有效期注册会员，又满足在入职期内成功入职的，则返费给推荐者
-		UserWallet uw1 = iUserWalletMapper.queryByUserId(re.getUser().getId());
-		List<FeeConfig> fcList = iFeeConfigMapper.queryAllByDataState(1);
-		FeeConfig fc = null;
-		for (FeeConfig temp:fcList){
-			if(temp.getType()==3){
-				fc = temp;
-			}
-		}
-		if(uw1==null||uw1.getId()==null){
-			uw1 = new UserWallet();
-			uw1.setFee(fc.getFee());
-			uw1.setCreateTime(new Date());
-			uw1.setDataState(1);
-			uw1.setState(0);
-			uw1.setUserId(re.getUser().getId());
-			iUserWalletMapper.insert(uw1);
-			saveBillRecrod(enrollment, uw1,1,fc);
-			//更新用户推荐费为已支付
-			return updateUserIsPayedRecommedFee(dto, user);
-		}
-		BigDecimal fee1 = uw1.getFee();
-		fee1 = fee1.add(fc.getFee());
-		uw1.setFee(fee1);
-		uw1.setUpdateTime(new Date());
-		iUserWalletMapper.updateById(uw1.getId(),uw1);
-		//更新用户推荐费为已支付
-		user.setIsPayedRecommendFee(1);
-		user.setUpdateTime(new Date());
-		iUserMapper.updateById(user.getId(),user);
-		saveBillRecrod(enrollment, uw1,1,fc);
-		dto.setResult("S");
-		return dto;
-	}
 
 	/**
 	 * 分阶段返费审核时，保存各个流程中的金额信息
@@ -382,6 +140,11 @@ public class EnrollApprovalServiceImpl implements IEnrollApprovalService {
 		//2.判断是否需要支付推荐费给推荐用户
 		if(user.getIsPayedRecommendFee()==1){
 			//如果已经支付过推荐费，则不需要再次支付
+			dto.setResult("S");
+			return dto;
+		}
+		//如果报名信息状态为31，则说明是最后一次期满审核，此时才能发放推荐费
+		if (enrollment.getState()!=31){
 			dto.setResult("S");
 			return dto;
 		}
@@ -962,13 +725,17 @@ public class EnrollApprovalServiceImpl implements IEnrollApprovalService {
 			if((enrollment.getState()==50||enrollment.getState()==30)&&ea.getType()==2){
 				//期满审核
 				if(state==1){
+					enrollment.setUpdateTime(new Date());
 					if(enrollment.getState()==50){
 						enrollment.setState(51);
 					}
 					if(enrollment.getState()==30){
 						enrollment.setState(31);
+						//如果该条报名记录已完成所有期满审核，则设置用户信息到期满状态
+						user.setCurrentState(3);
+						user.setUpdateTime(new Date());
+						iUserMapper.updateById(user.getId(), user);
 					}
-					enrollment.setUpdateTime(new Date());
 					ea.setState(1);
 					ea.setUpdateTime(new Date());
 					//更新分阶段期满返费信息状态
@@ -987,13 +754,8 @@ public class EnrollApprovalServiceImpl implements IEnrollApprovalService {
 					if(fee.compareTo(new BigDecimal(0))==0){
 						fee = ea.getReward();//这里是用来测试的数据，可能会做进一步修改
 					}
+					//保存用户的资金信息和推荐费信息
 					saveUserWalletAndRecord(enrollment,fee);
-					//更新用户状态到已期满
-					user.setUpdateTime(new Date());
-					if (enrollment.getState()==31){
-						user.setCurrentState(3);
-					}
-					iUserMapper.updateById(user.getId(), user);
 				}else{
 					if (enrollment.getState()==30){
 						enrollment.setState(32);
