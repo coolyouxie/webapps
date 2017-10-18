@@ -73,6 +73,7 @@
 						<option value="1" <c:if test="${messageConfig.type==1}">selected</c:if>>推荐</option>
 						<option value="2" <c:if test="${messageConfig.type==2}">selected</c:if>>分享</option>
 						<option value="3" <c:if test="${messageConfig.type==3}">selected</c:if>>详情</option>
+						<option value="4" <c:if test="${messageConfig.type==4}">selected</c:if>>补全信息</option>
 					</select>
 				</label>
 				<br/>

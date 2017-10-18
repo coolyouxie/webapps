@@ -110,6 +110,7 @@
 						<option value="1">推荐</option>
 						<option value="2">分享</option>
 						<option value="3" <c:if test="${type==3}">selected</c:if>>详情</option>
+						<option value="4">补全信息</option>
 					</select>
 				</label>
 				<br/>

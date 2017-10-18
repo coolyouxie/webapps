@@ -71,6 +71,8 @@
 										result = "分享";
 									}else if(cellValue==3){
 										result = "详情";
+									}else if(cellValue==4){
+                                        result = "补全信息";
 									}
 									return result;
 								}

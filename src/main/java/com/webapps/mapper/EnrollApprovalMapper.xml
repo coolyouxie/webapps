@@ -71,7 +71,7 @@
 	</select>
 	
 	<select id="queryByUserIdTypeAndState" resultMap="resultMap">
-		select * from t_enrollment_approval where user_id=#{userId} and type=#{type} and state = #{state}
+		select * from t_enrollment_approval where user_id=#{userId} and type=#{type} and state = #{state} order by create_time DESC
 	</select>
 
 	<select id="queryByUserIdEnrollmentIdTypeAndState" resultMap="resultMap">

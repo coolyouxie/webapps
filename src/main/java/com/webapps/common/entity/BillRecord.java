@@ -10,6 +10,8 @@ public class BillRecord extends Entity {
 	
 	private Integer type;
 
+	private User user;
+
 	public BigDecimal getFee() {
 		return fee;
 	}
@@ -33,6 +35,12 @@ public class BillRecord extends Entity {
 	public void setWalletId(Integer walletId) {
 		this.walletId = walletId;
 	}
-	
-	
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
 }
