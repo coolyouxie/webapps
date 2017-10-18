@@ -7,10 +7,12 @@ import org.apache.ibatis.annotations.Param;
 import com.webapps.common.entity.Province;
 import com.webapps.common.entity.User;
 import com.webapps.common.form.ProvinceRequestForm;
+import org.springframework.stereotype.Repository;
 
 /**
  * Created by xieshuai on 2017-6-28.
  */
+@Repository
 public interface IProvinceMapper extends IBaseMapper<Province>{
 	
 	public Province getByCode(String code) throws Exception;

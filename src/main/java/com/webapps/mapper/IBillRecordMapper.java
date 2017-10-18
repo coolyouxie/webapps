@@ -7,10 +7,12 @@ import org.apache.ibatis.annotations.Param;
 
 import com.webapps.common.entity.BillRecord;
 import com.webapps.common.form.BillRecordRequestForm;
+import org.springframework.stereotype.Repository;
 
 /**
  * Created by xieshuai on 2017-6-28.
  */
+@Repository
 public interface IBillRecordMapper extends IBaseMapper<BillRecord>,IPageMapper<BillRecord,BillRecordRequestForm>{
 	
 	List<BillRecord> queryByUserIdAndType(@Param("type")Integer type, @Param("userId")Integer userId);

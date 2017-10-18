@@ -6,10 +6,12 @@ import org.apache.ibatis.annotations.Param;
 
 import com.webapps.common.entity.Enrollment;
 import com.webapps.common.form.EnrollmentRequestForm;
+import org.springframework.stereotype.Repository;
 
 /**
  * Created by xieshuai on 2017-6-28.
  */
+@Repository
 public interface IEnrollmentMapper extends IBaseMapper<Enrollment>,IPageMapper<Enrollment,EnrollmentRequestForm>{
 	
 	public List<Enrollment> queryListByFkId(@Param("obj")EnrollmentRequestForm form)throws Exception;

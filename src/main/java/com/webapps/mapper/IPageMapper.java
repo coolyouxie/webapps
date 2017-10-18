@@ -1,8 +1,8 @@
 package com.webapps.mapper;
 
-import java.util.List;
-
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 public interface IPageMapper<T,R> {
 
