@@ -10,17 +10,18 @@
 		<result column="data_state" jdbcType="DECIMAL" property="dataState" />
 		<result column="create_time" jdbcType="VARCHAR" property="createTime" />
 		<result column="UPDATE_TIME" jdbcType="VARCHAR" property="updateTime" />
+		<result column="enrollment_id" jdbcType="DECIMAL" property="enrollmentId" />
 		<result column="user_id" jdbcType="DECIMAL" property="user.id" />
 		<result column="user_name" jdbcType="VARCHAR" property="user.name" />
 		<result column="user_mobile" jdbcType="VARCHAR" property="user.mobile" />
 	</resultMap>
 
 	<sql id="select_columns">
-		ID,wallet_id,type,fee, data_state,CREATE_TIME,UPDATE_TIME
+		ID,wallet_id,type,fee, data_state,CREATE_TIME,UPDATE_TIME,enrollment_id
 	</sql>
 
 	<sql id="insert_columns">
-		wallet_id,type,fee, data_state,CREATE_TIME
+		wallet_id,type,fee, data_state,CREATE_TIME,enrollment_id
 	</sql>
 	
 	<select id="getById" resultMap="resultMap">
@@ -67,8 +68,8 @@
 		tu.name as user_name,
 		tu.mobile as user_mobile
 		FROM t_bill_record tbr
-		left join t_user_wallet tuw on tuw.id = tbr.wallet_id
-		left join t_user tu on tu.id = tuw.user_id
+		left join t_enrollment te on te.id = tbr.enrollment_id
+		left join t_user tu on tu.id = te.user_id
 		<trim prefix="WHERE" prefixOverrides="AND">
 			tbr.data_state = 1
 			<if test="obj.type != null and obj.type != ''">
@@ -93,7 +94,8 @@
 			#{obj.type},
 			#{obj.fee},
 			#{obj.dataState},
-			now()
+			now(),
+			#{obj.enrollmentId}
 		)
 	</insert>
 	

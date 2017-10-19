@@ -11,6 +11,8 @@ public class BillRecord extends Entity {
 	private Integer type;
 
 	private User user;
+	
+	private Integer enrollmentId;
 
 	public BigDecimal getFee() {
 		return fee;
@@ -42,5 +44,13 @@ public class BillRecord extends Entity {
 
 	public void setUser(User user) {
 		this.user = user;
+	}
+
+	public Integer getEnrollmentId() {
+		return enrollmentId;
+	}
+
+	public void setEnrollmentId(Integer enrollmentId) {
+		this.enrollmentId = enrollmentId;
 	}
 }

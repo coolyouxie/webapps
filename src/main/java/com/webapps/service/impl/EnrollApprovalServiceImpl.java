@@ -128,14 +128,14 @@ public class EnrollApprovalServiceImpl implements IEnrollApprovalService {
 			uw.setState(0);
 			iUserWalletMapper.insert(uw);
 			//保存账单记录
-			saveBillRecrod(uw,3,null,fee);
+			saveBillRecrod(enrollment,uw,3,null,fee);
 		}else{
 			BigDecimal fee1 = uw.getFee();
 			fee1 = fee1.add(fee);
 			uw.setFee(fee1);
 			uw.setUpdateTime(new Date());
 			iUserWalletMapper.updateById(uw.getId(), uw);
-			saveBillRecrod(uw,3,null,fee);
+			saveBillRecrod(enrollment,uw,3,null,fee);
 		}
 		//2.判断是否需要支付推荐费给推荐用户
 		if(user.getIsPayedRecommendFee()==1){
@@ -179,6 +179,7 @@ public class EnrollApprovalServiceImpl implements IEnrollApprovalService {
 				fc = temp;
 			}
 		}
+		//如果用户还没有钱包记录,则需要生成一条
 		if(uw1==null||uw1.getId()==null){
 			return saveRecommendFee(enrollment, dto, user, re, fc);
 		}
@@ -192,6 +193,7 @@ public class EnrollApprovalServiceImpl implements IEnrollApprovalService {
 		user.setUpdateTime(new Date());
 		iUserMapper.updateById(user.getId(),user);
 		saveBillRecrod(enrollment, uw1,1,fc);
+		iUserMapper.updateById(user.getId(), user);
 		dto.setResult("S");
 		return dto;
 	}
@@ -242,19 +244,22 @@ public class EnrollApprovalServiceImpl implements IEnrollApprovalService {
 		}else{
 			br.setFee(fc.getFee());
 		}
+		br.setEnrollmentId(enrollment.getId());
 		br.setType(type);
 		br.setDataState(1);
 		br.setWalletId(uw.getId());
 		br.setCreateTime(new Date());
 		iBillRecordMapper.insert(br);
 	}
-	private void saveBillRecrod(UserWallet uw,Integer type,FeeConfig fc,BigDecimal fee) {
+	
+	private void saveBillRecrod(Enrollment enrollment,UserWallet uw,Integer type,FeeConfig fc,BigDecimal fee) {
 		BillRecord br = new BillRecord();
 		if(type==3){
 			br.setFee(fee);
 		}else{
 			br.setFee(fc.getFee());
 		}
+		br.setEnrollmentId(enrollment.getId());
 		br.setType(type);
 		br.setDataState(1);
 		br.setWalletId(uw.getId());
