@@ -12,7 +12,7 @@
 	
 	<!-- 扫描study.project包里下的所有class文件，配置注解的类全都装入容器中进行管理 -->
 	<aop:aspectj-autoproxy proxy-target-class="true"/>
-    <context:component-scan base-package="com.webapps" />
+    <context:component-scan base-package="com.webapps.service" />
     <context:annotation-config />
     
     <!-- 引入jdbc配置文件 -->
