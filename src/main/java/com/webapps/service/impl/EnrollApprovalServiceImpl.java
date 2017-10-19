@@ -193,7 +193,6 @@ public class EnrollApprovalServiceImpl implements IEnrollApprovalService {
 		user.setUpdateTime(new Date());
 		iUserMapper.updateById(user.getId(),user);
 		saveBillRecrod(enrollment, uw1,1,fc);
-		iUserMapper.updateById(user.getId(), user);
 		dto.setResult("S");
 		return dto;
 	}
