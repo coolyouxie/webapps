@@ -48,6 +48,13 @@ public class PictureController {
 		ResultDto<String> dto = iPictureService.uploadCompanyPicture(request);
 		return JSONUtil.toJSONString(JSONObject.fromObject(dto));
 	}
+
+	@ResponseBody
+	@RequestMapping(value = "/deleteById")
+	public String deleteById(Model model,Integer id){
+		ResultDto<String> dto = iPictureService.deleteById(id);
+		return JSONUtil.toJSONString(JSONObject.fromObject(dto));
+	}
 	
 
 }

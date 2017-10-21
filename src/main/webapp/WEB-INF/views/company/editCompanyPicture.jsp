@@ -188,9 +188,9 @@ function search(){
 			},
 			success:function(response){
 				if(response.result=="S"){
+				    alert("图片保存成功");
 					$("#oldPicUrl").val($("#newPicUrl").val());
 					search();
-					//window.location.href = "${ctx}/bannerConfig/toBannerConfigPage";
 				}else{
 					alert("信息保存失败，请稍后再试");
 					return ;
@@ -198,6 +198,26 @@ function search(){
 			}
 		});
 	}
+
+	function deleteById(id) {
+        $.ajax({
+            url:"${ctx}/picture/deleteById",
+            type:"post",
+            dataType:"json",
+            data:{
+                id:id
+            },
+            success:function(response){
+                if(response.result=="S"){
+                    alert("删除成功");
+                    search();
+                }else{
+                    alert("删除失败，请稍后再试");
+                    return ;
+                }
+            }
+        });
+    }
 	
 </script>
 </head>

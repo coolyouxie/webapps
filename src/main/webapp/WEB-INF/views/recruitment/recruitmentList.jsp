@@ -210,9 +210,9 @@
 				"id":id
 			},
 			success:function(response){
-				if("S"==response.resutl){
+				if("S"==response.result){
 					alert("删除成功");
-					dataGrid.trigger("reloadGrid");
+                    search();
 				}else{
 					alert(response.errorMsg);
 				}

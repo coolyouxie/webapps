@@ -39,5 +39,7 @@ public interface IPictureService {
 	public ResultDto<String> uploadImgForApp(MultipartFile[] files,String userId);
 
 	public ResultDto<List<Picture>> queryUserPictures(Integer userId);
+
+	public ResultDto<String> deleteById(Integer id);
 	
 }

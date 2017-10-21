@@ -130,6 +130,7 @@
 		left join t_company tc on tr.company_id = tc.id
 		left join t_banner_config tbc on tbc.fk_id = tr.id and tbc.type = 4 and tbc.data_state = 1
 		<trim prefix="WHERE" prefixOverrides="AND">
+			tr.data_state = 1
 			<if test="obj.title !=null and obj.title != ''">
 				AND tr.title like concat('%',#{obj.title},'%')
 			</if>
@@ -168,6 +169,7 @@
 		left join t_company tc on tr.company_id = tc.id
 		left join t_banner_config tbc on tbc.fk_id = tr.id and tbc.type=4 and tbc.data_state = 1
 		<trim prefix="WHERE" prefixOverrides="AND">
+			tr.data_state = 1
 			<if test="obj.title !=null and obj.title != ''">
 				AND tr.title like concat('%',#{obj.title},'%')
 			</if>

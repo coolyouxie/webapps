@@ -250,6 +250,20 @@ public class PictureServiceImpl implements IPictureService {
 		}
 	}
 
+	@Override
+	public ResultDto<String> deleteById(Integer id) {
+		ResultDto<String> dto = new ResultDto<>();
+		try {
+			iPictureMapper.deleteByIdInLogic(id);
+			dto.setResult("S");
+			return dto;
+		} catch (Exception e) {
+			e.printStackTrace();
+			dto.setResult("F");
+			return dto;
+		}
+	}
+
 	private ResultDto<String> saveBankAndIdCardPic(String picUrl,String fileName,String type,String userId)throws Exception{
 		ResultDto<String> dto = new ResultDto<String>();
 		Integer uId = Integer.valueOf(userId);

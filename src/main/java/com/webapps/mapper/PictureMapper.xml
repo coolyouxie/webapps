@@ -114,7 +114,11 @@
 	</update>
 	
 	<update id="deleteByIdInLogic">
-		update t_picture set data_state = 0 where id = #{id,jdbcType=DECIMAL}
+		update t_picture
+		set
+			data_state = 0,
+			update_time = now()
+		where id = #{id,jdbcType=DECIMAL}
 	</update>
 	
 	<update id="updateById">
