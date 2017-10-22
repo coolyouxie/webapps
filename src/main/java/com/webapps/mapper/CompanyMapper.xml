@@ -175,7 +175,7 @@
 		<trim prefix="WHERE" prefixOverrides="AND">
 			tc.data_state = 1
 			<if test="obj.name !=null and obj.name != ''">
-				AND (tc.name like concat('%',#{obj.name},'%')
+				AND (tc.name like concat('%',#{obj.name},'%'))
 			</if>
 			<if test="obj.contactName !=null and obj.contactName != ''">
 				AND (tc.contact_Name like concat('%',#{obj.contactName},'%')

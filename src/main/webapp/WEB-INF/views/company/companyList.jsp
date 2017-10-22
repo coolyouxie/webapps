@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+  <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
@@ -99,12 +99,12 @@
 	
 	function search(){
 		var params = {};
-		var keyWords = $.trim($("#keyWords").val());
-		if(keyWords){
-			params.keyWords=keyWords;
+		var companyName = $.trim($("#companyName").val());
+		if(companyName){
+			params.companyName=companyName;
 		}
 		dataGrid.jqGrid("setGridParam",{
-		    postData:{"keyWords":$("#keyWords").val()},
+		    postData:{"name":$("#companyName").val()},
 		    page:1
 		}).trigger("reloadGrid");
 	}
@@ -150,7 +150,7 @@
 				<div class="col-md-4">
 					<label>
 						<span>公司名称:</span>
-						<input type="text" id="keyWords" name="keyWords" value="">
+						<input type="text" id="companyName" name="company.name" value="">
 					</label>
 				</div>
 				<div class="col-md-2">
