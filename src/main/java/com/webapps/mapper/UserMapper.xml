@@ -158,10 +158,9 @@
 					or
 					tu.id_card_no like concat('%', #{obj.keyWords}, '%')
 					)
-				
 			</if>
 			<if test="obj.name !=null and obj.name != ''">
-				AND tu.name = #{obj.name,jdbcType=VARCHAR}
+				AND tu.name like concat('%', #{obj.name}, '%')
 			</if>
 			<if test="obj.age != null and obj.age != ''">
 				and tu.age = #{obj.age,jdbcType=DECIMAL}

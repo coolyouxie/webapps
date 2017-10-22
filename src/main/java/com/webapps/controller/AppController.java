@@ -15,6 +15,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -796,5 +797,16 @@ public class AppController {
 		dto.setData(obj);
 		dto.setResult("S");
 		return JSONUtil.toJSONString(JSONObject.fromObject(dto));
+	}
+
+	@RequestMapping(value="/download")
+	public String downloadApp(Model model){
+		String downloadUrl = (String)PropertyUtil.getProperty("downloadUrl");
+		String androidVersion = (String)PropertyUtil.getProperty("androidVersion");
+		String iosUrl = (String)PropertyUtil.getProperty("iosUrl");
+		model.addAttribute("downloadUrl",downloadUrl);
+		model.addAttribute("androidVersion",androidVersion);
+		model.addAttribute("iosUrl",iosUrl);
+		return "/common/download";
 	}
 }
