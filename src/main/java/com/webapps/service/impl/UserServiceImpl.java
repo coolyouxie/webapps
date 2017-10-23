@@ -38,11 +38,12 @@ public class UserServiceImpl implements IUserService {
 	@Override
 	public Page loadUserList(Page page,UserRequestForm user) throws Exception {
 		int startRow = page.getStartRow();
-		int endRow = page.getEndRow();
+		int rows = page.getRows();
 		int count = iUserMapper.queryCount(user);
-		List<User> list = iUserMapper.queryPage(startRow, endRow, user);
+		List<User> list = iUserMapper.queryPage(startRow, rows, user);
 		page.setResultList(list);
 		page.setRecords(count);
+		page.countRecords(count);
 		return page;
 	}
 

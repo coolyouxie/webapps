@@ -48,11 +48,12 @@ public class ApplyExpenditureServiceImpl implements IApplyExpenditureService {
 	@Override
 	public Page loadPageList(Page page, ApplyExpenditureRequestForm apply) {
 		int startRow = page.getStartRow();
-		int endRow = page.getEndRow();
+		int rows = page.getRows();
 		int count = iApplyExpenditureMapper.queryCount(apply);
-		List<ApplyExpenditure> list = iApplyExpenditureMapper.queryPage(startRow, endRow, apply);
+		List<ApplyExpenditure> list = iApplyExpenditureMapper.queryPage(startRow, rows, apply);
 		page.setRecords(count);
 		page.setResultList(list);
+		page.countRecords(count);
 		return page;
 	}
 

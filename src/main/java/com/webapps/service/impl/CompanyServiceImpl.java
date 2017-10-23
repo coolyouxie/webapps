@@ -40,11 +40,12 @@ public class CompanyServiceImpl implements ICompanyService {
 	@Override
 	public Page loadCompanyList(Page page, CompanyRequestForm company) throws Exception {
 		int startRow = page.getStartRow();
-		int endRow = page.getEndRow();
+		int rows = page.getRows();
 		int count = iCompanyMapper.queryCount(company);
-		List<Company> list = iCompanyMapper.queryPage(startRow, endRow, company);
+		List<Company> list = iCompanyMapper.queryPage(startRow, rows, company);
 		page.setResultList(list);
 		page.setRecords(count);
+		page.countRecords(count);
 		return page;
 	}
 

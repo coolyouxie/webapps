@@ -37,9 +37,9 @@
 		    width : 'auto',
 		    jsonReader : {
 								root : "resultList", // json中代表实际模型数据的入口
-								page : "page.page", // json中代表当前页码的数据   
-								records : "page.records", // json中代表数据行总数的数据   
-								total : 'page.total', // json中代表页码总数的数据 
+								page : "page", // json中代表当前页码的数据   
+								records : "records", // json中代表数据行总数的数据   
+								total : 'total', // json中代表页码总数的数据 
 								repeatitems : false // 如果设为false，则jqGrid在解析json时，会根据name来搜索对应的数据元素（即可以json中元素可以不按顺序）；而所使用的name是来自于colModel中的name设定。   
 						},
 		    colNames : [ '公司名称', '发布单标题', '报名人', '手机号','报名时间','沟通结果','操作'],

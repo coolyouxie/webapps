@@ -22,11 +22,12 @@ public class BillRecordServiceImpl implements IBillRecordService {
 	@Override
 	public Page loadPageList(Page page, BillRecordRequestForm form) {
 		int startRow = page.getStartRow();
-		int endRow = page.getEndRow();
+		int rows = page.getRows();
 		int count = iBillRecordMapper.queryCount(form);
-		List<BillRecord> list = iBillRecordMapper.queryPage(startRow, endRow, form);
+		List<BillRecord> list = iBillRecordMapper.queryPage(startRow, rows, form);
 		page.setRecords(count);
 		page.setResultList(list);
+		page.countRecords(count);
 		return page;
 	}
 

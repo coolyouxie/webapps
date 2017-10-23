@@ -179,9 +179,9 @@ public class RecruitmentServiceImpl implements IRecruitmentService {
 	@Override
 	public Page loadRecruitmentList(Page page, RecruitmentRequestForm form) throws Exception {
 		int startRow = page.getStartRow();
-		int endRow = page.getEndRow();
+		int rows = page.getRows();
 		int count = iRecruitmentMapper.queryCount(form);
-		List<Recruitment> list = iRecruitmentMapper.queryPage(startRow, endRow, form);
+		List<Recruitment> list = iRecruitmentMapper.queryPage(startRow, rows, form);
 		//查询发布单对应公司信息，并取公司信息中的图片作为发布单列表图片
 		if(CollectionUtils.isNotEmpty(list)){
 			for(Recruitment recruitment:list){
@@ -193,6 +193,7 @@ public class RecruitmentServiceImpl implements IRecruitmentService {
 		}
 		page.setResultList(list);
 		page.setRecords(count);
+		page.countRecords(count);
 		return page;
 	}
 

@@ -47,7 +47,7 @@
 <footer style="background-color:#ffffff">
     <div class="content" style="color:#000">
         <div class="btnlogo"><img src="${ctx}/img/timg-3.jpeg" style="max-width:100%;overflow:hidden;"/></div>
-        <h1>好东西，要分享</h1>
+        <h3>嘉聘网，找工作</h3><h3>挣工资，赚补贴！</h3>
         <p>&nbsp;</p>
         <div class="w1div">
             <ul data-am-widget="gallery" class="am-gallery am-avg-sm-1 am-avg-md-1 am-avg-lg-1 am-gallery-overlay" >

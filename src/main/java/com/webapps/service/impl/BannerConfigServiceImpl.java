@@ -99,11 +99,12 @@ public class BannerConfigServiceImpl implements IBannerConfigService {
 	@Override
 	public Page loadBannerConfigList(Page page, BannerConfigRequestForm form) {
 		int startRow = page.getStartRow();
-		int endRow = page.getEndRow();
+		int rows = page.getRows();
 		int count = iBannerConfigMapper.queryCount(form);
-		List<BannerConfig> list = iBannerConfigMapper.queryPage(startRow, endRow, form);
+		List<BannerConfig> list = iBannerConfigMapper.queryPage(startRow, rows, form);
 		page.setResultList(list);
 		page.setRecords(count);
+		page.countRecords(count);
 		return page;
 	}
 

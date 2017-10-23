@@ -298,7 +298,7 @@ public class AppController {
 		int currentPage = jsonObj.getInt("page");
 		int rows = jsonObj.getInt("rows");
 		RecruitmentRequestForm form = new RecruitmentRequestForm();
-		if(jsonObj.containsKey("publishType")){
+		if(jsonObj.containsKey("publishType")&&StringUtils.isNotBlank(jsonObj.getString("publishType"))){
 			Integer publishType = jsonObj.getInt("publishType");
 			if(publishType!=0){
 				form.setPublishType(publishType);

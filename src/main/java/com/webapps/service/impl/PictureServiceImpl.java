@@ -100,11 +100,12 @@ public class PictureServiceImpl implements IPictureService {
 	@Override
 	public Page loadPictureList(Page page, PictureRequestForm form) {
 		int startRow  = page.getStartRow();
-		int endRow = page.getEndRow();
+		int rows = page.getRows();
 		int count = iPictureMapper.queryCount(form);
-		List<Picture> list = iPictureMapper.queryPage(startRow, endRow, form);
+		List<Picture> list = iPictureMapper.queryPage(startRow, rows, form);
 		page.setRecords(count);
 		page.setResultList(list);
+		page.countRecords(count);
 		return page;
 	}
 

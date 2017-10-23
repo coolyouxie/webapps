@@ -64,11 +64,12 @@ public class EnrollApprovalServiceImpl implements IEnrollApprovalService {
 	@Override
 	public Page loadEnrollApprovalList(Page page, EnrollApprovalRequestForm form) throws Exception {
 		int startRow = page.getStartRow();
-		int endRow = page.getEndRow();
+		int rows = page.getRows();
 		int count = iEnrollApprovalMapper.queryCount(form);
-		List<EnrollApproval> result = iEnrollApprovalMapper.queryPage(startRow, endRow, form);
+		List<EnrollApproval> result = iEnrollApprovalMapper.queryPage(startRow, rows, form);
 		page.setResultList(result);
 		page.setRecords(count);
+		page.countRecords(count);
 		return page;
 	}
 

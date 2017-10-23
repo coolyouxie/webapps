@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.webapps.common.bean.Page;
-import com.webapps.common.entity.Company;
 import com.webapps.common.entity.FeeConfig;
 import com.webapps.common.form.FeeConfigRequestForm;
 import com.webapps.mapper.IFeeConfigMapper;
@@ -40,11 +39,12 @@ public class FeeConfigService implements IFeeConfigService {
 	@Override
 	public Page loadFeeConfigList(Page page, FeeConfigRequestForm form) throws Exception {
 		int startRow = page.getStartRow();
-		int endRow = page.getEndRow();
+		int rows = page.getRows();
 		int count = iFeeConfigMapper.queryCount(form);
-		List<FeeConfig> list = iFeeConfigMapper.queryPage(startRow, endRow, form);
+		List<FeeConfig> list = iFeeConfigMapper.queryPage(startRow, rows, form);
 		page.setResultList(list);
 		page.setRecords(count);
+		page.countRecords(count);
 		return page;
 	}
 

@@ -30,11 +30,12 @@ public class EnrollmentServiceImpl implements IEnrollmentService {
 	@Override
 	public Page loadEnrollmentList(Page page, EnrollmentRequestForm enrollment) throws Exception {
 		int startRow = page.getStartRow();
-		int endRow = page.getEndRow();
+		int rows = page.getRows();
 		int count = iEnrollmentMapper.queryCount(enrollment);
-		List<Enrollment> list = iEnrollmentMapper.queryPage(startRow, endRow, enrollment);
+		List<Enrollment> list = iEnrollmentMapper.queryPage(startRow, rows, enrollment);
 		page.setResultList(list);
 		page.setRecords(count);
+		page.countRecords(count);
 		return page;
 	}
 

@@ -38,9 +38,9 @@ public class RecommendServiceImpl implements IRecommendService {
 	@Override
 	public Page loadRecommendList(Page page, RecommendRequestForm recommend) throws Exception {
 		int startRow = page.getStartRow();
-		int endRow = page.getEndRow();
+		int rows = page.getRows();
 		int count = iRecommendMapper.queryCount(recommend);
-		List<Recommend> list = iRecommendMapper.queryPage(startRow, endRow, recommend);
+		List<Recommend> list = iRecommendMapper.queryPage(startRow, rows, recommend);
 		page.setResultList(list);
 		page.setRecords(count);
 		return page;

@@ -99,11 +99,12 @@ public class MessageConfigServiceImpl implements IMessageConfigService {
 	@Override
 	public Page loadMessageConfigList(Page page, MessageConfigRequestForm form) {
 		int startRow = page.getStartRow();
-		int endRow = page.getEndRow();
+		int rows = page.getRows();
 		int count = iMessageConfigMapper.queryCount(form);
-		List<MessageConfig> list = iMessageConfigMapper.queryPage(startRow, endRow, form);
+		List<MessageConfig> list = iMessageConfigMapper.queryPage(startRow, rows, form);
 		page.setResultList(list);
 		page.setRecords(count);
+		page.countRecords(count);
 		return page;
 	}
 
