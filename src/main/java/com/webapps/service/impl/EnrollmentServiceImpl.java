@@ -162,20 +162,28 @@ public class EnrollmentServiceImpl implements IEnrollmentService {
 	public ResultDto<Enrollment> cancelEnroll(EnrollmentRequestForm form){
 		ResultDto<Enrollment> dto = new ResultDto<Enrollment>();
 		try {
-			int result = iEnrollmentMapper.cancelEnroll(form, form.getId());
+			Enrollment enrollment = iEnrollmentMapper.getById(form.getId());
+			if(enrollment.getState()!=1){
+				dto.setErrorMsg("报名信息状态不符合可取消条件");
+				dto.setResult("F");
+				return dto;
+			}
+			enrollment.setDataState(0);
+			enrollment.setUpdateTime(new Date());
+			int result = iEnrollmentMapper.cancelEnroll(enrollment,enrollment.getId());
 			if(result!=1){
 				dto.setErrorMsg("报名信息更新失败，请稍后重试");
 				dto.setResult("F");
 			}else{
 				dto.setResult("S");
 			}
+			return dto;
 		} catch (Exception e) {
+			e.printStackTrace();
 			dto.setErrorMsg("报名信息更新异常，请稍后重试");
 			dto.setResult("F");
-			e.printStackTrace();
+			return dto;
 		}
-		dto.setData(form);
-		return dto;
 	}
 
 	@Override

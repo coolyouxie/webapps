@@ -98,7 +98,7 @@
 									}else if(rowObject.isTalked==1){
 										result = "已沟通&nbsp;&nbsp;&nbsp;&nbsp;";
 									}
-									result += "<button id='btn_"+rowObject.id+"' class='btn btn-primary btn-sm' data-toggle='modal' onclick='showModal("+rowObject.id+",2)'>作废</button>";
+									/* result += "<button id='btn_"+rowObject.id+"' class='btn btn-primary btn-sm' data-toggle='modal' onclick='showModal("+rowObject.id+",2)'>取消报名</button>"; */
 									return result;
 								}
 							} ],
