@@ -773,7 +773,13 @@ public class AppController {
 	}
 	
 	@RequestMapping(value="/toSharePage")
-	public String toSharePage(){
+	public String toSharePage(Model model){
+		String downloadUrl = (String)PropertyUtil.getProperty("downloadUrl");
+		String androidVersion = (String)PropertyUtil.getProperty("androidVersion");
+		String iosUrl = (String)PropertyUtil.getProperty("iosUrl");
+		model.addAttribute("downloadUrl",downloadUrl);
+		model.addAttribute("androidVersion",androidVersion);
+		model.addAttribute("iosUrl",iosUrl);
 		return "/common/share";
 	}
 
