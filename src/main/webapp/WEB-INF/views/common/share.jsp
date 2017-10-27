@@ -9,7 +9,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="keywords" content="" />
     <meta name="description" content="" />
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title></title>
 
     <!--360 browser -->
@@ -30,17 +30,26 @@
     <link rel="icon" type="image/png" href="${ctx}/css/amazeUI/images/i/favicon.png">
     <link rel="stylesheet" href="${ctx}/css/amazeUI/css/amazeui.min.css">
     <link rel="stylesheet" href="${ctx}/css/amazeUI/css/public.css">
+    <link rel="stylesheet" href="${ctx}/css/jquery/jquery.mobile-1.4.5.min.css">
+
 
     <!--[if (gte IE 9)|!(IE)]><!-->
     <script src="${ctx}/js/jquery/jQuery-1.12.4.0.js"></script>
+    <script src="${ctx}/js/jquery/jquery.mobile-1.4.5.min.js"></script>
     <!--<![endif]-->
     <!--[if lte IE 8 ]>
-    <script src="http://libs.baidu.com/jquery/1.11.3/jquery.min.js"></script>
     <script src="http://cdn.staticfile.org/modernizr/2.8.3/modernizr.js"></script>
     <script src="assets/js/amazeui.ie8polyfill.min.js"></script>
     <![endif]-->
     <script src="${ctx}/js/common/amazeUI/assets/js/amazeui.min.js"></script>
     <script src="${ctx}/js/common/amazeUI/public.js"></script>
+
+    <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
+    <link rel="stylesheet" href="${ctx}/js/common/bootstrap/bootstrap-3.3.7/dist/css/bootstrap.min.css" type="text/css" />
+    <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+    <script src="${ctx}/js/common/bootstrap/bootstrap-3.3.7/dist/js/bootstrap.min.js"></script>
+
+
 </head>
 <script>
 	function goDownload() {
@@ -63,8 +72,9 @@
 	
 	    // 是PC端
 	    if (IsPC()) {
+            window.location.href = '${downloadUrl}/android${androidVersion}.apk';
 	        alert("请使用移动设备打开此链接");  // 公司主页
-	        window.location.href = 'http://106.14.221.46:18080/webapps/download/android1.0.1.apk';
+	        //window.location.href = 'http://106.14.221.46:18080/webapps/download/android1.0.0.apk';
 	    }
 	}
 	
@@ -93,28 +103,48 @@
 	    }
 	    return flag;
 	}
-</script>
-<body>
 
-<footer style="background-color:#ffffff">
-    <div class="content" style="color:#000">
-        <div class="btnlogo"><img src="${ctx}/img/timg-3.jpeg" style="max-width:100%;overflow:hidden;"/></div>
-        <h3>嘉聘网，找工作</h3><h3>挣工资，赚补贴！</h3>
-        <p>&nbsp;</p>
-        <div class="w1div">
-            <ul data-am-widget="gallery" class="am-gallery am-avg-sm-1 am-avg-md-1 am-avg-lg-1 am-gallery-overlay" >
-                <li class="w2">
-                    <div class="am-gallery-item">
-                        <img src="${ctx}/img/download.png" />
-                    </div>
-                </li>
-            </ul>
+
+    var timeOutEvent = 0;
+    $(function () {
+        $("#touchDiv").on({
+            touchstart:function (e) {
+                timeOutEvent = setTimeout('open()',500);
+//                e.preventDefault();
+            },
+            touchmove:function () {
+                clearTimeout(timeOutEvent);
+                timeOutEvent = 0;
+            },
+            touchend:function () {
+                clearTimeout(timeOutEvent);
+                return false;
+            }
+        })
+    });
+    function open() {
+        $("#myPopup").popup('open');
+    }
+    function cancel() {
+        $("#myPopup").popup('close');
+    }
+</script>
+<style>
+
+</style>
+<body>
+<div data-role="popup" id="myPopup" class="ui-content" data-transition="slideup">
+    <a href="" class="ui-btn" onclick="goDownload()">下载应用</a>
+    <a href="" class="ui-btn" onclick="cancel()">取消</a>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div id="touchDiv" class="col-sm-12" style="padding-left: 0px;padding-right: 0px;">
+            <img src="${ctx}/img/shareImg.jpg" style="width:100%"/>
         </div>
-        <a class="am-btn am-btn-secondary am-round" onclick="goDownload()">点击下载</a>
-        <p>&nbsp;</p>
-        <span>嘉聘网络用科技助您找到好工作</span>
-        <p>嘉聘网<br>© 2017 嘉聘信息科技股份有限公司.</p>
     </div>
-</footer>
+</div>
+
 </body>
 </html>

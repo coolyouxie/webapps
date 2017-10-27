@@ -44,24 +44,6 @@
     <script src="${ctx}/js/common/amazeUI/public.js"></script>
 </head>
 <body>
-
-<footer style="background-color:#ffffff">
-    <div class="content" style="color:#000">
-        <div class="btnlogo"><img src="${ctx}/img/timg-3.jpeg" style="max-width:100%;overflow:hidden;"/></div>
-        <h1>好东西，要分享</h1>
-        <div class="w1div">
-            <ul data-am-widget="gallery" class="am-gallery am-avg-sm-1 am-avg-md-1 am-avg-lg-1 am-gallery-overlay" >
-                <li class="w2">
-                    <div class="am-gallery-item">
-                        <img src="${ctx}/img/1507555053.png" />
-                    </div>
-                </li>
-            </ul>
-        </div>
-        <span>嘉聘网络用科技助您找到好工作</span>
-        <p>嘉聘网<br>© 2017 嘉聘信息科技股份有限公司.</p>
-    </div>
-</footer>
 </body>
 </html>
 <script>
