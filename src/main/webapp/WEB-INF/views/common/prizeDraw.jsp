@@ -1,13 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Insert title here</title>
-</head>
-<body>
-	<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
 <meta charset="utf-8" />
@@ -76,7 +67,7 @@
 		<div class="g-lottery-case">
 			<div class="g-left">
 				<h2>
-					您已拥有<span class="playnum"></span>次抽奖机会，点击立刻抽奖！~
+					您已拥有<span class="playnum">1</span>次抽奖机会，点击立刻抽奖！~
 				</h2>
 				<div class="g-lottery-box">
 					<div class="g-lottery-img"></div>
