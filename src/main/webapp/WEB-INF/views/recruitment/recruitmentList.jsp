@@ -97,7 +97,7 @@
 									}else if(cellValue==2){
 										result = "直招";
 									}else if(cellValue==3){
-										result = "兼职";
+										result = "假期工";
 									}
 									return result;
 								}
@@ -109,13 +109,15 @@
 								formatter:function(cellValue,options,rowObject){
 									var result = null;
 									if(cellValue==1){
-										result = "热招";
+										result = "急招";
 									}else if(cellValue==2){
-										result = "高返费";
+										result = "热招";
 									}else if(cellValue==3){
-										result = "工作轻松";
+										result = "高返费";
 									}else if(cellValue==4){
 										result = "高工资";
+									}else if(cellValue==5){
+										result = "工作轻松";
 									}
 									return result;
 								}

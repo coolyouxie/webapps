@@ -192,7 +192,7 @@
 				and #{obj.publishTimeEnd} >= tr.create_time
 			</if>
 		</trim>
-		order by create_time desc
+		order by type asc, create_time desc
 		<include refid="ORACLE.paginationEnd" />
 	</select>
 	

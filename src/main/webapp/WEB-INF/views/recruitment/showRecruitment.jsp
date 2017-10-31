@@ -117,7 +117,7 @@ function addMessage(){
 					<select id="type" name="type" class="form-control" disabled="disabled">
 						<option value="1" <c:if test="${recruitment.publishType!=null and recruitment.publishType==1}">selected</c:if>>普招</option>
 						<option value="2" <c:if test="${recruitment.publishType!=null and recruitment.publishType==2}">selected</c:if>>直费</option>
-						<option value="3" <c:if test="${recruitment.publishType!=null and recruitment.publishType==3}">selected</c:if>>兼职</option>
+						<option value="3" <c:if test="${recruitment.publishType!=null and recruitment.publishType==3}">selected</c:if>>假期工</option>
 					</select>
 				</div>
 			</div>
@@ -126,10 +126,11 @@ function addMessage(){
 				<label class="col-md-2 control-label" for="type">发布单类型：</label>
 				<div class="col-md-4" >
 					<select id="type" name="type" class="form-control" disabled="disabled">
-						<option value="1" <c:if test="${recruitment.type!=null and recruitment.type==1}">selected</c:if>>热招</option>
-						<option value="2" <c:if test="${recruitment.type!=null and recruitment.type==2}">selected</c:if>>高返费</option>
-						<option value="3" <c:if test="${recruitment.type!=null and recruitment.type==3}">selected</c:if>>工作轻松</option>
+						<option value="1" <c:if test="${recruitment.type!=null and recruitment.type==1}">selected</c:if>>急招</option>
+						<option value="2" <c:if test="${recruitment.type!=null and recruitment.type==2}">selected</c:if>>热招</option>
+						<option value="3" <c:if test="${recruitment.type!=null and recruitment.type==3}">selected</c:if>>高返费</option>
 						<option value="4" <c:if test="${recruitment.type!=null and recruitment.type==4}">selected</c:if>>高工资</option>
+						<option value="5" <c:if test="${recruitment.type!=null and recruitment.type==5}">selected</c:if>>工作轻松</option>
 					</select>
 				</div>
 			</div>

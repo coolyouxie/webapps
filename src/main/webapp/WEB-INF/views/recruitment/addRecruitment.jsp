@@ -173,7 +173,7 @@
 					<select id="type" name="publishType" class="form-control">
 						<option value="1">普招</option>
 						<option value="2">直招</option>
-						<option value="3">兼职</option>
+						<option value="3">假期工</option>
 					</select>
 				</div>
 			</div>
@@ -182,10 +182,11 @@
 				<label class="col-md-2 control-label" for="type">发布单类型：</label>
 				<div class="col-md-4" >
 					<select id="type" name="type" class="form-control">
-						<option value="1" >热招</option>
-						<option value="2" >高返费</option>
-						<option value="3" >工作轻松</option>
+						<option value="1" >急招</option>
+						<option value="2" >热招</option>
+						<option value="3" >高返费</option>
 						<option value="4" >高工资</option>
+						<option value="5" >工作轻松</option>
 					</select>
 				</div>
 			</div>
