@@ -62,6 +62,7 @@
 					</ul>
 					<ul class="nav nav-sidebar">
 						<li><a href="${ctx}/appServer/toSharePage">分享页面</a></li>
+						<li><a href="${ctx}/appServer/toPrizeDraw?params={userId:19}">抽奖页面</a></li>
 					</ul>
 				</div>
 				<div class="col-sm-10 col-md-offset-2 main" style="padding: 20px 0 0 0;">

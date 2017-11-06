@@ -1,25 +1,64 @@
 package com.webapps.controller;
 
-import com.google.gson.Gson;
-import com.webapps.common.bean.Page;
-import com.webapps.common.bean.ResultDto;
-import com.webapps.common.entity.*;
-import com.webapps.common.form.*;
-import com.webapps.common.utils.JSONUtil;
-import com.webapps.common.utils.PropertyUtil;
-import com.webapps.mapper.IEnrollmentExtraMapper;
-import com.webapps.service.*;
-import net.sf.json.JSONObject;
+import java.util.List;
+
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
+import com.google.gson.Gson;
+import com.webapps.common.bean.Page;
+import com.webapps.common.bean.ResultDto;
+import com.webapps.common.entity.AliSmsMsg;
+import com.webapps.common.entity.ApplyExpenditure;
+import com.webapps.common.entity.BannerConfig;
+import com.webapps.common.entity.BillRecord;
+import com.webapps.common.entity.Company;
+import com.webapps.common.entity.EnrollApproval;
+import com.webapps.common.entity.Enrollment;
+import com.webapps.common.entity.EnrollmentExtra;
+import com.webapps.common.entity.FeeConfig;
+import com.webapps.common.entity.MessageConfig;
+import com.webapps.common.entity.Picture;
+import com.webapps.common.entity.Recommend;
+import com.webapps.common.entity.Recruitment;
+import com.webapps.common.entity.User;
+import com.webapps.common.entity.UserReward;
+import com.webapps.common.entity.UserWallet;
+import com.webapps.common.form.ApplyExpenditureRequestForm;
+import com.webapps.common.form.BannerConfigRequestForm;
+import com.webapps.common.form.BillRecordRequestForm;
+import com.webapps.common.form.MessageConfigRequestForm;
+import com.webapps.common.form.RecruitmentRequestForm;
+import com.webapps.common.utils.JSONUtil;
+import com.webapps.common.utils.PropertyUtil;
+import com.webapps.mapper.IEnrollmentExtraMapper;
+import com.webapps.service.IAliSmsMsgService;
+import com.webapps.service.IApplyExpenditureService;
+import com.webapps.service.IBannerConfigService;
+import com.webapps.service.IBillRecordService;
+import com.webapps.service.ICompanyService;
+import com.webapps.service.IEnrollApprovalService;
+import com.webapps.service.IEnrollmentService;
+import com.webapps.service.IFeeConfigService;
+import com.webapps.service.IMessageConfigService;
+import com.webapps.service.IPictureService;
+import com.webapps.service.IRecommendService;
+import com.webapps.service.IRecruitmentService;
+import com.webapps.service.IUserRewardService;
+import com.webapps.service.IUserService;
+import com.webapps.service.IUserWalletService;
+
+import net.sf.json.JSONObject;
 
 
 @Controller
@@ -72,6 +111,9 @@ public class AppController {
 
 	@Autowired
 	private IEnrollmentExtraMapper iEnrollmentExtraMapper;
+	
+	@Autowired
+	private IUserRewardService iUserRewardService;
 
 	/**
 	 * app端登录接口
@@ -814,5 +856,15 @@ public class AppController {
 		model.addAttribute("androidVersion",androidVersion);
 		model.addAttribute("iosUrl",iosUrl);
 		return "/common/download";
+	}
+	
+	@RequestMapping(value="/toPrizeDraw")
+	public String toPrizeDraw(Model model, String params){
+		JSONObject obj = JSONObject.fromObject(params);
+		Integer userId = obj.getInt("userId");
+		ResultDto<UserReward> dto = iUserRewardService.getUserRewardByUserIdAndType(userId, 2);
+		model.addAttribute("userReward", dto.getData());
+		model.addAttribute("result", dto.getResult());
+		return "/common/prizeDraw";
 	}
 }

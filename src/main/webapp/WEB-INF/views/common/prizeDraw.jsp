@@ -1,3 +1,7 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<c:set var="ctx" value="${pageContext.request.contextPath}" />
 <!DOCTYPE html>
 <html>
 <head>
@@ -38,14 +42,14 @@
 	height: 400px;
 	margin-left: 30px;
 	position: relative;
-	background: url(ly-plate-c.gif) no-repeat;
+	background: url(${ctx}/img/ly-plate-c.gif) no-repeat;
 }
 
 .g-lottery-box .g-lottery-img {
 	width: 340px;
 	height: 340px;
 	position: relative;
-	background: url(bg-lottery.png) no-repeat;
+	background: url(${ctx}/img/playbtn.png) no-repeat;
 	left: 30px;
 	top: 30px;
 }
@@ -58,7 +62,7 @@
 	left: 50%;
 	margin-left: -94px;
 	margin-top: -94px;
-	background: url(playbtn.png) no-repeat;
+	background: url(${ctx}/img/bg-lottery.png) no-repeat;
 }
 </style>
 </head>
@@ -77,11 +81,11 @@
 		</div>
 	</div>
 	<script src="http://libs.baidu.com/jquery/2.1.4/jquery.min.js"></script>
-	<script type="text/javascript" src="jsmin/jquery.rotate.min.js"></script>
+	<script type="text/javascript" src="${ctx}/js/jquery/jquery.rotate.min.js"></script>
 	<script>
 		$(function() {
-			var $btn = $('.g-lottery-img');// 旋转的div
-			var playnum = 5; //初始次数，由后台传入
+			var btn = $('.g-lottery-img');// 旋转的div
+			var playnum = 1; //初始次数，由后台传入
 			$('.playnum').html(playnum);//显示还剩下多少次抽奖机会
 			var isture = 0;//是否正在抽奖
 			var clickfunc = function() {
@@ -128,8 +132,8 @@
 			});
 			var rotateFunc = function(awards, angle, text) {
 				isture = true;
-				$btn.stopRotate();
-				$btn.rotate({
+				btn.stopRotate();
+				btn.rotate({
 					angle : 0,//旋转的角度数
 					duration : 4000, //旋转时间
 					animateTo : angle + 1440, //给定的角度,让它根据得出来的结果加上1440度旋转
