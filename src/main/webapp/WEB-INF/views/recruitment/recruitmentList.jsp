@@ -264,17 +264,18 @@
 							<option value="">-请选择-</option>
 							<option value="1">普招</option>
 							<option value="2">直招</option>
-							<option value="3">兼职</option>
+							<option value="3">假期工</option>
 						</select>
 					</label>
 					<label>
 						<span>发布单类型:</span>
 						<select id="type" name="type" >
 							<option value="">-请选择-</option>
-							<option value="1">热招</option>
-							<option value="2">高返费</option>
-							<option value="3">工作轻松</option>
+							<option value="1">急招</option>
+							<option value="2">热招</option>
+							<option value="3">高返费</option>
 							<option value="4">工资高</option>
+							<option value="5">工作轻松</option>
 						</select>
 					</label>
 				</div>
