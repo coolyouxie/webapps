@@ -19,27 +19,27 @@ public interface IPictureService {
 	 * @return
 	 * @throws Exception
 	 */
-	public List<Picture> getByFkId(Integer fkId)throws Exception;
+    List<Picture> getByFkId(Integer fkId)throws Exception;
 	
 	/**
 	 * 保存图片信息
 	 * @param obj
 	 * @return
 	 */
-	public ResultDto<String> uploadCompanyPicture(HttpServletRequest request);
+    ResultDto<String> uploadCompanyPicture(HttpServletRequest request);
 	
-	public ResultDto<Picture> savePicture(PictureRequestForm form);
+	ResultDto<Picture> savePicture(PictureRequestForm form);
 	
-	public ResultDto<Picture> saveCompanyPicture(PictureRequestForm form);
+	ResultDto<Picture> saveCompanyPicture(PictureRequestForm form);
 	
-	public Page loadPictureList(Page page ,PictureRequestForm form);
+	Page loadPictureList(Page page, PictureRequestForm form);
 	
-	public ResultDto<String> uploadBannerPicture(HttpServletRequest request);
+	ResultDto<String> uploadBannerPicture(HttpServletRequest request);
 	
-	public ResultDto<String> uploadImgForApp(MultipartFile[] files,String userId);
+	ResultDto<String> uploadImgForApp(MultipartFile[] files, String userId);
 
-	public ResultDto<List<Picture>> queryUserPictures(Integer userId);
+	ResultDto<List<Picture>> queryUserPictures(Integer userId);
 
-	public ResultDto<String> deleteById(Integer id);
+	ResultDto<String> deleteById(Integer id);
 	
 }

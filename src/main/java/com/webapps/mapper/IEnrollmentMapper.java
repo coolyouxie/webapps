@@ -14,23 +14,23 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface IEnrollmentMapper extends IBaseMapper<Enrollment>,IPageMapper<Enrollment,EnrollmentRequestForm>{
 	
-	public List<Enrollment> queryListByFkId(@Param("obj")EnrollmentRequestForm form)throws Exception;
+	List<Enrollment> queryListByFkId(@Param("obj") EnrollmentRequestForm form)throws Exception;
 	
-	public int countByFkIds(@Param("obj")Enrollment em)throws Exception;
+	int countByFkIds(@Param("obj") Enrollment em)throws Exception;
 	
-	public int saveTalkInfoById(@Param("obj")Enrollment em,@Param("id")Integer id)throws Exception;
+	int saveTalkInfoById(@Param("obj") Enrollment em, @Param("id") Integer id)throws Exception;
 	
-	public int cancelEnroll(@Param("obj")Enrollment em,@Param("id")Integer id)throws Exception;
+	int cancelEnroll(@Param("obj") Enrollment em, @Param("id") Integer id)throws Exception;
 	
-	public List<Enrollment> queryListByUserIdAndState(@Param("userId")Integer userId,@Param("emId")Integer emId)throws Exception;
+	List<Enrollment> queryListByUserIdAndState(@Param("userId") Integer userId, @Param("emId") Integer emId)throws Exception;
 
-	public List<Enrollment> queryListByUserIdAndStateNew(@Param("userId")Integer userId,@Param("state")Integer state)throws Exception;
+	List<Enrollment> queryListByUserIdAndStateNew(@Param("userId") Integer userId, @Param("state") Integer state)throws Exception;
 	
-	public void batchUpdate(@Param("list")List<Enrollment> list)throws Exception;
+	void batchUpdate(@Param("list") List<Enrollment> list)throws Exception;
 
-	public List<Enrollment> queryListByUserIdStateAndId(@Param("userId")Integer user,@Param("id")Integer id)throws Exception;
+	List<Enrollment> queryListByUserIdStateAndId(@Param("userId") Integer user, @Param("id") Integer id)throws Exception;
 
-	public int batchUpdateToDelete(List<Enrollment> list);
+	int batchUpdateToDelete(List<Enrollment> list);
 
-	public int batchUpdateToHistory(@Param("list") List<Enrollment> list);
+	int batchUpdateToHistory(@Param("list") List<Enrollment> list);
 }

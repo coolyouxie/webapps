@@ -3,7 +3,7 @@ module('Inline', {
         this.component = $('<div data-date="12-02-2012"></div>')
                         .appendTo('#qunit-fixture')
                         .datetimepicker({format: "dd-mm-yyyy"});
-        this.dp = this.component.data('datetimepicker')
+        this.dp = this.component.data('datetimepicker');
         this.picker = this.dp.picker;
     },
     teardown: function(){
@@ -23,6 +23,6 @@ test('Visible after init', function(){
 });
 
 test('update', function(){
-    this.dp.update('13-03-2012')
+    this.dp.update('13-03-2012');
     datesEqual(this.dp.date, UTCDate(2012, 2, 13));
 });

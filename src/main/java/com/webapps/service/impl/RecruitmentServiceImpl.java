@@ -206,7 +206,12 @@ public class RecruitmentServiceImpl implements IRecruitmentService {
 		}
 		return r;
 	}
-	
-	
+
+	@Override
+	public List<Recruitment> queryListByType(int type) throws Exception {
+		List<Recruitment> list = iRecruitmentMapper.queryListByType(type);
+		return list;
+	}
+
 
 }

@@ -54,8 +54,8 @@
 					if(response&&response.result=="S"){
 						window.location.href="${ctx}/company/toCompanyListPage";
 					}
-		        });;
-		    }
+                });
+            }
 		});
 	});
 	

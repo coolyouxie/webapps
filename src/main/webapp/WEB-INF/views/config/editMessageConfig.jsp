@@ -41,7 +41,7 @@
 					window.location.href = "${ctx}/messageConfig/toMessageConfigPage";
 				}else{
 					alert("信息保存失败，请稍后再试");
-					return ;
+
 				}
 			}
 		});

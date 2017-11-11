@@ -7,12 +7,12 @@ import com.webapps.common.form.CompanyRequestForm;
 
 public interface ICompanyService {
 	
-	public Page loadCompanyList(Page page,CompanyRequestForm company) throws Exception;
+	Page loadCompanyList(Page page, CompanyRequestForm company) throws Exception;
 	
-	public Company getById(Integer id) throws Exception;
+	Company getById(Integer id) throws Exception;
 	
-	public ResultDto<Company> saveCompany(Company company) throws Exception;
+	ResultDto<Company> saveCompany(Company company) throws Exception;
 	
-	public ResultDto<Company> deleteCompanyById(Integer id) throws Exception;
+	ResultDto<Company> deleteCompanyById(Integer id) throws Exception;
 
 }

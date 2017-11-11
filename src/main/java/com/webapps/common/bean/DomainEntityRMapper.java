@@ -13,12 +13,12 @@ public interface DomainEntityRMapper<I extends Dto> {
 	 * @param fkid
 	 * deleteByFkIds
 	 */
-	public int insertByFkIds(Long... fkid);
+    int insertByFkIds(Long... fkid);
 
 	/**
 	 * @param fkid
 	 * deleteByFkIds
 	 */
-	public int deleteByFkIds(Long... fkid);
+    int deleteByFkIds(Long... fkid);
 	
 }

@@ -13,12 +13,12 @@ import com.webapps.common.form.UserRewardRequestForm;
 public interface IUserRewardMapper extends IBaseMapper<UserReward>,IPageMapper<UserReward,UserRewardRequestForm>{
 	
 	
-	public UserReward queryAvaliableUserIdTypeAndDate(@Param("userId")Integer userId,@Param("type")int type,
-			@Param("startDate")String startDate,@Param("endDate")String endDate)throws Exception;
+	UserReward queryAvaliableUserIdTypeAndDate(@Param("userId") Integer userId, @Param("type") int type,
+                                               @Param("startDate") String startDate, @Param("endDate") String endDate)throws Exception;
 	
-	public UserReward queryByUserIdTypeAndDate(@Param("userId")Integer userId,@Param("type")int type,
-			@Param("startDate")String startDate,@Param("endDate")String endDate)throws Exception;
+	UserReward queryByUserIdTypeAndDate(@Param("userId") Integer userId, @Param("type") int type,
+                                        @Param("startDate") String startDate, @Param("endDate") String endDate)throws Exception;
 	
-	public int resetLeftTimes(@Param("leftTimes")int leftTimes);
+	int resetLeftTimes(@Param("leftTimes") int leftTimes);
 	
 }

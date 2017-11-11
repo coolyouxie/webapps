@@ -34,7 +34,7 @@ public class PropertyUtil {
 	}
 	
 	public static void main(String[] args){
-		System.out.println((String)getProperty("WebApp_Path"));;
-	}
+		System.out.println((String)getProperty("WebApp_Path"));
+    }
 
 }

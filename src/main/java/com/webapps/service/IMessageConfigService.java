@@ -9,14 +9,14 @@ import com.webapps.common.form.MessageConfigRequestForm;
 
 public interface IMessageConfigService {
 	
-	public ResultDto<MessageConfig> saveMessageConfig(MessageConfigRequestForm form);
+	ResultDto<MessageConfig> saveMessageConfig(MessageConfigRequestForm form);
 	
-	public int deleteMessageConfigById(MessageConfigRequestForm form);
+	int deleteMessageConfigById(MessageConfigRequestForm form);
 	
-	public Page loadMessageConfigList(Page page,MessageConfigRequestForm form);
+	Page loadMessageConfigList(Page page, MessageConfigRequestForm form);
 	
-	public MessageConfig getById(Integer id);
+	MessageConfig getById(Integer id);
 	
-	public List<MessageConfig> queryAll();
+	List<MessageConfig> queryAll();
 	
 }

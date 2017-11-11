@@ -19,6 +19,6 @@ public interface IBillRecordMapper extends IBaseMapper<BillRecord>,IPageMapper<B
 	
 	List<BillRecord> queryByUserId(Integer userId);
 	
-	public BigDecimal sumFeeByUserIdAndType(@Param("userId")Integer userId,@Param("type")Integer type);
+	BigDecimal sumFeeByUserIdAndType(@Param("userId") Integer userId, @Param("type") Integer type);
 	
 }

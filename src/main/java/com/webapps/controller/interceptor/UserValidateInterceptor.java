@@ -25,7 +25,7 @@ public class UserValidateInterceptor implements HandlerInterceptor {
 
 	public boolean preHandle(HttpServletRequest arg0, HttpServletResponse arg1, Object arg2) throws Exception {
 		String validateCode = (String)arg0.getSession().getAttribute(ValidatorCodeUtil.sessionKey);
-		String checkCode = (String)arg0.getParameter("checkCode");
+		String checkCode = arg0.getParameter("checkCode");
 		String path = arg0.getContextPath();
 		if(StringUtils.isBlank(validateCode)){
 			arg1.sendRedirect(path+"/login.jsp");

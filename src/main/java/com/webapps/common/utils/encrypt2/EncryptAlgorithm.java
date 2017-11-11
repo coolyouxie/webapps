@@ -12,7 +12,7 @@ public enum EncryptAlgorithm {
     RSAWithPadding("RSA/ECB/PKCS1Padding");	
     
     private final String alg_code;
-    private EncryptAlgorithm(String code){
+    EncryptAlgorithm(String code){
         alg_code = code;
     }
     

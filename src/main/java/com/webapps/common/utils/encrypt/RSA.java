@@ -37,7 +37,7 @@ public class RSA {
 	 * @throws AlipayException
 	 */
 	private static PublicKey getPublicKeyFromX509(String algorithm, String bysKey)
-			throws NoSuchAlgorithmException, Exception {
+			throws Exception {
 		byte[] decodedKey = Base64.decode(bysKey);
 		X509EncodedKeySpec x509 = new X509EncodedKeySpec(decodedKey);
 

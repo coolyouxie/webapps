@@ -179,7 +179,7 @@
 										return "";
 									}
 									result = '<a href="${ctx}/recruitment/toRecruitmentInfoPage?type=editFromList&id='+rowObject.id+'" style="color:blue">编辑</a>'+
-										' <a href="#" style="color:blue" onclick="deleteById('+ rowObject.id + ')" >删除</a>'
+										' <a href="#" style="color:blue" onclick="deleteById('+ rowObject.id + ')" >删除</a>';
 									return result;
 								}
 							} ],

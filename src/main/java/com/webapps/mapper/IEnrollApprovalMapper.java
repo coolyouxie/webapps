@@ -14,18 +14,18 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface IEnrollApprovalMapper extends IBaseMapper<EnrollApproval>,IPageMapper<EnrollApproval,EnrollApprovalRequestForm>{
 	
-	public List<EnrollApproval> queryListByFkId(@Param("obj")EnrollApprovalRequestForm form)throws Exception;
+	List<EnrollApproval> queryListByFkId(@Param("obj") EnrollApprovalRequestForm form)throws Exception;
 	
-	public int countByFkIds(@Param("obj")EnrollApproval em)throws Exception;
+	int countByFkIds(@Param("obj") EnrollApproval em)throws Exception;
 	
-	public List<EnrollApproval> queryByUserIdTypeAndState(@Param("userId")Integer userId,
-														  @Param("type")Integer type ,
-														  @Param("state")Integer state)throws Exception;
+	List<EnrollApproval> queryByUserIdTypeAndState(@Param("userId") Integer userId,
+                                                   @Param("type") Integer type,
+                                                   @Param("state") Integer state)throws Exception;
 
-	public List<EnrollApproval> queryByUserIdEnrollmentIdTypeAndState(@Param("userId")Integer userId,
-																	  @Param("enrollmentId")Integer enrollmentId,
-																	  @Param("type")Integer type ,
-																	  @Param("state")Integer state)throws Exception;
+	List<EnrollApproval> queryByUserIdEnrollmentIdTypeAndState(@Param("userId") Integer userId,
+                                                               @Param("enrollmentId") Integer enrollmentId,
+                                                               @Param("type") Integer type,
+                                                               @Param("state") Integer state)throws Exception;
 	
-	public int batchDeleteInLogic(List<EnrollApproval> list)throws Exception;
+	int batchDeleteInLogic(List<EnrollApproval> list)throws Exception;
 }

@@ -14,9 +14,9 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface IMessageConfigMapper extends IBaseMapper<MessageConfig>,IPageMapper<MessageConfig,MessageConfigRequestForm>{
 	
-	public List<MessageConfig> getByFkIdAndType(@Param("fkId")Integer fkId,@Param("type")Integer type)throws Exception;
+	List<MessageConfig> getByFkIdAndType(@Param("fkId") Integer fkId, @Param("type") Integer type)throws Exception;
 	
-	public List<MessageConfig> getByFkIdTypeAndBelongType(@Param("fkId")Integer fkId,@Param("type")Integer type,@Param("belongType")Integer belongType)throws Exception;
+	List<MessageConfig> getByFkIdTypeAndBelongType(@Param("fkId") Integer fkId, @Param("type") Integer type, @Param("belongType") Integer belongType)throws Exception;
 	
-	public int batchDeleteInLogic(List<MessageConfig> list)throws Exception;
+	int batchDeleteInLogic(List<MessageConfig> list)throws Exception;
 }

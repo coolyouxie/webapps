@@ -9,17 +9,17 @@ import com.webapps.common.form.EnrollmentRequestForm;
 
 public interface IEnrollmentService {
 	
-	public Page loadEnrollmentList(Page page,EnrollmentRequestForm enrollment) throws Exception;
+	Page loadEnrollmentList(Page page, EnrollmentRequestForm enrollment) throws Exception;
 	
-	public Enrollment getById(Integer id) throws Exception;
+	Enrollment getById(Integer id) throws Exception;
 	
-	public ResultDto<Enrollment> saveEnrollment(Enrollment enrollment) throws Exception;
+	ResultDto<Enrollment> saveEnrollment(Enrollment enrollment) throws Exception;
 	
-	public ResultDto<Enrollment> deleteEnrollmentById(Integer id) throws Exception;
+	ResultDto<Enrollment> deleteEnrollmentById(Integer id) throws Exception;
 	
-	public List<Enrollment> queryEnrollmentListByUserId(Integer id)throws Exception;
+	List<Enrollment> queryEnrollmentListByUserId(Integer id)throws Exception;
 	
-	public int saveTalkInfoById(Enrollment em)throws Exception;
+	int saveTalkInfoById(Enrollment em)throws Exception;
 	
 	/**
 	 * 用户报名接口
@@ -27,16 +27,16 @@ public interface IEnrollmentService {
 	 * @return
 	 * @throws Exception
 	 */
-	public ResultDto<Enrollment> userEnroll(Enrollment em)throws Exception;
+    ResultDto<Enrollment> userEnroll(Enrollment em)throws Exception;
 	
-	public ResultDto<Enrollment> updateEnrollment(EnrollmentRequestForm form);
+	ResultDto<Enrollment> updateEnrollment(EnrollmentRequestForm form);
 	
-	public ResultDto<Enrollment> cancelEnroll(EnrollmentRequestForm form);
+	ResultDto<Enrollment> cancelEnroll(EnrollmentRequestForm form);
 
 	/**
 	 * 根据用户ID查询用户当前有效的报名信息（这里的有效指的是用户入职审核通过和期满审核通过的最近的一条记录）
 	 * @param userId
 	 * @return
 	 */
-	public Enrollment getCurrentStateEnrollmentByUserId(Integer userId);
+    Enrollment getCurrentStateEnrollmentByUserId(Integer userId);
 }

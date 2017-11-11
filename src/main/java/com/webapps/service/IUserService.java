@@ -7,20 +7,20 @@ import com.webapps.common.form.UserRequestForm;
 
 public interface IUserService {
 	
-	public Page loadUserList(Page page,UserRequestForm user) throws Exception;
+	Page loadUserList(Page page, UserRequestForm user) throws Exception;
 	
-	public User login(User user)throws Exception;
+	User login(User user)throws Exception;
 	
-	public int insert(User user)throws Exception;
+	int insert(User user)throws Exception;
 	
-	public ResultDto<User> saveUser(User user);
+	ResultDto<User> saveUser(User user);
 	
-	public User getById(Integer id)throws Exception;
+	User getById(Integer id)throws Exception;
 	
-	public ResultDto<User> deleteUserById(Integer id) throws Exception;
+	ResultDto<User> deleteUserById(Integer id) throws Exception;
 	
-	public ResultDto<String> getSmsValidateMsg(String phoneNum);
+	ResultDto<String> getSmsValidateMsg(String phoneNum);
 	
-	public ResultDto<String> resetPassword(String phoneNum,String password);
+	ResultDto<String> resetPassword(String phoneNum, String password);
 	
 }

@@ -7,11 +7,11 @@ import com.webapps.common.entity.UserReward;
 
 public interface IUserRewardService {
 	
-	public ResultDto<UserReward> getUserRewardByUserIdAndType(Integer userId,int type);
+	ResultDto<UserReward> getUserRewardByUserIdAndType(Integer userId, int type);
 	
-	public ResultDto<UserReward> saveUserReward(Integer urId,Integer userId,BigDecimal fee);
+	ResultDto<UserReward> saveUserReward(Integer urId, Integer userId, BigDecimal fee);
 	
-	public ResultDto<String> resetLeftTimes();
+	ResultDto<String> resetLeftTimes();
 	
 
 }

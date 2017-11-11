@@ -10,7 +10,7 @@ module('Keyboard Navigation 2011', {
                         .appendTo('#qunit-fixture')
                         .datetimepicker({format: "dd-mm-yyyy"})
                         .focus(); // Activate for visibility checks
-        this.dp = this.input.data('datetimepicker')
+        this.dp = this.input.data('datetimepicker');
         this.picker = this.dp.picker;
     },
     teardown: function(){

@@ -73,7 +73,7 @@
 					window.location.href = "${ctx}/bannerConfig/toBannerConfigPage";
 				}else{
 					alert("信息保存失败，请稍后再试");
-					return ;
+
 				}
 			}
 		});

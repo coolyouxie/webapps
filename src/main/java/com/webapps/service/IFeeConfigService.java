@@ -8,14 +8,14 @@ import com.webapps.common.form.FeeConfigRequestForm;
 
 public interface IFeeConfigService {
 	
-	public int saveFeeConfig(FeeConfigRequestForm form)throws Exception;
+	int saveFeeConfig(FeeConfigRequestForm form)throws Exception;
 	
-	public int deleteFeeConfigById(Integer id)throws Exception;
+	int deleteFeeConfigById(Integer id)throws Exception;
 	
-	public Page loadFeeConfigList(Page page,FeeConfigRequestForm form)throws Exception;
+	Page loadFeeConfigList(Page page, FeeConfigRequestForm form)throws Exception;
 	
-	public FeeConfig getById(Integer id)throws Exception;
+	FeeConfig getById(Integer id)throws Exception;
 	
-	public List<FeeConfig> queryAll()throws Exception;
+	List<FeeConfig> queryAll()throws Exception;
 
 }

@@ -40,7 +40,7 @@ function walkAsync(directory, excludedDirectories, fileCallback, errback) {
           return;
         }
         if (stats.isSymbolicLink()) {
-          return;
+
         }
         else if (stats.isDirectory()) {
           process.nextTick(walkAsync, filepath, excludedDirectories, fileCallback, errback);

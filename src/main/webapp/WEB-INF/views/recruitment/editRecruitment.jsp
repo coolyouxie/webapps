@@ -65,194 +65,194 @@ function showModal(){
 </script>
 </head>
 <body>
-	<form id="picForm" enctype="multipart/form-data" method="post" >
-		<div class="modal fade" id="msgModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-			<div class="modal-dialog modal-md" style="width: 580px;height:300px;">
-				<div class="modal-content">
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+	<form; id="picForm"; enctype="multipart/form-data"; method="post" >
+		<div; class="modal fade"; id="msgModal"; tabindex="-1"; role="dialog"; aria-labelledby="myModalLabel"; aria-hidden="true">
+			<div; class="modal-dialog modal-md"; style="width: 580px;height:300px;">
+				<div; class="modal-content">
+					<div; class="modal-header">
+						<button; type="button"; class="close"; data-dismiss="modal"; aria-hidden="true">
 							&times;
 						</button>
-						<h4 class="modal-title" id="myModalLabel">
+						<h4; class="modal-title"; id="myModalLabel">
 							添加图片
 						</h4>
 					</div>
-					<div class="modal-body">
-						<input type="file" id="image" name="image" class="projectfile" multiple value="" />
-						<p class="help-block">支持jpg、jpeg、png、gif格式，大小不超过2.0M</p>
+					<div; class="modal-body">
+						<input; type="file"; id="image"; name="image"; class="projectfile"; multiple; value="" />
+						<p; class="help-block">支持jpg;、jpeg;、png;、gif格式;，大小不超过2;.0;M</p>
 					</div>
-					<div class="modal-footer">
-						<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+					<div; class="modal-footer">
+						<button; type="button"; class="btn btn-default"; data-dismiss="modal">关闭</button>
 					</div>
 				</div>
 			</div>
 		</div>
 	</form>
-	<div class="container-fluid">
-		<div class="row">
-			<div class="col-md-4 col-md-offset-2">
+	<div; class="container-fluid">
+		<div; class="row">
+			<div; class="col-md-4 col-md-offset-2">
 				<h4>
 					修改发布单
 				</h4>
 			</div>
 		</div>
-		<form id="saveForm" class="form-horizontal" action="${ctx}/recruitment/saveRecruitment"  method="post">
-			<input type="hidden" id="handleType" name="handleType" value="${handleType}">
-			<input type="hidden" id="id" name="id" value="${recruitment.id}">
-			<input type="hidden" id="companyId" name="company.id" value="${recruitment.company.id}" >
-			<input type="hidden" id="picUrl" name="bannerConfig.picUrl" value="${recruitment.bannerConfig.picUrl}">
-			<div class="form-group">
-				<label class="col-md-2 control-label" for="">公司名称：</label>
-				<div class="col-md-4" >
-					<label class="col-md-3 control-label" >${recruitment.company.name}</label>
+		<form; id="saveForm"; class="form-horizontal"; action="${ctx}/recruitment/saveRecruitment";  method="post">
+			<input; type="hidden"; id="handleType"; name="handleType"; value="${handleType}">
+			<input; type="hidden"; id="id"; name="id"; value="${recruitment.id}">
+			<input; type="hidden"; id="companyId"; name="company.id"; value="${recruitment.company.id}" >
+			<input; type="hidden"; id="picUrl"; name="bannerConfig.picUrl"; value="${recruitment.bannerConfig.picUrl}">
+			<div; class="form-group">
+				<label; class="col-md-2 control-label"; for="">公司名称：</label>
+				<div; class="col-md-4" >
+					<label; class="col-md-3 control-label" >${recruitment.company.name}</label>
 				</div>
 			</div>
 			
-			<div class="form-group">
-				<label class="col-md-2 control-label" for="title">标题：</label>
-				<div class="col-md-4" >
-					<input type="text" id="title" name="title" class="form-control" value="${recruitment.title}" >
+			<div; class="form-group">
+				<label; class="col-md-2 control-label"; for="title">标题：</label>
+				<div; class="col-md-4" >
+					<input; type="text"; id="title"; name="title"; class="form-control"; value="${recruitment.title}" >
 				</div>
 			</div>
 			
-			<div class="form-group">
-				<label class="col-md-2 control-label" for="salaryBriefs">薪酬福利：</label>
-				<div class="col-md-4" >
-					<textarea id="salaryBriefs" name="salaryBriefs" class="form-control" row="3" >${recruitment.salaryBriefs}</textarea>
+			<div; class="form-group">
+				<label; class="col-md-2 control-label"; for="salaryBriefs">薪酬福利：</label>
+				<div; class="col-md-4" >
+					<textarea; id="salaryBriefs"; name="salaryBriefs"; class="form-control"; row="3" >${recruitment.salaryBriefs}</textarea>
 				</div>
 			</div>
 			
-			<div class="form-group">
-				<label class="col-md-2 control-label" for="briefInfo">其他福利：</label>
-				<div class="col-md-4" >
-					<textarea id="briefInfo" name="briefInfo" class="form-control" row="3" >${recruitment.briefInfo}</textarea>
+			<div; class="form-group">
+				<label; class="col-md-2 control-label"; for="briefInfo">其他福利：</label>
+				<div; class="col-md-4" >
+					<textarea; id="briefInfo"; name="briefInfo"; class="form-control"; row="3" >${recruitment.briefInfo}</textarea>
 				</div>
 			</div>
 			
-			<div class="form-group">
-				<label class="col-md-2 control-label" for="mobile" >手机号：</label>
-				<div class="col-md-4" >
-					<input type="text" id="mobile" name="mobile" class="form-control" value="${recruitment.mobile}" placeholder="请输入发布人手机号" >
+			<div; class="form-group">
+				<label; class="col-md-2 control-label"; for="mobile" >手机号：</label>
+				<div; class="col-md-4" >
+					<input; type="text"; id="mobile"; name="mobile"; class="form-control"; value="${recruitment.mobile}"; placeholder="请输入发布人手机号" >
 				</div>
 			</div>
 			
-			<div class="form-group">
-				<label class="col-md-2 control-label" for="mobile" >QQ：</label>
-				<div class="col-md-4" >
-					<input type="text" id="QQ" name="QQ" class="form-control" value="${recruitment.QQ}" placeholder="请输入发布人QQ号" >
+			<div; class="form-group">
+				<label; class="col-md-2 control-label"; for="mobile" >QQ：</label>
+				<div; class="col-md-4" >
+					<input; type="text"; id="QQ"; name="QQ"; class="form-control"; value="${recruitment.QQ}"; placeholder="请输入发布人QQ号" >
 				</div>
 			</div>
 			
-			<div class="form-group">
-				<label class="col-md-2 control-label" for="weiXin" >微信：</label>
-				<div class="col-md-4" >
-					<input type="text" id="weiXin" name="weiXin" class="form-control" value="${recruitment.weiXin}" placeholder="请输入发布人微信号" >
+			<div; class="form-group">
+				<label; class="col-md-2 control-label"; for="weiXin" >微信：</label>
+				<div; class="col-md-4" >
+					<input; type="text"; id="weiXin"; name="weiXin"; class="form-control"; value="${recruitment.weiXin}"; placeholder="请输入发布人微信号" >
 				</div>
 			</div>
 			
-			<div class="form-group">
-				<label class="col-md-2 control-label" for="workType">工种：</label>
-				<div class="col-md-4" >
-					<input type="text" id="workType" name="workType" class="form-control" value="${recruitment.workType}" placeholder="工种" >
+			<div; class="form-group">
+				<label; class="col-md-2 control-label"; for="workType">工种：</label>
+				<div; class="col-md-4" >
+					<input; type="text"; id="workType"; name="workType"; class="form-control"; value="${recruitment.workType}"; placeholder="工种" >
 				</div>
 			</div>
 			
-			<div class="form-group">
-				<label class="col-md-2 control-label" for="salaryLow">薪资范围：</label>
-				<div class="col-md-2" >
-					<input type="text" class ="form-control" id="salaryLow" name="salaryLow" value="${recruitment.salaryLow}" laceholder="最低薪资" >
+			<div; class="form-group">
+				<label; class="col-md-2 control-label"; for="salaryLow">薪资范围：</label>
+				<div; class="col-md-2" >
+					<input; type="text"; class ="form-control"; id="salaryLow"; name="salaryLow"; value="${recruitment.salaryLow}"; laceholder="最低薪资" >
 				</div>
-				<div class="col-md-2" >
-					<input type="text" class ="form-control" id="salaryHigh" name="salaryHigh" value="${recruitment.salaryHigh}" placeholder="最高薪资" >
+				<div; class="col-md-2" >
+					<input; type="text"; class ="form-control"; id="salaryHigh"; name="salaryHigh"; value="${recruitment.salaryHigh}"; placeholder="最高薪资" >
 				</div>
 			</div>
 			
-			<div class="form-group">
-				<label class="col-md-2 control-label" for="publishType">招工类型：</label>
-				<div class="col-md-4" >
-					<select id="type" name="publishType" class="form-control">
-						<option value="1" <c:if test="${recruitment.publishType!=null and recruitment.publishType==1}">selected</c:if>>普招</option>
-						<option value="2" <c:if test="${recruitment.publishType!=null and recruitment.publishType==2}">selected</c:if>>直招</option>
-						<option value="3" <c:if test="${recruitment.publishType!=null and recruitment.publishType==3}">selected</c:if>>假期工</option>
+			<div; class="form-group">
+				<label; class="col-md-2 control-label"; for="publishType">招工类型：</label>
+				<div; class="col-md-4" >
+					<select; id="type"; name="publishType"; class="form-control">
+						<option; value="1"; <c:if test="${recruitment.publishType!=null and recruitment.publishType==1}">selected</c:if>>普招</option>
+						<option; value="2"; <c:if test="${recruitment.publishType!=null and recruitment.publishType==2}">selected</c:if>>直招</option>
+						<option; value="3"; <c:if test="${recruitment.publishType!=null and recruitment.publishType==3}">selected</c:if>>假期工</option>
 					</select>
 				</div>
 			</div>
 			
-			<div class="form-group">
-				<label class="col-md-2 control-label" for="type">发布单类型：</label>
-				<div class="col-md-4" >
-					<select id="type" name="type" class="form-control">
-						<option value="1" <c:if test="${recruitment.type!=null and recruitment.type==1}">selected</c:if>>急招</option>
-						<option value="2" <c:if test="${recruitment.type!=null and recruitment.type==2}">selected</c:if>>热招</option>
-						<option value="3" <c:if test="${recruitment.type!=null and recruitment.type==3}">selected</c:if>>高返费</option>
-						<option value="4" <c:if test="${recruitment.type!=null and recruitment.type==4}">selected</c:if>>高工资</option>
-						<option value="5" <c:if test="${recruitment.type!=null and recruitment.type==5}">selected</c:if>>工作轻松</option>
+			<div; class="form-group">
+				<label; class="col-md-2 control-label"; for="type">发布单类型：</label>
+				<div; class="col-md-4" >
+					<select; id="type"; name="type"; class="form-control">
+						<option; value="1"; <c:if test="${recruitment.type!=null and recruitment.type==1}">selected</c:if>>急招</option>
+						<option; value="2"; <c:if test="${recruitment.type!=null and recruitment.type==2}">selected</c:if>>热招</option>
+						<option; value="3"; <c:if test="${recruitment.type!=null and recruitment.type==3}">selected</c:if>>高返费</option>
+						<option; value="4"; <c:if test="${recruitment.type!=null and recruitment.type==4}">selected</c:if>>高工资</option>
+						<option; value="5"; <c:if test="${recruitment.type!=null and recruitment.type==5}">selected</c:if>>工作轻松</option>
 					</select>
 				</div>
 			</div>
 			
-			<div class="form-group">
-				<label class="col-md-2 control-label" for="isBanner">Banner展示：</label>
-				<div class="col-md-4" >
-					<select id="isBanner" name="isBanner" class="form-control">
-						<option value="2" <c:if test="${recruitment.isBanner==2}">selected</c:if>>否</option>
-						<option value="1" <c:if test="${recruitment.isBanner==1}">selected</c:if>>是</option>
+			<div; class="form-group">
+				<label; class="col-md-2 control-label"; for="isBanner">Banner展示：</label>
+				<div; class="col-md-4" >
+					<select; id="isBanner"; name="isBanner"; class="form-control">
+						<option; value="2"; <c:if test="${recruitment.isBanner==2}">selected</c:if>>否</option>
+						<option; value="1"; <c:if test="${recruitment.isBanner==1}">selected</c:if>>是</option>
 					</select>
-					<button type="button" class="btn btn-primary" onclick="showModal()">
+					<button; type="button"; class="btn btn-primary"; onclick="showModal()">
 						上传Banner图片
 					</button>
 				</div>
 			</div>
 			
-			<div class="form-group">
-				<label class="col-md-2 control-label" for="isMessage">作为信息推送：</label>
-				<div class="col-md-4" >
-					<select id="isMessage" name="isMessage" class="form-control">
-						<option value="0" <c:if test="${recruitment.isMessage==0}">selected</c:if>>否</option>
-						<option value="1" <c:if test="${recruitment.isMessage==1}">selected</c:if>>是</option>
+			<div; class="form-group">
+				<label; class="col-md-2 control-label"; for="isMessage">作为信息推送：</label>
+				<div; class="col-md-4" >
+					<select; id="isMessage"; name="isMessage"; class="form-control">
+						<option; value="0"; <c:if test="${recruitment.isMessage==0}">selected</c:if>>否</option>
+						<option; value="1"; <c:if test="${recruitment.isMessage==1}">selected</c:if>>是</option>
 					</select>
 				</div>
 			</div>
 			
-			<div class="form-group">
-				<label class="col-md-2 control-label" for="cashback">入职期满金额：</label>
-				<div class="col-md-4" >
-					<input class ="form-control" id="cashback" name="cashback" value="${recruitment.cashback}" placeholder="返现金额" >
+			<div; class="form-group">
+				<label; class="col-md-2 control-label"; for="cashback">入职期满金额：</label>
+				<div; class="col-md-4" >
+					<input; class ="form-control"; id="cashback"; name="cashback"; value="${recruitment.cashback}"; placeholder="返现金额" >
 				</div>
 			</div>
 			
-			<div class="form-group">
-				<label class="col-md-2 control-label" for="jobBriefs">岗位职责：</label>
-				<div class="col-md-4" >
-					<textarea class ="form-control" id="jobBriefs" name="jobBriefs" >${recruitment.jobBriefs}</textarea>
+			<div; class="form-group">
+				<label; class="col-md-2 control-label"; for="jobBriefs">岗位职责：</label>
+				<div; class="col-md-4" >
+					<textarea; class ="form-control"; id="jobBriefs"; name="jobBriefs" >${recruitment.jobBriefs}</textarea>
 				</div>
 			</div>
 			
-			<div class="form-group">
-				<label class="col-md-2 control-label" for="requirement">入职条件：</label>
-				<div class="col-md-4" >
-					<textarea class ="form-control" id="requirement" name="requirement" >${recruitment.requirement}</textarea>
+			<div; class="form-group">
+				<label; class="col-md-2 control-label"; for="requirement">入职条件：</label>
+				<div; class="col-md-4" >
+					<textarea; class ="form-control"; id="requirement"; name="requirement" >${recruitment.requirement}</textarea>
 				</div>
 			</div>
 			
-			<div class="form-group">
-				<label class="col-md-2 control-label" for="cashbackBriefs">补贴详情：</label>
-				<div class="col-md-4" >
-					<textarea class ="form-control" id="cashbackBriefs" name="cashbackBriefs" >${recruitment.cashbackBriefs}</textarea>
+			<div; class="form-group">
+				<label; class="col-md-2 control-label"; for="cashbackBriefs">补贴详情：</label>
+				<div; class="col-md-4" >
+					<textarea; class ="form-control"; id="cashbackBriefs"; name="cashbackBriefs" >${recruitment.cashbackBriefs}</textarea>
 				</div>
 			</div>
 			
-			<div class="form-group">
-				<label class="col-md-2 control-label" for="cashbackDays">期满天数：</label>
-				<div class="col-md-4" >
-					<input class ="form-control" id="cashbackDays" name="cashbackDays" value="${recruitment.cashbackDays}" placeholder="期满天数" >
+			<div; class="form-group">
+				<label; class="col-md-2 control-label"; for="cashbackDays">期满天数：</label>
+				<div; class="col-md-4" >
+					<input; class ="form-control"; id="cashbackDays"; name="cashbackDays"; value="${recruitment.cashbackDays}"; placeholder="期满天数" >
 				</div>
 			</div>
 			
-			<div class="">
-				<label class="col-md-4 control-label"></label>
-				<div class="col-md-4">
-					<button type="submit" class="btn btn-primary">
+			<div; class="">
+				<label; class="col-md-4 control-label"></label>
+				<div; class="col-md-4">
+					<button; type="submit"; class="btn btn-primary">
 						发布
 					</button>
 				</div>
@@ -260,4 +260,4 @@ function showModal(){
 		</form>
 	</div>
 </body>
-</html>
+</html>;

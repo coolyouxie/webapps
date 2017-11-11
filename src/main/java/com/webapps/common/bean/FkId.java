@@ -12,6 +12,6 @@ import java.lang.annotation.Target;
 @Target({ METHOD,TYPE,FIELD})
 public @interface FkId {
 	
-	public String[] value() default "";
+	String[] value() default "";
 	
 }

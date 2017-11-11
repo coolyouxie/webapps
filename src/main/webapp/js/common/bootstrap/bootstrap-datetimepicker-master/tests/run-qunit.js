@@ -33,8 +33,7 @@ function waitFor(testFx, onReady, timeOutMillis) {
                 }
             }
         }, 100); //< repeat check every 100ms
-};
-
+}
 if (system.args.length !== 2) {
     console.log('Usage: run-qunit.js URL');
     phantom.exit(1);
@@ -52,7 +51,7 @@ page.onError = function (msg, trace) {
     trace.forEach(function(item) {
         console.log('  ', item.file, ':', item.line);
     })
-}
+};
 
 var _openPath = phantom.args[0].replace(/^.*(\\|\/)/, '');
 var openPath = _openPath;
@@ -116,11 +115,11 @@ page.open(openPath, function(status){
                     } else {
                         hitmiss = ' ' + 'undef';
                     }
-                    var htmlLine = fileLines[idx]
+                    var htmlLine = fileLines[idx];
                     if (!source)
                         htmlLine = htmlLine.replace('<', '&lt;').replace('>', '&gt;');
                     colorized += '<div class="code' + hitmiss + '">' + htmlLine + '</div>\n';
-                };
+                }
                 colorized = coverageBase.replace('COLORIZED_LINE_HTML', colorized);
 
                 fs.write('coverage.html', colorized, 'w');

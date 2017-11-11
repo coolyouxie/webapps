@@ -474,7 +474,7 @@ public class AppController {
 			dto.setResult("S");
 		}else{
 			dto.setResult("F");
-			dto.setErrorMsg("无更多数据");;
+			dto.setErrorMsg("无更多数据");
 		}
 		return JSONUtil.toJSONString(JSONObject.fromObject(dto));
 	}
@@ -866,5 +866,22 @@ public class AppController {
 		model.addAttribute("userReward", dto.getData());
 		model.addAttribute("result", dto.getResult());
 		return "/common/prizeDraw";
+	}
+
+	@ResponseBody
+	@RequestMapping(value = "/queryRecruitmentListByType",produces = "text/html;charset=UTF-8")
+	public String queryRecruitmentListByType(@RequestBody String params){
+		ResultDto<List<Recruitment>> dto = new ResultDto<List<Recruitment>>();
+		try {
+			List<Recruitment> list = iRecruitmentService.queryListByType(1);
+			dto.setData(list);
+			dto.setResult("S");
+			return JSONUtil.toJSONString(JSONObject.fromObject(dto));
+		} catch (Exception e) {
+			e.printStackTrace();
+			dto.setResult("F");
+			dto.setErrorMsg("查询发布单异常");
+			return JSONUtil.toJSONString(JSONObject.fromObject(dto));
+		}
 	}
 }

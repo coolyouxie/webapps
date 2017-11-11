@@ -20,29 +20,29 @@ public interface IEnrollApprovalService {
 	 * @return
 	 * @throws Exception
 	 */
-	public Page loadEnrollApprovalList(Page page,EnrollApprovalRequestForm form)throws Exception;
+    Page loadEnrollApprovalList(Page page, EnrollApprovalRequestForm form)throws Exception;
 	
 	/**
 	 *
 	 * @return
 	 * @throws Exception
 	 */
-	public ResultDto<EnrollApproval> approvalById(Integer id,Integer state,String remark,Integer approverId)throws Exception;
+    ResultDto<EnrollApproval> approvalById(Integer id, Integer state, String remark, Integer approverId)throws Exception;
 	
-	public EnrollApproval getById(Integer id)throws Exception;
+	EnrollApproval getById(Integer id)throws Exception;
 
-	public ResultDto<EnrollApproval> applyEntryApproval(JSONObject params);
+	ResultDto<EnrollApproval> applyEntryApproval(JSONObject params);
 	
-	public ResultDto<EnrollApproval> applyExpireApproval(JSONObject params);
+	ResultDto<EnrollApproval> applyExpireApproval(JSONObject params);
 
 	/**
 	 * 分阶段申请期满返费
 	 * @param params
 	 * @return
 	 */
-	public ResultDto<EnrollApproval> applyExpireApprovalWithCashbackDays(JSONObject params);
+    ResultDto<EnrollApproval> applyExpireApprovalWithCashbackDays(JSONObject params);
 	
-	public ResultDto<List<EnrollApproval>> queryByUserIdTypeAndState(Integer userId,Integer type,Integer state);
+	ResultDto<List<EnrollApproval>> queryByUserIdTypeAndState(Integer userId, Integer type, Integer state);
 
 	/**
 	 * 分阶段期满入职审核
@@ -53,8 +53,8 @@ public interface IEnrollApprovalService {
 	 * @param cashbackData
 	 * @return
 	 */
-	public ResultDto<EnrollApproval> entryApproveById(Integer id,Integer state,String failedReason,
-											  Integer approverId,String[] cashbackData);
+    ResultDto<EnrollApproval> entryApproveById(Integer id, Integer state, String failedReason,
+                                               Integer approverId, String[] cashbackData);
 
 	/**
 	 * 分阶段期满审核
@@ -65,9 +65,9 @@ public interface IEnrollApprovalService {
 	 * @return
 	 * @throws Exception
 	 */
-	public ResultDto<EnrollApproval> expireApprovalById(Integer id,Integer state,String failedReason,
-														Integer approverId)throws Exception;
+    ResultDto<EnrollApproval> expireApprovalById(Integer id, Integer state, String failedReason,
+                                                 Integer approverId)throws Exception;
 	
-	public EntryDetailDto loadEntryDetail(Integer enrollApprovalId)throws Exception;
+	EntryDetailDto loadEntryDetail(Integer enrollApprovalId)throws Exception;
 														
 }

@@ -11,6 +11,6 @@ import org.springframework.stereotype.Repository;
 public interface IUserWalletMapper extends IBaseMapper<UserWallet>,IPageMapper<UserWallet,UserWalletRequestForm>{
 	
 	
-	public UserWallet queryByUserId(Integer userId);
+	UserWallet queryByUserId(Integer userId);
 	
 }

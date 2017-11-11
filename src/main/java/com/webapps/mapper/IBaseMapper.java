@@ -11,16 +11,16 @@ import java.util.List;
  */
 public interface IBaseMapper<T> {
 
-    public T getById(Integer id) throws Exception;
+    T getById(Integer id) throws Exception;
 
-    public int deleteById(Integer id) throws Exception;
+    int deleteById(Integer id) throws Exception;
 
-    public int updateById(@Param("id")Integer id,@Param("obj")T t)throws Exception;
+    int updateById(@Param("id") Integer id, @Param("obj") T t)throws Exception;
 
-    public int insert(@Param("obj")T obj) throws DuplicateKeyException;
+    int insert(@Param("obj") T obj) throws DuplicateKeyException;
     
-    public List<T> queryAll() throws Exception;
+    List<T> queryAll() throws Exception;
     
-	public int deleteByIdInLogic(Integer id) throws Exception;
+	int deleteByIdInLogic(Integer id) throws Exception;
 
 }

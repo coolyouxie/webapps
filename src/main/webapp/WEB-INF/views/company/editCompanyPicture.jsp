@@ -77,8 +77,8 @@ function search(){
 						//alert("图片上传成功");
 						//window.location.href="${ctx}/company/toCompanyListPage";
 					}
-		        });;
-		    }
+                });
+            }
 		});
 		
 		dataGrid = jQuery("#list").jqGrid({
@@ -193,7 +193,7 @@ function search(){
 					search();
 				}else{
 					alert("信息保存失败，请稍后再试");
-					return ;
+
 				}
 			}
 		});
@@ -213,7 +213,7 @@ function search(){
                     search();
                 }else{
                     alert("删除失败，请稍后再试");
-                    return ;
+
                 }
             }
         });

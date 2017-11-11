@@ -13,13 +13,13 @@ import java.util.List;
 @Repository
 public interface IEnrollmentExtraMapper extends IBaseMapper<EnrollmentExtra>,IPageMapper<EnrollmentExtra,EnrollmentExtraRequestForm>{
 
-    public List<EnrollmentExtra> queryListByEnrollmentId(@Param("enrollmentId") Integer enrollmentId) throws Exception;
+    List<EnrollmentExtra> queryListByEnrollmentId(@Param("enrollmentId") Integer enrollmentId) throws Exception;
 
-    public List<EnrollmentExtra> queryListByEnrollmentIdAndState(@Param("enrollmentId") Integer enrollmentId,
-                                                         @Param("state") Integer state) throws Exception;
+    List<EnrollmentExtra> queryListByEnrollmentIdAndState(@Param("enrollmentId") Integer enrollmentId,
+                                                          @Param("state") Integer state) throws Exception;
 
-    public List<EnrollmentExtra> queryListByEnrollmentIdStateAndCashbackDays(@Param("enrollmentId") Integer enrollmentId,
-                                                                             @Param("state") Integer state,
-                                                                             @Param("cashbackDays")Integer cashbackDays)throws Exception;
+    List<EnrollmentExtra> queryListByEnrollmentIdStateAndCashbackDays(@Param("enrollmentId") Integer enrollmentId,
+                                                                      @Param("state") Integer state,
+                                                                      @Param("cashbackDays") Integer cashbackDays)throws Exception;
 
 }

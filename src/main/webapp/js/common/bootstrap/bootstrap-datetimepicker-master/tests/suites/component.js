@@ -78,15 +78,15 @@ test('simple keyboard nav test', function(){
 });
 
 test('setValue', function(){
-    this.dp.date = UTCDate(2012, 2, 13)
-    this.dp.setValue()
+    this.dp.date = UTCDate(2012, 2, 13);
+    this.dp.setValue();
     datesEqual(this.dp.date, UTCDate(2012, 2, 13));
     equal(this.input.val(), '13-03-2012');
 });
 
 test('update', function(){
     this.input.val('13-03-2012');
-    this.dp.update()
+    this.dp.update();
     datesEqual(this.dp.date, UTCDate(2012, 2, 13));
 });
 
@@ -148,8 +148,8 @@ test('Selecting date resets viewDate and date', function(){
 
     // Updated internally on click
     target.click();
-    datesEqual(this.dp.viewDate, UTCDate(2012, 1, 26))
-    datesEqual(this.dp.date, UTCDate(2012, 1, 26))
+    datesEqual(this.dp.viewDate, UTCDate(2012, 1, 26));
+    datesEqual(this.dp.date, UTCDate(2012, 1, 26));
 
     // Re-rendered on click
     target = this.picker.find('.datetimepicker-days tbody td:first');

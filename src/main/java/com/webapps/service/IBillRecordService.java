@@ -6,6 +6,6 @@ import com.webapps.common.form.BillRecordRequestForm;
 public interface IBillRecordService {
 	
 
-	public Page loadPageList(Page page,BillRecordRequestForm form);
+	Page loadPageList(Page page, BillRecordRequestForm form);
 	
 }

@@ -5,11 +5,11 @@ import com.webapps.common.entity.AliSmsMsg;
 
 public interface IAliSmsMsgService {
 	
-	public ResultDto<AliSmsMsg> getAliSmsCode(String phoneNum,Integer type);
+	ResultDto<AliSmsMsg> getAliSmsCode(String phoneNum, Integer type);
 	
-	public ResultDto<String> validateAliSmsCode(Integer aliSmsMsgId,String msgCode);
+	ResultDto<String> validateAliSmsCode(Integer aliSmsMsgId, String msgCode);
 	
-	public ResultDto<String> validateAliSmsCode(String phoneNum,Integer type,String msgCode);
+	ResultDto<String> validateAliSmsCode(String phoneNum, Integer type, String msgCode);
 	
 
 }

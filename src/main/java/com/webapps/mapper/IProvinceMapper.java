@@ -15,12 +15,12 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface IProvinceMapper extends IBaseMapper<Province>{
 	
-	public Province getByCode(String code) throws Exception;
+	Province getByCode(String code) throws Exception;
 	
-	public int batchUpdate(List<Province> list) throws Exception;
+	int batchUpdate(List<Province> list) throws Exception;
 	
-	public List<Province> queryByParentId(Integer parentId) throws Exception;
+	List<Province> queryByParentId(Integer parentId) throws Exception;
 	
-	public List<Province> queryByLevel(Integer level) throws Exception;
+	List<Province> queryByLevel(Integer level) throws Exception;
 
 }

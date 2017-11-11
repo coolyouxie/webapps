@@ -11,6 +11,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ICompanyMapper extends IBaseMapper<Company>,IPageMapper<Company,CompanyRequestForm>{
 	
-	public User queryCompanyByAccount(String account);
+	User queryCompanyByAccount(String account);
 
 }

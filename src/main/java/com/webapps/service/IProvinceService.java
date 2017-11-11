@@ -7,14 +7,14 @@ import com.webapps.common.entity.Province;
 
 public interface IProvinceService {
 	
-	public Province getById(Integer id)throws Exception;
+	Province getById(Integer id)throws Exception;
 	
 	/**
 	 * 初始化数据时使用的方法
 	 * @return
 	 * @throws Exception
 	 */
-	public List<Province> setProvinceParentId()throws Exception;
+    List<Province> setProvinceParentId()throws Exception;
 	
 	/**
 	 * 根据父级行政区ID查询行政区
@@ -22,7 +22,7 @@ public interface IProvinceService {
 	 * @return
 	 * @throws Exception
 	 */
-	public ResultDto<List<Province>> queryProvinceByParentId(Integer parentId);
+    ResultDto<List<Province>> queryProvinceByParentId(Integer parentId);
 	
 	/**
 	 * 根据行政区等级查询行政区信息
@@ -30,6 +30,6 @@ public interface IProvinceService {
 	 * @return
 	 * @throws Exception
 	 */
-	public ResultDto<List<Province>> queryProvinceByLevel(Integer level);
+    ResultDto<List<Province>> queryProvinceByLevel(Integer level);
 
 }

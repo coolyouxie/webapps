@@ -5536,8 +5536,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	            item = (slider.vars.controlNav === "thumbnails") ? '<img src="' + slide.attr('data-thumb') + '"/>' : '<a>' + j + '</a>';
 	            if ('thumbnails' === slider.vars.controlNav && true === slider.vars.thumbCaptions) {
 	              var captn = slide.attr('data-thumbcaption');
-	              if ('' != captn && undefined != captn) {item += '<span class="' + namespace + 'caption">' + captn + '</span>'};
-	            }
+                    if ('' != captn && undefined != captn) {
+                        item += '<span class="' + namespace + 'caption">' + captn + '</span>'
+                    }
+                }
 	            // slider.controlNavScaffold.append('<li>' + item + '</li>');
 	            slider.controlNavScaffold.append('<li>' + item + '<i></i></li>');
 	            j++;
@@ -5877,9 +5879,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    },
 	    resize: function() {
 	      if (!slider.animating && slider.is(':visible')) {
-	        if (!carousel) {slider.doMath()};
-
-	        if (fade) {
+              if (!carousel) {
+                  slider.doMath()
+              }
+              if (fade) {
 	          // SMOOTH HEIGHT:
 	          methods.smoothHeight();
 	        } else if (carousel) { //CAROUSEL:
@@ -6110,8 +6113,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	      }
 	      // SMOOTH HEIGHT:
-	      if (slider.vars.smoothHeight) {methods.smoothHeight(slider.vars.animationSpeed)};
-	    }
+            if (slider.vars.smoothHeight) {
+                methods.smoothHeight(slider.vars.animationSpeed)
+            }
+        }
 	  };
 	  slider.wrapup = function(dimension) {
 	    // SLIDE:
@@ -11775,7 +11780,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    var length = this.rsBlock.length / 3;
 
-	    var rsBlocks = new Array();
+	    var rsBlocks = [];
 
 	    for (var i = 0; i < length; i++) {
 
@@ -12591,7 +12596,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	//---------------------------------------------------------------------
 
 	function QRBitBuffer() {
-	  this.buffer = new Array();
+	  this.buffer = [];
 	  this.length = 0;
 	}
 
@@ -12933,7 +12938,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    var length = this.rsBlock.length / 3;
 
-	    var rsBlocks = new Array();
+	    var rsBlocks = [];
 
 	    for (var i = 0; i < length; i++) {
 
@@ -13749,7 +13754,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	// ---------------------------------------------------------------------
 
 	function QRBitBuffer() {
-	  this.buffer = new Array();
+	  this.buffer = [];
 	  this.length = 0;
 	}
 
@@ -16442,4 +16447,3 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ }
 /******/ ])
 });
-;

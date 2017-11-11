@@ -4,7 +4,7 @@ import com.webapps.common.entity.UserWallet;
 
 public interface IUserWalletService {
 	
-	public UserWallet getUserWalletByUserId(Integer userId);
+	UserWallet getUserWalletByUserId(Integer userId);
 	
 
 }

@@ -52,8 +52,8 @@
 							$("#msgModal").modal("hide");
 							$("#picUrl").val(response.data);
 						}
-					});;
-				}
+                    });
+                }
 		});
 		loadProvince("province");
 		loadCityOrArea($("#tmpProvince").val(),"city");

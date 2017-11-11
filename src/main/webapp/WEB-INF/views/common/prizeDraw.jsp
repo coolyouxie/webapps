@@ -75,7 +75,7 @@
 				</h2>
 				<div class="g-lottery-box">
 					<div class="g-lottery-img"></div>
-					<a class="playbtn" href="javascript:;" title="开始抽奖"></a>
+					<a class="playbtn" href="javascript:" title="开始抽奖"></a>
 				</div>
 			</div>
 		</div>
@@ -112,7 +112,7 @@
 					rotateFunc(6, 120, '谢谢参与6');
 					break;
 				}
-			}
+			};
 			$(".playbtn").click(function() {
 				if (isture)
 					return; // 如果在执行就退出

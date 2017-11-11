@@ -7,11 +7,11 @@ import com.webapps.common.form.ApplyExpenditureRequestForm;
 public interface IApplyExpenditureService {
 	
 
-	public Page loadPageList(Page page,ApplyExpenditureRequestForm apply);
+	Page loadPageList(Page page, ApplyExpenditureRequestForm apply);
 	
-	public ResultDto<String> approveById(Integer id,Integer state,Integer approverId,String reason);
+	ResultDto<String> approveById(Integer id, Integer state, Integer approverId, String reason);
 	
-	public ResultDto<String> applyExpenditure(Integer userId,Integer walletId);
+	ResultDto<String> applyExpenditure(Integer userId, Integer walletId);
 	
 	
 	

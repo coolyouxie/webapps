@@ -9,14 +9,16 @@ import com.webapps.common.form.RecruitmentRequestForm;
 
 public interface IRecruitmentService {
 	
-	public ResultDto<RecruitmentRequestForm> saveRecruitment(RecruitmentRequestForm form);
+	ResultDto<RecruitmentRequestForm> saveRecruitment(RecruitmentRequestForm form);
 	
-	public List<Recruitment> queryListByCompanyId(Integer companyId)throws Exception;
+	List<Recruitment> queryListByCompanyId(Integer companyId)throws Exception;
 	
-	public int deleteRecruitmentById(Integer id)throws Exception;
+	int deleteRecruitmentById(Integer id)throws Exception;
 	
-	public Page loadRecruitmentList(Page page,RecruitmentRequestForm form)throws Exception;
+	Page loadRecruitmentList(Page page, RecruitmentRequestForm form)throws Exception;
 	
-	public Recruitment getById(Integer id)throws Exception;
+	Recruitment getById(Integer id)throws Exception;
+
+	List<Recruitment> queryListByType(int type)throws Exception;
 
 }

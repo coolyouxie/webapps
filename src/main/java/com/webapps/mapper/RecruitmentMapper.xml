@@ -118,6 +118,21 @@
 	<select id="queryAll" resultMap="resultMap">
 		select <include refid="select_columns" /> from t_recruitment tr
 	</select>
+
+	<select id="queryListByType" resultMap="resultMap">
+		SELECT
+		<include refid="select_columns" />,
+		tc.name as company_name,
+		tc.address as company_address,
+		tbc.fk_id as banner_id,
+		tbc.pic_url as pic_url,
+		tbc.type as banner_type
+		FROM t_recruitment tr
+		left join t_company tc on tr.company_id = tc.id
+		left join t_banner_config tbc on tbc.fk_id = tr.id and tbc.type=4 and tbc.data_state = 1
+		WHERE tr.type = #{type} and tr.data_state = 1
+		order by type asc, create_time desc
+	</select>
 	
 	<!-- 根据父级行政区号查询 -->
 	<select id="queryByCompanyId" resultMap="resultMap">

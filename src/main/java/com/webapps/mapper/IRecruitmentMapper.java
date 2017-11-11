@@ -13,8 +13,10 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface IRecruitmentMapper extends IBaseMapper<Recruitment>,IPageMapper<Recruitment,RecruitmentRequestForm>{
 	
-	public Province getByCode(String code);
+	Province getByCode(String code);
 	
-	public List<Recruitment> queryByCompanyId(Integer companyId);
+	List<Recruitment> queryByCompanyId(Integer companyId);
+
+	List<Recruitment> queryListByType(int type)throws Exception;
 
 }

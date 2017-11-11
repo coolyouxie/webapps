@@ -10,6 +10,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface IUserMapper extends IBaseMapper<User>,IPageMapper<User,UserRequestForm>{
 	
-	public User queryUserByAccount(String account);
+	User queryUserByAccount(String account);
 	
 }

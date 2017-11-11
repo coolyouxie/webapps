@@ -21,10 +21,10 @@ $(document).ready(function(){
     var nextnum=2;
     var dqnum=parseInt($('.am-pagination .am-active a').text());
 
-    $('.am-pagination-next').before('<li id="wos-pagination-next-more" style="display: none"><a class="am-hide-sm">...</a></li>')
-    $('.am-pagination-prev').after('<li id="wos-pagination-prev-more"  style="display: none"><a class="am-hide-sm">...</a></li>')
+    $('.am-pagination-next').before('<li id="wos-pagination-next-more" style="display: none"><a class="am-hide-sm">...</a></li>');
+    $('.am-pagination-prev').after('<li id="wos-pagination-prev-more"  style="display: none"><a class="am-hide-sm">...</a></li>');
     $(".am-pagination li a").each(function(){
-        var dq=$(this).text()
+        var dq=$(this).text();
         if (dq>dqnum+nextnum){
             $(this).parent("li").hide();
             $('#wos-pagination-next-more').show();
@@ -33,10 +33,10 @@ $(document).ready(function(){
             $(this).parent("li").hide();
             $('#wos-pagination-prev-more').show();
         }
-    })
+    });
     $('#wos-pagination-next-more').click(function(){
         $(".am-pagination li a").each(function(){
-            var dq=$(this).text()
+            var dq=$(this).text();
             if (dq>dqnum+nextnum){
                 $(this).parent("li").show();
             }
@@ -45,7 +45,7 @@ $(document).ready(function(){
     });
     $('#wos-pagination-prev-more').click(function(){
         $(".am-pagination li a").each(function(){
-            var dq=$(this).text()
+            var dq=$(this).text();
             if (dq<dqnum-prevnum){
                 $(this).parent("li").show();
             }

@@ -9,7 +9,7 @@ public enum EncryptAlgorithm {
 
 	private final String alg_code;
 
-	private EncryptAlgorithm(String code) {
+	EncryptAlgorithm(String code) {
 		alg_code = code;
 	}
 

@@ -12,6 +12,6 @@ import org.springframework.stereotype.Repository;
 public interface IWalletRecordMapper extends IBaseMapper<WalletRecord>,IPageMapper<WalletRecord,WalletRecordRequestForm>{
 	
 	
-	public UserWallet queryByWalletId(Integer walletId);
+	UserWallet queryByWalletId(Integer walletId);
 	
 }

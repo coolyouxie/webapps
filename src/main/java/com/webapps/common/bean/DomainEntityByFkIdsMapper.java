@@ -15,14 +15,14 @@ public interface DomainEntityByFkIdsMapper<I extends Dto> {
 	 * @param fkid
 	 * deleteByFkIds
 	 */
-	public int deleteByFkIds(Long... fkid);
+    int deleteByFkIds(Long... fkid);
 
 	/**
 	 * @param fkIds
 	 * @return
 	 * 根据FkIds查询返回多个对象
 	 */
-	public List<I> queryByFkIds(Long... fkId);
+    List<I> queryByFkIds(Long... fkId);
 	
 	
 }

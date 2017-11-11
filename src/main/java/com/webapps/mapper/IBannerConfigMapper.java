@@ -14,7 +14,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface IBannerConfigMapper extends IBaseMapper<BannerConfig>,IPageMapper<BannerConfig,BannerConfigRequestForm>{
 	
-	public List<BannerConfig> getByFkIdAndType(@Param("fkId")Integer fkId,@Param("type")Integer type)throws Exception;
+	List<BannerConfig> getByFkIdAndType(@Param("fkId") Integer fkId, @Param("type") Integer type)throws Exception;
 	
-	public int batchDeleteInLogic(List<BannerConfig> list)throws Exception;
+	int batchDeleteInLogic(List<BannerConfig> list)throws Exception;
 }

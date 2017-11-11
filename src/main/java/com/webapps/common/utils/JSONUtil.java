@@ -120,7 +120,7 @@ public class JSONUtil {
 			while (it.hasNext()) {
 				String key = (String) it.next();
 				Object value = jsonObject.get(key);
-				map.put((String) key, value);
+				map.put(key, value);
 			}
 			list.add(map);
 		}
