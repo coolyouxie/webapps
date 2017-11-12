@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.webapps.mapper.IGroupUserMapper">
+	<resultMap id="resultMap" type="com.webapps.common.entity.GroupUser">
+		<id column="ID" jdbcType="DECIMAL" property="id" />
+		<result column="user_name" jdbcType="VARCHAR" property="userName" />
+		<result column="user_mobile" jdbcType="VARCHAR" property="userMobile" />
+		<result column="leader_name" jdbcType="VARCHAR" property="leaderName" />
+		<result column="leader_mobile" jdbcType="VARCHAR" property="leaderMobile" />
+		<result column="data_state" jdbcType="DECIMAL" property="dataState" />
+		<result column="create_time" jdbcType="VARCHAR" property="createTime" />
+		<result column="update_time" jdbcType="VARCHAR" property="updateTime" />
+	</resultMap>
+
+	<sql id="select_columns">
+		ID,user_name,user_mobile,leader_name,leader_mobile, data_state,create_time,update_time
+	</sql>
+
+	<sql id="insert_columns">
+		user_name,user_mobile,leader_name,leader_mobile, data_state,create_time
+	</sql>
+
+	<select id="getById" resultMap="resultMap">
+		select <include refid="select_columns" /> from t_group_user where id = #{id} and data_state = 1
+	</select>
+	
+	<!-- 查询所有 -->
+	<select id="queryAll" resultMap="resultMap">
+		select <include refid="select_columns" /> from t_group_user where data_state = 1 
+	</select>
+	
+	<select id="queryTopNumAliMsg" resultMap="resultMap">
+		<include refid="ORACLE.paginationStart" /> 
+		select <include refid="select_columns" /> from t_group_user where data_state = 1 order by create_time desc
+		<include refid="ORACLE.paginationEnd" />
+	</select>
+	
+	<select id="queryByPhoneNumType" resultMap="resultMap">
+		select <include refid="select_columns" />
+		from t_group_user where phone_numbers =#{phoneNum} and type=#{type} and data_state = 1 order by id desc
+	</select>
+	
+	<!-- 查询行政区总数 -->
+	<select id="queryCount" resultType="java.lang.Integer">
+		SELECT count(1) FROM t_group_user
+		<trim prefix="WHERE" prefixOverrides="AND">
+			data_state = 1 
+			<if test="obj.leaderName !=null and obj.leaderName != ''">
+				AND leader_name like concat('%',#{obj.leaderName},'%')
+			</if>
+			<if test="obj.leaderMobile !=null and obj.leaderMobile != ''">
+				and leader_mobile = #{obj.leaderMobile}
+			</if>
+			<if test="obj.userName != null and obj.userName != ''">
+				and user_name like concat('%',#{obj.userName},'%')
+			</if>
+			<if test="obj.userMobile !=null and obj.userMobile != ''">
+				and user_mobile = #{obj.userMobile}
+			</if>
+		</trim>
+	</select>
+
+	<!-- 分页查询行政区信息 -->
+	<select id="queryPage" resultMap="resultMap">
+		<include refid="ORACLE.paginationStart" />
+		SELECT
+		<include refid="select_columns" />
+		FROM t_group_user
+		<trim prefix="WHERE" prefixOverrides="AND">
+			data_state = 1
+			<if test="obj.leaderName !=null and obj.leaderName != ''">
+				AND leader_name like concat('%',#{obj.leaderName},'%')
+			</if>
+			<if test="obj.leaderMobile !=null and obj.leaderMobile != ''">
+				and leader_mobile = #{obj.leaderMobile}
+			</if>
+			<if test="obj.userName != null and obj.userName != ''">
+				and user_name like concat('%',#{obj.userName},'%')
+			</if>
+			<if test="obj.userMobile !=null and obj.userMobile != ''">
+				and user_mobile = #{obj.userMobile}
+			</if>
+		</trim>
+		order by create_time DESC
+		<include refid="ORACLE.paginationEnd" />
+	</select>
+
+	<!-- 用于初始化数据时使用 -->
+	<update id="batchUpdate" >
+		<foreach collection="list" item="item" index="index" open="" close="" separator=";">
+			update t_group_user
+			<set>
+				parent_id=#{item.parentId},
+				type = #{item.type}
+			</set>
+			where id = #{item.id}
+         </foreach>
+	</update>
+	
+	<update id="batchDeleteInLogic" >
+		<foreach collection="list" item="item" index="index" open="" close="" separator=";">
+			update t_group_user
+			<set>
+				data_state = 0,
+				update_time = #{item.updateTime}
+			</set>
+			where id = #{item.id}
+         </foreach>
+	</update>
+	
+	<insert id="insert" useGeneratedKeys="true" keyProperty="obj.id">
+		insert into t_group_user 
+		(<include refid="insert_columns" />)
+		values
+		(
+			#{item.userName,jdbcType=VARCHAR},
+			#{item.userMobile,jdbcType=VARCHAR},
+			#{item.leaderName,jdbcType=VARCHAR},
+			#{item.leaderMobile,jdbcType=VARCHAR},
+			#{item.dataState,jdbcType=INTEGER},
+			#{item.createTime,jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<insert id="batchInsert" parameterType="java.util.List">
+		insert into t_group_user
+		(
+			<include refid="insert_columns" />
+		)
+		values
+		<foreach collection="list" item="item" index="index" separator=",">
+			(
+				#{item.userName,jdbcType=VARCHAR},
+				#{item.userMobile,jdbcType=VARCHAR},
+				#{item.leaderName,jdbcType=VARCHAR},
+				#{item.leaderMobile,jdbcType=VARCHAR},
+				#{item.dataState,jdbcType=INTEGER},
+				#{item.createTime,jdbcType=VARCHAR}
+		  	)
+		</foreach>
+	</insert>
+	
+	<update id="updateById" >
+		data_state=#{obj.dataState},
+		update_time=#{obj.updateTime}
+		where id=#{id}
+	</update>
+	
+	<update id="deleteByIdInLogic" >
+		update t_group_user
+		set data_state = 0,
+		update_time = #{obj.updateTime}
+		where id = #{id}
+	</update>
+</mapper>

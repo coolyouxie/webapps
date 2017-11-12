@@ -1,7 +1,13 @@
 package com.webapps.controller;
 
-import java.util.List;
+import java.util.*;
 
+import com.webapps.common.entity.*;
+import com.webapps.service.*;
+import net.sf.json.JSON;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONString;
+import net.sf.json.util.JSONUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -18,22 +24,6 @@ import org.springframework.web.multipart.MultipartFile;
 import com.google.gson.Gson;
 import com.webapps.common.bean.Page;
 import com.webapps.common.bean.ResultDto;
-import com.webapps.common.entity.AliSmsMsg;
-import com.webapps.common.entity.ApplyExpenditure;
-import com.webapps.common.entity.BannerConfig;
-import com.webapps.common.entity.BillRecord;
-import com.webapps.common.entity.Company;
-import com.webapps.common.entity.EnrollApproval;
-import com.webapps.common.entity.Enrollment;
-import com.webapps.common.entity.EnrollmentExtra;
-import com.webapps.common.entity.FeeConfig;
-import com.webapps.common.entity.MessageConfig;
-import com.webapps.common.entity.Picture;
-import com.webapps.common.entity.Recommend;
-import com.webapps.common.entity.Recruitment;
-import com.webapps.common.entity.User;
-import com.webapps.common.entity.UserReward;
-import com.webapps.common.entity.UserWallet;
 import com.webapps.common.form.ApplyExpenditureRequestForm;
 import com.webapps.common.form.BannerConfigRequestForm;
 import com.webapps.common.form.BillRecordRequestForm;
@@ -42,21 +32,6 @@ import com.webapps.common.form.RecruitmentRequestForm;
 import com.webapps.common.utils.JSONUtil;
 import com.webapps.common.utils.PropertyUtil;
 import com.webapps.mapper.IEnrollmentExtraMapper;
-import com.webapps.service.IAliSmsMsgService;
-import com.webapps.service.IApplyExpenditureService;
-import com.webapps.service.IBannerConfigService;
-import com.webapps.service.IBillRecordService;
-import com.webapps.service.ICompanyService;
-import com.webapps.service.IEnrollApprovalService;
-import com.webapps.service.IEnrollmentService;
-import com.webapps.service.IFeeConfigService;
-import com.webapps.service.IMessageConfigService;
-import com.webapps.service.IPictureService;
-import com.webapps.service.IRecommendService;
-import com.webapps.service.IRecruitmentService;
-import com.webapps.service.IUserRewardService;
-import com.webapps.service.IUserService;
-import com.webapps.service.IUserWalletService;
 
 import net.sf.json.JSONObject;
 
@@ -114,6 +89,9 @@ public class AppController {
 	
 	@Autowired
 	private IUserRewardService iUserRewardService;
+
+	@Autowired
+	private IGroupUserService iGroupUserService;
 
 	/**
 	 * app端登录接口
@@ -883,5 +861,54 @@ public class AppController {
 			dto.setErrorMsg("查询发布单异常");
 			return JSONUtil.toJSONString(JSONObject.fromObject(dto));
 		}
+	}
+
+	@ResponseBody
+	@RequestMapping(value="/batchEnroll",produces ="text/html;charset=UTF-8" )
+	public String saveGroupUser(@RequestBody String params){
+		ResultDto<String> dto = null;
+		try {
+			JSONObject object = JSONObject.fromObject(params);
+			GroupUser leader = (GroupUser) JSONObject.toBean(JSONObject.fromObject(object.getString("leader")),GroupUser.class);
+			JSONArray array = JSONArray.fromObject(object.getString("users"));
+			List list = (List) JSONArray.toCollection(array,GroupUser.class);
+			if(CollectionUtils.isNotEmpty(array)) {
+				dto = iGroupUserService.batchInsert(list, leader);
+			}
+			return JSONUtil.toJSONString(JSONObject.fromObject(dto));
+		} catch (Exception e) {
+			e.printStackTrace();
+			if(dto==null){
+				dto = new ResultDto<>();
+				dto.setErrorMsg("保存信息异常");
+				dto.setResult("F");
+			}
+			return JSONUtil.toJSONString(JSONObject.fromObject(dto));
+		}
+	}
+
+	public static void main(String[] args){
+		GroupUser user = new GroupUser();
+		user.setUserName("test");
+		user.setUserMobile("17321004552");
+		GroupUser user1 = new GroupUser();
+		user1.setUserName("test");
+		user1.setUserMobile("17321004552");
+		List<GroupUser> list = new ArrayList<>();
+		list.add(user);
+		list.add(user1);
+		Map<String,Object> map = new HashMap<>();
+		GroupUser leader = new GroupUser();
+		leader.setLeaderName("leader");
+		leader.setLeaderMobile("17321004552");
+		map.put("leader",leader);
+		map.put("users",list);
+		String jsonStr = JSONUtil.toJSONString(map);
+		System.out.println(jsonStr);
+//		JSONObject object = JSONObject.fromObject(jsonStr);
+		JSONArray array = JSONArray.fromObject(jsonStr);
+		System.out.println();
+//		List list1 = (List)JSONArray.toCollection(array, User.class);
+//		System.out.println(((User)list1.get(0)).getMobile());
 	}
 }
