@@ -25,23 +25,30 @@ public class GroupUserServiceImpl implements IGroupUserService {
     @Override
     public ResultDto<String> batchInsert(List<GroupUser> list, GroupUser leader) throws Exception {
         ResultDto<String> dto = new ResultDto<>();
-        if(CollectionUtils.isNotEmpty(list)&&leader!=null){
-            Date createTime = new Date();
-            for(GroupUser user:list){
-                user.setLeaderMobile(leader.getLeaderMobile());
-                user.setLeaderName(leader.getLeaderName());
-                user.setCreateTime(createTime);
-                user.setDataState(1);
-            }
-            int count = iGroupUserMapper.batchInsert(list);
-            if(count==list.size()){
-                dto.setResult("S");
-                return dto;
-            }
-            dto.setResult("F");
-            dto.setErrorMsg("部分数据保存失败");
+        Date createTime = new Date();
+        if(leader!=null){
+            leader.setCreateTime(createTime);
+            leader.setDataState(1);
+            iGroupUserMapper.insert(leader);
+            dto.setResult("S");
             return dto;
         }
+//        if(CollectionUtils.isNotEmpty(list)&&leader!=null){
+//            for(GroupUser user:list){
+//                user.setLeaderMobile(leader.getLeaderMobile());
+//                user.setLeaderName(leader.getLeaderName());
+//                user.setCreateTime(createTime);
+//                user.setDataState(1);
+//            }
+//            int count = iGroupUserMapper.batchInsert(list);
+//            if(count==list.size()){
+//                dto.setResult("S");
+//                return dto;
+//            }
+//            dto.setResult("F");
+//            dto.setErrorMsg("部分数据保存失败");
+//            return dto;
+//        }
         dto.setResult("F");
         dto.setErrorMsg("传入数据为空");
         return dto;

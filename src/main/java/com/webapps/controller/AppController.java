@@ -864,17 +864,17 @@ public class AppController {
 	}
 
 	@ResponseBody
-	@RequestMapping(value="/batchEnroll",produces ="text/html;charset=UTF-8" )
+	@RequestMapping(value="/saveGroupUser",produces ="text/html;charset=UTF-8" )
 	public String saveGroupUser(@RequestBody String params){
 		ResultDto<String> dto = null;
 		try {
 			JSONObject object = JSONObject.fromObject(params);
 			GroupUser leader = (GroupUser) JSONObject.toBean(JSONObject.fromObject(object.getString("leader")),GroupUser.class);
-			JSONArray array = JSONArray.fromObject(object.getString("users"));
-			List list = (List) JSONArray.toCollection(array,GroupUser.class);
-			if(CollectionUtils.isNotEmpty(array)) {
-				dto = iGroupUserService.batchInsert(list, leader);
-			}
+//			JSONArray array = JSONArray.fromObject(object.getString("users"));
+//			List list = (List) JSONArray.toCollection(array,GroupUser.class);
+//			if(CollectionUtils.isNotEmpty(array)) {
+				dto = iGroupUserService.batchInsert(null, leader);
+//			}
 			return JSONUtil.toJSONString(JSONObject.fromObject(dto));
 		} catch (Exception e) {
 			e.printStackTrace();

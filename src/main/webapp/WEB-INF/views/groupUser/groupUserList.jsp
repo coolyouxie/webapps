@@ -42,18 +42,8 @@
 								total : 'total', // json中代表页码总数的数据 
 								repeatitems : false // 如果设为false，则jqGrid在解析json时，会根据name来搜索对应的数据元素（即可以json中元素可以不按顺序）；而所使用的name是来自于colModel中的name设定。   
 							},
-		    colNames : [ '用户姓名', '用户手机号','团队负责人','负责人手机号','创建时间'],
+		    colNames : [ '用户姓名', '用户手机号','创建时间'],
 		    colModel : [ {
-								label : 'userName',
-								name : 'userName',
-								align : 'center',
-								sortable : false
-							}, {
-								label : 'userMobile',
-								name : 'userMobile',
-								align : 'center',
-								sortable : false
-							}, {
 								label : 'leaderName',
 								name : 'leaderName',
 								align : 'center',
@@ -64,8 +54,8 @@
 								align : 'center',
 								sortable : false
 							}, {
-								label : 'createTimeStr',
-								name : 'createTimeStr',
+								label : 'createTimeFullStr',
+								name : 'createTimeFullStr',
 								align : 'center',
 								sortable : false
 							}],
@@ -111,29 +101,15 @@
 	<div class="container-fluid">
 		<form id="searchForm">
 			<div class="row" style="margin-bottom:8px">
-				<div class="col-sm-3" style="width:255px">
+				<div class="col-sm-4" >
 					<label>
 						<span>用户姓名:</span>
-						<input type="text" id="userName" name="userName" value="">
-					</label>
-				</div>
-				<div class="col-sm-3" style="width:255px">
-					<label>
-						<span>用户手机号:</span>
-						<input type="text" id="userMobile" name="userMobile" value="">
-					</label>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-sm-3" style="width:255px">
-					<label>
-						<span>负责人:</span>
 						<input type="text" id="leaderName" name="leaderName" value="">
 					</label>
 				</div>
-				<div class="col-sm-3" style="width:255px">
+				<div class="col-sm-4" >
 					<label>
-						<span>负责人手机号:</span>
+						<span>用户手机号:</span>
 						<input type="text" id="leaderMobile" name="leaderMobile" value="">
 					</label>
 				</div>

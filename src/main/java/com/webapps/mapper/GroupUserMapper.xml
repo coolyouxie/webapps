@@ -114,12 +114,12 @@
 		(<include refid="insert_columns" />)
 		values
 		(
-			#{item.userName,jdbcType=VARCHAR},
-			#{item.userMobile,jdbcType=VARCHAR},
-			#{item.leaderName,jdbcType=VARCHAR},
-			#{item.leaderMobile,jdbcType=VARCHAR},
-			#{item.dataState,jdbcType=INTEGER},
-			#{item.createTime,jdbcType=VARCHAR}
+			#{obj.userName,jdbcType=VARCHAR},
+			#{obj.userMobile,jdbcType=VARCHAR},
+			#{obj.leaderName,jdbcType=VARCHAR},
+			#{obj.leaderMobile,jdbcType=VARCHAR},
+			#{obj.dataState,jdbcType=INTEGER},
+			#{obj.createTime,jdbcType=VARCHAR}
 		)
 	</insert>
 
