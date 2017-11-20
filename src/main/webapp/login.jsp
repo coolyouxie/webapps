@@ -33,7 +33,11 @@
 		        $("#nameId").val($.cookie("username"));
 		        $("#pwdId").val($.cookie("password"));
 	        }
-			
+			var loginResult = $("#loginResult").val();
+			if(loginResult){
+				alert(loginResult);
+				return;
+			}
 		});
 		
 		function saveUser(){
@@ -82,6 +86,7 @@
 
 
 <body data-type="login" onload="Code(loginForm.yzImg);">
+	<input id="loginResult" value="${loginResult}" />
 	<div class="am-g myapp-login">
 		<div class="myapp-login-logo-block  tpl-login-max">
 			<div class="myapp-login-logo-text">

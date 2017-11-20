@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.webapps.common.entity.User;
 import com.webapps.common.utils.ValidatorCodeUtil;
@@ -24,13 +25,19 @@ public class LoginController {
 
 	@Autowired
 	private IUserService iUserService;
+	
+	@RequestMapping(value="/toLoginPage")
+	public String toLoginPage(Model model,String loginResult){
+		model.addAttribute("loginResult", loginResult);
+		return "/views/login";
+	}
 
 	@RequestMapping(value = "/userLogin")
 	public String login(Model model,
 			@RequestParam("account")String account,
 			@RequestParam("password")String password,
 			@RequestParam("checkCode")String checkCode,
-			HttpServletRequest request) {
+			HttpServletRequest request,RedirectAttributes attr) {
 		if(StringUtils.isBlank(account)||StringUtils.isBlank(password)){
 			model.addAttribute("loginResult", "用户名或密码不能为空！");
 			return "forward:/webapps/login";
@@ -41,6 +48,10 @@ public class LoginController {
 			user.setPassword(password);
 			User temp = iUserService.login(user);
 			if (temp != null) {
+				if(temp.getUserType()!=1&&temp.getUserType()!=2){
+					model.addAttribute("loginResult", "无登录权限！");
+					return "forward:/login/toLoginPage";
+				}
 				request.getSession().setAttribute("user", temp);
 				model.addAttribute("user", temp);
 				return "redirect:/index.jsp";

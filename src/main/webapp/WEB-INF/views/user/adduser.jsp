@@ -100,20 +100,6 @@
 						<option value="1">男</option>
 					</select>
 				</div>
-			</div>	
-			
-			<div class="form-group">
-				<label class="col-md-2 control-label" for="age">年龄：</label>
-				<div class="col-md-3" >
-					<input type="text" id="age" name="age" class="form-control" placeholder="请输入年龄" >
-				</div>
-			</div>
-			
-			<div class="form-group">
-				<label class="col-md-2 control-label" for="email">email：</label>
-				<div class="col-md-3" >
-					<input type="email" id="email" name="email" class="form-control" placeholder="请输入email" >
-				</div>
 			</div>
 			
 			<div class="form-group">
@@ -123,38 +109,6 @@
 				</div>
 			</div>
 			
-			<div class="form-group">
-				<label class="col-md-2 control-label" for="age">学历：</label>
-				<div class="col-md-3">
-					<select id="eductionId" name="educationId">
-						<option value="" selected>-请选择-</option>
-						<option value="1">小学</option>
-						<option value="2">初中</option>
-						<option value="3">高中</option>
-						<option value="4">中专</option>
-						<option value="5">职高</option>
-						<option value="6">大专</option>
-						<option value="7">本科</option>
-						<option value="8">硕士</option>
-						<option value="9">博士</option>
-						<option value="10">博士后</option>
-					</select>
-				</div>
-			</div>
-			
-			<div class="form-group">
-				<label class="col-md-2 control-label" for="address">居住地址：</label>
-				<div class="col-md-3" >
-					<input type="text" id="address" name="address" class="form-control" placeholder="请输入现在的居住地址" >
-				</div>
-			</div>
-			
-			<div class="form-group">
-				<label class="col-md-2 control-label" for="homeAddress">家庭住址：</label>
-				<div class="col-md-3" >
-					<input type="text" id="homeAddress" name="homeAddress" class="form-control" placeholder="请输入户籍所在地址" >
-				</div>
-			</div>
 			<div class="form-group">
 				<label class="col-md-3 control-label"></label>
 				<div class="col-md-3">
