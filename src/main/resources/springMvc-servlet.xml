@@ -18,6 +18,7 @@
 	<mvc:resources mapping="/images/**" location="/img/" />
 	<mvc:resources mapping="/common/**" location="/js/common/" />
 	<mvc:resources mapping="/jquery/**" location="/js/jquery/" />
+	<mvc:resources mapping="/login.jsp" location="/login.jsp" />
 	<mvc:default-servlet-handler />
 
 	<bean id="jspViewResolver"
