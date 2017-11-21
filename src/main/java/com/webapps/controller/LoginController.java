@@ -27,8 +27,7 @@ public class LoginController {
 	private IUserService iUserService;
 	
 	@RequestMapping(value="/toLoginPage")
-	public String toLoginPage(Model model,String loginResult){
-		model.addAttribute("loginResult", loginResult);
+	public String toLoginPage(Model model){
 		return "/views/login";
 	}
 
@@ -50,7 +49,7 @@ public class LoginController {
 			if (temp != null) {
 				if(temp.getUserType()!=1&&temp.getUserType()!=2){
 					model.addAttribute("loginResult", "无登录权限！");
-					return "forward:/login/toLoginPage";
+					return "redirect:/permissionDenied.jsp";
 				}
 				request.getSession().setAttribute("user", temp);
 				model.addAttribute("user", temp);
