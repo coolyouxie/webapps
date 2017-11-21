@@ -193,14 +193,11 @@
 				<div class="col-md-2">
 					<button type="button" onclick="addRecruitment()" class="form-control" >新建发布单</button>
 				</div>
-				<!-- <div class="col-md-2">
-					<button type="button" onclick="addMessage()" class="form-control" >新建消息</button>
-				</div> -->
 			</form>
 		</div>
 		
 		<div class="row">
-			<label class="col-md-2 control-label" for="name">公司名称：</label>
+			<label class="col-md-2 control-label">公司名称：</label>
 			<div class="col-md-4" >
 				${company.name}
 			</div>
@@ -259,35 +256,35 @@
 		</div>
 			
 		<div class="row">
-			<label class="col-md-2 control-label" for="contactName">联系人：</label>
+			<label class="col-md-2 control-label" >联系人：</label>
 			<div class="col-md-4" >
 				${company.contactName}
 			</div>
 		</div>
 			
 		<div class="row">
-			<label class="col-md-2 control-label" for="telephone">联系电话：</label>
+			<label class="col-md-2 control-label" >联系电话：</label>
 			<div class="col-md-4" >
 				${company.telephone}
 			</div>
 		</div>
 			
 		<div class="row">
-			<label class="col-md-2 control-label" for="mobile">手机号：</label>
+			<label class="col-md-2 control-label" >手机号：</label>
 			<div class="col-md-4" >
 				${company.mobile}
 			</div>
 		</div>
 			
 		<div class="row">
-			<label class="col-md-2 control-label" for="briefs">公司简介：</label>
+			<label class="col-md-2 control-label" >公司简介：</label>
 			<div class="col-md-4" >
 				${company.briefs}
 			</div>
 		</div>
 			
 		<div class="row">
-			<label class="col-md-2 control-label" for="environment">公司环境：</label>
+			<label class="col-md-2 control-label" >公司环境：</label>
 			<div class="col-md-4" >
 				${company.environment}
 			</div>

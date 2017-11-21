@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<c:set var="ctx" value="${pageContext.request.contextPath}" />
 <!DOCTYPE html">
 <html>
 <head>
@@ -42,96 +44,52 @@
 				<label class="col-md-2 control-label" for="account">
 					账号：
 				</label>
-				<div class="col-md-3">
-					<input type="text" id="account" name="account" class="form-control" placeholder="请输入账号名" value="${user.account}" readonly="readonly">
-				</div>
+				<input type="text" id="account" name="account" class="form-group" placeholder="请输入账号名" value="${user.account}" readonly="readonly">
 			</div>
 			
 			<div class="form-group">
 				<label class="col-md-2 control-label" for="name">姓名：</label>
-				<div class="col-md-3" >
-					<input type="text" id="name" name="name" class="form-control" placeholder="请输入姓名" value="${user.name}">
-				</div>
-			</div>	
+					<input type="text" id="name" name="name" class="form-group" placeholder="请输入姓名" value="${user.name}">
+			</div>
 			
 			<div class="form-group">
 				<label class="col-md-2 control-label" for="idCardNo">身份证：</label>
-				<div class="col-md-3" >
-					<input type="text" id="idCardNo" name="idCardNo" class="form-control" placeholder="请输入身份证号" value="${user.idCardNo}">
-				</div>
+					<input type="text" id="idCardNo" name="idCardNo" class="form-group" placeholder="请输入身份证号" value="${user.idCardNo}">
 			</div>
 
 			<div class="form-group">
 				<label class="col-md-2 control-label" for="bankCardNum">银行卡号：</label>
-					<div class="col-md-3" >
-						<input type="text" id="bankCardNum" name="bankCardNum" class="form-control" placeholder="请输入银行卡号" value="${user.bankCardNum}">
-					</div>
+				<input type="text" id="bankCardNum" name="bankCardNum" class="form-group" placeholder="请输入银行卡号" value="${user.bankCardNum}">
 			</div>
 
 			<div class="form-group">
 				<label class="col-md-2 control-label" for="mobile">手机号：</label>
-				<div class="col-md-3" >
-					<input type="mobile" id="mobile" name="mobile" class="form-control" placeholder="请输入手机号" value="${user.mobile}">
-				</div>
+				<input type="mobile" id="mobile" name="mobile" class="form-group" placeholder="请输入手机号" value="${user.mobile}">
 			</div>
 			
 			<div class="form-group">
 				<label class="col-md-2 control-label" for="gender">性别：</label>
-				<div class="col-md-3" >
-					<select id="gender" name="gender" class="form-control">
-						<option value="0" <c:if test="${user.gender==0}">selected</c:if>>女</option>
-						<option value="1" <c:if test="${user.gender==1}">selected</c:if>>男</option>
-					</select>
-				</div>
+				<select id="gender" name="gender" class="form-group">
+					<option value="0" <c:if test="${user.gender==0}">selected</c:if>>女</option>
+					<option value="1" <c:if test="${user.gender==1}">selected</c:if>>男</option>
+				</select>
 			</div>
 			
 			<div class="form-group">
 				<label class="col-md-2 control-label" for="age">年龄：</label>
-				<div class="col-md-3" >
-					<input type="text" id="age" name="age" class="form-control" placeholder="请输入年龄" value="${user.age}">
-				</div>
+				<input type="text" id="age" name="age" class="form-group" placeholder="请输入年龄" value="${user.age}">
 			</div>
-			
+
 			<div class="form-group">
-				<label class="col-md-2 control-label" for="age">学历：</label>
-				<div class="col-md-3" >
-					<select id="eductionId" name="educationId" >
-						<option value="" selected>-请选择-</option>
-						<option value="1" <c:if test="${user.educationId==1}">selected</c:if>>小学</option>
-						<option value="2" <c:if test="${user.educationId==2}">selected</c:if>>初中</option>
-						<option value="3" <c:if test="${user.educationId==3}">selected</c:if>>高中</option>
-						<option value="4" <c:if test="${user.educationId==4}">selected</c:if>>中专</option>
-						<option value="5" <c:if test="${user.educationId==5}">selected</c:if>>职高</option>
-						<option value="6" <c:if test="${user.educationId==6}">selected</c:if>>大专</option>
-						<option value="7" <c:if test="${user.educationId==7}">selected</c:if>>本科</option>
-						<option value="8" <c:if test="${user.educationId==8}">selected</c:if>>硕士</option>
-						<option value="9" <c:if test="${user.educationId==9}">selected</c:if>>博士</option>
-						<option value="10" <c:if test="${user.educationId==10}">selected</c:if>>博士后</option>
-					</select>
-				</div>
+				<label class="col-md-2 control-label" for="userType">用户类型：</label>
+				<select id="userType" name="userType" class="from-group">
+					<option value="1" <c:if test="${user.userType==1}">selected</c:if>>超级管理员</option>
+					<option value="2" <c:if test="${user.userType==2}">selected</c:if>>普通管理员</option>
+					<option value="3" <c:if test="${user.userType==3}">selected</c:if>>普通会员</option>
+					<option value="4" <c:if test="${user.userType==4}">selected</c:if>>企业会员</option>
+				</select>
 			</div>
-			
-			<div class="form-group">
-				<label class="col-md-2 control-label" for="email">email：</label>
-				<div class="col-md-3" >
-					<input type="email" id="email" name="email" class="form-control" placeholder="请输入email" value="${user.email}">
-				</div>
-			</div>
-			
-			
-			<div class="form-group">
-				<label class="col-md-2 control-label" for="address">居住地址：</label>
-				<div class="col-md-3" >
-					<input type="text" id="address" name="address" class="form-control" placeholder="请输入现在的居住地址" value="${user.address}">
-				</div>
-			</div>
-			
-			<div class="form-group">
-				<label class="col-md-2 control-label" for="homeAddress">家庭住址：</label>
-				<div class="col-md-3" >
-					<input type="text" id="homeAddress" name="homeAddress" class="form-control" placeholder="请输入户籍所在地址" value="${user.homeAddress}">
-				</div>
-			</div>
+
 			<div class="form-group">
 				<div class="col-md-3" >
 				</div>
