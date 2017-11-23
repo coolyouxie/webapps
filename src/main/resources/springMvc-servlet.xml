@@ -18,7 +18,7 @@
 	<mvc:resources mapping="/images/**" location="/img/" />
 	<mvc:resources mapping="/common/**" location="/js/common/" />
 	<mvc:resources mapping="/jquery/**" location="/js/jquery/" />
-	<mvc:resources mapping="/commonPage/**" location="/WEB-INF/views/common/" />
+	<mvc:resources mapping="/login.jsp" location="/login.jsp" />
 	<mvc:default-servlet-handler />
 
 	<bean id="jspViewResolver"
@@ -36,7 +36,6 @@
 			<mvc:mapping path="/login/userLogin" />
 			<mvc:exclude-mapping path="/login/getValidatorImage" />
 			<mvc:exclude-mapping path="/**/login.jsp" />
-			<mvc:exclude-mapping path="/**/common/permissionDenied.jsp" />
 			<mvc:exclude-mapping path="/appServer/**" />
 			<bean class="com.webapps.controller.interceptor.UserValidateInterceptor" />
 		</mvc:interceptor>
@@ -53,7 +52,6 @@
 			<mvc:exclude-mapping path="/**/*.jpg" />
 			<mvc:exclude-mapping path="/**/*.jpeg" />
 			<mvc:exclude-mapping path="/**/login.jsp" />
-			<mvc:exclude-mapping path="/**/common/permissionDenied.jsp" />
 			<mvc:exclude-mapping path="/webapps" />
 			<mvc:exclude-mapping path="/webapps/" />
 			<mvc:exclude-mapping path="/appServer/**" />

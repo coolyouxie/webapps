@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
-<!DOCTYPE html">
+<!DOCTYPE html>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -74,7 +74,7 @@
 		<div class="row">
 			<input type="hidden" id="cashbackId" value="${cashback.id}">
 			<div class="form-group">
-				<label class="col-md-2 control-label" for="title">提现金额：</label>
+				<label class="col-md-2 control-label">提现金额：</label>
 				<div class="col-md-2" >
 					<input type="text" id="cashbackTitle" class="form-control" placeholder="请输入标题" value="${cashback.title}">
 				</div>
@@ -93,7 +93,7 @@
 		<div class="row">
 			<input type="hidden" id="redPacketsId" value="${redPackets.id}">
 			<div class="form-group">
-				<label class="col-md-2 control-label" for="title">红包金额：</label>
+				<label class="col-md-2 control-label" >红包金额：</label>
 				<div class="col-md-2" >
 					<input type="text" id="redPacketsTitle" class="form-control" placeholder="请输入标题" value="${redPackets.title}">
 				</div>
