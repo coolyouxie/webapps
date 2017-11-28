@@ -1,7 +1,5 @@
 package com.webapps.controller;
 
-import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -14,14 +12,18 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.webapps.common.bean.Page;
 import com.webapps.common.bean.ResultDto;
 import com.webapps.common.dto.EntryDetailDto;
+import com.webapps.common.entity.Company;
 import com.webapps.common.entity.EnrollApproval;
 import com.webapps.common.entity.Enrollment;
-import com.webapps.common.entity.EnrollmentExtra;
+import com.webapps.common.entity.Recruitment;
 import com.webapps.common.entity.User;
 import com.webapps.common.form.EnrollApprovalRequestForm;
 import com.webapps.common.utils.JSONUtil;
+import com.webapps.service.ICompanyService;
 import com.webapps.service.IEnrollApprovalService;
 import com.webapps.service.IEnrollmentService;
+import com.webapps.service.IRecruitmentService;
+import com.webapps.service.IUserService;
 
 @Controller
 @RequestMapping("enrollApproval")
@@ -32,6 +34,15 @@ public class EnrollApprovalController {
 	
 	@Autowired
 	private IEnrollApprovalService iEnrollApprovalService;
+	
+	@Autowired
+	private IUserService iUserService;
+	
+	@Autowired
+	private IRecruitmentService iRecruitmentService;
+	
+	@Autowired
+	private ICompanyService iCompanyService;
 	
 	@RequestMapping("/toEnrollApprovalListPage")
 	public String toEnrollApprovalListPage(HttpServletRequest request,HttpServletResponse response){
@@ -96,11 +107,9 @@ public class EnrollApprovalController {
 		User user = (User)request.getSession().getAttribute("user");
 		try {
 			if(approvalType==1){
-//				dto = iEnrollApprovalService.enrollApproval(id, state, remark, reward,user.getId(),cashbackDays);
 				//使用新的分阶段期满返费入职审核
 				dto = iEnrollApprovalService.entryApproveById(id,state,remark,user.getId(),cashbackData);
 			}else{
-//				dto = iEnrollApprovalService.expireApproval(id, state, remark,user.getId());
 				//使用新的分阶段期满审核方法
 				dto = iEnrollApprovalService.expireApprovalById(id, state, remark,user.getId());
 			}
@@ -112,15 +121,57 @@ public class EnrollApprovalController {
 		return JSONUtil.toJSONString(JSONUtil.toJSONObject(dto));
 	}
 	
-	@RequestMapping(value="/getEntryDetailById")
-	public String getEntryDetailById(Model model,Integer id){
+	@RequestMapping(value="/toShowEntryInfoPage")
+	public String toShowEntryInfoPage(Model model,Integer enrollApprovalId){
 		try {
-			EntryDetailDto dto = iEnrollApprovalService.loadEntryDetail(id);
+			EntryDetailDto dto = iEnrollApprovalService.loadEntryDetail(enrollApprovalId);
 			model.addAttribute("dto", dto);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return "/enrollApproval/entryDetail";
+		return "/enrollApproval/showEntryInfo";
+	}
+	
+	
+	@RequestMapping(value="/toShowExpireInfoPage")
+	public String toShowExpireInfoPage(Model model,Integer enrollApprovalId){
+		try {
+			EntryDetailDto dto = iEnrollApprovalService.loadEntryDetail(enrollApprovalId);
+			model.addAttribute("dto", dto);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "/enrollApproval/showExpireInfo";
+	}
+	
+	@RequestMapping(value="/toEditEntryInfoPage")
+	public String toEditEntryInfoPage(Model model,Integer enrollApprovalId){
+		try {
+			EnrollApproval enrollApproval = iEnrollApprovalService.getById(enrollApprovalId);
+			Enrollment enrollment = null;
+			if(enrollApproval!=null){
+				enrollment = iEnrollmentService.getById(enrollApproval.getEnrollmentId());
+			}
+			if(enrollment!=null){
+				if(enrollment!=null&&enrollment.getUser()!=null&&enrollment.getUser().getId()!=null){
+					User user = iUserService.getById(enrollment.getUser().getId());
+					enrollment.setUser(user);
+				}
+				if(enrollment.getRecruitment()!=null&&enrollment.getRecruitment().getId()!=null){
+					Recruitment recruitment = iRecruitmentService.getById(enrollment.getRecruitment().getId());
+					enrollment.setRecruitment(recruitment);
+				}
+				if(enrollment.getCompany()!=null&&enrollment.getCompany().getId()!=null){
+					Company company = iCompanyService.getById(enrollment.getCompany().getId());
+					enrollment.setCompany(company);
+				}
+				model.addAttribute("enrollment", enrollment);
+				model.addAttribute("enrollApprovalId", enrollApprovalId);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "/enrollApproval/editEntryInfo";
 	}
 
 }
