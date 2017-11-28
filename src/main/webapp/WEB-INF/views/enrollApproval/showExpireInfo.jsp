@@ -129,10 +129,7 @@
 		</c:forEach>
 	</div>
 	<div class="row">
-		<div class="col-md-3"></div>
-		<div class="col-md-3">
-			<a class="btn btn-primary btn-sm" onclick="goBack()">返回</a>
-		</div>
+		<a class="btn btn-primary btn-sm" onclick="goBack()">返回</a>
 	</div>
 </div>
 </body>

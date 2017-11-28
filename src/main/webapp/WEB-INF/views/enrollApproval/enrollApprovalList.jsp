@@ -145,7 +145,7 @@
 										if(rowObject.state==0){
 											result = ' <a href="${ctx}/enrollApproval/toEditEntryInfoPage?enrollApprovalId='+rowObject.id+'" class="btn btn-primary btn-sm">入职审核</a>';
 										}else if(rowObject.state==1){
-											result = ' <a href="${ctx}/enrollApproval/toShowEntryInfo?enrollApprovalId='+rowObject.id+'" class="btn btn-primary btn-sm">入职审核信息</a>';
+											result = ' <a href="${ctx}/enrollApproval/toShowEntryInfoPage?enrollApprovalId='+rowObject.id+'" class="btn btn-primary btn-sm">入职审核信息</a>';
 										}
 									}else if(rowObject.type==2){
 										if(rowObject.state==0){
