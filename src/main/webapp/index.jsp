@@ -13,7 +13,6 @@
 		<!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
 		<link rel="stylesheet" href="${ctx}/js/common/bootstrap/bootstrap-3.3.7/dist/css/bootstrap.min.css" type="text/css" />
 		<link rel="stylesheet" href="${ctx}/css/dashboard.css">
-		
 	</head>
 	<body>
 		<input type="hidden" id="basePath" value="${ctx}" />

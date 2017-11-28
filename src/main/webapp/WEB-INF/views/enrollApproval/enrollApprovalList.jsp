@@ -34,7 +34,7 @@
 		    datatype: "json",
 		    mtype : "POST",
 		    height : 650,
-		    width : 950,
+		    width : 'auto',
 		    jsonReader : {
 								root : "resultList", // json中代表实际模型数据的入口
 								page : "page", // json中代表当前页码的数据   
@@ -140,15 +140,29 @@
 								sortable : false,
 								formatter:function(cellValue,options,rowObject){
 									var result = "";
-									if(rowObject.state==0){
+									
+									if(rowObject.type==1){
+										if(rowObject.state==0){
+											result = ' <a href="${ctx}/enrollApproval/toEditEntryInfoPage?enrollApprovalId='+rowObject.id+'" class="btn btn-primary btn-sm">入职审核</a>';
+										}else if(rowObject.state==1){
+											result = ' <a href="${ctx}/enrollApproval/toShowEntryInfo?enrollApprovalId='+rowObject.id+'" class="btn btn-primary btn-sm">入职审核信息</a>';
+										}
+									}else if(rowObject.type==2){
+										if(rowObject.state==0){
+											result = ' <a href="${ctx}/enrollApproval/toEditExpireInfoPage?enrollApprovalId='+rowObject.id+'" class="btn btn-primary btn-sm">期满审核</a>';
+										}else if(rowObject.state==1){
+											result = ' <a href="${ctx}/enrollApproval/toShowExpireInfoPage?enrollApprovalId='+rowObject.id+'" class="btn btn-primary btn-sm">期满审核信息</a>';
+										}
+									}
+									/* if(rowObject.state==0){
 										result = '<button class="btn btn-primary btn-sm" onclick="showModal('+rowObject.id+',1,'+rowObject.type+')">通过</button>'+
 										'<button class="btn btn-primary btn-sm" onclick="showModal('+rowObject.id+',2,'+rowObject.type+')">不通过</button>';
 									}else{
 										result = "已审核  ";
-									}
-									if(rowObject.state!=0){
-										result += '  <a class="btn btn-primary btn-sm" onclick="toEntryDetail('+rowObject.id+')">期满信息</a>';
-									}
+									} */
+									/* if(rowObject.state!=0){
+										result += '  <a href="${ctx}/enrollApproval/toShowEntryInfo?enrollApprovalId='+rowObject.id+'" class="btn btn-primary btn-sm" >期满信息</a>';
+									} */
 									return result;
 								}
 							} ],

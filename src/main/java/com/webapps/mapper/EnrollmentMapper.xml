@@ -38,16 +38,16 @@
 	</sql>
 	
 	<select id="getById" resultMap="resultMap">
-		select * from t_enrollment where id = #{id}
+		select <include refid="select_columns" /> from t_enrollment te where te.id = #{id}
 	</select>
 	
 	<!-- 查询所有 -->
 	<select id="queryAll" resultMap="resultMap">
-		select <include refid="select_columns" /> from t_enrollment where data_state = 1
+		select <include refid="select_columns" /> from t_enrollment te where te.data_state = 1
 	</select>
 	
 	<select id="queryByState" resultMap="resultMap">
-		select <include refid="select_columns" /> from t_enrollment where state = #{state}
+		select <include refid="select_columns" /> from t_enrollment te where state = #{state}
 	</select>
 	
 	<select id="queryListByFkId" resultMap="resultMap">

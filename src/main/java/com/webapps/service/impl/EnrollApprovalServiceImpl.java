@@ -290,7 +290,7 @@ public class EnrollApprovalServiceImpl implements IEnrollApprovalService {
 					return dto;
 				}
 				if(enrollment.getState()!=1&&enrollment.getState()!=22){
-					dto.setErrorMsg("报名信息不是入职待审核状态，不可审核");
+					dto.setErrorMsg("报名信息不是入职待审核状态或已提交审核，不可审核");
 					dto.setResult("F");
 					return dto;
 				}
