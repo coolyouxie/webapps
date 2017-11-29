@@ -178,6 +178,7 @@ public class EnrollApprovalController {
 		try {
 			EnrollApprovalInfoDto dto = iEnrollApprovalService.loadEnrollApprovalInfo(enrollApprovalId);
 			model.addAttribute("dto", dto);
+			model.addAttribute("enrollApprovalId", enrollApprovalId);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
