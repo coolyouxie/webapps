@@ -181,7 +181,7 @@ public class EnrollApprovalController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return "/enrollApproval/showEntryInfo";
+		return "/enrollApproval/editExpireInfo";
 	}
 	
 }

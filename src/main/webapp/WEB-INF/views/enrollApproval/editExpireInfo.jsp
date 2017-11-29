@@ -144,7 +144,7 @@
 		</div><!-- /.modal -->
 	</div>
 	<div class="container-fluid">
-		<h3>用户申请入职审核信息</h3>
+		<h3>用户申请期满审核信息</h3>
 		<br/>
 		<div class="row">
 			<label class="col-md-2 control-label">公司名称：</label>
@@ -210,9 +210,12 @@
 			</c:forEach>
 		</div>
 		<div class="row">
-			<a class="btn btn-primary btn-sm" onclick="submit(1)">通过</a>
-			<a class="btn btn-primary btn-sm" onclick="submit(2)">不通过</a>
-			<a class="btn btn-primary btn-sm" onclick="goBack()">返回</a>
+			<div class="col-md-3"></div>
+			<div class="col-md-3">
+				<a class="btn btn-primary btn-sm" onclick="submit(1)">通过</a>
+				<a class="btn btn-primary btn-sm" onclick="submit(2)">不通过</a>
+				<a class="btn btn-primary btn-sm" onclick="goBack()">返回</a>
+			</div>
 		</div>
 	</div>
 </body>
