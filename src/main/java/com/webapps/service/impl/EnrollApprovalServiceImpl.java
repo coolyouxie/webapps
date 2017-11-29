@@ -2,7 +2,7 @@ package com.webapps.service.impl;
 
 import com.webapps.common.bean.Page;
 import com.webapps.common.bean.ResultDto;
-import com.webapps.common.dto.EntryDetailDto;
+import com.webapps.common.dto.EnrollApprovalInfoDto;
 import com.webapps.common.entity.*;
 import com.webapps.common.form.EnrollApprovalRequestForm;
 import com.webapps.common.utils.DateUtil;
@@ -795,14 +795,18 @@ public class EnrollApprovalServiceImpl implements IEnrollApprovalService {
 	}
 
 	@Override
-	public EntryDetailDto loadEntryDetail(Integer enrollApprovalId) throws Exception {
-		EntryDetailDto dto = new EntryDetailDto();
+	public EnrollApprovalInfoDto loadEnrollApprovalInfo(Integer enrollApprovalId) throws Exception {
+		EnrollApprovalInfoDto dto = new EnrollApprovalInfoDto();
 		EnrollApproval ea = iEnrollApprovalMapper.getById(enrollApprovalId);
 		Enrollment enrollment = iEnrollmentMapper.getById(ea.getEnrollmentId());
 		List<EnrollmentExtra> list = iEnrollmentExtraMapper.queryListByEnrollmentId(ea.getEnrollmentId());
 		User user = iUserMapper.getById(enrollment.getUser().getId());
 		Company company = iCompanyMapper.getById(enrollment.getCompany().getId());
 		Recruitment recruitment = iRecruitmentMapper.getById(enrollment.getRecruitment().getId());
+		if(ea!=null&&ea.getOperatorId()!=null){
+			User approver = iUserMapper.getById(ea.getOperatorId());
+			dto.setApprover(approver);
+		}
 		dto.setCompany(company);
 		dto.setEnrollApproval(ea);
 		dto.setEnrollment(enrollment);

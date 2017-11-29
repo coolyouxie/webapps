@@ -75,65 +75,87 @@
 		</div><!-- /.modal -->
 	</div>
 	<div class="container-fluid">
-	<h3>用户申请入职审核信息</h3>
-	<br/>
-	<div class="row">
-		<label class="col-md-2 control-label">公司名称：</label>
-		<div class="col-md-3">
-			<span>${dto.company.name}</span>
+		<h3>用户申请入职审核信息</h3>
+		<br/>
+		<div class="row">
+			<label class="col-md-2 control-label">公司名称：</label>
+			<div class="col-md-3">
+				<span>${dto.company.name}</span>
+			</div>
 		</div>
-	</div>
-	<div class="row">
-		<label class="col-md-2 control-label">发布单：</label>
-		<div class="col-md-3">
-			<span>${dto.recruitment.title}</span>
+		<div class="row">
+			<label class="col-md-2 control-label">发布单：</label>
+			<div class="col-md-3">
+				<span>${dto.recruitment.title}</span>
+			</div>
 		</div>
-	</div>
-	<div class="row">
-		<label class="col-md-2 control-label">用户：</label>
-		<div class="col-md-3">
-			<span>${dto.user.name}</span>
+		<div class="row">
+			<label class="col-md-2 control-label">用户：</label>
+			<div class="col-md-3">
+				<span>${dto.user.name}</span>
+			</div>
 		</div>
-	</div>
-	<div class="row">
-		<label class="col-md-2 control-label">报名时间：</label>
-		<div  class="col-md-3">
-			<span>${dto.enrollment.createTimeStr}</span>
+		<div class="row">
+			<label class="col-md-2 control-label">报名时间：</label>
+			<div  class="col-md-3">
+				<span>${dto.enrollment.createTimeStr}</span>
+			</div>
 		</div>
-	</div>
-	<div class="row">
-		<label class="col-md-2 control-label">入职时间：</label>
-		<div class="col-md-3">
-			<span>${dto.enrollment.entryDateStr}</span>
+		<div class="row">
+			<label class="col-md-2 control-label">入职时间：</label>
+			<div class="col-md-3">
+				<span>${dto.enrollment.entryDateStr}</span>
+			</div>
 		</div>
-	</div>
-	<div class="row">
-		<label class="col-md-2 control-label">用户手机号：</label>
-		<div class="col-md-3">
-			<span>${dto.user.mobile}</span>
+		<div class="row">
+			<label class="col-md-2 control-label">用户手机号：</label>
+			<div class="col-md-3">
+				<span>${dto.user.mobile}</span>
+			</div>
 		</div>
-	</div>
-	<div class="row">
-		<c:forEach items="${dto.extraList}" var="item" varStatus="status">
-			<div class="row" style="margin-left:0px;margin-right:0px;">
-				<label class="col-md-2 control-label" for="days${status}">期满天数：</label>
-				<div class="col-md-2 " id="days${status}">
-					<input type="text" class="form-control" value="${item.cashbackDays}" readonly="readonly">
+		<div class="row">
+			<c:forEach items="${dto.extraList}" var="item" varStatus="status">
+				<div class="row" style="margin-left:0px;margin-right:0px;">
+					<label class="col-md-2 control-label" for="days${status}">期满天数：</label>
+					<div class="col-md-2 " id="days${status}">
+						<input type="text" class="form-control" value="${item.cashbackDays}" readonly="readonly">
+					</div>
+	
+					<label class="col-md-2 control-label" for="fee${status}">期满天数：</label>
+					<div class="col-md-2" id="fee${status}">
+						<input type="text" class="form-control" value="${item.fee}" readonly="readonly">
+					</div>
 				</div>
-
-				<label class="col-md-2 control-label" for="fee${status}">期满天数：</label>
-				<div class="col-md-2" id="fee${status}">
-					<input type="text" class="form-control" value="${item.fee}" readonly="readonly">
+			</c:forEach>
+		</div>
+		<c:if test="${dto.approver!=null}">
+			<div class="row">
+				<label class="col-md-2 control-label">审核人：</label>
+				<div class="col-md-3">
+					<span>${dto.approver.name}</span>
 				</div>
 			</div>
-		</c:forEach>
-	</div>
-	<div class="row">
-		<div class="col-md-3"></div>
-		<div class="col-md-3">
-			<a class="btn btn-primary btn-sm" onclick="goBack()">返回</a>
+			<div class="row">
+				<label class="col-md-2 control-label">审核人电话：</label>
+				<div class="col-md-3">
+					<span>${dto.approver.mobile}</span>
+				</div>
+			</div>
+		</c:if>
+		<c:if test="${dto.enrollApproval.state==2}">
+			<div class="row">
+				<label class="col-md-2 control-label">不通过原因：</label>
+				<div class="col-md-6">
+					<span>${dto.enrollApproval.failedReason}</span>
+				</div>
+			</div>
+		</c:if>
+		<div class="row">
+			<div class="col-md-3"></div>
+			<div class="col-md-3">
+				<a class="btn btn-primary btn-sm" onclick="goBack()">返回</a>
+			</div>
 		</div>
 	</div>
-</div>
 </body>
 </html>

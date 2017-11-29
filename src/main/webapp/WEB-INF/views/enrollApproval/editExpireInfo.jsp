@@ -28,7 +28,76 @@
 <script src="${ctx}/js/common/common.js"></script>
 
 <script type="text/javascript">
+	function submit(state){
+		var r=null;
+		if(state==1){
+			r=confirm("确认审核通过！");
+		}else{
+			r=confirm("确认审核不通过！");
+		}
+		if (r==true){
+			if(state==1){
+				agree();
+			}else{
+				$('#remarkModal').modal('show');
+			}
+		}else{
+			return;
+		}
+	}
 	
+	function openRemarkModal(){
+		$('#remarkModal').modal('show');
+	}
+	
+	function agree(){
+		$.ajax({
+			url:"${ctx}/enrollApproval/enrollApprovalById",
+			type:"POST",
+			dataType:"JSON",
+	        traditional: true,//必须指定为true
+			data:{
+				"id":$("#enrollApprovalId").val(),
+				"state":1,
+				"approvalType":2
+			},
+			success:function(response){
+				if(response.result=='S'){
+					window.location.href="${ctx}/enrollApproval/toEnrollApprovalListPage";
+				}else{
+					alert(response.errorMsg);
+				}
+			}
+		});
+	}
+	
+	function disagree(){
+		var remark = $("#remark").val().trim();
+		if(!remark){
+			alert("请输入不通过原因");
+			return;
+		}
+		$('#remarkModal').modal('hide');
+		$.ajax({
+			url:"${ctx}/enrollApproval/enrollApprovalById",
+			type:"POST",
+			dataType:"JSON",
+	        traditional: true,//必须指定为true
+			data:{
+				"id":$("#enrollApprovalId").val(),
+				"state":2,
+				"remark":remark,
+				"approvalType":2
+			},
+			success:function(response){
+				if(response.result=='S'){
+					window.location.href="${ctx}/enrollApproval/toEnrollApprovalListPage";
+				}else{
+					alert(response.errorMsg);
+				}
+			}
+		});
+	}
 </script>
 <style>
 .input-group-sm {
@@ -56,6 +125,24 @@
 </head>
 <body>
 	<input type="hidden" id="enrollApprovalId" value="${enrollApprovalId}">
+	<!-- 不通过原因模态框 -->
+	<div class="modal fade" id="remarkModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="myModalLabel">不通过原因</h4>
+				</div>
+				<div class="modal-body">
+					<textarea id="remark" class="form-control" ></textarea>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+					<button type="button" class="btn btn-primary" onclick="disagree()">提交</button>
+				</div>
+			</div><!-- /.modal-content -->
+		</div><!-- /.modal -->
+	</div>
 	<div class="container-fluid">
 		<h3>用户申请入职审核信息</h3>
 		<br/>
@@ -122,30 +209,9 @@
 				</div>
 			</c:forEach>
 		</div>
-		<c:if test="${dto.approver!=null}">
-			<div class="row">
-				<label class="col-md-2 control-label">审核人：</label>
-				<div class="col-md-8">
-					<span>${dto.approver.name}</span>
-				</div>
-			</div>
-			<div class="row">
-				<label class="col-md-2 control-label">审核人电话：</label>
-				<div class="col-md-8">
-					<span>${dto.approver.mobile}</span>
-				</div>
-			</div>
-		</c:if>
-		<c:if test="${dto.enrollApproval.state==2}">
-			<div class="row">
-				<label class="col-md-2 control-label">不通过原因：</label>
-				<div class="col-md-6">
-					<span>${dto.enrollApproval.failedReason}</span>
-				</div>
-			</div>
-		</c:if>
 		<div class="row">
-			<div class="col-md-3"></div>
+			<a class="btn btn-primary btn-sm" onclick="submit(1)">通过</a>
+			<a class="btn btn-primary btn-sm" onclick="submit(2)">不通过</a>
 			<a class="btn btn-primary btn-sm" onclick="goBack()">返回</a>
 		</div>
 	</div>

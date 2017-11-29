@@ -163,74 +163,74 @@
 		</div><!-- /.modal -->
 	</div>
 	<div class="container-fluid">
-	<h3>用户申请入职审核信息</h3>
-	<br/>
-	<form class="form-inline">
-		<div class="row">
-			<label class="col-md-2 control-label">公司名称：</label>
-			<div class="col-md-3">
-				<span>${enrollment.company.name}</span>
-			</div>
-		</div>
-		<div class="row">
-			<label class="col-md-2 control-label">发布单：</label>
-			<div class="col-md-3">
-				<span>${enrollment.recruitment.title}</span>
-			</div>
-		</div>
-		<div class="row">
-			<label class="col-md-2 control-label">用户：</label>
-			<div class="col-md-3">
-				<span>${enrollment.user.name}</span>
-			</div>
-		</div>
-		<div class="row">
-			<label class="col-md-2 control-label">报名时间：</label>
-			<div  class="col-md-3">
-				<span>${enrollment.createTimeStr}</span>
-			</div>
-		</div>
-		<div class="row">
-			<label class="col-md-2 control-label">入职时间：</label>
-			<div class="col-md-3">
-				<span>${enrollment.entryDateStr}</span>
-			</div>
-		</div>
-		<div class="row">
-			<label class="col-md-2 control-label">用户手机号：</label>
-			<div class="col-md-3">
-				<span>${enrollment.user.mobile}</span>
-			</div>
-		</div>
-		<div class="row">
-			<% for(int i=1;i<=5;i++){%>
-				<div class="row" style="margin-left:0px;margin-right:0px;">
-					<label class="col-md-2 control-label" for="divDays<%=i%>">期满天数：</label>
-					<div class="col-md-2 " id="divDays<%=i%>">
-						<select id="cashbackDays<%=i%>">
-							<option>请选择天数</option>
-							<% for(int days=1;days<=120;days++){%>
-								<option value="<%=days%>"><%=days%></option>
-							<%}%>
-						</select>
-					</div>
-					<label class="col-md-2 control-label" for="divFee<%=i%>">期满返费：</label>
-					<div class="col-md-2" id="divFee<%=i%>">
-						<input type="text" id="reward<%=i%>" class="form-control" value="">
-					</div>
+		<h3>用户申请入职审核信息</h3>
+		<br/>
+		<form class="form-inline">
+			<div class="row">
+				<label class="col-md-2 control-label">公司名称：</label>
+				<div class="col-md-3">
+					<span>${enrollment.company.name}</span>
 				</div>
-			<%}%>
-		</div>
-		<div class="row">
-			<div class="col-md-3">
 			</div>
-			<div class="col-md-2">
-				<a class="btn btn-primary btn-sm" onclick="submit(1)">通过</a>
-				<a class="btn btn-primary btn-sm" onclick="submit(2)">不通过</a>
-				<a class="btn btn-primary btn-sm" onclick="goBack()">返回</a>
+			<div class="row">
+				<label class="col-md-2 control-label">发布单：</label>
+				<div class="col-md-3">
+					<span>${enrollment.recruitment.title}</span>
+				</div>
 			</div>
-		</div>
-	</form>
+			<div class="row">
+				<label class="col-md-2 control-label">用户：</label>
+				<div class="col-md-3">
+					<span>${enrollment.user.name}</span>
+				</div>
+			</div>
+			<div class="row">
+				<label class="col-md-2 control-label">报名时间：</label>
+				<div  class="col-md-3">
+					<span>${enrollment.createTimeStr}</span>
+				</div>
+			</div>
+			<div class="row">
+				<label class="col-md-2 control-label">入职时间：</label>
+				<div class="col-md-3">
+					<span>${enrollment.entryDateStr}</span>
+				</div>
+			</div>
+			<div class="row">
+				<label class="col-md-2 control-label">用户手机号：</label>
+				<div class="col-md-3">
+					<span>${enrollment.user.mobile}</span>
+				</div>
+			</div>
+			<div class="row">
+				<% for(int i=1;i<=5;i++){%>
+					<div class="row" style="margin-left:0px;margin-right:0px;">
+						<label class="col-md-2 control-label" for="divDays<%=i%>">期满天数：</label>
+						<div class="col-md-2 " id="divDays<%=i%>">
+							<select id="cashbackDays<%=i%>">
+								<option>请选择天数</option>
+								<% for(int days=1;days<=120;days++){%>
+									<option value="<%=days%>"><%=days%></option>
+								<%}%>
+							</select>
+						</div>
+						<label class="col-md-2 control-label" for="divFee<%=i%>">期满返费：</label>
+						<div class="col-md-2" id="divFee<%=i%>">
+							<input type="text" id="reward<%=i%>" class="form-control" value="">
+						</div>
+					</div>
+				<%}%>
+			</div>
+			<div class="row">
+				<div class="col-md-3">
+				</div>
+				<div class="col-md-2">
+					<a class="btn btn-primary btn-sm" onclick="submit(1)">通过</a>
+					<a class="btn btn-primary btn-sm" onclick="submit(2)">不通过</a>
+					<a class="btn btn-primary btn-sm" onclick="goBack()">返回</a>
+				</div>
+			</div>
+		</form>
 	</div>
 </body>
 </html>

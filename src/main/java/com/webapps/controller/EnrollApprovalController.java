@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.webapps.common.bean.Page;
 import com.webapps.common.bean.ResultDto;
-import com.webapps.common.dto.EntryDetailDto;
+import com.webapps.common.dto.EnrollApprovalInfoDto;
 import com.webapps.common.entity.Company;
 import com.webapps.common.entity.EnrollApproval;
 import com.webapps.common.entity.Enrollment;
@@ -124,24 +124,12 @@ public class EnrollApprovalController {
 	@RequestMapping(value="/toShowEntryInfoPage")
 	public String toShowEntryInfoPage(Model model,Integer enrollApprovalId){
 		try {
-			EntryDetailDto dto = iEnrollApprovalService.loadEntryDetail(enrollApprovalId);
+			EnrollApprovalInfoDto dto = iEnrollApprovalService.loadEnrollApprovalInfo(enrollApprovalId);
 			model.addAttribute("dto", dto);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return "/enrollApproval/showEntryInfo";
-	}
-	
-	
-	@RequestMapping(value="/toShowExpireInfoPage")
-	public String toShowExpireInfoPage(Model model,Integer enrollApprovalId){
-		try {
-			EntryDetailDto dto = iEnrollApprovalService.loadEntryDetail(enrollApprovalId);
-			model.addAttribute("dto", dto);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return "/enrollApproval/showExpireInfo";
 	}
 	
 	@RequestMapping(value="/toEditEntryInfoPage")
@@ -174,4 +162,26 @@ public class EnrollApprovalController {
 		return "/enrollApproval/editEntryInfo";
 	}
 
+	@RequestMapping(value="/toShowExpireInfoPage")
+	public String toShowExpireInfoPage(Model model,Integer enrollApprovalId){
+		try {
+			EnrollApprovalInfoDto dto = iEnrollApprovalService.loadEnrollApprovalInfo(enrollApprovalId);
+			model.addAttribute("dto", dto);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "/enrollApproval/showExpireInfo";
+	}
+	
+	@RequestMapping(value="/toEditExpireInfoPage")
+	public String toEditExpireInfoPage(Model model,Integer enrollApprovalId){
+		try {
+			EnrollApprovalInfoDto dto = iEnrollApprovalService.loadEnrollApprovalInfo(enrollApprovalId);
+			model.addAttribute("dto", dto);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "/enrollApproval/showEntryInfo";
+	}
+	
 }

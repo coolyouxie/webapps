@@ -144,13 +144,13 @@
 									if(rowObject.type==1){
 										if(rowObject.state==0){
 											result = ' <a href="${ctx}/enrollApproval/toEditEntryInfoPage?enrollApprovalId='+rowObject.id+'" class="btn btn-primary btn-sm">入职审核</a>';
-										}else if(rowObject.state==1){
+										}else{
 											result = ' <a href="${ctx}/enrollApproval/toShowEntryInfoPage?enrollApprovalId='+rowObject.id+'" class="btn btn-primary btn-sm">入职审核信息</a>';
 										}
 									}else if(rowObject.type==2){
 										if(rowObject.state==0){
 											result = ' <a href="${ctx}/enrollApproval/toEditExpireInfoPage?enrollApprovalId='+rowObject.id+'" class="btn btn-primary btn-sm">期满审核</a>';
-										}else if(rowObject.state==1){
+										}else{
 											result = ' <a href="${ctx}/enrollApproval/toShowExpireInfoPage?enrollApprovalId='+rowObject.id+'" class="btn btn-primary btn-sm">期满审核信息</a>';
 										}
 									}

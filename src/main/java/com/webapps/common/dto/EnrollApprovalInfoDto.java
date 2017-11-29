@@ -9,7 +9,7 @@ import com.webapps.common.entity.EnrollmentExtra;
 import com.webapps.common.entity.Recruitment;
 import com.webapps.common.entity.User;
 
-public class EntryDetailDto extends Dto {
+public class EnrollApprovalInfoDto extends Dto {
 	
 	/**
 	 * 
@@ -27,6 +27,8 @@ public class EntryDetailDto extends Dto {
 	private Company company;
 	
 	private Recruitment recruitment;
+	
+	private User approver;
 
 	public Enrollment getEnrollment() {
 		return enrollment;
@@ -74,6 +76,14 @@ public class EntryDetailDto extends Dto {
 
 	public void setRecruitment(Recruitment recruitment) {
 		this.recruitment = recruitment;
+	}
+
+	public User getApprover() {
+		return approver;
+	}
+
+	public void setApprover(User approver) {
+		this.approver = approver;
 	}
 
 }
