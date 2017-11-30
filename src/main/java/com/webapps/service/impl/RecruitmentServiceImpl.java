@@ -210,6 +210,14 @@ public class RecruitmentServiceImpl implements IRecruitmentService {
 	@Override
 	public List<Recruitment> queryListByType(int type) throws Exception {
 		List<Recruitment> list = iRecruitmentMapper.queryListByType(type);
+		if(CollectionUtils.isNotEmpty(list)){
+			for(Recruitment r:list){
+				List<Picture> pictures = iPictureMapper.queryListByFkIdAndType(r.getCompany().getId(),1);
+				if(CollectionUtils.isNotEmpty(pictures)){
+					r.setPicUrl(pictures.get(0).getPicUrl());
+				}
+			}
+		}
 		return list;
 	}
 

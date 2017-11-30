@@ -107,6 +107,7 @@ public class PasswordEncryptUtil {
 		String salt = null;
 		try {
 			salt = generateSalt();
+			System.out.println(salt);
 			String encrptPwd = getEncryptedPassword(pwd, salt);
 			System.out.println(encrptPwd);
 		} catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
