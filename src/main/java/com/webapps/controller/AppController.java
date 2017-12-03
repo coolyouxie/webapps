@@ -3,6 +3,8 @@ package com.webapps.controller;
 import java.util.*;
 
 import com.webapps.common.entity.*;
+import com.webapps.common.utils.DataHandler;
+import com.webapps.common.utils.DataUtil;
 import com.webapps.service.*;
 import net.sf.json.JSON;
 import net.sf.json.JSONArray;
@@ -102,6 +104,15 @@ public class AppController {
 	@ResponseBody
 	@RequestMapping(value = "/login", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
 	public String login(@RequestBody String params) {
+		boolean flag = false;
+		if(StringUtils.isNotBlank(params)){
+			if(params.contains("encryptData")){
+				flag = true;
+			}
+		}
+		if(flag){
+			params = DataUtil.decryptData(params);
+		}
 		logger.info("用户登录接口login接收参数：" + params);
 		ResultDto<User> dto = new ResultDto<User>();
 		Gson gson = new Gson();
@@ -121,6 +132,9 @@ public class AppController {
 			dto.setErrorMsg("登录异常，请稍后重试");
 			dto.setResult("F");
 		}
+		if(flag){
+			return DataUtil.encryptData(JSONUtil.toJSONObjectString(JSONObject.fromObject(dto)));
+		}
 		return JSONUtil.toJSONObjectString(JSONObject.fromObject(dto));
 	}
 	
@@ -132,6 +146,15 @@ public class AppController {
 	@ResponseBody
 	@RequestMapping(value = "/register", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
 	public String register(@RequestBody String params) {
+		boolean flag = false;
+		if(StringUtils.isNotBlank(params)){
+			if(params.contains("encryptData")){
+				flag = true;
+			}
+		}
+		if(flag){
+			params = DataUtil.decryptData(params);
+		}
 		User user = new User();
 		JSONObject jsonObj = JSONUtil.toJSONObject(params);
 		String smsCode = jsonObj.getString("smsCode");
@@ -163,12 +186,24 @@ public class AppController {
 			dto.setResult("F");
 			dto.setErrorMsg("注册时异常，请稍后重试");
 		}
+		if(flag){
+			return DataUtil.encryptData(JSONUtil.toJSONString(JSONUtil.toJSONObject(dto)));
+		}
 		return JSONUtil.toJSONString(JSONUtil.toJSONObject(dto));
 	}
 	
 	@ResponseBody
 	@RequestMapping(value="/resetPassword", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
 	public String resetPassword(@RequestBody String params){
+		boolean flag = false;
+		if(StringUtils.isNotBlank(params)){
+			if(params.contains("encryptData")){
+				flag = true;
+			}
+		}
+		if(flag){
+			params = DataUtil.decryptData(params);
+		}
 		JSONObject obj = JSONObject.fromObject(params);
 		String phoneNumber = obj.getString("phoneNumber");
 		String password = obj.getString("password");
@@ -178,6 +213,9 @@ public class AppController {
 		ResultDto<String> dto2 = null;
 		if("S".equals(dto1.getResult())){
 			dto2 = iUserService.resetPassword(phoneNumber, password);
+		}
+		if(flag){
+			return DataUtil.encryptData(JSONUtil.toJSONString(JSONUtil.toJSONObject(dto2)));
 		}
 		return JSONUtil.toJSONString(JSONObject.fromObject(dto2));
 	}
@@ -191,24 +229,57 @@ public class AppController {
 	@ResponseBody
 	@RequestMapping(value = "/getValidateCode", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
 	public String getValidateCode(@RequestBody String params) {
+		boolean flag = false;
+		if(StringUtils.isNotBlank(params)){
+			if(params.contains("encryptData")){
+				flag = true;
+			}
+		}
+		if(flag){
+			params = DataUtil.decryptData(params);
+		}
 		Gson gson = new Gson();
 		AliSmsMsg asm = gson.fromJson(params, AliSmsMsg.class);
 		ResultDto<AliSmsMsg> dto = iAliSmsMsgService.getAliSmsCode(asm.getPhoneNumbers(), asm.getType());
+		if(flag){
+			return DataUtil.encryptData(JSONUtil.toJSONString(JSONUtil.toJSONObject(dto)));
+		}
 		return JSONUtil.toJSONString(JSONUtil.toJSONObject(dto));
 	}
 	
 	@ResponseBody
 	@RequestMapping(value = "/validateSmsCode", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
 	public String validateSmsCode(@RequestBody String params) {
+		boolean flag = false;
+		if(StringUtils.isNotBlank(params)){
+			if(params.contains("encryptData")){
+				flag = true;
+			}
+		}
+		if(flag){
+			params = DataUtil.decryptData(params);
+		}
 		Gson gson = new Gson();
 		AliSmsMsg asm = gson.fromJson(params, AliSmsMsg.class);
 		ResultDto<String> dto = iAliSmsMsgService.validateAliSmsCode(asm.getId(), asm.getValidateCode());
+		if(flag){
+			return DataUtil.encryptData(JSONUtil.toJSONString(JSONUtil.toJSONObject(dto)));
+		}
 		return JSONUtil.toJSONString(JSONUtil.toJSONObject(dto));
 	}
 
 	@ResponseBody
 	@RequestMapping(value = "/userRecommend", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
 	public String userRecommend(@RequestBody String params) {
+		boolean flag = false;
+		if(StringUtils.isNotBlank(params)){
+			if(params.contains("encryptData")){
+				flag = true;
+			}
+		}
+		if(flag){
+			params = DataUtil.decryptData(params);
+		}
 		logger.info("获取用户推荐列表getUserRecommomendList接收参数:" + params);
 		Gson gson = new Gson();
 		Recommend r = gson.fromJson(params, Recommend.class);
@@ -220,6 +291,9 @@ public class AppController {
 			dto.setResult("F");
 			logger.error(e.getMessage());
 			return gson.toJson(dto);
+		}
+		if(flag){
+			return DataUtil.encryptData(JSONUtil.toJSONString(JSONUtil.toJSONObject(dto)));
 		}
 		return JSONUtil.toJSONString(JSONUtil.toJSONObject(dto));
 	}
@@ -233,6 +307,15 @@ public class AppController {
 	@ResponseBody
 	@RequestMapping(value = "/getUserRecommendList", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
 	public String getUserRecommendList(@RequestBody String params) {
+		boolean flag = false;
+		if(StringUtils.isNotBlank(params)){
+			if(params.contains("encryptData")){
+				flag = true;
+			}
+		}
+		if(flag){
+			params = DataUtil.decryptData(params);
+		}
 		logger.info("获取用户推荐列表getUserRecommomendList接收参数:" + params);
 		JSONObject jsonObj = JSONUtil.toJSONObject(params);
 		Integer userId = jsonObj.getInt("userId");
@@ -246,6 +329,9 @@ public class AppController {
 			dto.setResult("F");
 			e.printStackTrace();
 		}
+		if(flag){
+			return DataUtil.encryptData(JSONUtil.toJSONString(JSONUtil.toJSONObject(dto)));
+		}
 		return JSONUtil.toJSONString(JSONUtil.toJSONObject(dto));
 	}
 
@@ -258,6 +344,15 @@ public class AppController {
 	@ResponseBody
 	@RequestMapping(value = "/getUserEnrollmentList", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
 	public String getUserEnrollmentList(@RequestBody String params) {
+		boolean flag = false;
+		if(StringUtils.isNotBlank(params)){
+			if(params.contains("encryptData")){
+				flag = true;
+			}
+		}
+		if(flag){
+			params = DataUtil.decryptData(params);
+		}
 		JSONObject jsonObj = JSONUtil.toJSONObject(params);
 		Integer userId = jsonObj.getInt("userId");
 		ResultDto<List<Enrollment>> dto = new ResultDto<List<Enrollment>>();
@@ -269,6 +364,9 @@ public class AppController {
 			e.printStackTrace();
 			dto.setErrorMsg("查询异常，请稍后再试");
 			dto.setResult("F");
+		}
+		if(flag){
+			return DataUtil.encryptData(JSONUtil.toJSONString(JSONUtil.toJSONObject(dto)));
 		}
 		return JSONUtil.toJSONString(JSONUtil.toJSONObject(dto));
 	}
@@ -282,6 +380,15 @@ public class AppController {
 	@ResponseBody
 	@RequestMapping(value = "/userEnroll", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
 	public String userEnroll(@RequestBody String params) {
+		boolean flag = false;
+		if(StringUtils.isNotBlank(params)){
+			if(params.contains("encryptData")){
+				flag = true;
+			}
+		}
+		if(flag){
+			params = DataUtil.decryptData(params);
+		}
 		logger.info("用户报名接口userEnroll接收参数:" + params);
 		Gson gson = new Gson();
 		Enrollment em = gson.fromJson(params, Enrollment.class);
@@ -300,6 +407,9 @@ public class AppController {
 			dto.setErrorMsg("参数为空");
 			dto.setResult("F");
 		}
+		if(flag){
+			return DataUtil.encryptData(JSONUtil.toJSONString(JSONUtil.toJSONObject(dto)));
+		}
 		return JSONUtil.toJSONString(JSONUtil.toJSONObject(dto));
 	}
 
@@ -313,6 +423,15 @@ public class AppController {
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/getRecruitmentList", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
 	public String getRecruitmentList(@RequestBody String params) {
+		boolean flag = false;
+		if(StringUtils.isNotBlank(params)){
+			if(params.contains("encryptData")){
+				flag = true;
+			}
+		}
+		if(flag){
+			params = DataUtil.decryptData(params);
+		}
 		ResultDto<List<Recruitment>> dto = new ResultDto<List<Recruitment>>();
 		JSONObject jsonObj = JSONUtil.toJSONObject(params);
 		int currentPage = jsonObj.getInt("page");
@@ -344,6 +463,9 @@ public class AppController {
 			dto.setErrorMsg("查询异常，请稍后再试");
 			e.printStackTrace();
 		}
+		if(flag){
+			return DataUtil.encryptData(JSONUtil.toJSONString(JSONUtil.toJSONObject(dto)));
+		}
 		String result = JSONUtil.toJSONString(JSONObject.fromObject(dto));
 		return result;
 	}
@@ -356,6 +478,15 @@ public class AppController {
 	@ResponseBody
 	@RequestMapping(value = "/getRecruitmentDetail", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
 	public String getRecruitmentDetail(@RequestBody String params) {
+		boolean flag = false;
+		if(StringUtils.isNotBlank(params)){
+			if(params.contains("encryptData")){
+				flag = true;
+			}
+		}
+		if(flag){
+			params = DataUtil.decryptData(params);
+		}
 		JSONObject obj = JSONUtil.toJSONObject(params);
 		Integer id = obj.getInt("id");
 		ResultDto<Recruitment> dto = new ResultDto<Recruitment>();
@@ -370,6 +501,9 @@ public class AppController {
 			dto.setResult("F");
 			dto.setErrorMsg("查询信息异常，请稍后再试");
 		}
+		if(flag){
+			return DataUtil.encryptData(JSONUtil.toJSONString(JSONUtil.toJSONObject(dto)));
+		}
 		return JSONUtil.toJSONString(JSONUtil.toJSONObject(dto));
 	}
 
@@ -381,6 +515,15 @@ public class AppController {
 	@ResponseBody
 	@RequestMapping(value = "/getCompanyInfo", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
 	public String getCompanyInfo(@RequestBody String params) {
+		boolean flag = false;
+		if(StringUtils.isNotBlank(params)){
+			if(params.contains("encryptData")){
+				flag = true;
+			}
+		}
+		if(flag){
+			params = DataUtil.decryptData(params);
+		}
 		Gson gson = new Gson();
 		ResultDto<Company> dto = new ResultDto<Company>();
 		Company c = gson.fromJson(params, Company.class);
@@ -391,6 +534,9 @@ public class AppController {
 			e.printStackTrace();
 			dto.setResult("F");
 			dto.setErrorMsg("查询企业信息异常，请稍后重试");
+		}
+		if(flag){
+			return DataUtil.encryptData(JSONUtil.toJSONString(JSONUtil.toJSONObject(dto)));
 		}
 		return JSONUtil.toJSONString(JSONUtil.toJSONObject(dto));
 	}
@@ -403,6 +549,15 @@ public class AppController {
 	@ResponseBody
 	@RequestMapping(value = "/getFeeConfig", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
 	public String getFeeConfig(@RequestBody String params) {
+		boolean flag = false;
+		if(StringUtils.isNotBlank(params)){
+			if(params.contains("encryptData")){
+				flag = true;
+			}
+		}
+		if(flag){
+			params = DataUtil.decryptData(params);
+		}
 		ResultDto<List<FeeConfig>> dto = new ResultDto<List<FeeConfig>>();
 		try {
 			List<FeeConfig> temp = iFeeConfigService.queryAll();
@@ -412,6 +567,9 @@ public class AppController {
 			e.printStackTrace();
 			dto.setErrorMsg("查询信息异常，请稍后再试");
 			dto.setResult("F");
+		}
+		if(flag){
+			return DataUtil.encryptData(JSONUtil.toJSONString(JSONUtil.toJSONObject(dto)));
 		}
 		return JSONUtil.toJSONString(JSONUtil.toJSONObject(dto));
 	}
@@ -438,6 +596,15 @@ public class AppController {
 	@ResponseBody
 	@RequestMapping(value = "/getMessageConfig", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
 	public String getMessageConfig(@RequestBody String params) {
+		boolean flag = false;
+		if(StringUtils.isNotBlank(params)){
+			if(params.contains("encryptData")){
+				flag = true;
+			}
+		}
+		if(flag){
+			params = DataUtil.decryptData(params);
+		}
 		ResultDto<List<MessageConfig>> dto = new ResultDto<List<MessageConfig>>();
 		JSONObject jsonObj = JSONObject.fromObject(params);
 		Integer rows = jsonObj.getInt("rows");
@@ -454,6 +621,9 @@ public class AppController {
 			dto.setResult("F");
 			dto.setErrorMsg("无更多数据");
 		}
+		if(flag){
+			return DataUtil.encryptData(JSONUtil.toJSONString(JSONUtil.toJSONObject(dto)));
+		}
 		return JSONUtil.toJSONString(JSONObject.fromObject(dto));
 	}
 	
@@ -465,6 +635,15 @@ public class AppController {
 	@ResponseBody
 	@RequestMapping(value = "/getUserWallet", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
 	public String getUserWallet(@RequestBody String params) {
+		boolean flag = false;
+		if(StringUtils.isNotBlank(params)){
+			if(params.contains("encryptData")){
+				flag = true;
+			}
+		}
+		if(flag){
+			params = DataUtil.decryptData(params);
+		}
 		JSONObject obj = JSONObject.fromObject(params);
 		Integer userId = obj.getInt("userId");
 		UserWallet uw = iUserWalletService.getUserWalletByUserId(userId);
@@ -475,6 +654,9 @@ public class AppController {
 		}else{
 			dto.setData(uw);
 			dto.setResult("S");
+		}
+		if(flag){
+			return DataUtil.encryptData(JSONUtil.toJSONString(JSONUtil.toJSONObject(dto)));
 		}
 		return JSONUtil.toJSONString(JSONObject.fromObject(dto));
 	}
@@ -488,10 +670,22 @@ public class AppController {
 	@ResponseBody
 	@RequestMapping(value = "/applyCashback", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
 	public String applyCashback(@RequestBody String params) {
+		boolean flag = false;
+		if(StringUtils.isNotBlank(params)){
+			if(params.contains("encryptData")){
+				flag = true;
+			}
+		}
+		if(flag){
+			params = DataUtil.decryptData(params);
+		}
 		JSONObject obj = JSONObject.fromObject(params);
 		Integer userId = obj.getInt("userId");
 		Integer walletId = obj.getInt("walletId");
 		ResultDto<String> dto = iApplyExpenditureService.applyExpenditure(userId, walletId);
+		if(flag){
+			return DataUtil.encryptData(JSONUtil.toJSONString(JSONUtil.toJSONObject(dto)));
+		}
 		return JSONUtil.toJSONString(JSONObject.fromObject(dto));
 	}
 
@@ -526,6 +720,15 @@ public class AppController {
 	@ResponseBody
 	@RequestMapping(value = "/updateUserInfo", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
 	public String updateUserInfo(@RequestBody String params) {
+		boolean flag = false;
+		if(StringUtils.isNotBlank(params)){
+			if(params.contains("encryptData")){
+				flag = true;
+			}
+		}
+		if(flag){
+			params = DataUtil.decryptData(params);
+		}
 		logger.info("更新用户信息接口updateUserInfo接收参数：" + params);
 		Gson gson = new Gson();
 		User ur = gson.fromJson(params, User.class);
@@ -539,6 +742,9 @@ public class AppController {
 			logger.error(e.getMessage());
 			return gson.toJson(dto);
 		}
+		if(flag){
+			return DataUtil.encryptData(JSONUtil.toJSONString(JSONUtil.toJSONObject(dto)));
+		}
 		return JSONUtil.toJSONString(JSONUtil.toJSONObject(dto));
 	}
 
@@ -548,6 +754,15 @@ public class AppController {
 	@ResponseBody
 	@RequestMapping(value = "/getUserInfo", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
 	public String getUserInfo(@RequestBody String params) {
+		boolean flag = false;
+		if(StringUtils.isNotBlank(params)){
+			if(params.contains("encryptData")){
+				flag = true;
+			}
+		}
+		if(flag){
+			params = DataUtil.decryptData(params);
+		}
 		logger.info("获取用户信息接口getUserInfo接收参数：" + params);
 		JSONObject obj = JSONUtil.toJSONObject(params);
 		Integer id = obj.getInt("id");
@@ -564,12 +779,24 @@ public class AppController {
 			dto.setResult("F");
 			dto.setErrorMsg("获取数据异常");
 		}
+		if(flag){
+			return DataUtil.encryptData(JSONUtil.toJSONString(JSONUtil.toJSONObject(dto)));
+		}
 		return JSONUtil.toJSONString(JSONUtil.toJSONObject(dto));
 	}
 	
 	@ResponseBody
 	@RequestMapping(value = "/applyApproval", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
 	public String applyApproval(@RequestBody String params) {
+		boolean flag = false;
+		if(StringUtils.isNotBlank(params)){
+			if(params.contains("encryptData")){
+				flag = true;
+			}
+		}
+		if(flag){
+			params = DataUtil.decryptData(params);
+		}
 		ResultDto<EnrollApproval> dto = null;
 		logger.info("获取用户申请审核接口applyApproval接收参数：" + params);
 		JSONObject obj = JSONUtil.toJSONObject(params);
@@ -586,6 +813,9 @@ public class AppController {
 			dto.setErrorMsg("发起审核异常");
 			return JSONUtil.toJSONString(JSONUtil.toJSONObject(dto));
 		}
+		if(flag){
+			return DataUtil.encryptData(JSONUtil.toJSONString(JSONUtil.toJSONObject(dto)));
+		}
 		return JSONUtil.toJSONString(JSONUtil.toJSONObject(dto));
 	}
 	
@@ -598,6 +828,15 @@ public class AppController {
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/applyExpenditureList", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
 	public String applyExpenditureList(@RequestBody String params) {
+		boolean flag = false;
+		if(StringUtils.isNotBlank(params)){
+			if(params.contains("encryptData")){
+				flag = true;
+			}
+		}
+		if(flag){
+			params = DataUtil.decryptData(params);
+		}
 		ResultDto<List<ApplyExpenditure>> dto = new ResultDto<List<ApplyExpenditure>>();
 		logger.info("获取用户提现申请接口applyExpenditureList接收参数：" + params);
 		JSONObject obj = JSONUtil.toJSONObject(params);
@@ -615,6 +854,9 @@ public class AppController {
 			dto.setErrorMsg("提现记录查询异常");
 			return JSONUtil.toJSONString(JSONUtil.toJSONObject(dto));
 		}
+		if(flag){
+			return DataUtil.encryptData(JSONUtil.toJSONString(JSONUtil.toJSONObject(dto)));
+		}
 		return JSONUtil.toJSONString(JSONUtil.toJSONObject(dto));
 	}
 	
@@ -626,6 +868,15 @@ public class AppController {
 	@ResponseBody
 	@RequestMapping(value = "/expireApprovalSuccessList", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
 	public String expireApprovalSuccessList(@RequestBody String params) {
+		boolean flag = false;
+		if(StringUtils.isNotBlank(params)){
+			if(params.contains("encryptData")){
+				flag = true;
+			}
+		}
+		if(flag){
+			params = DataUtil.decryptData(params);
+		}
 		logger.info("获取用户期满审核通过接口expireApprovalSuccessList接收参数：" + params);
 		ResultDto<List<EnrollApproval>> dto = new ResultDto<List<EnrollApproval>>();
 		JSONObject obj = JSONUtil.toJSONObject(params);
@@ -639,6 +890,9 @@ public class AppController {
 			dto.setErrorMsg("提现记录查询异常");
 			return JSONUtil.toJSONString(JSONUtil.toJSONObject(dto));
 		}
+		if(flag){
+			return DataUtil.encryptData(JSONUtil.toJSONString(JSONUtil.toJSONObject(dto)));
+		}
 		return JSONUtil.toJSONString(JSONUtil.toJSONObject(dto));
 	}
 	
@@ -646,6 +900,15 @@ public class AppController {
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/loanBillRecordList", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
 	public String loanBillRecordList(@RequestBody String params) {
+		boolean flag = false;
+		if(StringUtils.isNotBlank(params)){
+			if(params.contains("encryptData")){
+				flag = true;
+			}
+		}
+		if(flag){
+			params = DataUtil.decryptData(params);
+		}
 		logger.info("获取用户期满审核通过接口expireApprovalSuccessList接收参数：" + params);
 		ResultDto<List<BillRecord>> dto = new ResultDto<List<BillRecord>>();
 		JSONObject obj = JSONUtil.toJSONObject(params);
@@ -665,6 +928,9 @@ public class AppController {
 			dto.setResult("F");
 			dto.setErrorMsg("推荐费记录查询异常");
 			return JSONUtil.toJSONString(JSONUtil.toJSONObject(dto));
+		}
+		if(flag){
+			return DataUtil.encryptData(JSONUtil.toJSONString(JSONUtil.toJSONObject(dto)));
 		}
 		return JSONUtil.toJSONString(JSONUtil.toJSONObject(dto));
 	}
@@ -700,6 +966,15 @@ public class AppController {
 	@ResponseBody
 	@RequestMapping(value = "/getUserState", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
 	public String getUserState(@RequestBody String params) {
+		boolean flag = false;
+		if(StringUtils.isNotBlank(params)){
+			if(params.contains("encryptData")){
+				flag = true;
+			}
+		}
+		if(flag){
+			params = DataUtil.decryptData(params);
+		}
 		logger.info("获取用户期满审核通过接口expireApprovalSuccessList接收参数：" + params);
 		ResultDto<JSONObject> dto = new ResultDto<JSONObject>();
 		JSONObject obj = JSONUtil.toJSONObject(params);
@@ -734,11 +1009,17 @@ public class AppController {
 			result.put("reason",reason);
 			dto.setResult("S");
 			dto.setData(result);
+			if(flag){
+				return DataUtil.encryptData(JSONUtil.toJSONString(JSONUtil.toJSONObject(dto)));
+			}
 			return JSONUtil.toJSONString(JSONObject.fromObject(dto));
 		}catch (Exception e){
 			e.printStackTrace();
 			dto.setResult("F");
 			dto.setErrorMsg("获取用户状态时异常");
+			if(flag){
+				return DataUtil.encryptData(JSONUtil.toJSONString(JSONUtil.toJSONObject(dto)));
+			}
 			return JSONUtil.toJSONString(JSONObject.fromObject(dto));
 		}
 	}
@@ -766,16 +1047,37 @@ public class AppController {
 	@ResponseBody
 	@RequestMapping(value="/getUserPictures",produces = "text/html;charset=UTF-8")
 	public String getUserPictures(@RequestBody String params){
+		boolean flag = false;
+		if(StringUtils.isNotBlank(params)){
+			if(params.contains("encryptData")){
+				flag = true;
+			}
+		}
+		if(flag){
+			params = DataUtil.decryptData(params);
+		}
 		JSONObject obj = JSONObject.fromObject(params);
 		Integer userId = obj.getInt("userId");
 		ResultDto<List<Picture>> dto = null;
 		dto = iPictureService.queryUserPictures(userId);
+		if(flag){
+			return DataUtil.encryptData(JSONUtil.toJSONString(JSONUtil.toJSONObject(dto)));
+		}
 		return JSONUtil.toJSONString(JSONObject.fromObject(dto));
 	}
 
 	@ResponseBody
 	@RequestMapping(value = "/getEnrollmentExtraInfo",produces = "text/html;charset=UTF-8")
 	public String getEnrollmentextraInfo(@RequestBody String params){
+		boolean flag = false;
+		if(StringUtils.isNotBlank(params)){
+			if(params.contains("encryptData")){
+				flag = true;
+			}
+		}
+		if(flag){
+			params = DataUtil.decryptData(params);
+		}
 		JSONObject obj = JSONObject.fromObject(params);
 		Integer emId = obj.getInt("enrollmentId");
 		ResultDto<List<EnrollmentExtra>> dto = new ResultDto<List<EnrollmentExtra>>();
@@ -783,11 +1085,17 @@ public class AppController {
 			List<EnrollmentExtra> list = iEnrollmentExtraMapper.queryListByEnrollmentId(emId);
 			dto.setData(list);
 			dto.setResult("S");
+			if(flag){
+				return DataUtil.encryptData(JSONUtil.toJSONString(JSONUtil.toJSONObject(dto)));
+			}
 			return(JSONUtil.toJSONString(JSONObject.fromObject(dto)));
 		} catch (Exception e) {
 			e.printStackTrace();
 			dto.setErrorMsg("报名扩展信息查询异常");
 			dto.setResult("F");
+			if(flag){
+				return DataUtil.encryptData(JSONUtil.toJSONString(JSONUtil.toJSONObject(dto)));
+			}
 			return(JSONUtil.toJSONString(JSONObject.fromObject(dto)));
 		}
 	}
@@ -849,16 +1157,31 @@ public class AppController {
 	@ResponseBody
 	@RequestMapping(value = "/queryRecruitmentListByType",produces = "text/html;charset=UTF-8")
 	public String queryRecruitmentListByType(@RequestBody String params){
+		boolean flag = false;
+		if(StringUtils.isNotBlank(params)){
+			if(params.contains("encryptData")){
+				flag = true;
+			}
+		}
+		if(flag){
+			params = DataUtil.decryptData(params);
+		}
 		ResultDto<List<Recruitment>> dto = new ResultDto<List<Recruitment>>();
 		try {
 			List<Recruitment> list = iRecruitmentService.queryListByType(1);
 			dto.setData(list);
 			dto.setResult("S");
+			if(flag){
+				return DataUtil.encryptData(JSONUtil.toJSONString(JSONUtil.toJSONObject(dto)));
+			}
 			return JSONUtil.toJSONString(JSONObject.fromObject(dto));
 		} catch (Exception e) {
 			e.printStackTrace();
 			dto.setResult("F");
 			dto.setErrorMsg("查询发布单异常");
+			if(flag){
+				return DataUtil.encryptData(JSONUtil.toJSONString(JSONUtil.toJSONObject(dto)));
+			}
 			return JSONUtil.toJSONString(JSONObject.fromObject(dto));
 		}
 	}
@@ -866,15 +1189,23 @@ public class AppController {
 	@ResponseBody
 	@RequestMapping(value="/saveGroupUser",produces ="text/html;charset=UTF-8" )
 	public String saveGroupUser(@RequestBody String params){
+		boolean flag = false;
+		if(StringUtils.isNotBlank(params)){
+			if(params.contains("encryptData")){
+				flag = true;
+			}
+		}
+		if(flag){
+			params = DataUtil.decryptData(params);
+		}
 		ResultDto<String> dto = null;
 		try {
 			JSONObject object = JSONObject.fromObject(params);
 			GroupUser leader = (GroupUser) JSONObject.toBean(JSONObject.fromObject(object.getString("leader")),GroupUser.class);
-//			JSONArray array = JSONArray.fromObject(object.getString("users"));
-//			List list = (List) JSONArray.toCollection(array,GroupUser.class);
-//			if(CollectionUtils.isNotEmpty(array)) {
-				dto = iGroupUserService.batchInsert(null, leader);
-//			}
+			dto = iGroupUserService.batchInsert(null, leader);
+			if(flag){
+				return DataUtil.encryptData(JSONUtil.toJSONString(JSONUtil.toJSONObject(dto)));
+			}
 			return JSONUtil.toJSONString(JSONObject.fromObject(dto));
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -883,7 +1214,50 @@ public class AppController {
 				dto.setErrorMsg("保存信息异常");
 				dto.setResult("F");
 			}
+			if(flag){
+				return DataUtil.encryptData(JSONUtil.toJSONString(JSONUtil.toJSONObject(dto)));
+			}
 			return JSONUtil.toJSONString(JSONObject.fromObject(dto));
+		}
+	}
+
+	@ResponseBody
+	@RequestMapping(value = "/testDecrypt",produces ="text/html;charset=UTF-8")
+	public String testDecrypt(@RequestBody String params){
+		if(StringUtils.isNotBlank(params)&&params.contains("encryptData")){
+			return "加密参数："+DataUtil.decryptData(params);
+		}else{
+			return "未加密参数："+params;
+		}
+	}
+
+	@ResponseBody
+	@RequestMapping(value = "/testEncrypt",produces ="text/html;charset=UTF-8")
+	public String testEncrypt(@RequestBody String params){
+		if(StringUtils.isNotBlank(params)){
+			return DataUtil.encryptData(params);
+		}else{
+			return "加密参数为空";
+		}
+	}
+
+	@ResponseBody
+	@RequestMapping(value = "/testServerEncrypt",produces ="text/html;charset=UTF-8")
+	public String testServerEncrypt(@RequestBody String params){
+		if(StringUtils.isNotBlank(params)){
+			return "加密参数："+DataUtil.testServerEncrypt(params);
+		}else{
+			return "加密参数为空";
+		}
+	}
+
+	@ResponseBody
+	@RequestMapping(value = "/testAppDecrypt",produces ="text/html;charset=UTF-8")
+	public String testAppDecrypt(@RequestBody String params){
+		if(StringUtils.isNotBlank(params)){
+			return "加密参数："+DataUtil.testAppDecrypt(params);
+		}else{
+			return "加密参数为空";
 		}
 	}
 
@@ -911,4 +1285,6 @@ public class AppController {
 //		List list1 = (List)JSONArray.toCollection(array, User.class);
 //		System.out.println(((User)list1.get(0)).getMobile());
 	}
+
+
 }

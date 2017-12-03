@@ -1,23 +1,15 @@
 package com.webapps.common.utils.encrypt;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
-import java.security.KeyFactory;
-import java.security.NoSuchAlgorithmException;
-import java.security.PrivateKey;
-import java.security.PublicKey;
-import java.security.spec.PKCS8EncodedKeySpec;
-import java.security.spec.X509EncodedKeySpec;
-
-import javax.crypto.Cipher;
-import javax.crypto.KeyGenerator;
-import javax.crypto.SecretKey;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import sun.misc.BASE64Decoder;
+import javax.crypto.Cipher;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.security.*;
+import java.security.spec.PKCS8EncodedKeySpec;
+import java.security.spec.X509EncodedKeySpec;
 
 public class RSA {
 
@@ -31,10 +23,8 @@ public class RSA {
 
 	/**
 	 * @param algorithm
-	 * @param ins
 	 * @return
 	 * @throws NoSuchAlgorithmException
-	 * @throws AlipayException
 	 */
 	private static PublicKey getPublicKeyFromX509(String algorithm, String bysKey)
 			throws Exception {
@@ -210,62 +200,23 @@ public class RSA {
 	}
 
 	public static void main(String[] args) {
-		// try {
-		// KeyPair kp = EncryptUtil.getDefaultKeyPair(EncryptAlgorithm.RSA);
-		// PublicKey key1 = kp.getPublic();
-		// PrivateKey key2 = kp.getPrivate();
-		// String keyStr1 = Base64.encode(key1.getEncoded());
-		// String keyStr2 = Base64.encode(key2.getEncoded());
-		// System.out.println("publicKey:"+keyStr1);
-		// System.out.println("privateKey:"+keyStr2);
-		// } catch (Exception e1) {
-		// e1.printStackTrace();
-		// }
+		 try {
+		 KeyPair kp = EncryptUtil.getDefaultKeyPair(EncryptAlgorithm.RSA);
+		 PublicKey key1 = kp.getPublic();
+		 PrivateKey key2 = kp.getPrivate();
+		 String keyStr1 = Base64.encode(key1.getEncoded());
+		 String keyStr2 = Base64.encode(key2.getEncoded());
+		 System.out.println("publicKey:"+keyStr1);
+		 System.out.println("privateKey:"+keyStr2);
+		 } catch (Exception e1) {
+		 e1.printStackTrace();
+		 }
 
 		 String serverPubKey = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCHjtVGMmt2CyOy/bbE7F5gW6ympHnA9DECuFDTDQW9wNiU/oVPx+5+dSD6vuj/v0lwCyH0U1TEwXBygc+8k88qT+qWTwIlmygm5rRtsBzdUjKLxxr8Tn7axla55a7Nh9y0J4bdMGgz737yKtpDUxmlPfiM47agrkUi4CuRO745tQIDAQAB";
 		 String serverPriKey = "MIICdQIBADANBgkqhkiG9w0BAQEFAASCAl8wggJbAgEAAoGBAIeO1UYya3YLI7L9tsTsXmBbrKakecD0MQK4UNMNBb3A2JT+hU/H7n51IPq+6P+/SXALIfRTVMTBcHKBz7yTzypP6pZPAiWbKCbmtG2wHN1SMovHGvxOftrGVrnlrs2H3LQnht0waDPvfvIq2kNTGaU9+IzjtqCuRSLgK5E7vjm1AgMBAAECgYBa9F5rpEbwRFcmsQ+iH8rPMpOsmG1NJ0t/PLaWdYVlpXBswD4oosiGNwby14e0md+newDEU+lrvzM40ZrWOALmsP7qWEb9ERybEXnMUPgeJl/72KYgzLn0ByKEQhdUesYt8cAgdoYD7SiuImqs0wtd+iXDn19UYrTi/r+WGcX0HQJBAMw6gcyepJpKrMpqJ25UFTYO+27moC19Y+LdTgSONe6fS9w8p0YZRgdsIV9Y3gCW05WKxu+OANpmIQeVOZGhwMsCQQCp6+uBbpYnOgHEv8soRtPp34SUt0tZ+pWjePuEGRufrMX7526BN5BihlXAaQlCO3YsAIARkIzEWUcFsliQlR9/AkAUZ7QYUbF4iQWCo+CUsWn9ILoWdoyCfwi/3gSxh9Pzp47YzmaYJmZMz4z2DdcAkBFL27XMsY98QsACFfLOji7JAkBPn6ON1To7S21EuvMB/p6SuxCvd2yxz0CLh8ekUPemzRlBP2OC3XylDnnkXdPe22o2mE1q7ado4sTrIHVr2tUVAkBlVwD125aIxTvzFgf5t6fiOUpAT6Zotu9gGHEN5AanwhOG3WoEatZewZYwFKbk4VVQKsgNboSJOyetQn+Flh7n";
-		
-		String test = "Y6k05epYzS3Zej0pVWtffbHw1FFsQrW7lRS8QwKml55yQAnQ9ucXMypbOX9TiZhn/uxXT8X+fR3IzgfXITKF4EoaKrSYuY/vjQ5sTcp5MSwmEdoPekctUpg817r7UytgITGXK0g5ERqb5XEXi66g15pCq38Ifn1sH1z4zKePR7k=";
-
-		String appPubKey = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQChls8YN8El6EOH40xkRI2NV+wEaZv1h+de7cQzE/gSn5E//Jeql0MQizmwkdAnueBWa+mam+kNdeWV8dx7/0z6iUulCJOiLkYGBRYbaKbGAbD4hRchNAciS2d6U6aq4cDJ9+LDA3QfjFJY/4Bmf6E0Nnh1FTQWYzrOl+UFPxbVvwIDAQAB";
-		String appPriKey = "MIICdwIBADANBgkqhkiG9w0BAQEFAASCAmEwggJdAgEAAoGBAKGWzxg3wSXoQ4fjTGREjY1X7ARpm/WH517txDMT+BKfkT/8l6qXQxCLObCR0Ce54FZr6Zqb6Q115ZXx3Hv/TPqJS6UIk6IuRgYFFhtopsYBsPiFFyE0ByJLZ3pTpqrhwMn34sMDdB+MUlj/gGZ/oTQ2eHUVNBZjOs6X5QU/FtW/AgMBAAECgYEAlidQS73LgpEg544Et4uoSbZwv+zvGqpuCp1A2wHsXEngrCfpO4ERtbbaJcRpO/ESkNv4GE5WssZiUAKOkr665PpxRQNWgm6LiEjiscNL6KyfckrjRGcZbxmX/hJLP9WNLN36zzW8CGKR8a30J25YFYu5W9hHO8qJRoTcrFLnvBECQQDq5w7BAPucViwBnOzkYbc7rsG41ast/TrlE489uylCblL82tsS24v+QuUYiD0F7uorF3FQwZl3QSmwEziVauPJAkEAsBobxfmxONK+/ID1wjQ3xzTI4f++YDVV46BltK/8Yh/4+6Ve9NURHcl8UYQ/gkyZM1kUeW2Qrysr9OaMTU7hRwJAA6RBXkydmfbcB8pfActiA9LZvfvSA4yBdTuwZMyZ/yWms7TQ4KH2saJn2tGB4K2rg6+BWjcmIesoskoZ/ncBwQJAeP7nWEZwOu+qI8njkbTZIjklUQqr3mSnB8g8OUK1sSHwq857CNOgeAvpLAUmsbs5g+tPwwLB52lNQW5qte9dnwJBALSqOYjlTvFDJ++xRJFEuIE/tjaLDBsmJxG66KFgOmghK++cPtO9qDoLwD5cPosNF74umimK67dV76QhZfDs5S0=";
-		String testStr = "MkhJMskuuc7Gey3e";
-		String data = "gKHsbuDQzWemdCqjC50ZuhiK+N/tB61K7B/3Py+U9O+Gbtwpe3CfZkHDlvqQKKyN8tDes1fintzvwFwv14UMo/GG309Y+a0I5mP8y8jzfP5odlPHRQpbDYB54buhzZO10sLx7Ev3JlnrJLdLYpaPsf+gWio3O91jDWzu4JyJRU0=";
-		try {
-			System.out.println(AESEncrypt.encrypt("{\"data\":\"test\"}", "Jt0bS1HfPB2mEIhK"));
-			System.out.println(AESEncrypt.decrypt(Base64.decode("ElikWpVxo4ftrqOe3Sd9TQ=="), AESEncrypt.getKeyBytes("Jt0bS1HfPB2mEIhK")));
-												   
-			String testStr1 = RSA.encrypt(testStr, appPubKey);
-			System.out.println(testStr1);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		PrivateKey priKey;
-		PublicKey pubKey;
-		try {
-			priKey = EncryptUtil.getPrivateKey(serverPriKey);
-			pubKey = EncryptUtil.getPublicKey(serverPubKey);
-			
-			testStr = EncryptUtil.asymmEncry(testStr, pubKey, EncryptAlgorithm.RSA);
-			System.out.println(testStr);
-			testStr = EncryptUtil.asymmDecry(testStr, priKey, EncryptAlgorithm.RSA);
-			System.out.println(testStr);
-			
-//			KeyGenerator kg = KeyGenerator.getInstance("AES");
-//			kg.init(128);
-//			SecretKey sk = kg.generateKey();
-//			String randomKey = Base64.encode(sk.getEncoded());
-//			testStr = EncryptStringUtils.bin2hex(AESEncrypt.encrypt(testStr, randomKey));
-//			System.out.println("加密结果：" + testStr);
-//			randomKey = EncryptUtil.asymmEncry("MkhJMskuuc7Gey3e", priKey, EncryptAlgorithm.RSA);
-//			System.out.println("AES密钥加密结果：" + randomKey);
-//			System.out.println("APP-AES：" + Base64.encode(EncryptStringUtils.hex2byte(randomKey.getBytes())));
-//			data = EncryptStringUtils.bin2hex(data);
-//			randomKey = EncryptUtil.asymmDecry(data, pubKey, EncryptAlgorithm.RSA);
-//			System.out.println("AES密钥解密结果：" + randomKey);
-//			testStr = AESEncrypt.decrypt(EncryptStringUtils.hex2bin(testStr), randomKey);
-//			System.out.println("解密结果：" + testStr);
+		String testStr = "fxKNEcJfn0cNNRnwbSsHTMGfsIkWOMecKgylKAbLSma8et5jPSnDaaSseoI711pO5a9M+YmFRZsJr+MQnTEAvNIR6HflagxbW3uE1CZNIuzoSfQs+szfkXUlQAAlrYSR8oGu+H2YNkhLl8k7Dkvop7XtFcrjouziJVvbD1dv0W8=";
+		 try {
+			System.out.println(RSA.decrypt(testStr,serverPriKey));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
