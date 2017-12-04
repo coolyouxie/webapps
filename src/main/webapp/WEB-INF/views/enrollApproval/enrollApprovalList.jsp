@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta charset="utf-8" />
-<title>审核列表</title>	
+<title>入职审核列表</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" href="${ctx}/js/common/jquery/jquery-ui-1.12.1/jquery-ui.css" type="text/css" />
 <link rel="stylesheet" href="${ctx}/js/common/jquery/jqGrid/css/ui.jqgrid.css" type="text/css" />
@@ -42,7 +42,7 @@
 								total : 'total', // json中代表页码总数的数据 
 								repeatitems : false // 如果设为false，则jqGrid在解析json时，会根据name来搜索对应的数据元素（即可以json中元素可以不按顺序）；而所使用的name是来自于colModel中的name设定。   
 							},
-		    colNames : [ '报名人', '手机号','身份证号','报名时间','入职公司','入职日期','发布单标题','类型','状态','备注','操作'],
+		    colNames : [ '报名人', '手机号','身份证号','报名时间','入职公司','入职日期','发布单标题','状态','备注','操作'],
 		    colModel : [ {
 								label : 'user.name',
 								name : 'user.name',
@@ -99,20 +99,6 @@
 									return result;
 								}
 							}, {
-								label : 'type',
-								name : 'type',
-								align : 'center',
-								sortable : false,
-								formatter:function(cellValue,options,rowObject){
-									var result = null;
-									if(cellValue==1){
-										result = '入职审核';
-									}else if(cellValue==2){
-										result = "期满审核";
-									}
-									return result;
-								}
-							},{
 								label : 'state',
 								name : 'state',
 								align : 'center',
@@ -140,29 +126,11 @@
 								sortable : false,
 								formatter:function(cellValue,options,rowObject){
 									var result = "";
-									
-									if(rowObject.type==1){
-										if(rowObject.state==0){
-											result = ' <a href="${ctx}/enrollApproval/toEditEntryInfoPage?enrollApprovalId='+rowObject.id+'" class="btn btn-primary btn-sm">入职审核</a>';
-										}else{
-											result = ' <a href="${ctx}/enrollApproval/toShowEntryInfoPage?enrollApprovalId='+rowObject.id+'" class="btn btn-primary btn-sm">入职审核信息</a>';
-										}
-									}else if(rowObject.type==2){
-										if(rowObject.state==0){
-											result = ' <a href="${ctx}/enrollApproval/toEditExpireInfoPage?enrollApprovalId='+rowObject.id+'" class="btn btn-primary btn-sm">期满审核</a>';
-										}else{
-											result = ' <a href="${ctx}/enrollApproval/toShowExpireInfoPage?enrollApprovalId='+rowObject.id+'" class="btn btn-primary btn-sm">期满审核信息</a>';
-										}
-									}
-									/* if(rowObject.state==0){
-										result = '<button class="btn btn-primary btn-sm" onclick="showModal('+rowObject.id+',1,'+rowObject.type+')">通过</button>'+
-										'<button class="btn btn-primary btn-sm" onclick="showModal('+rowObject.id+',2,'+rowObject.type+')">不通过</button>';
+									if(rowObject.state==0){
+										result = ' <a href="${ctx}/enrollApproval/toEditEntryInfoPage?enrollApprovalId='+rowObject.id+'" class="btn btn-primary btn-sm">审核</a>';
 									}else{
-										result = "已审核  ";
-									} */
-									/* if(rowObject.state!=0){
-										result += '  <a href="${ctx}/enrollApproval/toShowEntryInfo?enrollApprovalId='+rowObject.id+'" class="btn btn-primary btn-sm" >期满信息</a>';
-									} */
+										result = ' <a href="${ctx}/enrollApproval/toShowEntryInfoPage?enrollApprovalId='+rowObject.id+'" class="btn btn-primary btn-sm">入职信息</a>';
+									}
 									return result;
 								}
 							} ],
@@ -407,6 +375,7 @@
 	
 	<div class="container-fluid">
 		<form id="searchForm">
+			<input type="text" name="type" value="1" >
 			<div class="row" style="margin-bottom:8px">
 				<div class="col-sm-3" style="width:255px">
 					<label>
@@ -442,14 +411,6 @@
 					</label>
 				</div>
 				<div class="col-sm-2">
-					<label>
-						<span>类型:</span>
-						<select id="type" name="type">
-							<option value="">-请选择-</option>
-							<option value="1">入职审核</option>
-							<option value="2">期满审核</option>
-						</select>
-					</label>
 				</div>
 				<div class="col-sm-2">
 					<label>
