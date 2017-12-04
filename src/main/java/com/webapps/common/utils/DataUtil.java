@@ -34,7 +34,7 @@ public class DataUtil {
     public static String encryptData(String data){
         String key = getRandomKey(16);
         try {
-            String encryptData = AES.Encrypt(data,key);
+            String encryptData = AES.encrypt(data,key);
             String encryptKey = RSA.encrypt(key,appPubKey);
             JSONObject obj = new JSONObject();
             obj.put("encryptData",encryptKey+"|"+encryptData);
@@ -54,7 +54,7 @@ public class DataUtil {
         String encryptParams = dataArray[1];
         try {
             String aesKey = RSA.decrypt(encryptAesKey,appPriKey);
-            String params = AES.Decrypt(encryptParams,aesKey);
+            String params = AES.decrypt(encryptParams,aesKey);
             return params;
         } catch (Exception e) {
             logger.error("数据解密异常");
@@ -66,7 +66,7 @@ public class DataUtil {
     public static String testServerEncrypt(String data){
         String key = getRandomKey(16);
         try {
-            String encryptData = AES.Encrypt(data,key);
+            String encryptData = AES.encrypt(data,key);
             String encryptKey = RSA.encrypt(key,serverPubKey);
             JSONObject obj = new JSONObject();
             obj.put("encryptData",encryptKey+"|"+encryptData);
@@ -86,7 +86,7 @@ public class DataUtil {
         String encryptParams = dataArray[1];
         try {
             String aesKey = RSA.decrypt(encryptAesKey,appPriKey);
-            String params = AES.Decrypt(encryptParams,aesKey);
+            String params = AES.decrypt(encryptParams,aesKey);
             return params;
         } catch (Exception e) {
             logger.error("数据解密异常");
