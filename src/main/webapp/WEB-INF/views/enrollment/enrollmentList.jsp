@@ -42,6 +42,19 @@
 								total : 'total', // json中代表页码总数的数据 
 								repeatitems : false // 如果设为false，则jqGrid在解析json时，会根据name来搜索对应的数据元素（即可以json中元素可以不按顺序）；而所使用的name是来自于colModel中的name设定。   
 						},
+            getParam: function(){
+                var rowListNum = $("#list").jqGrid('getGridParam', 'rowNum');
+                if(rowListNum == undefined){
+                    $('#pageSize').val(15);
+                }else{
+                    $('#pageSize').val(rowListNum);
+                }
+                //组装查询的条件参数
+                var params = {
+                    'company.name':$("#companyName").val()
+                };
+                return params;
+            },
 		    colNames : [ '公司名称', '发布单标题', '报名人', '手机号','报名时间','沟通结果','操作'],
 		    colModel : [ {
 								label : 'company.name',
@@ -98,29 +111,28 @@
 									}else if(rowObject.isTalked==1){
 										result = "已沟通&nbsp;&nbsp;&nbsp;&nbsp;";
 									}
-									/* result += "<button id='btn_"+rowObject.id+"' class='btn btn-primary btn-sm' data-toggle='modal' onclick='showModal("+rowObject.id+",2)'>取消报名</button>"; */
 									return result;
 								}
 							} ],
 		    pager: '#pager',
-		    rowNum:15,
-		    rowList:[15,30,50],
+            pagination: true,
+		    rowNum:1,
+		    rowList:[1,2,3],
 		    sortname: 'id',
 		    viewrecords: true,
 		    sortorder: "desc",
-		    caption: "报名列表",
-		    gridComplete : function() { //在此事件中循环为每一行添加日志、废保和查看链接
-				
-			}
+		    caption: "报名列表"
 		});
 	});
 	
 	function search(){
-		var params = $("#searchForm").serialize();
-		dataGrid.jqGrid("setGridParam",{
-		    postData:params+"&rows="+dataGrid.jqGrid('getGridParam', 'rowNum')+"&page=1",
-		    page:1
-		}).trigger("reloadGrid");
+	    alert($("#searchForm").serialize());
+        $("#list").setGridParam({
+	        url:"${ctx}/enrollment/loadEnrollmentList",
+	        datatype:'json',
+	        page:1,
+	        postData:$("#searchForm").serialize()+"&page=2"+"&rows="+$("#list").getGridParam("rowNum")
+        }).trigger('reloadGrid');
 	}
 	
 	function deleteById(id){
@@ -268,6 +280,18 @@
 						<input type="text" id="enrollTimeEnd" name="enrollTimeEnd" onClick="WdatePicker({isShowWeek:true})">
 					</label>
 				</div>
+
+				<div class="col-sm-3">
+					<label>
+						<span>状态:</span>
+						<select id="isTalked" name="isTalked">
+							<option value="">-请选择-</option>
+							<option value="0">未沟通</option>
+							<option value="1">已沟通</option>
+						</select>
+					</label>
+				</div>
+
 				<div class="col-sm-3">
 					<label>
 						<span>状态:</span>

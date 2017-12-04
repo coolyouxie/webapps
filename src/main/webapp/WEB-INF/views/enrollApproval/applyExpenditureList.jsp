@@ -117,15 +117,12 @@
 								}
 							} ],
 		    pager: '#pager',
-		    rowNum:50,
-		    rowList:[50,100,200],
+		    rowNum:15,
+		    rowList:[15,30,50],
 		    sortname: 'id',
 		    viewrecords: true,
 		    sortorder: "desc",
-		    caption: "审核列表",
-		    gridComplete : function() { //在此事件中循环为每一行添加日志、废保和查看链接
-				
-			}
+		    caption: "审核列表"
 		});
 	});
 	

@@ -125,6 +125,9 @@
 			<if test="obj.state != null and obj.state != ''">
 				and te.state = #{obj.state}
 			</if>
+			<if test="obj.isTalked != null and obj.isTalked != '' or obj.isTalked==0">
+				and te.is_talked = #{obj.isTalked}
+			</if>
 			<if test="obj.user != null and obj.user.name != null and obj.user.name != ''">
 				and tu.name = #{obj.user.name}
 			</if>
@@ -163,6 +166,9 @@
 			te.data_state = 1 
 			<if test="obj.state != null and obj.state != ''">
 				and te.state = #{obj.state}
+			</if>
+			<if test="obj.isTalked != null and obj.isTalked != '' or obj.isTalked==0">
+				and te.is_talked = #{obj.isTalked}
 			</if>
 			<if test="obj.user != null and obj.user.id != null and obj.user.id != ''">
 				and te.user_id = #{obj.user.id}
