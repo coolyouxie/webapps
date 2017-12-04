@@ -26,8 +26,7 @@ public class RSA {
 	 * @return
 	 * @throws NoSuchAlgorithmException
 	 */
-	private static PublicKey getPublicKeyFromX509(String algorithm, String bysKey)
-			throws Exception {
+	private static PublicKey getPublicKeyFromX509(String algorithm, String bysKey) throws Exception {
 		byte[] decodedKey = Base64.decode(bysKey);
 		X509EncodedKeySpec x509 = new X509EncodedKeySpec(decodedKey);
 
@@ -200,40 +199,22 @@ public class RSA {
 	}
 
 	public static void main(String[] args) {
-<<<<<<< HEAD
+		try {
+			KeyPair kp = EncryptUtil.getDefaultKeyPair(EncryptAlgorithm.RSA);
+			PublicKey key1 = kp.getPublic();
+			PrivateKey key2 = kp.getPrivate();
+			String keyStr1 = Base64.encode(key1.getEncoded());
+			String keyStr2 = Base64.encode(key2.getEncoded());
+			System.out.println("publicKey:" + keyStr1);
+			System.out.println("privateKey:" + keyStr2);
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
 		String serverPubKey = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCHjtVGMmt2CyOy/bbE7F5gW6ympHnA9DECuFDTDQW9wNiU/oVPx+5+dSD6vuj/v0lwCyH0U1TEwXBygc+8k88qT+qWTwIlmygm5rRtsBzdUjKLxxr8Tn7axla55a7Nh9y0J4bdMGgz737yKtpDUxmlPfiM47agrkUi4CuRO745tQIDAQAB";
 		String serverPriKey = "MIICdQIBADANBgkqhkiG9w0BAQEFAASCAl8wggJbAgEAAoGBAIeO1UYya3YLI7L9tsTsXmBbrKakecD0MQK4UNMNBb3A2JT+hU/H7n51IPq+6P+/SXALIfRTVMTBcHKBz7yTzypP6pZPAiWbKCbmtG2wHN1SMovHGvxOftrGVrnlrs2H3LQnht0waDPvfvIq2kNTGaU9+IzjtqCuRSLgK5E7vjm1AgMBAAECgYBa9F5rpEbwRFcmsQ+iH8rPMpOsmG1NJ0t/PLaWdYVlpXBswD4oosiGNwby14e0md+newDEU+lrvzM40ZrWOALmsP7qWEb9ERybEXnMUPgeJl/72KYgzLn0ByKEQhdUesYt8cAgdoYD7SiuImqs0wtd+iXDn19UYrTi/r+WGcX0HQJBAMw6gcyepJpKrMpqJ25UFTYO+27moC19Y+LdTgSONe6fS9w8p0YZRgdsIV9Y3gCW05WKxu+OANpmIQeVOZGhwMsCQQCp6+uBbpYnOgHEv8soRtPp34SUt0tZ+pWjePuEGRufrMX7526BN5BihlXAaQlCO3YsAIARkIzEWUcFsliQlR9/AkAUZ7QYUbF4iQWCo+CUsWn9ILoWdoyCfwi/3gSxh9Pzp47YzmaYJmZMz4z2DdcAkBFL27XMsY98QsACFfLOji7JAkBPn6ON1To7S21EuvMB/p6SuxCvd2yxz0CLh8ekUPemzRlBP2OC3XylDnnkXdPe22o2mE1q7ado4sTrIHVr2tUVAkBlVwD125aIxTvzFgf5t6fiOUpAT6Zotu9gGHEN5AanwhOG3WoEatZewZYwFKbk4VVQKsgNboSJOyetQn+Flh7n";
-		String content = "I am a sentence which waiting for encrypt!我是一条等待加密的数据!";
-		PublicKey pubKey = null;
-		PrivateKey priKey = null;
-		try {
-			priKey = EncryptUtil.getPrivateKey(serverPriKey);
-			pubKey = EncryptUtil.getPublicKey(serverPubKey);
-//			String encryptStr = EncryptUtil.asymmEncry(content, pubKey, EncryptAlgorithm.RSA);
-			String encryptStr = RSA.encrypt(content, serverPubKey);
-			System.out.println(encryptStr);
-			String decryptStr = RSA.decrypt(encryptStr, serverPriKey);
-//			String decryptStr = EncryptUtil.asymmDecry(encryptStr, priKey, EncryptAlgorithm.RSA);
-			System.out.println(decryptStr);
-=======
-		 try {
-		 KeyPair kp = EncryptUtil.getDefaultKeyPair(EncryptAlgorithm.RSA);
-		 PublicKey key1 = kp.getPublic();
-		 PrivateKey key2 = kp.getPrivate();
-		 String keyStr1 = Base64.encode(key1.getEncoded());
-		 String keyStr2 = Base64.encode(key2.getEncoded());
-		 System.out.println("publicKey:"+keyStr1);
-		 System.out.println("privateKey:"+keyStr2);
-		 } catch (Exception e1) {
-		 e1.printStackTrace();
-		 }
-
-		 String serverPubKey = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCHjtVGMmt2CyOy/bbE7F5gW6ympHnA9DECuFDTDQW9wNiU/oVPx+5+dSD6vuj/v0lwCyH0U1TEwXBygc+8k88qT+qWTwIlmygm5rRtsBzdUjKLxxr8Tn7axla55a7Nh9y0J4bdMGgz737yKtpDUxmlPfiM47agrkUi4CuRO745tQIDAQAB";
-		 String serverPriKey = "MIICdQIBADANBgkqhkiG9w0BAQEFAASCAl8wggJbAgEAAoGBAIeO1UYya3YLI7L9tsTsXmBbrKakecD0MQK4UNMNBb3A2JT+hU/H7n51IPq+6P+/SXALIfRTVMTBcHKBz7yTzypP6pZPAiWbKCbmtG2wHN1SMovHGvxOftrGVrnlrs2H3LQnht0waDPvfvIq2kNTGaU9+IzjtqCuRSLgK5E7vjm1AgMBAAECgYBa9F5rpEbwRFcmsQ+iH8rPMpOsmG1NJ0t/PLaWdYVlpXBswD4oosiGNwby14e0md+newDEU+lrvzM40ZrWOALmsP7qWEb9ERybEXnMUPgeJl/72KYgzLn0ByKEQhdUesYt8cAgdoYD7SiuImqs0wtd+iXDn19UYrTi/r+WGcX0HQJBAMw6gcyepJpKrMpqJ25UFTYO+27moC19Y+LdTgSONe6fS9w8p0YZRgdsIV9Y3gCW05WKxu+OANpmIQeVOZGhwMsCQQCp6+uBbpYnOgHEv8soRtPp34SUt0tZ+pWjePuEGRufrMX7526BN5BihlXAaQlCO3YsAIARkIzEWUcFsliQlR9/AkAUZ7QYUbF4iQWCo+CUsWn9ILoWdoyCfwi/3gSxh9Pzp47YzmaYJmZMz4z2DdcAkBFL27XMsY98QsACFfLOji7JAkBPn6ON1To7S21EuvMB/p6SuxCvd2yxz0CLh8ekUPemzRlBP2OC3XylDnnkXdPe22o2mE1q7ado4sTrIHVr2tUVAkBlVwD125aIxTvzFgf5t6fiOUpAT6Zotu9gGHEN5AanwhOG3WoEatZewZYwFKbk4VVQKsgNboSJOyetQn+Flh7n";
 		String testStr = "fxKNEcJfn0cNNRnwbSsHTMGfsIkWOMecKgylKAbLSma8et5jPSnDaaSseoI711pO5a9M+YmFRZsJr+MQnTEAvNIR6HflagxbW3uE1CZNIuzoSfQs+szfkXUlQAAlrYSR8oGu+H2YNkhLl8k7Dkvop7XtFcrjouziJVvbD1dv0W8=";
-		 try {
-			System.out.println(RSA.decrypt(testStr,serverPriKey));
->>>>>>> origin/master
+		try {
+			System.out.println(RSA.decrypt(testStr, serverPriKey));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
