@@ -8,7 +8,7 @@ import javax.crypto.spec.SecretKeySpec;
 public class AES {
 	
 	// 加密
-	public static String Encrypt(String sSrc, String sKey) throws Exception {
+	public static String encrypt(String sSrc, String sKey) throws Exception {
         if (sKey == null) {
             System.out.print("Key为空null");
             return null;
@@ -28,7 +28,7 @@ public class AES {
     }
  
     // 解密
-    public static String Decrypt(String sSrc, String sKey) throws Exception {
+    public static String decrypt(String sSrc, String sKey) throws Exception {
         try {
             // 判断Key是否正确
             if (sKey == null) {
@@ -81,11 +81,11 @@ public class AES {
         String cSrc = "数据2343esdofsdfsdfw@wr[1";
         System.out.println("加密前的字串是："+cSrc);
         // 加密
-        String enString = AES.Encrypt(cSrc, cKey);
+        String enString = AES.encrypt(cSrc, cKey);
         System.out.println("加密后的字串是：" + enString);
  
         // 解密
-        String DeString = AES.Decrypt(enString, cKey);
+        String DeString = AES.decrypt(enString, cKey);
         System.out.println("解密后的字串是：" + DeString);
     }
 

@@ -316,11 +316,7 @@ public class RSAEncrypt {
 		String encryptStr = "Test String chaijunkun";
 		try {
 			 byte[] datas = rsaEncrypt.decrypt(rsaEncrypt.getPrivateKey(),Base64.decode(data));
-			 System.out.println(RSAEncrypt.byteArrayToString(datas));
-			 System.out.println(new String(datas));
 			 datas = rsaEncrypt.decrypt(rsaEncrypt.getPrivateKey(),Base64.decode(data1));
-			 System.out.println(RSAEncrypt.byteArrayToString(datas));
-			 System.out.println(new String(datas));
 			// 加密
 			byte[] cipher = rsaEncrypt.encrypt(rsaEncrypt.getPublicKey(), encryptStr.getBytes());
 			// 解密
@@ -334,16 +330,6 @@ public class RSAEncrypt {
 		} catch (Exception e) {
 			System.err.println(e.getMessage());
 		}
-		
-		String aesKey = "cBYqWKbkker7QQae";
-		String data2 = "1gFhbAfKF4Phq//xNCrXmA==";
-		String data3 = "U2FsdGVkX1/pR94YvAG5w9taodHPtww0ssGY8thCN6g=";
-		try {
-			System.out.println(AESEncrypt.decrypt(data3, aesKey));
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
 	}
 
 }
