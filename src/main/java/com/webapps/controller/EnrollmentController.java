@@ -3,10 +3,15 @@ package com.webapps.controller;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.sun.tools.internal.ws.wsdl.document.http.HTTPUrlEncoded;
+import com.webapps.common.form.RequestForm;
+import com.webapps.common.utils.DataDecodeUtil;
+import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.webapps.common.bean.Page;
@@ -16,6 +21,8 @@ import com.webapps.common.form.EnrollmentRequestForm;
 import com.webapps.common.utils.JSONUtil;
 import com.webapps.service.IEnrollmentService;
 
+import java.net.URLDecoder;
+
 @Controller
 @RequestMapping("enrollment")
 public class EnrollmentController {
@@ -23,17 +30,19 @@ public class EnrollmentController {
 	@Autowired
 	private IEnrollmentService iEnrollmentService;
 	
-	@RequestMapping("/toEnrollmentListPage")
+	@RequestMapping(value="/toEnrollmentListPage")
 	public String toEnrollmentListPage(HttpServletRequest request,HttpServletResponse response){
 		return "/enrollment/enrollmentList";
 	}
 	
 	@ResponseBody
-	@RequestMapping("/loadEnrollmentList")
-	public Page loadEnrollmentList(Model model,Page page,EnrollmentRequestForm form,HttpServletRequest request,HttpServletResponse response){
+	@RequestMapping(value="/loadEnrollmentList",method=RequestMethod.POST,produces ="text/html;charset=UTF-8")
+	public String loadEnrollmentList(Model model,Page page,EnrollmentRequestForm form,HttpServletRequest request,HttpServletResponse response){
 		try {
+			DataDecodeUtil<EnrollmentRequestForm> decoder = new DataDecodeUtil<>();
+			form = decoder.decodeParams(form);
 			page = iEnrollmentService.loadEnrollmentList(page, form);
-			return page;
+			return JSONUtil.toJSONString(JSONObject.fromObject(page));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -41,7 +50,7 @@ public class EnrollmentController {
 	}
 	
 	
-	@RequestMapping("/getById")
+	@RequestMapping(value="/getById")
 	public String getById(Model model,Integer id,HttpServletRequest request,HttpServletResponse response){
 		try {
 			Enrollment em = iEnrollmentService.getById(id);

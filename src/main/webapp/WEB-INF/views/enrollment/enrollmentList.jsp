@@ -116,8 +116,8 @@
 							} ],
 		    pager: '#pager',
             pagination: true,
-		    rowNum:1,
-		    rowList:[1,2,3],
+		    rowNum:15,
+		    rowList:[15,30,50],
 		    sortname: 'id',
 		    viewrecords: true,
 		    sortorder: "desc",
@@ -126,12 +126,8 @@
 	});
 	
 	function search(){
-	    alert($("#searchForm").serialize());
         $("#list").setGridParam({
-	        url:"${ctx}/enrollment/loadEnrollmentList",
-	        datatype:'json',
-	        page:1,
-	        postData:$("#searchForm").serialize()+"&page=2"+"&rows="+$("#list").getGridParam("rowNum")
+	        url:"${ctx}/enrollment/loadEnrollmentList?"+encodeURI($("#searchForm").serialize())
         }).trigger('reloadGrid');
 	}
 	
