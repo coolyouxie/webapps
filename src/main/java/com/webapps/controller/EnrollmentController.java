@@ -7,6 +7,7 @@ import com.sun.tools.internal.ws.wsdl.document.http.HTTPUrlEncoded;
 import com.webapps.common.form.RequestForm;
 import com.webapps.common.utils.DataDecodeUtil;
 import net.sf.json.JSONObject;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -37,10 +38,18 @@ public class EnrollmentController {
 	
 	@ResponseBody
 	@RequestMapping(value="/loadEnrollmentList",method=RequestMethod.POST,produces ="text/html;charset=UTF-8")
-	public String loadEnrollmentList(Model model,Page page,EnrollmentRequestForm form,HttpServletRequest request,HttpServletResponse response){
+	public String loadEnrollmentList(Model model,Page page,EnrollmentRequestForm form){
 		try {
-			DataDecodeUtil<EnrollmentRequestForm> decoder = new DataDecodeUtil<>();
-			form = decoder.decodeParams(form);
+			if(form!=null&&form.getCompany()!=null&& StringUtils.isNotBlank(form.getCompany().getName())){
+				String companyName = form.getCompany().getName().trim();
+				companyName = URLDecoder.decode(companyName,"UTF-8");
+				form.getCompany().setName(companyName);
+			}
+			if(form!=null&&form.getUser()!=null&& StringUtils.isNotBlank(form.getUser().getName())){
+				String userName = form.getUser().getName().trim();
+				userName = URLDecoder.decode(userName,"UTF-8");
+				form.getUser().setName(userName);
+			}
 			page = iEnrollmentService.loadEnrollmentList(page, form);
 			return JSONUtil.toJSONString(JSONObject.fromObject(page));
 		} catch (Exception e) {
@@ -51,7 +60,7 @@ public class EnrollmentController {
 	
 	
 	@RequestMapping(value="/getById")
-	public String getById(Model model,Integer id,HttpServletRequest request,HttpServletResponse response){
+	public String getById(Model model,Integer id){
 		try {
 			Enrollment em = iEnrollmentService.getById(id);
 			model.addAttribute("enrollment", em);
@@ -63,13 +72,12 @@ public class EnrollmentController {
 	
 	/**
 	 * 保存报名列表中的沟通信息
-	 * @param model
 	 * @param em
 	 * @return
 	 */
 	@ResponseBody
 	@RequestMapping(value="/saveTalkInfo")
-	public String saveTalkInfo(Model model,Enrollment em){
+	public String saveTalkInfo(Enrollment em){
 		ResultDto<String> dto = new ResultDto<String>();
 		try {
 			int count = iEnrollmentService.saveTalkInfoById(em);

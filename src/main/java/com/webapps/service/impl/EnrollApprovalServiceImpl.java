@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import java.math.BigDecimal;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -814,6 +815,23 @@ public class EnrollApprovalServiceImpl implements IEnrollApprovalService {
 		dto.setRecruitment(recruitment);
 		dto.setUser(user);
 		return dto;
+	}
+
+	@Override
+	public Page getUserApprovalPage(Page page, EnrollApprovalRequestForm form) {
+		try {
+			if(form!=null&&form.getCompany()!=null&& StringUtils.isNotBlank(form.getCompany().getName())){
+				form.getCompany().setName(URLDecoder.decode(form.getCompany().getName(),"UTF-8"));
+			}
+			if(form!=null&&form.getUser()!=null&& StringUtils.isNotBlank(form.getUser().getName())){
+				form.getUser().setName(URLDecoder.decode(form.getUser().getName(),"UTF-8"));
+			}
+			page = this.loadEnrollApprovalList(page, form);
+			return page;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 }

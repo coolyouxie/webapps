@@ -29,13 +29,13 @@ public class PictureController {
 	private IPictureService iPictureService;
 	
 	@ResponseBody
-	@RequestMapping("/loadCompanyPicList")
-	public Page loadCompanyList(Model model,Page page,Integer fkId,HttpServletRequest request,HttpServletResponse response){
+	@RequestMapping(value="/loadCompanyPicList",produces = "text/html;charset=UTF-8")
+	public String loadCompanyList(Model model,Page page,Integer fkId){
 		PictureRequestForm form = new PictureRequestForm();
 		form.setFkId(fkId);
 		try {
 			page = iPictureService.loadPictureList(page, form);
-			return page;
+			return JSONUtil.toJSONString(JSONObject.fromObject(page));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

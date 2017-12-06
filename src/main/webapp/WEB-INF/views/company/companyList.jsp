@@ -27,8 +27,8 @@
 		    url:"${ctx}/company/loadCompanyList",
 		    datatype: "json",
 		    mtype : "POST",
-		    height : 650,
-		    width : 950,
+		    height : "auto",
+		    width : "auto",
 		    jsonReader : {
 								root : "resultList", // json中代表实际模型数据的入口
 								page : "page", // json中代表当前页码的数据   
@@ -77,8 +77,8 @@
 								sortable : false
 							} ],
 		    pager: '#pager',
-		    rowNum:50,
-		    rowList:[50,100,200],
+		    rowNum:15,
+		    rowList:[15,30,50],
 		    sortname: 'id',
 		    viewrecords: true,
 		    sortorder: "desc",
@@ -98,14 +98,8 @@
 	});
 	
 	function search(){
-		var params = {};
-		var companyName = $.trim($("#companyName").val());
-		if(companyName){
-			params.companyName=companyName;
-		}
 		dataGrid.jqGrid("setGridParam",{
-		    postData:"name="+$("#companyName").val()+"&rows="+dataGrid.jqGrid('getGridParam', 'rowNum')+"&page=1",
-		    page:1
+            url:"${ctx}/company/loadCompanyList?"+encodeURI($("#searchForm").serialize())
 		}).trigger("reloadGrid");
 	}
 	
@@ -150,7 +144,7 @@
 				<div class="col-md-4">
 					<label>
 						<span>公司名称:</span>
-						<input type="text" id="companyName" name="company.name" value="">
+						<input type="text" id="companyName" name="name" value="">
 					</label>
 				</div>
 				<div class="col-md-2">

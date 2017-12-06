@@ -43,6 +43,7 @@ public class RecommendServiceImpl implements IRecommendService {
 		List<Recommend> list = iRecommendMapper.queryPage(startRow, rows, recommend);
 		page.setResultList(list);
 		page.setRecords(count);
+		page.countRecords(count);
 		return page;
 	}
 

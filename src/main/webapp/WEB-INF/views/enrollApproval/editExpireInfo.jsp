@@ -52,7 +52,7 @@
 	
 	function agree(){
 		$.ajax({
-			url:"${ctx}/enrollApproval/enrollApprovalById",
+			url:"${ctx}/expireApproval/expireApprovalById",
 			type:"POST",
 			dataType:"JSON",
 	        traditional: true,//必须指定为true
@@ -63,7 +63,7 @@
 			},
 			success:function(response){
 				if(response.result=='S'){
-					window.location.href="${ctx}/enrollApproval/toEnrollApprovalListPage";
+					window.location.href="${ctx}/expireApproval/toExpireApprovalListPage";
 				}else{
 					alert(response.errorMsg);
 				}
@@ -79,7 +79,7 @@
 		}
 		$('#remarkModal').modal('hide');
 		$.ajax({
-			url:"${ctx}/enrollApproval/enrollApprovalById",
+			url:"${ctx}/expireApproval/expireApprovalById",
 			type:"POST",
 			dataType:"JSON",
 	        traditional: true,//必须指定为true
@@ -91,7 +91,7 @@
 			},
 			success:function(response){
 				if(response.result=='S'){
-					window.location.href="${ctx}/enrollApproval/toEnrollApprovalListPage";
+					window.location.href="${ctx}/expireApproval/toExpireApprovalListPage";
 				}else{
 					alert(response.errorMsg);
 				}

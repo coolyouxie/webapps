@@ -57,7 +57,7 @@
 						<li><a href="${ctx}/enrollment/toEnrollmentListPage" target="mainContainer">报名列表</a></li>
 						<li><a href="${ctx}/groupUser/toGroupUserListPage" target="mainContainer">团队用户列表</a></li>
 						<li><a href="${ctx}/recommend/toRecommendListPage" target="mainContainer">推荐列表</a></li>
-						<li><a href="${ctx}/enrollApproval/toEnrollApprovalListPage" target="mainContainer">入职审核列表</a></li>
+						<li><a href="${ctx}/enrollApproval/toEntryApprovalListPage" target="mainContainer">入职审核列表</a></li>
 						<li><a href="${ctx}/expireApproval/toExpireApprovalListPage" target="mainContainer">期满审核列表</a></li>
 						<li><a href="${ctx}/applyExpenditure/toApplyExpenditureListPage" target="mainContainer">提现审核列表</a></li>
 					</ul>

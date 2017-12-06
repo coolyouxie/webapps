@@ -3,6 +3,8 @@ package com.webapps.controller;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.webapps.common.utils.JSONUtil;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,6 +23,8 @@ import com.webapps.service.IPictureService;
 import net.sf.json.JSONObject;
 import net.sf.json.util.JSONUtils;
 
+import java.net.URLDecoder;
+
 @Controller
 @RequestMapping("company")
 public class CompanyController {
@@ -37,11 +41,14 @@ public class CompanyController {
 	}
 	
 	@ResponseBody
-	@RequestMapping("/loadCompanyList")
-	public Page loadCompanyList(Model model,Page page,CompanyRequestForm form,HttpServletRequest request,HttpServletResponse response){
+	@RequestMapping(value="/loadCompanyList",produces ="text/html;charset=UTF-8")
+	public String loadCompanyList(Model model,Page page,CompanyRequestForm form){
 		try {
+			if(form!=null&& StringUtils.isNotBlank(form.getName())){
+				form.setName(URLDecoder.decode(form.getName(),"UTF-8"));
+			}
 			page = iCompanyService.loadCompanyList(page, form);
-			return page;
+			return JSONUtil.toJSONString(JSONObject.fromObject(page));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

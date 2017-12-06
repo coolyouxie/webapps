@@ -3,6 +3,9 @@ package com.webapps.controller;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.webapps.common.utils.JSONUtil;
+import net.sf.json.JSONObject;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,6 +16,8 @@ import com.webapps.common.bean.Page;
 import com.webapps.common.entity.Recommend;
 import com.webapps.common.form.RecommendRequestForm;
 import com.webapps.service.IRecommendService;
+
+import java.net.URLDecoder;
 
 @Controller
 @RequestMapping("recommend")
@@ -27,17 +32,22 @@ public class RecommendController {
 	}
 	
 	@ResponseBody
-	@RequestMapping("/loadRecommendList")
-	public Page loadEnrollmentList(Model model,Page page,RecommendRequestForm form,HttpServletRequest request,HttpServletResponse response){
+	@RequestMapping(value="/loadRecommendList",produces = "text/html;charset=UTF-8")
+	public String loadEnrollmentList(Model model,Page page,RecommendRequestForm form,HttpServletRequest request,HttpServletResponse response){
 		try {
+			if(form!=null&& StringUtils.isNotBlank(form.getName())){
+				form.setName(URLDecoder.decode(form.getName(),"UTF-8"));
+			}
+			if(form!=null&&form.getUser()!=null&& StringUtils.isNotBlank(form.getUser().getName())){
+				form.getUser().setName(URLDecoder.decode(form.getUser().getName(),"UTF-8"));
+			}
 			page = iRecommendService.loadRecommendList(page, form);
-			return page;
+			return JSONUtil.toJSONString(JSONObject.fromObject(page));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return null;
 	}
-	
 	
 	@RequestMapping("/getById")
 	public String getById(Model model,Integer id,HttpServletRequest request,HttpServletResponse response){

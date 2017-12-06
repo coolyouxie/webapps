@@ -69,5 +69,7 @@ public interface IEnrollApprovalService {
                                                  Integer approverId)throws Exception;
 	
 	EnrollApprovalInfoDto loadEnrollApprovalInfo(Integer enrollApprovalId)throws Exception;
+
+	Page getUserApprovalPage(Page page, EnrollApprovalRequestForm form);
 														
 }

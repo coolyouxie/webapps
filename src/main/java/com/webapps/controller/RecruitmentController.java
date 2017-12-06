@@ -3,6 +3,8 @@ package com.webapps.controller;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import net.sf.json.JSONObject;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,6 +22,8 @@ import com.webapps.service.ICompanyService;
 import com.webapps.service.IRecruitmentService;
 
 import net.sf.json.util.JSONUtils;
+
+import java.net.URLDecoder;
 
 @Controller
 @RequestMapping("recruitment")
@@ -49,11 +53,17 @@ public class RecruitmentController {
 	}
 	
 	@ResponseBody
-	@RequestMapping("/loadRecruitmentList")
-	public Page loadRecruitmentList(Model model,Page page,RecruitmentRequestForm form,HttpServletRequest request,HttpServletResponse response){
+	@RequestMapping(value="/loadRecruitmentList",produces = "text/html;charset=UTF-8")
+	public String loadRecruitmentList(Model model,Page page,RecruitmentRequestForm form,HttpServletRequest request,HttpServletResponse response){
 		try {
+			if(form!=null&& StringUtils.isNotBlank(form.getTitle())){
+				form.setTitle(URLDecoder.decode(form.getTitle(),"UTF-8"));
+			}
+			if(form!=null&&form.getCompany()!=null&& StringUtils.isNotBlank(form.getCompany().getName())){
+				form.getCompany().setName(URLDecoder.decode(form.getCompany().getName(),"UTF-8"));
+			}
 			page = iRecruitmentService.loadRecruitmentList(page, form);
-			return page;
+			return JSONUtil.toJSONString(JSONObject.fromObject(page));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

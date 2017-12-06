@@ -3,6 +3,8 @@ package com.webapps.controller;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.webapps.common.utils.JSONUtil;
+import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -37,14 +39,14 @@ public class MessageConfigController {
 	}
 	
 	@ResponseBody
-	@RequestMapping(value="/loadMessageConfigList")
-	public Page loadMessageConfigList(Model model,Page page,MessageConfigRequestForm form,HttpServletRequest request,HttpServletResponse response){
+	@RequestMapping(value="/loadMessageConfigList",produces = "text/html;charset=UTF-8")
+	public String loadMessageConfigList(Model model,Page page,MessageConfigRequestForm form){
 		try {
 			page = iMessageConfigService.loadMessageConfigList(page,form);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return page;
+		return JSONUtil.toJSONString(JSONObject.fromObject(page));
 	}
 	
 	@RequestMapping(value="/toMessageConfigAddPage")

@@ -33,7 +33,7 @@
                 url:"${ctx}/expireApproval/loadExpireApprovalList",
                 datatype: "json",
                 mtype : "POST",
-                height : 650,
+                height : "auto",
                 width : 'auto',
                 jsonReader : {
                     root : "resultList", // json中代表实际模型数据的入口
@@ -127,9 +127,9 @@
                     formatter:function(cellValue,options,rowObject){
                         var result = "";
 						if(rowObject.state==0){
-							result = ' <a href="${ctx}/enrollApproval/toEditExpireInfoPage?enrollApprovalId='+rowObject.id+'" class="btn btn-primary btn-sm">审核</a>';
+							result = ' <a href="${ctx}/expireApproval/toEditExpireInfoPage?enrollApprovalId='+rowObject.id+'" class="btn btn-primary btn-sm">审核</a>';
 						}else{
-							result = ' <a href="${ctx}/enrollApproval/toShowExpireInfoPage?enrollApprovalId='+rowObject.id+'" class="btn btn-primary btn-sm">期满信息</a>';
+							result = ' <a href="${ctx}/expireApproval/toShowExpireInfoPage?enrollApprovalId='+rowObject.id+'" class="btn btn-primary btn-sm">期满信息</a>';
 						}
                         return result;
                     }
@@ -146,8 +146,7 @@
 
         function search(){
             dataGrid.jqGrid("setGridParam",{
-                postData:$("#searchForm").serialize()+"&rows="+dataGrid.jqGrid('getGridParam', 'rowNum')+"&page=1",
-                page:1
+                url:"${ctx}/expireApproval/loadExpireApprovalList?"+encodeURI($("#searchForm").serialize())
             }).trigger("reloadGrid");
         }
 
@@ -158,7 +157,7 @@
                 return;
             }
             $.ajax({
-                url:"${ctx}/enrollApproval/enrollApprovalById",
+                url:"${ctx}/expireApproval/expireApprovalById",
                 type:"POST",
                 dataType:"JSON",
                 traditional: true,//必须指定为true
@@ -241,7 +240,7 @@
         }
 
         function toEntryDetail(id){
-            window.location.href="${ctx}/enrollApproval/getEntryDetailById?id="+id;
+            window.location.href="${ctx}/expireApproval/getEntryDetailById?id="+id;
         }
 	</script>
 	<style>

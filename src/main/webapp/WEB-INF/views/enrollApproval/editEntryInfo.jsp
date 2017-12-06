@@ -56,19 +56,18 @@
 	        return;
 		}
 		$.ajax({
-			url:"${ctx}/enrollApproval/enrollApprovalById",
+			url:"${ctx}/enrollApproval/entryApprovalById",
 			type:"POST",
 			dataType:"JSON",
             traditional: true,//必须指定为true
 			data:{
 				"id":$("#enrollApprovalId").val(),
 				"state":1,
-				"approvalType":1,
 				"cashbackData":cashbackData
 			},
 			success:function(response){
 				if(response.result=='S'){
-					window.location.href="${ctx}/enrollApproval/toEnrollApprovalListPage";
+					window.location.href="${ctx}/enrollApproval/toEntryApprovalListPage";
 				}else{
 					alert(response.errorMsg);
 				}
@@ -84,7 +83,7 @@
 		}
 		$('#remarkModal').modal('hide');
 		$.ajax({
-			url:"${ctx}/enrollApproval/enrollApprovalById",
+			url:"${ctx}/enrollApproval/entryApprovalById",
 			type:"POST",
 			dataType:"JSON",
             traditional: true,//必须指定为true
@@ -96,7 +95,7 @@
 			},
 			success:function(response){
 				if(response.result=='S'){
-					window.location.href="${ctx}/enrollApproval/toEnrollApprovalListPage";
+					window.location.href="${ctx}/enrollApproval/toEntryApprovalListPage";
 				}else{
 					alert(response.errorMsg);
 				}

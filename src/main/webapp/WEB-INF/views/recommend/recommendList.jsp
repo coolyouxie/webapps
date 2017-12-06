@@ -97,8 +97,7 @@
 	
 	function search(){
 		dataGrid.jqGrid("setGridParam",{
-		    postData:$("#searchForm").serialize()+"&rows="+dataGrid.jqGrid('getGridParam', 'rowNum')+"&page=1",
-		    page:1
+		    url:"${ctx}/recommend/loadRecommendList?"+encodeURI($("#searchForm").serialize())
 		}).trigger("reloadGrid");
 	}
 	
@@ -158,26 +157,31 @@
 						<input type="text" id="name" name="name" value="">
 					</label>
 				</div>
-			</div>
-			<div class="row">
-				<div class="col-md-3" style="width:255px">
-					<label>
-						<span>公司名称:</span>
-						<input type="text" id="company.name" name="company.name" value="">
-					</label>
-				</div>
-				<div class="col-md-3" style="width:255px">
-					<label>
-						<span>发布单:</span>
-						<input type="text" id="recruitment.title" name="recruitment.title" value="">
-					</label>
-				</div>
 				<div class="col-md-2">
 					<button type='button' class="btn btn-primary btn-sm" data-toggle="modal" onclick="search()">
 						查询
 					</button>
 				</div>
 			</div>
+			<%--<div class="row">--%>
+				<%--<div class="col-md-3" style="width:255px">--%>
+					<%--<label>--%>
+						<%--<span>公司名称:</span>--%>
+						<%--<input type="text" id="company.name" name="company.name" value="">--%>
+					<%--</label>--%>
+				<%--</div>--%>
+				<%--<div class="col-md-3" style="width:255px">--%>
+					<%--<label>--%>
+						<%--<span>发布单:</span>--%>
+						<%--<input type="text" id="recruitment.title" name="recruitment.title" value="">--%>
+					<%--</label>--%>
+				<%--</div>--%>
+				<%--<div class="col-md-2">--%>
+					<%--<button type='button' class="btn btn-primary btn-sm" data-toggle="modal" onclick="search()">--%>
+						<%--查询--%>
+					<%--</button>--%>
+				<%--</div>--%>
+			<%--</div>--%>
 		</form>
 	</div>
 	<table id="list"></table>

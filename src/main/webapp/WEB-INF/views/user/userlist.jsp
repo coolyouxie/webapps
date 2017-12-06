@@ -27,8 +27,8 @@
 		    url:"${ctx}/user/loadUserList",
 		    datatype: "json",
 		    mtype : "POST",
-		    height:650,
-		    width:950,
+		    height:"auto",
+		    width:'auto',
 		    jsonReader : {
 				root : "resultList", // json中代表实际模型数据的入口
 				page : "page", // json中代表当前页码的数据
@@ -94,8 +94,8 @@
 				sortable : false
 			} ],
 		    pager: '#pager',
-		    rowNum:50,
-		    rowList:[50,100,200],
+		    rowNum:15,
+		    rowList:[15,30,50],
 		    sortname: 'id',
 		    viewrecords: true,
 		    sortorder: "desc",
@@ -115,22 +115,8 @@
 	});
 	
 	function search(){
-		var params = {};
-		var keyWords = $.trim($("#keyWords").val());
-		var gender = $("#genderType").val();
-		var educationId = $("#eductionId").val();
-		if(keyWords){
-			params.keyWords=keyWords;
-		}
-		if(gender){
-			params.gender=gender;
-		}
-		if(educationId){
-			params.educationId=educationId;
-		}
 		dataGrid.jqGrid("setGridParam",{
-		    postData:$("#searchForm").serialize()+"&rows="+dataGrid.jqGrid('getGridParam', 'rowNum')+"&page=1",
-		    page:1
+            url:"${ctx}/user/loadUserList?"+encodeURI($("#searchForm").serialize())
 		}).trigger("reloadGrid");
 	}
 	

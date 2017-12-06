@@ -4,6 +4,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import com.webapps.common.entity.Picture;
+import com.webapps.common.utils.JSONUtil;
+import net.sf.json.JSONObject;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,6 +23,7 @@ import com.webapps.service.IPictureService;
 
 import net.sf.json.util.JSONUtils;
 
+import java.net.URLDecoder;
 import java.util.List;
 
 @Controller
@@ -61,14 +65,17 @@ public class UserController {
 	}
 
 	@ResponseBody
-	@RequestMapping("/loadUserList")
-	public Page loadUserList(Page page,UserRequestForm user,HttpSession session){
+	@RequestMapping(value="/loadUserList",produces = "text/html;charset=UTF-8")
+	public String loadUserList(Page page,UserRequestForm user){
 		try {
+			if(user!=null&& StringUtils.isNotBlank(user.getName())){
+				user.setName(URLDecoder.decode(user.getName(),"UTF-8"));
+			}
 			page = iUserService.loadUserList(page, user);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return page;
+		return JSONUtil.toJSONString(JSONObject.fromObject(page));
 	}
 	
 	@RequestMapping("/saveUser")
