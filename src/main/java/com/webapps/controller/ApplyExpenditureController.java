@@ -3,6 +3,7 @@ package com.webapps.controller;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +18,9 @@ import com.webapps.service.IApplyExpenditureService;
 
 import net.sf.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+
 @Controller
 @RequestMapping(value="applyExpenditure")
 public class ApplyExpenditureController {
@@ -30,10 +34,17 @@ public class ApplyExpenditureController {
 	}
 	
 	@ResponseBody
-	@RequestMapping(value="/loadPageList")
-	public Page loadPageList(Page page,ApplyExpenditureRequestForm form,HttpServletRequest request){
+	@RequestMapping(value="/loadPageList",produces = "text/html;charset=UTF-8")
+	public String loadPageList(Page page,ApplyExpenditureRequestForm form,HttpServletRequest request){
+		if(form!=null&&form.getUser()!=null&& StringUtils.isNotBlank(form.getUser().getName())){
+			try {
+				form.getUser().setName(URLDecoder.decode(form.getUser().getName(),"UTF-8"));
+			} catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
+			}
+		}
 		page = iApplyExpenditureService.loadPageList(page, form);
-		return page;
+		return JSONUtil.toJSONString(JSONObject.fromObject(page));
 	}
 	
 	@ResponseBody

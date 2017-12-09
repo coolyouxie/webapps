@@ -7,7 +7,7 @@
 <html>
 <head>
 <meta charset="utf-8" />
-<title>用户申请入职审核信息</title>
+<title>用户申请期满审核信息</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" href="${ctx}/js/common/jquery/jquery-ui-1.12.1/jquery-ui.css" type="text/css" />
 <link rel="stylesheet" href="${ctx}/js/common/jquery/jqGrid/css/ui.jqgrid.css" type="text/css" />
@@ -57,7 +57,7 @@
 <body>
 	<input type="hidden" id="enrollApprovalId" value="${enrollApprovalId}">
 	<div class="container-fluid">
-		<h3>用户申请入职审核信息</h3>
+		<h3>用户申请期满审核信息</h3>
 		<br/>
 		<div class="row">
 			<label class="col-md-2 control-label">公司名称：</label>
@@ -72,9 +72,15 @@
 			</div>
 		</div>
 		<div class="row">
-			<label class="col-md-2 control-label">用户：</label>
+			<label class="col-md-2 control-label">用户姓名：</label>
 			<div class="col-md-3">
 				<span>${dto.user.name}</span>
+			</div>
+		</div>
+		<div class="row">
+			<label class="col-md-2 control-label">用户手机号：</label>
+			<div class="col-md-3">
+				<span>${dto.user.mobile}</span>
 			</div>
 		</div>
 		<div class="row">
@@ -99,12 +105,6 @@
 			<label class="col-md-2 control-label">待审核返费金额：</label>
 			<div class="col-md-3" style="color:red">
 				<span>${dto.enrollApproval.reward}</span>
-			</div>
-		</div>
-		<div class="row">
-			<label class="col-md-2 control-label">用户手机号：</label>
-			<div class="col-md-3">
-				<span>${dto.user.mobile}</span>
 			</div>
 		</div>
 		<div class="row">

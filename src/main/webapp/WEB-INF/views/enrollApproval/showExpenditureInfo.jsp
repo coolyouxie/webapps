@@ -7,7 +7,7 @@
 <html>
 <head>
 <meta charset="utf-8" />
-<title>用户申请入职审核信息</title>
+<title>用户申请提现审核信息</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" href="${ctx}/js/common/jquery/jquery-ui-1.12.1/jquery-ui.css" type="text/css" />
 <link rel="stylesheet" href="${ctx}/js/common/jquery/jqGrid/css/ui.jqgrid.css" type="text/css" />
@@ -28,7 +28,76 @@
 <script src="${ctx}/js/common/common.js"></script>
 
 <script type="text/javascript">
+	function submit(state){
+		var r=null;
+		if(state==1){
+			r=confirm("确认审核通过！");
+		}else{
+			r=confirm("确认审核不通过！");
+		}
+		if (r==true){
+			if(state==1){
+				agree();
+			}else{
+				$('#remarkModal').modal('show');
+			}
+		}else{
+			return;
+		}
+	}
 	
+	function openRemarkModal(){
+		$('#remarkModal').modal('show');
+	}
+	
+	function agree(){
+		$.ajax({
+			url:"${ctx}/expireApproval/expireApprovalById",
+			type:"POST",
+			dataType:"JSON",
+	        traditional: true,//必须指定为true
+			data:{
+				"id":$("#enrollApprovalId").val(),
+				"state":1,
+				"approvalType":2
+			},
+			success:function(response){
+				if(response.result=='S'){
+					window.location.href="${ctx}/expireApproval/toExpireApprovalListPage";
+				}else{
+					alert(response.errorMsg);
+				}
+			}
+		});
+	}
+	
+	function disagree(){
+		var remark = $("#remark").val().trim();
+		if(!remark){
+			alert("请输入不通过原因");
+			return;
+		}
+		$('#remarkModal').modal('hide');
+		$.ajax({
+			url:"${ctx}/expireApproval/expireApprovalById",
+			type:"POST",
+			dataType:"JSON",
+	        traditional: true,//必须指定为true
+			data:{
+				"id":$("#enrollApprovalId").val(),
+				"state":2,
+				"remark":remark,
+				"approvalType":2
+			},
+			success:function(response){
+				if(response.result=='S'){
+					window.location.href="${ctx}/expireApproval/toExpireApprovalListPage";
+				}else{
+					alert(response.errorMsg);
+				}
+			}
+		});
+	}
 </script>
 <style>
 .input-group-sm {
@@ -75,7 +144,7 @@
 		</div><!-- /.modal -->
 	</div>
 	<div class="container-fluid">
-		<h3>用户申请入职审核信息</h3>
+		<h3>用户申请期满审核信息</h3>
 		<br/>
 		<div class="row">
 			<label class="col-md-2 control-label">公司名称：</label>
@@ -96,12 +165,6 @@
 			</div>
 		</div>
 		<div class="row">
-			<label class="col-md-2 control-label">用户手机号：</label>
-			<div class="col-md-3">
-				<span>${dto.user.mobile}</span>
-			</div>
-		</div>
-		<div class="row">
 			<label class="col-md-2 control-label">报名时间：</label>
 			<div  class="col-md-3">
 				<span>${dto.enrollment.createTimeStr}</span>
@@ -111,6 +174,24 @@
 			<label class="col-md-2 control-label">入职时间：</label>
 			<div class="col-md-3">
 				<span>${dto.enrollment.entryDateStr}</span>
+			</div>
+		</div>
+		<div class="row">
+			<label class="col-md-2 control-label">待审核期满天数：</label>
+			<div class="col-md-3" style="color:red">
+				<span>${dto.enrollApproval.cashbackDays}</span>
+			</div>
+		</div>
+		<div class="row">
+			<label class="col-md-2 control-label">待审核返费金额：</label>
+			<div class="col-md-3" style="color:red">
+				<span>${dto.enrollApproval.reward}</span>
+			</div>
+		</div>
+		<div class="row">
+			<label class="col-md-2 control-label">用户手机号：</label>
+			<div class="col-md-3">
+				<span>${dto.user.mobile}</span>
 			</div>
 		</div>
 		<div class="row">
@@ -128,31 +209,11 @@
 				</div>
 			</c:forEach>
 		</div>
-		<c:if test="${dto.approver!=null}">
-			<div class="row">
-				<label class="col-md-2 control-label">审核人：</label>
-				<div class="col-md-3">
-					<span>${dto.approver.name}</span>
-				</div>
-			</div>
-			<div class="row">
-				<label class="col-md-2 control-label">审核人电话：</label>
-				<div class="col-md-3">
-					<span>${dto.approver.mobile}</span>
-				</div>
-			</div>
-		</c:if>
-		<c:if test="${dto.enrollApproval.state==2}">
-			<div class="row">
-				<label class="col-md-2 control-label">不通过原因：</label>
-				<div class="col-md-6">
-					<span>${dto.enrollApproval.failedReason}</span>
-				</div>
-			</div>
-		</c:if>
 		<div class="row">
 			<div class="col-md-3"></div>
 			<div class="col-md-3">
+				<a class="btn btn-primary btn-sm" onclick="submit(1)">通过</a>
+				<a class="btn btn-primary btn-sm" onclick="submit(2)">不通过</a>
 				<a class="btn btn-primary btn-sm" onclick="goBack()">返回</a>
 			</div>
 		</div>

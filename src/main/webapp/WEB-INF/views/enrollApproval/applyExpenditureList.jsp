@@ -33,8 +33,8 @@
 		    url:"${ctx}/applyExpenditure/loadPageList",
 		    datatype: "json",
 		    mtype : "POST",
-		    height : 650,
-		    width : 950,
+		    height : "auto",
+		    width : "auto",
 		    jsonReader : {
 								root : "resultList", // json中代表实际模型数据的入口
 								page : "page", // json中代表当前页码的数据   
@@ -128,8 +128,7 @@
 	
 	function search(){
 		dataGrid.jqGrid("setGridParam",{
-		    postData:$("#searchForm").serialize()+"&rows="+dataGrid.jqGrid('getGridParam', 'rowNum')+"&page=1",
-		    page:1
+		    url:"${ctx}/applyExpenditure/loadPageList?"+decodeURI($("#searchForm").serialize())
 		}).trigger("reloadGrid");
 	}
 	
@@ -176,8 +175,12 @@
 	
 </script>
 <style>
-	.input-group-sm {
-		margin-bottom: 10px;
+	.ui-jqgrid tr.jqgrow td {
+		white-space: normal !important;
+		height:auto;
+		vertical-align:text-top;
+		padding-top:2px;
+		word-break:break-all;
 	}
 	.input-group-sm label{
 		width:100%;
