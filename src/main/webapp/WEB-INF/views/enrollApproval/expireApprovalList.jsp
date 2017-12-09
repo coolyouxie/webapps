@@ -127,7 +127,7 @@
                     formatter:function(cellValue,options,rowObject){
                         var result = "";
 						if(rowObject.state==0){
-							result = ' <a href="${ctx}/expireApproval/toEditExpireInfoPage?enrollApprovalId='+rowObject.id+'" class="btn btn-primary btn-sm">审核</a>';
+							result = ' <a href="${ctx}/expireApproval/toApproveExpireInfoPage?enrollApprovalId='+rowObject.id+'" class="btn btn-primary btn-sm">审核</a>';
 						}else{
 							result = ' <a href="${ctx}/expireApproval/toShowExpireInfoPage?enrollApprovalId='+rowObject.id+'" class="btn btn-primary btn-sm">期满信息</a>';
 						}

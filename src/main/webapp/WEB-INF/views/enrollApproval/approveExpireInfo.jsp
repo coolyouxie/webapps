@@ -167,7 +167,7 @@
 		<div class="row">
 			<label class="col-md-2 control-label">报名时间：</label>
 			<div  class="col-md-3">
-				<span>${dto.enrollment.createTimeStr}</span>
+				<span>${dto.enrollment.createTimeFullStr}</span>
 			</div>
 		</div>
 		<div class="row">

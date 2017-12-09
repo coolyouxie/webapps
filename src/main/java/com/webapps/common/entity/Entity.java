@@ -26,7 +26,7 @@ public class Entity {
 		}
 		return null;
 	}
-    
+
     private int dataState = 1;
 
     public Integer getId() {
@@ -71,7 +71,7 @@ public class Entity {
 	
 	public String getUpdateTimeStr(){
 		if(this.getUpdateTime()!=null){
-			return DateUtil.format(this.getCreateTime(), DateUtil.SIMPLE_PATTERN);
+			return DateUtil.format(this.getUpdateTime(), DateUtil.SIMPLE_PATTERN);
 		}
 		return null;
 	}

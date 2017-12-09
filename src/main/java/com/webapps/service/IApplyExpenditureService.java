@@ -2,6 +2,7 @@ package com.webapps.service;
 
 import com.webapps.common.bean.Page;
 import com.webapps.common.bean.ResultDto;
+import com.webapps.common.entity.ApplyExpenditure;
 import com.webapps.common.form.ApplyExpenditureRequestForm;
 
 public interface IApplyExpenditureService {
@@ -12,6 +13,8 @@ public interface IApplyExpenditureService {
 	ResultDto<String> approveById(Integer id, Integer state, Integer approverId, String reason);
 	
 	ResultDto<String> applyExpenditure(Integer userId, Integer walletId);
+
+	ApplyExpenditure loadById(Integer id);
 	
 	
 	

@@ -45,11 +45,7 @@
 			return;
 		}
 	}
-	
-	function openRemarkModal(){
-		$('#remarkModal').modal('show');
-	}
-	
+
 	function agree(){
 		$.ajax({
 			url:"${ctx}/applyExpenditure/expenditureApprovalById",
@@ -85,7 +81,7 @@
 			data:{
 				"id":$("#applyExpenditureId").val(),
 				"state":2,
-				"remark":remark
+				"reason":remark
 			},
 			success:function(response){
 				if(response.result=='S'){
@@ -122,7 +118,7 @@
 </style>
 </head>
 <body>
-	<input type="hidden" id="applyExpenditureId" value="${applyExpenditureId}">
+	<input type="hidden" id="applyExpenditureId" value="${dto.id}">
 	<!-- 不通过原因模态框 -->
 	<div class="modal fade" id="remarkModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class="modal-dialog">
@@ -177,55 +173,14 @@
 		<div class="row">
 			<label class="col-md-2 control-label">申请时间：</label>
 			<div class="col-md-3" style="color:red">
-				<span>${dto.createTimeFullStr}</span>
+				<span>${dto.createTimeStr}</span>
 			</div>
 		</div>
-		<div class="row">
-			<label class="col-md-2 control-label">审核人：</label>
-			<div class="col-md-3" style="color:red">
-				<span>${approver.name}</span>
-			</div>
-		</div>
-		<div class="row">
-			<label class="col-md-2 control-label">审核人手机：</label>
-			<div class="col-md-3" style="color:red">
-				<span>${approver.mobile}</span>
-			</div>
-		</div>
-		<div class="row">
-			<label class="col-md-2 control-label">审核结果：</label>
-			<div class="col-md-3" style="color:red">
-				<span>
-					<c:if test="${dto.state==0}">
-						待审核
-					</c:if>
-					<c:if test="${dto.state==1}">
-						通过
-					</c:if>
-					<c:if test="${dto.state==2}">
-						不通过
-					</c:if>
-				</span>
-			</div>
-		</div>
-		<c:if test="${dto.state==2}">
-			<div class="row">
-			<label class="col-md-2 control-label">审核结果：</label>
-			<div class="col-md-3" style="color:red">
-				<span>${dto.reason}</span>
-			</div>
-		</div>
-		</c:if>
-		<div class="row">
-			<label class="col-md-2 control-label">审核时间：</label>
-			<div class="col-md-3" style="color:red">
-				<span>${dto.updateTimeFullStr}</span>
-			</div>
-		</div>
-
 		<div class="row">
 			<div class="col-md-3"></div>
 			<div class="col-md-3">
+				<a class="btn btn-primary btn-sm" onclick="submit(1)">通过</a>
+				<a class="btn btn-primary btn-sm" onclick="submit(2)">不通过</a>
 				<a class="btn btn-primary btn-sm" onclick="goBack()">返回</a>
 			</div>
 		</div>

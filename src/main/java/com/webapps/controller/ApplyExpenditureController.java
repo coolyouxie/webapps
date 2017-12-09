@@ -3,9 +3,12 @@ package com.webapps.controller;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.webapps.common.entity.ApplyExpenditure;
+import com.webapps.service.IUserService;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -27,10 +30,13 @@ public class ApplyExpenditureController {
 	
 	@Autowired
 	private IApplyExpenditureService iApplyExpenditureService;
+
+	@Autowired
+	private IUserService iUserService;
 	
-	@RequestMapping("/toApplyExpenditureListPage")
+	@RequestMapping("/toExpenditureApproveListPage")
 	public String toCompanyListPage(HttpServletRequest request,HttpServletResponse response){
-		return "/enrollApproval/applyExpenditureList";
+		return "/enrollApproval/expenditureApproveList";
 	}
 	
 	@ResponseBody
@@ -48,11 +54,32 @@ public class ApplyExpenditureController {
 	}
 	
 	@ResponseBody
-	@RequestMapping(value="/approvalById")
-	public String approvalById(Integer id,Integer state,String reason,HttpServletRequest request){
+	@RequestMapping(value="/expenditureApprovalById")
+	public String expenditureApprovalById(Integer id,Integer state,String reason,HttpServletRequest request){
 		User user = (User) request.getSession().getAttribute("user");
 		ResultDto<String> dto = iApplyExpenditureService.approveById(id, state, user.getId(), reason);
 		return JSONUtil.toJSONString(JSONObject.fromObject(dto));
 	}
 
+	@RequestMapping(value="/toApproveExpenditurePage")
+	public String toApproveExpenditurePage(Model model, Integer id){
+		ApplyExpenditure dto = iApplyExpenditureService.loadById(id);
+		model.addAttribute("dto",dto);
+		return "/enrollApproval/approveExpenditure";
+	}
+
+	@RequestMapping(value="/toShowExpenditurePage")
+	public String toShowExpenditurePage(Model model, Integer id){
+		ApplyExpenditure dto = iApplyExpenditureService.loadById(id);
+		model.addAttribute("dto",dto);
+		try {
+			if(dto.getApproverId()!=null){
+				User approver = iUserService.getById(dto.getApproverId());
+				model.addAttribute("approver",approver);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "/enrollApproval/showExpenditureInfo";
+	}
 }

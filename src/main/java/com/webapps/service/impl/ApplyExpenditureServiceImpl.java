@@ -103,7 +103,6 @@ public class ApplyExpenditureServiceImpl implements IApplyExpenditureService {
 	
 	/**
 	 * 保存期满审核成功后的返费账单信息
-	 * @param enrollment
 	 * @param uw
 	 */
 	private void saveBillRecrod(ApplyExpenditure ae, UserWallet uw) {
@@ -190,6 +189,25 @@ public class ApplyExpenditureServiceImpl implements IApplyExpenditureService {
 			dto.setResult("F");
 			return dto;
 		}
+	}
+
+	@Override
+	public ApplyExpenditure loadById(Integer id) {
+		try {
+			ApplyExpenditure ae = iApplyExpenditureMapper.getById(id);
+			if(ae!=null&&ae.getWalletId()!=null){
+				UserWallet uw = iUserWalletMapper.getById(ae.getWalletId());
+				if(uw!=null&&uw.getUserId()!=null){
+					User user = iUserMapper.getById(uw.getUserId());
+					ae.setUser(user);
+				}
+			}
+			return ae;
+		} catch (Exception e) {
+			logger.error("加载用户提现审核信息异常");
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 }

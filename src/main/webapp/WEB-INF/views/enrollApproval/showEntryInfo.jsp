@@ -104,7 +104,7 @@
 		<div class="row">
 			<label class="col-md-2 control-label">报名时间：</label>
 			<div  class="col-md-3">
-				<span>${dto.enrollment.createTimeStr}</span>
+				<span>${dto.enrollment.createTimeFullStr}</span>
 			</div>
 		</div>
 		<div class="row">
@@ -139,6 +139,23 @@
 				<label class="col-md-2 control-label">审核人电话：</label>
 				<div class="col-md-3">
 					<span>${dto.approver.mobile}</span>
+				</div>
+			</div>
+			<div class="row">
+				<label class="col-md-2 control-label">审核时间：</label>
+				<div class="col-md-3">
+					<span>${dto.enrollApproval.updateTimeFullStr}</span>
+				</div>
+			</div>
+			<div class="row">
+				<label class="col-md-2 control-label">不通过原因：</label>
+				<div class="col-md-6">
+					<c:if test="${dto.enrollApproval.state==1}">
+						<span>通过</span>
+					</c:if>
+					<c:if test="${dto.enrollApproval.state==2}">
+						<span>不通过</span>
+					</c:if>
 				</div>
 			</div>
 		</c:if>

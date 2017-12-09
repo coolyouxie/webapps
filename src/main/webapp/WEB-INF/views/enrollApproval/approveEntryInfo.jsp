@@ -56,7 +56,7 @@
 	        return;
 		}
 		$.ajax({
-			url:"${ctx}/enrollApproval/entryApprovalById",
+			url:"${ctx}/entryApproval/entryApprovalById",
 			type:"POST",
 			dataType:"JSON",
             traditional: true,//必须指定为true
@@ -67,7 +67,7 @@
 			},
 			success:function(response){
 				if(response.result=='S'){
-					window.location.href="${ctx}/enrollApproval/toEntryApprovalListPage";
+					window.location.href="${ctx}/entryApproval/toEntryApprovalListPage";
 				}else{
 					alert(response.errorMsg);
 				}
@@ -83,7 +83,7 @@
 		}
 		$('#remarkModal').modal('hide');
 		$.ajax({
-			url:"${ctx}/enrollApproval/entryApprovalById",
+			url:"${ctx}/entryApproval/entryApprovalById",
 			type:"POST",
 			dataType:"JSON",
             traditional: true,//必须指定为true
@@ -95,7 +95,7 @@
 			},
 			success:function(response){
 				if(response.result=='S'){
-					window.location.href="${ctx}/enrollApproval/toEntryApprovalListPage";
+					window.location.href="${ctx}/entryApproval/toEntryApprovalListPage";
 				}else{
 					alert(response.errorMsg);
 				}
@@ -186,7 +186,7 @@
 			<div class="row">
 				<label class="col-md-2 control-label">报名时间：</label>
 				<div  class="col-md-3">
-					<span>${enrollment.createTimeStr}</span>
+					<span>${enrollment.createTimeFullStr}</span>
 				</div>
 			</div>
 			<div class="row">

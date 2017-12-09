@@ -19,7 +19,8 @@
 	</resultMap>
 
 	<sql id="select_columns">
-		tae.ID,tae.wallet_id,tae.fee, tae.data_state,tae.CREATE_TIME,tae.UPDATE_TIME,tae.approver_id,tae.reason,tae.state
+		tae.ID,tae.wallet_id,tae.fee, tae.data_state,tae.CREATE_TIME,
+		tae.UPDATE_TIME,tae.approver_id,tae.reason,tae.state
 	</sql>
 
 	<sql id="insert_columns">

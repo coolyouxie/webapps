@@ -30,7 +30,7 @@
 	var dataGrid = null;
 	jQuery(document).ready(function(){
 		dataGrid = jQuery("#list").jqGrid({
-		    url:"${ctx}/enrollApproval/loadEntryApprovalList",
+		    url:"${ctx}/entryApproval/loadEntryApprovalList",
 		    datatype: "json",
 		    mtype : "POST",
 		    height : "auto",
@@ -127,9 +127,9 @@
 								formatter:function(cellValue,options,rowObject){
 									var result = "";
 									if(rowObject.state==0){
-										result = ' <a href="${ctx}/enrollApproval/toEditEntryInfoPage?enrollApprovalId='+rowObject.id+'" class="btn btn-primary btn-sm">审核</a>';
+										result = ' <a href="${ctx}/entryApproval/toApproveEntryInfoPage?enrollApprovalId='+rowObject.id+'" class="btn btn-primary btn-sm">审核</a>';
 									}else{
-										result = ' <a href="${ctx}/enrollApproval/toShowEntryInfoPage?enrollApprovalId='+rowObject.id+'" class="btn btn-primary btn-sm">入职信息</a>';
+										result = ' <a href="${ctx}/entryApproval/toShowEntryInfoPage?enrollApprovalId='+rowObject.id+'" class="btn btn-primary btn-sm">入职信息</a>';
 									}
 									return result;
 								}
@@ -146,7 +146,7 @@
 	
 	function search(){
 		dataGrid.jqGrid("setGridParam",{
-		    url:"${ctx}/enrollApproval/loadEntryApprovalList?"+encodeURI($("#searchForm").serialize())
+		    url:"${ctx}/entryApproval/loadEntryApprovalList?"+encodeURI($("#searchForm").serialize())
 		}).trigger("reloadGrid");
 	}
 	
@@ -157,7 +157,7 @@
 	        return;
 		}
 		$.ajax({
-			url:"${ctx}/enrollApproval/entryApprovalById",
+			url:"${ctx}/entryApproval/entryApprovalById",
 			type:"POST",
 			dataType:"JSON",
             traditional: true,//必须指定为true
@@ -239,7 +239,7 @@
     }
 	
 	function toEntryDetail(id){
-		window.location.href="${ctx}/enrollApproval/getEntryDetailById?id="+id;
+		window.location.href="${ctx}/entryApproval/getEntryDetailById?id="+id;
 	}
 </script>
 <style>

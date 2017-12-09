@@ -76,8 +76,8 @@ public class ExpireApprovalController {
 		return "/enrollApproval/showExpireInfo";
 	}
 	
-	@RequestMapping(value="/toEditExpireInfoPage")
-	public String toEditExpireInfoPage(Model model,Integer enrollApprovalId){
+	@RequestMapping(value="/toApproveExpireInfoPage")
+	public String toApproveExpireInfoPage(Model model,Integer enrollApprovalId){
 		try {
 			EnrollApprovalInfoDto dto = iEnrollApprovalService.loadEnrollApprovalInfo(enrollApprovalId);
 			model.addAttribute("dto", dto);
@@ -85,7 +85,7 @@ public class ExpireApprovalController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return "/enrollApproval/editExpireInfo";
+		return "/enrollApproval/approveExpireInfo";
 	}
-	
+
 }
