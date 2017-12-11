@@ -39,7 +39,7 @@ public class PermissionController {
 	private IPermissionService iPermissionService;
 	
 	@RequestMapping("/toPermissionListPage")
-	public String toCompanyListPage(HttpServletRequest request,HttpServletResponse response){
+	public String toPermissionListPage(HttpServletRequest request,HttpServletResponse response){
 		return "/manage/permissionList";
 	}
 	

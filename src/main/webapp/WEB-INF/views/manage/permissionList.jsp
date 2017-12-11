@@ -37,7 +37,7 @@
                     total: 'total', // json中代表页码总数的数据
                     repeatitems: false // 如果设为false，则jqGrid在解析json时，会根据name来搜索对应的数据元素（即可以json中元素可以不按顺序）；而所使用的name是来自于colModel中的name设定。
                 },
-                colNames: ['权限名称', '权限编号', '上级权限编号','权限层级', '创建时间', '操作'],
+                colNames: ['权限名称', '权限编号', '上级权限编号','权限层级','类型', '创建时间', '操作'],
                 colModel: [{
                     label: 'name',
                     name: 'name',
