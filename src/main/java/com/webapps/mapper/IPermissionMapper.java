@@ -15,4 +15,6 @@ import java.util.List;
 @Repository
 public interface IPermissionMapper extends IBaseMapper<Permission>,IPageMapper<Permission,PermissionRequestForm>{
 
+    List<Permission> getByNameOrCode(@Param("name")String name,@Param("code")String code)throws Exception;
+
 }

@@ -6,10 +6,12 @@ import com.webapps.common.entity.Permission;
 import com.webapps.common.form.PermissionRequestForm;
 import com.webapps.mapper.IPermissionMapper;
 import com.webapps.service.IPermissionService;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collection;
 import java.util.List;
 
 @Service
@@ -54,5 +56,34 @@ public class PermissionServiceImpl implements IPermissionService{
     @Override
     public ResultDto<Permission> deletePermissionById(Integer id) throws Exception {
         return null;
+    }
+
+    @Override
+    public ResultDto<String> validatePermission(PermissionRequestForm form) throws Exception {
+        List<Permission> list = iPermissionMapper.getByNameOrCode(form.getName(),form.getCode());
+        String errorMsg = "";
+        ResultDto<String> dto = new ResultDto<String>();
+        dto.setResult("S");
+        if(CollectionUtils.isNotEmpty(list)){
+            for(int i=0;i<list.size();i++){
+                if(form.getName().equalsIgnoreCase(list.get(0).getName())){
+                    if(errorMsg.equalsIgnoreCase("")){
+                        errorMsg += "权限名称重复";
+                    }else{
+                        errorMsg += ",权限名称重复";
+                    }
+                    dto.setResult("F");
+                }else{
+                    if(errorMsg.equalsIgnoreCase("")){
+                        errorMsg += "权限编号重复";
+                    }else{
+                        errorMsg += ",权限编号重复";
+                    }
+                    dto.setResult("F");
+                }
+            }
+            dto.setErrorMsg(errorMsg);
+        }
+        return dto;
     }
 }

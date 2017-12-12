@@ -39,7 +39,7 @@
 
         //校验名称是否重复
 
-		//校验code是否重复
+        //校验code是否重复
 
 	</script>
 	<style>
@@ -65,33 +65,43 @@
 </head>
 <body>
 <div class="container-fluid">
-	<form id="searchForm">
-		<div class="row" style="margin-bottom:10px">
-			<div class="col-sm-3" style="width:255px;">
-				<label>
-					<span>推荐人:</span>
-					<input type="text" id="user.name" name="user.name" value="">
-				</label>
-			</div>
-			<div class="col-sm-4" style="width:275px;">
-				<label>
-					<span>推荐人手机:</span>
-					<input type="text" id="user.mobile" name="user.mobile" value="">
-				</label>
-			</div>
-			<div class="col-md-3">
-				<label>
-					<span>被推荐人:</span>
-					<input type="text" id="name" name="name" value="">
-				</label>
-			</div>
-			<div class="col-md-2">
-				<button type='button' class="btn btn-primary btn-sm" data-toggle="modal" onclick="search()">
-					查询
-				</button>
-			</div>
+	<div class="row">
+		<div class="col-md-4">
+			<h2>
+				权限详情
+			</h2>
 		</div>
-	</form>
+	</div>
+	<div class="row" style="width:255px;">
+		<label>
+			<span>权限名称:</span>
+			<span>${permission.name}</span>
+		</label>
+	</div>
+	<div class="row" style="width:275px;">
+		<label>
+			<span>权限编号:</span>
+			<span>${permission.code}</span>
+		</label>
+	</div>
+	<div class="row">
+		<label>
+			<span>父权限编号:</span>
+			<span>${permission.parentCode}</span>
+		</label>
+	</div>
+	<div class="row">
+		<label>
+			<span>权限层级:</span>
+			<span>${permission.level}</span>
+		</label>
+	</div>
+	<div class="row">
+		<label>
+			<span>权限类型</span>
+			<span>${permission.type}</span>
+		</label>
+	</div>
 </div>
 <table id="list"></table>
 <div id="pager"></div>

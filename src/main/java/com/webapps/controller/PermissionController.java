@@ -26,7 +26,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.net.URLDecoder;
 
 @Controller
-@RequestMapping("permission")
+@RequestMapping(value="permission")
 public class PermissionController {
 	
 	@Autowired
@@ -41,6 +41,11 @@ public class PermissionController {
 	@RequestMapping("/toPermissionListPage")
 	public String toPermissionListPage(HttpServletRequest request,HttpServletResponse response){
 		return "/manage/permissionList";
+	}
+
+	@RequestMapping("/toAddPermissionPage")
+	public String toAddPermissionPage(HttpServletRequest request,HttpServletResponse response){
+		return "/manage/addPermission";
 	}
 	
 	@ResponseBody
@@ -61,7 +66,7 @@ public class PermissionController {
 	@ResponseBody
 	@RequestMapping("/savePermission")
 	public String savePermission(Model model,PermissionRequestForm form,HttpServletRequest request){
-		ResultDto<Permission> dto = null;
+		ResultDto<Permission> dto = new ResultDto<Permission>();
 		if(null!=form){
 			try {
 				dto = iPermissionService.savePermission(form);
@@ -103,11 +108,26 @@ public class PermissionController {
 			e.printStackTrace();
 		}
 		if("edit".equalsIgnoreCase(type)){
-			return "/permission/toEditPage";
+			return "/manage/editPermission";
 		}else if("show".equals(type)){
-			return "/permission/toShowPage";
+			return "/manage/permissionInfo";
 		}
 		return null;
+	}
+
+	@ResponseBody
+	@RequestMapping("/validatePermission")
+	public String validatePermission(Model model,PermissionRequestForm form){
+		ResultDto<String> dto = null;
+		try {
+			dto = iPermissionService.validatePermission(form);
+			return JSONUtil.toJSONString(JSONObject.fromObject(dto));
+		} catch (Exception e) {
+			e.printStackTrace();
+			dto.setErrorMsg("验证权限时异常");
+			dto.setResult("F");
+			return JSONUtil.toJSONString(JSONObject.fromObject(dto));
+		}
 	}
 
 }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.webapps.mapper.IPermissonMapper">
+<mapper namespace="com.webapps.mapper.IPermissionMapper">
     <resultMap id="resultMap" type="com.webapps.common.entity.Permission">
         <id column="ID" jdbcType="DECIMAL" property="id"/>
         <result column="name" jdbcType="VARCHAR" property="name"/>
@@ -13,11 +13,11 @@
     </resultMap>
 
     <sql id="select_columns">
-		ID,name,code,parent_code,level, ,type,create_time,update_time
+		ID,name,code,parent_code,level,type,create_time,update_time
 	</sql>
 
     <sql id="insert_columns">
-		name,code,parent_code,level, type,create_time
+		name,code,parent_code,level,type,create_time
 	</sql>
 
     <select id="getById" resultMap="resultMap">
@@ -40,16 +40,16 @@
         from t_permission
         <trim prefix="WHERE" prefixOverrides="AND">
             <if test="obj.name !=null and obj.name != ''">
-                AND tr.name like concat('%',#{obj.name},'%')
+                AND name like concat('%',#{obj.name},'%')
             </if>
             <if test="obj.code != null and obj.code != '' ">
-                and tr.code = #{obj.code}
+                and code = #{obj.code}
             </if>
             <if test="obj.parentCode != null and obj.parentCode != ''">
-                and tc.parentCode =#{obj.paretCode}
+                and parentCode =#{obj.paretCode}
             </if>
             <if test="obj.level != null and obj.level != '' or obj.level=0">
-                and tr.level = #{obj.level}
+                and level = #{obj.level}
             </if>
         </trim>
         <include refid="ORACLE.paginationEnd"/>
@@ -61,21 +61,20 @@
         from t_permission where phone_numbers =#{phoneNum} and type=#{type} and data_state = 1 order by id desc
     </select>
 
-    <!-- 查询行政区总数 -->
     <select id="queryCount" resultType="java.lang.Integer">
         SELECT count(1) FROM t_permission
         <trim prefix="WHERE" prefixOverrides="AND">
             <if test="obj.name !=null and obj.name != ''">
-                AND tr.name like concat('%',#{obj.name},'%')
+                AND name like concat('%',#{obj.name},'%')
             </if>
             <if test="obj.code != null and obj.code != '' ">
-                and tr.code = #{obj.code}
+                and code = #{obj.code}
             </if>
             <if test="obj.parentCode != null and obj.parentCode != ''">
-                and tc.parentCode =#{obj.paretCode}
+                and parentCode =#{obj.paretCode}
             </if>
             <if test="obj.level != null and obj.level != '' or obj.level=0">
-                and tr.level = #{obj.level}
+                and level = #{obj.level}
             </if>
         </trim>
     </select>
@@ -84,27 +83,27 @@
     <select id="queryPage" resultMap="resultMap">
         <include refid="ORACLE.paginationStart"/>
         SELECT
-        <include refid="select_columns"/>,
-        tc.id as company_id,tc.name as company_name,
-        tr.id as recruitment_id,tr.title as recruitment_title
+        <include refid="select_columns"/>
         FROM t_permission
-        left join t_company tc on tc.id = fk_id and type = 3
-        left join t_recruitment tr on tr.id = fk_id and type = 4
         <trim prefix="WHERE" prefixOverrides="AND">
-            data_state = 1
-            <if test="obj.keyWords !=null and obj.keyWords != ''">
-                AND title like concat('%',#{obj.keyWords},'%')
+            <if test="obj.name !=null and obj.name != ''">
+                AND name like concat('%',#{obj.name},'%')
             </if>
-            <if test="obj.type != null and obj.type != ''">
-                AND type = #{obj.type,jdbcType=DECIMAL}
+            <if test="obj.code != null and obj.code != '' ">
+                and code = #{obj.code}
+            </if>
+            <if test="obj.parentCode != null and obj.parentCode != ''">
+                and parentCode =#{obj.paretCode}
+            </if>
+            <if test="obj.level != null and obj.level != '' or obj.level=0">
+                and level = #{obj.level}
             </if>
         </trim>
-        order by name
         <include refid="ORACLE.paginationEnd"/>
     </select>
 
-    <select id="getByPhoneNumTypeAndState" resultMap="resultMap">
-		select * from t_permission where Phone_Numbers = #{phoneNum} and type = #{type} and data_state = #{dataState} order by create_time desc
+    <select id="getByNameOrCode" resultMap="resultMap">
+		select * from t_permission where name = #{name} or code = #{code}
 	</select>
 
     <!-- 用于初始化数据时使用 -->
@@ -135,25 +134,22 @@
         (<include refid="insert_columns"/>)
         values
         (
-        #{obj.phoneNumbers},
-        #{obj.signName},
-        #{obj.templateCode},
-        #{obj.templateParam},
-        #{obj.smsUpExtendCode},
-        #{obj.outId},
-        #{obj.requestId},
-        #{obj.dataState},
-        #{obj.createTime},
+        #{obj.name},
         #{obj.code},
-        #{obj.message},
-        #{obj.bizId},
+        #{obj.parentCode},
+        #{obj.level},
         #{obj.type},
-        #{obj.validateCode}
+        #{obj.createTime}
         )
     </insert>
 
     <update id="updateById">
-		data_state=#{obj.dataState},
+        update t_permission set
+		name=#{obj.name},
+		code=#{obj.code},
+		parent_code=#{obj.parentCode},
+		level=#{obj.level},
+		type=#{obj.type},
 		update_time=#{obj.updateTime}
 		where id=#{id}
 	</update>

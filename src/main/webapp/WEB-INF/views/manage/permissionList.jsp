@@ -43,8 +43,8 @@
                     name: 'name',
                     align: 'center',
                     sortable: false,
-                    formatter: function (cellvalue, options, rowObject) {
-                        return '<a href="${ctx}/permission/getById?type=show&id=' + rowObject.id + '" style="color:blue">' + cellvalue + '</a>';
+                    formatter: function (cellValue, options, rowObject) {
+                        return '<a href="${ctx}/permission/getById?type=show&id=' + rowObject.id + '" style="color:blue">' + cellValue + '</a>';
                     }
                 }, {
                     label: 'code',
@@ -76,8 +76,8 @@
                     name: 'operate',
                     align: 'center',
                     sortable: false,
-                    formatter: function (cellvalue, options, rowObject) {
-						return '<a href="${ctx}/permisson/getById?type=edit&id="'+rowObject.id+'"class="btn btn-primary btn-sm">修改</a>';
+                    formatter: function (cellValue, options, rowObject) {
+						return '<a href="${ctx}/permission/getById?type=edit&id='+rowObject.id+'" class="btn btn-primary btn-sm">修改</a>';
                     }
                 }],
                 pager: '#pager',
@@ -135,33 +135,14 @@
 </head>
 <body>
 <div class="container-fluid">
-	<%--<form id="searchForm">--%>
-		<%--<div class="row" style="margin-bottom:10px">--%>
-			<%--<div class="col-sm-3" style="width:255px;">--%>
-				<%--<label>--%>
-					<%--<span>推荐人:</span>--%>
-					<%--<input type="text" id="user.name" name="user.name" value="">--%>
-				<%--</label>--%>
-			<%--</div>--%>
-			<%--<div class="col-sm-4" style="width:275px;">--%>
-				<%--<label>--%>
-					<%--<span>推荐人手机:</span>--%>
-					<%--<input type="text" id="user.mobile" name="user.mobile" value="">--%>
-				<%--</label>--%>
-			<%--</div>--%>
-			<%--<div class="col-md-3">--%>
-				<%--<label>--%>
-					<%--<span>被推荐人:</span>--%>
-					<%--<input type="text" id="name" name="name" value="">--%>
-				<%--</label>--%>
-			<%--</div>--%>
-			<%--<div class="col-md-2">--%>
-				<%--<button type='button' class="btn btn-primary btn-sm" data-toggle="modal" onclick="search()">--%>
-					<%--查询--%>
-				<%--</button>--%>
-			<%--</div>--%>
-		<%--</div>--%>
-	<%--</form>--%>
+	<div class="row">
+		<div class="col-md-3">
+			<a href="${ctx}/permission/toAddPermissionPage" class="btn btn-primary btn-sm">添加权限</a>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-3">&nbsp;</div>
+	</div>
 </div>
 <table id="list"></table>
 <div id="pager"></div>

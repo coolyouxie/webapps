@@ -15,4 +15,6 @@ public interface IPermissionService {
 	
 	ResultDto<Permission> deletePermissionById(Integer id) throws Exception;
 
+	ResultDto<String> validatePermission(PermissionRequestForm form) throws Exception;
+
 }
