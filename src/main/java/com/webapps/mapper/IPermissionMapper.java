@@ -17,4 +17,19 @@ public interface IPermissionMapper extends IBaseMapper<Permission>,IPageMapper<P
 
     List<Permission> getByNameOrCode(@Param("name")String name,@Param("code")String code)throws Exception;
 
+    /**
+     * 根据name,code,parentCode,level,type字段查询权限数据
+     * @param form
+     * @return
+     * @throws Exception
+     */
+    List<Permission> queryByConditions(@Param("obj")PermissionRequestForm form)throws Exception;
+
+    /**
+     * id为0时，查询所有层级为3的权限
+     * id为不0时，查询所有层级为3的权限并且标记哪些权限为id对应权限的子权限
+     * @return
+     */
+    List<Permission> queryAllLevel3PermByParentId(Integer id);
+
 }

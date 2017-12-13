@@ -86,4 +86,10 @@ public class PermissionServiceImpl implements IPermissionService{
         }
         return dto;
     }
+
+    @Override
+    public List<Permission> queryByConditions(PermissionRequestForm form) throws Exception {
+        List<Permission> list = iPermissionMapper.queryByConditions(form);
+        return list;
+    }
 }

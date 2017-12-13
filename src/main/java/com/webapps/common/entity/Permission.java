@@ -1,16 +1,20 @@
 package com.webapps.common.entity;
 
+import java.util.List;
+
 public class Permission extends Entity {
 	
 	private String name;
 	
 	private String code;
 	
-	private String level;
+	private int level;
 	
 	private Integer type;
 	
 	private String parentCode;
+
+	private List<Permission> childrenPermissions;
 
 	public String getName() {
 		return name;
@@ -28,11 +32,11 @@ public class Permission extends Entity {
 		this.code = code;
 	}
 
-	public String getLevel() {
+	public int getLevel() {
 		return level;
 	}
 
-	public void setLevel(String level) {
+	public void setLevel(int level) {
 		this.level = level;
 	}
 
@@ -50,5 +54,13 @@ public class Permission extends Entity {
 
 	public void setParentCode(String parentCode) {
 		this.parentCode = parentCode;
+	}
+
+	public List<Permission> getChildrenPermissions() {
+		return childrenPermissions;
+	}
+
+	public void setChildrenPermissions(List<Permission> childrenPermissions) {
+		this.childrenPermissions = childrenPermissions;
 	}
 }

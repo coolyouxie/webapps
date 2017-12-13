@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.net.URLDecoder;
+import java.util.List;
 
 @Controller
 @RequestMapping(value="permission")
@@ -103,6 +104,9 @@ public class PermissionController {
 	public String getById(Model model,Integer id,String type){
 		try {
 			Permission p = iPermissionService.getById(id);
+			PermissionRequestForm form = new PermissionRequestForm();
+			form.setLevel(3);
+			List<Permission> childrenPermission = iPermissionService.queryByConditions(form);
 			model.addAttribute("permission", p);
 		} catch (Exception e) {
 			e.printStackTrace();

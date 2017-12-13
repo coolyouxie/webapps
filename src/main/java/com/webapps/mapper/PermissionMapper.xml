@@ -33,8 +33,27 @@
         from t_permission
     </select>
 
-    <select id="queryTopNumAliMsg" resultMap="resultMap">
-        <include refid="ORACLE.paginationStart"/>
+    <select id="queryAllLevel3PermByParentId" resultMap="resultMap">
+        select
+        tp.*,CASE WHEN ISNULL(tpr.parent_permission_id) = 0 THEN 1 ELSE 0 END as flag
+        from t_permission
+        <trim prefix="WHERE" prefixOverrides="AND">
+            <if test="id !=null and id != '' or id=0">
+                AND id = #{obj.id}
+            </if>
+            <if test="obj.code != null and obj.code != '' ">
+                and code = #{obj.code}
+            </if>
+            <if test="obj.parentCode != null and obj.parentCode != ''">
+                and parentCode =#{obj.paretCode}
+            </if>
+            <if test="obj.level != null and obj.level != '' or obj.level=0">
+                and level = #{obj.level}
+            </if>
+        </trim>
+    </select>
+
+    <select id="queryByConditions" resultMap="resultMap">
         select
         <include refid="select_columns"/>
         from t_permission
@@ -51,14 +70,10 @@
             <if test="obj.level != null and obj.level != '' or obj.level=0">
                 and level = #{obj.level}
             </if>
+            <if test="obj.type != null and obj.type != '' or obj.type=0">
+                and type = #{obj.type}
+            </if>
         </trim>
-        <include refid="ORACLE.paginationEnd"/>
-    </select>
-
-    <select id="queryByPhoneNumType" resultMap="resultMap">
-        select
-        <include refid="select_columns"/>
-        from t_permission where phone_numbers =#{phoneNum} and type=#{type} and data_state = 1 order by id desc
     </select>
 
     <select id="queryCount" resultType="java.lang.Integer">
