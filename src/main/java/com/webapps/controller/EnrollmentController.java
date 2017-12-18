@@ -1,12 +1,10 @@
 package com.webapps.controller;
 
+import java.net.URLDecoder;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.sun.tools.internal.ws.wsdl.document.http.HTTPUrlEncoded;
-import com.webapps.common.form.RequestForm;
-import com.webapps.common.utils.DataDecodeUtil;
-import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,7 +20,7 @@ import com.webapps.common.form.EnrollmentRequestForm;
 import com.webapps.common.utils.JSONUtil;
 import com.webapps.service.IEnrollmentService;
 
-import java.net.URLDecoder;
+import net.sf.json.JSONObject;
 
 @Controller
 @RequestMapping("enrollment")
