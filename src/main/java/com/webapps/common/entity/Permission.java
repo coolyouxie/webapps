@@ -13,6 +13,8 @@ public class Permission extends Entity {
 	private Integer type;
 	
 	private String parentCode;
+	
+	private boolean checkFlag;
 
 	private List<Permission> childPermissions;
 
@@ -62,5 +64,13 @@ public class Permission extends Entity {
 
 	public void setChildPermissions(List<Permission> childPermissions) {
 		this.childPermissions = childPermissions;
+	}
+
+	public boolean isCheckFlag() {
+		return checkFlag;
+	}
+
+	public void setCheckFlag(boolean checkFlag) {
+		this.checkFlag = checkFlag;
 	}
 }

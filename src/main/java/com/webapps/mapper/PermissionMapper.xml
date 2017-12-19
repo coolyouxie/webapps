@@ -11,6 +11,7 @@
         <result column="type" jdbcType="DECIMAL" property="type"/>
         <result column="create_time" jdbcType="VARCHAR" property="createTime"/>
         <result column="update_time" jdbcType="VARCHAR" property="updateTime"/>
+        <result column="check_flag" jdbcType="VARCHAR" property="checkFlag" />
     </resultMap>
 
     <sql id="select_columns">
@@ -35,23 +36,35 @@
     </select>
 
     <select id="queryAllLevel3PermByParentId" resultMap="resultMap">
-        select
-        tp.*,CASE WHEN ISNULL(tpr.parent_permission_id) = 0 THEN 1 ELSE 0 END as flag
-        from t_permission
-        <trim prefix="WHERE" prefixOverrides="AND">
-            <if test="id !=null and id != '' or id=0">
-                AND id = #{obj.id}
-            </if>
-            <if test="obj.code != null and obj.code != '' ">
-                and code = #{obj.code}
-            </if>
-            <if test="obj.parentCode != null and obj.parentCode != ''">
-                and parentCode =#{obj.paretCode}
-            </if>
-            <if test="obj.level != null and obj.level != '' or obj.level=0">
-                and level = #{obj.level}
-            </if>
-        </trim>
+        SELECT *, false AS check_flag
+			FROM
+				t_permission
+			WHERE
+				LEVEL = 3
+			AND id NOT IN (
+				SELECT
+					tp.id
+				FROM
+					t_permission tp
+				LEFT JOIN t_permission_relation tpr ON tpr.permission_id = tp.id
+				WHERE
+					tp. LEVEL = 3
+				AND tpr.parent_permission_id = #{parentId}
+			)
+			UNION
+				SELECT
+					tp.*, CASE parent_permission_id
+				WHEN #{parentId} THEN
+					true
+				ELSE
+					false
+				END check_flag
+				FROM
+					t_permission tp
+				LEFT JOIN t_permission_relation tpr ON tpr.permission_id = tp.id
+				WHERE
+					tp. LEVEL = 3
+				AND tpr.parent_permission_id = #{parentId} 
     </select>
 
     <select id="queryByConditions" resultMap="resultMap">
