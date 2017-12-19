@@ -13,12 +13,20 @@ public interface IPermissionService {
 	
 	Permission getById(Integer id) throws Exception;
 	
-	ResultDto<Permission> savePermission(Permission permission) throws Exception;
+	ResultDto<String> saveOperatePermission(Permission permission) throws Exception;
+	
+	ResultDto<String> saveMenuPermission(PermissionRequestForm permission) throws Exception;
 	
 	ResultDto<Permission> deletePermissionById(Integer id) throws Exception;
 
 	ResultDto<String> validatePermission(PermissionRequestForm form) throws Exception;
 
 	List<Permission> queryByConditions(PermissionRequestForm form) throws Exception;
+	
+	List<Permission> loadAllOperatePermission();
+	
+	List<Permission> loadAllMenuPermission();
+	
+	List<Permission> loadUserPermission(Integer userId);
 
 }

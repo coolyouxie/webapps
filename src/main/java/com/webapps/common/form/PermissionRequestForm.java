@@ -1,9 +1,8 @@
 package com.webapps.common.form;
 
-import com.webapps.common.entity.ApplyExpenditure;
-import com.webapps.common.entity.Permission;
-
 import java.io.Serializable;
+
+import com.webapps.common.entity.Permission;
 
 public class PermissionRequestForm extends Permission implements RequestForm,Serializable{
 
@@ -12,6 +11,8 @@ public class PermissionRequestForm extends Permission implements RequestForm,Ser
 	private String applyTimeStart;
 	
 	private String applyTimeEnd;
+	
+	private Integer childPermission[];
 
 	public String getApplyTimeStart() {
 		return applyTimeStart;
@@ -27,6 +28,14 @@ public class PermissionRequestForm extends Permission implements RequestForm,Ser
 
 	public void setApplyTimeEnd(String applyTimeEnd) {
 		this.applyTimeEnd = applyTimeEnd;
+	}
+
+	public Integer[] getChildPermission() {
+		return childPermission;
+	}
+
+	public void setChildPermission(Integer childPermission[]) {
+		this.childPermission = childPermission;
 	}
 
 }

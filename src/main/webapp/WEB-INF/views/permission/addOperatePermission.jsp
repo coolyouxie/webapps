@@ -130,6 +130,11 @@
 <body>
 <div class="container-fluid">
 	<form id="addForm">
+		<div class="row">
+			<h2>
+				菜单权限管理
+			</h2>
+		</div>
 		<div class="row" style="width:255px;">
 			<label>
 				<span>权限名称:</span>
@@ -159,6 +164,24 @@
 				<span>权限类型</span>
 				<input id="type" name="type" value="">
 			</label>
+		</div>
+		<div class="row">
+			<div class="col-md-1">&nbsp;</div>
+			<table style="border:solid 1px grey">
+				<tr style="border:solid 1px grey">
+					<td style="border:solid 1px grey">
+						操作权限列表
+					</td>
+				</tr>
+				<c:forEach var="p" items="${permissions}">
+					<tr style="border:solid 1px grey">
+						<td style="border:solid 1px grey">
+							<input type="checkbox" name="childPermission">
+							${p.name}
+						</td>
+					</tr>
+				</c:forEach>
+			</table>
 		</div>
 		<a href="###" onclick="validate()">添加</a>
 	</form>

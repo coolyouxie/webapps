@@ -14,7 +14,7 @@ public class Permission extends Entity {
 	
 	private String parentCode;
 
-	private List<Permission> childrenPermissions;
+	private List<Permission> childPermissions;
 
 	public String getName() {
 		return name;
@@ -56,11 +56,11 @@ public class Permission extends Entity {
 		this.parentCode = parentCode;
 	}
 
-	public List<Permission> getChildrenPermissions() {
-		return childrenPermissions;
+	public List<Permission> getChildPermissions() {
+		return childPermissions;
 	}
 
-	public void setChildrenPermissions(List<Permission> childrenPermissions) {
-		this.childrenPermissions = childrenPermissions;
+	public void setChildPermissions(List<Permission> childPermissions) {
+		this.childPermissions = childPermissions;
 	}
 }

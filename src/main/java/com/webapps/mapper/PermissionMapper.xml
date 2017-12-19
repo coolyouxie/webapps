@@ -8,8 +8,9 @@
         <result column="code" jdbcType="VARCHAR" property="code"/>
         <result column="parent_code" jdbcType="VARCHAR" property="parentCode"/>
         <result column="level" jdbcType="DECIMAL" property="level"/>
-        <result column="create_time" jdbcType="VARCHAR" property="createTime"/>
         <result column="type" jdbcType="DECIMAL" property="type"/>
+        <result column="create_time" jdbcType="VARCHAR" property="createTime"/>
+        <result column="update_time" jdbcType="VARCHAR" property="updateTime"/>
     </resultMap>
 
     <sql id="select_columns">
@@ -67,10 +68,10 @@
             <if test="obj.parentCode != null and obj.parentCode != ''">
                 and parentCode =#{obj.paretCode}
             </if>
-            <if test="obj.level != null and obj.level != '' or obj.level=0">
+            <if test="obj.level != null and obj.level != '' or obj.level==0">
                 and level = #{obj.level}
             </if>
-            <if test="obj.type != null and obj.type != '' or obj.type=0">
+            <if test="obj.type != null and obj.type != '' or obj.type==0">
                 and type = #{obj.type}
             </if>
         </trim>

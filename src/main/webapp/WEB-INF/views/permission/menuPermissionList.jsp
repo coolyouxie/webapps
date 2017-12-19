@@ -25,7 +25,7 @@
         var dataGrid = null;
         jQuery(document).ready(function () {
             dataGrid = jQuery("#list").jqGrid({
-                url: "${ctx}/permission/loadPermissionList",
+                url: "${ctx}/permission/loadMenuPermissionList",
                 datatype: "json",
                 mtype: "POST",
                 height: 'auto',
@@ -44,7 +44,7 @@
                     align: 'center',
                     sortable: false,
                     formatter: function (cellValue, options, rowObject) {
-                        return '<a href="${ctx}/permission/getById?type=show&id=' + rowObject.id + '" style="color:blue">' + cellValue + '</a>';
+                        return '<a href="${ctx}/permission/getMenuPermissionById?type=show&id=' + rowObject.id + '" style="color:blue">' + cellValue + '</a>';
                     }
                 }, {
                     label: 'code',
@@ -77,7 +77,7 @@
                     align: 'center',
                     sortable: false,
                     formatter: function (cellValue, options, rowObject) {
-						return '<a href="${ctx}/permission/getById?type=edit&id='+rowObject.id+'" class="btn btn-primary btn-sm">修改</a>';
+						return '<a href="${ctx}/permission/getMenuPermissionById?type=edit&id='+rowObject.id+'" class="btn btn-primary btn-sm">修改</a>';
                     }
                 }],
                 pager: '#pager',
@@ -92,7 +92,7 @@
 
         function search() {
             dataGrid.jqGrid("setGridParam", {
-                url: "${ctx}/permission/loadPermissionList?" + encodeURI($("#searchForm").serialize())
+                url: "${ctx}/permission/loadMenuPermissionList?" + encodeURI($("#searchForm").serialize())
             }).trigger("reloadGrid");
         }
 
@@ -137,7 +137,7 @@
 <div class="container-fluid">
 	<div class="row">
 		<div class="col-md-3">
-			<a href="${ctx}/permission/toAddPermissionPage" class="btn btn-primary btn-sm">添加权限</a>
+			<a href="${ctx}/permission/toAddMenuPermissionPage" class="btn btn-primary btn-sm">添加权限</a>
 		</div>
 	</div>
 	<div class="row">
