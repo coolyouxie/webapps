@@ -78,6 +78,10 @@ public class PermissionServiceImpl implements IPermissionService{
         dto.setResult("S");
         if(CollectionUtils.isNotEmpty(list)){
             for(int i=0;i<list.size();i++){
+            	if(list.get(0).getId().equals(form.getId())){
+            		//如果是更新操作时，则判断id是否相等，如果相等，则不校验，否则校验
+            		continue;
+				}
                 if(form.getName().equalsIgnoreCase(list.get(0).getName())){
                     if(errorMsg.equalsIgnoreCase("")){
                         errorMsg += "权限名称重复";
@@ -140,24 +144,47 @@ public class PermissionServiceImpl implements IPermissionService{
 	}
 
 	@Override
+	public Permission getMenuPermissionById(Integer id) {
+		try {
+			Permission pr = iPermissionMapper.getById(id);
+			if(pr!=null){
+				List<Permission> list = iPermissionMapper.queryAllLevel3PermByParentId(id);
+				pr.setChildPermissions(list);
+				return pr;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	@Override
 	public ResultDto<String> saveMenuPermission(PermissionRequestForm permission) throws Exception {
 		 ResultDto<String> dto =new ResultDto<>();
 	        if(permission.getId()!=null){
 	            iPermissionMapper.updateById(permission.getId(),permission);
-	            List<PermissionRelation> insertList = new ArrayList<>();
 	            List<PermissionRelation> deleteList = new ArrayList<>();
 	            PermissionRelation pr = new PermissionRelation();
 	            pr.setParentPermissionId(permission.getId());
 	            List<PermissionRelation> list = iPermissionRelationMapper.queryByConditions(pr);
-	            if(CollectionUtils.isEmpty(list)||permission.getChildPermission()==null
-	            		||permission.getChildPermission().length==0){
+	            if(permission.getChildPermission()==null||permission.getChildPermission().length==0){
+	            	if(CollectionUtils.isNotEmpty(list)){
+						iPermissionRelationMapper.batchDeleteInLogic(list);
+						dto.setResult("S");
+						return dto;
+					}
+				}
+	            if(CollectionUtils.isEmpty(list)){
+					if(permission.getChildPermission()!=null&&permission.getChildPermission().length!=0){
+						savePermissionRelation(permission);
+					}
 	            	dto.setResult("S");
 	            	return dto;
 	            }
 	            for(PermissionRelation temp:list){
 	            	boolean flag = false;
 	            	for(int i=0;i<permission.getChildPermission().length;i++){
-	            		if(temp.getId().equals(permission.getChildPermission()[i])){
+	            		if(temp.getPermissionId().equals(permission.getChildPermission()[i])){
 	            			flag = true;
 	            		}
 	            	}
@@ -176,7 +203,7 @@ public class PermissionServiceImpl implements IPermissionService{
 	            	relation.setPermissionId(permission.getChildPermission()[i]);
 	            	relation.setDataState(1);
 	            	for(PermissionRelation temp:list){
-	            		if(temp.getId().equals(permission.getChildPermission()[i])){
+	            		if(temp.getPermissionId().equals(permission.getChildPermission()[i])){
 	            			flag = true;
 	            			if(temp.getDataState()==0){
 	            				updateFlag = true;
@@ -184,7 +211,6 @@ public class PermissionServiceImpl implements IPermissionService{
 	            		}
 	            	}
 	            	if(!flag){
-	            		insertList.add(relation);
 	            		if(!updateFlag){
 	            			relation.setCreateTime(new Date());
 	            			iPermissionRelationMapper.insert(relation);
@@ -197,17 +223,21 @@ public class PermissionServiceImpl implements IPermissionService{
 	        }else{
 	            iPermissionMapper.insert(permission);
 	            if(permission.getChildPermission()!=null&&permission.getChildPermission().length!=0){
-	            	for(int i=0;i<permission.getChildPermission().length;i++){
-	            		PermissionRelation relation = new PermissionRelation();
-		            	relation.setParentPermissionId(permission.getId());
-		            	relation.setPermissionId(permission.getChildPermission()[i]);
-		            	relation.setCreateTime(new Date());
-		            	relation.setDataState(1);
-		            	iPermissionRelationMapper.insert(relation);
-	            	}
+					savePermissionRelation(permission);
 	            }
 	        }
 	        dto.setResult("S");
 	        return dto;
+	}
+
+	private void savePermissionRelation(PermissionRequestForm permission) {
+		for(int i=0;i<permission.getChildPermission().length;i++){
+            PermissionRelation relation = new PermissionRelation();
+            relation.setParentPermissionId(permission.getId());
+            relation.setPermissionId(permission.getChildPermission()[i]);
+            relation.setCreateTime(new Date());
+            relation.setDataState(1);
+            iPermissionRelationMapper.insert(relation);
+        }
 	}
 }

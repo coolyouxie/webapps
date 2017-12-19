@@ -6,7 +6,7 @@
 <html>
 <head>
 	<meta charset="utf-8"/>
-	<title>权限管理</title>
+	<title>菜单权限管理</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 	<link rel="stylesheet" href="${ctx}/js/common/jquery/jquery-ui-1.12.1/jquery-ui.css" type="text/css"/>
 	<link rel="stylesheet" href="${ctx}/js/common/jquery/jqGrid/css/ui.jqgrid.css" type="text/css"/>

@@ -36,7 +36,7 @@
     </select>
 
     <select id="queryAllLevel3PermByParentId" resultMap="resultMap">
-        SELECT *, false AS check_flag
+        SELECT * from (SELECT *, false AS check_flag
 			FROM
 				t_permission
 			WHERE
@@ -49,7 +49,7 @@
 				LEFT JOIN t_permission_relation tpr ON tpr.permission_id = tp.id
 				WHERE
 					tp. LEVEL = 3
-				AND tpr.parent_permission_id = #{parentId}
+				AND tpr.parent_permission_id = #{parentId} and data_state=1
 			)
 			UNION
 				SELECT
@@ -64,7 +64,9 @@
 				LEFT JOIN t_permission_relation tpr ON tpr.permission_id = tp.id
 				WHERE
 					tp. LEVEL = 3
-				AND tpr.parent_permission_id = #{parentId} 
+				AND tpr.parent_permission_id = #{parentId} and data_state=1)
+				temp_
+				ORDER by NAME
     </select>
 
     <select id="queryByConditions" resultMap="resultMap">

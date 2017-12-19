@@ -6,7 +6,7 @@
 <html>
 <head>
 	<meta charset="utf-8"/>
-	<title>新增权限</title>
+	<title>修改菜单权限</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 	<link rel="stylesheet" href="${ctx}/js/common/jquery/jquery-ui-1.12.1/jquery-ui.css" type="text/css"/>
 	<link rel="stylesheet" href="${ctx}/js/common/jquery/jqGrid/css/ui.jqgrid.css" type="text/css"/>
@@ -38,6 +38,10 @@
         }
 
         function update() {
+            var childPermission = [];
+            $("input[name=childPermission]:checked").each(function () {
+                childPermission.push($(this).val());
+            });
             if(!$("#name").val()||!$("#name").val().trim()){
                 alert("请输入权限名称");
                 return;
@@ -59,16 +63,18 @@
                 return;
             }
             $.ajax({
-                url: "${ctx}/permission/savePermission",
+                url: "${ctx}/permission/saveMenuPermission",
                 type: "POST",
                 dataType: "JSON",
+	            traditional:true,
                 data: {
                     "id": $("#id").val(),
                     "name": $("#name").val(),
                     "code": $("#code").val(),
-                    "parentCode": $("#parentCode").val(),
                     "type": $("#type").val(),
-                    "level": $("#level").val()
+                    "level": $("#level").val(),
+	                "parentCode":$("#parentCode").val(),
+					"childPermission":childPermission
                 },
                 success: function (response) {
                     if(response.result=="F"){
@@ -76,7 +82,7 @@
                         return;
                     }else{
                         alert("更新成功");
-                        window.location.href = "${ctx}/permission/toPermissionListPage";
+                        window.location.href = "${ctx}/permission/toMenuPermissionListPage";
                     }
                 }
             });
@@ -88,6 +94,10 @@
                 alert("请输入权限名称");
                 return;
             }
+            if(!$("#parentCode").val()||!$("#parentCode").val().trim()){
+                alert("请输入父权限编号");
+                return;
+            }
             if(!$("#code").val()||!$("#code").val().trim()){
                 alert("请输入权限编号");
                 return;
@@ -97,6 +107,7 @@
                 type: "POST",
                 dataType: "JSON",
                 data: {
+                    "id":$("#id").val(),
                     "name": $("#name").val().trim(),
                     "code": $("#code").val()
                 },
@@ -113,10 +124,6 @@
 
 	</script>
 	<style>
-		.input-group-sm {
-			margin-bottom: 10px;
-		}
-
 		.input-group-sm label {
 			width: 100%;
 		}
@@ -149,7 +156,7 @@
 				<input id="code" name="code" value="${permission.code}">
 			</label>
 		</div>
-		<div class="row">
+		<div class="row" style="width:275px;">
 			<label>
 				<span>父权限编号:</span>
 				<input id="parentCode" name="parentCode" value="${permission.parentCode}">
@@ -167,7 +174,26 @@
 				<input id="type" name="type" value="${permission.type}">
 			</label>
 		</div>
-		<a href="###" onclick="validate()">更新</a>
+		<br/>
+		<div class="row">
+			<div class="col-md-1"></div>
+			<table>
+				<tr>
+					<td>
+						操作权限
+					</td>
+				</tr>
+				<c:forEach var="p" items="${permission.childPermissions}">
+					<tr>
+						<td>
+							<input type="checkbox" name="childPermission" value="${p.id}" <c:if test="${p.checkFlag=='true'}">checked="checked"</c:if>>
+							${p.name}
+						</td>
+					</tr>
+				</c:forEach>
+			</table>
+		</div>
+		<a onclick="validate()" class="btn btn-primary btn-sm">更新</a>
 	</form>
 </div>
 <table id="list"></table>

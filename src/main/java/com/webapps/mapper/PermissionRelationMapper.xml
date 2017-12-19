@@ -4,8 +4,8 @@
 <mapper namespace="com.webapps.mapper.IPermissionRelationMapper">
     <resultMap id="resultMap" type="com.webapps.common.entity.PermissionRelation">
         <id column="ID" jdbcType="DECIMAL" property="id"/>
-        <result column="permission_id" jdbcType="VARCHAR" property="name"/>
-        <result column="parent_permission_id" jdbcType="VARCHAR" property="code"/>
+        <result column="permission_id" jdbcType="VARCHAR" property="permissionId"/>
+        <result column="parent_permission_id" jdbcType="VARCHAR" property="parentPermissionId"/>
         <result column="create_time" jdbcType="VARCHAR" property="createTime"/>
         <result column="update_time" jdbcType="VARCHAR" property="updateTime"/>
         <result column="data_state" jdbcType="DECIMAL" property="dataState"/>
@@ -22,26 +22,26 @@
     <select id="getById" resultMap="resultMap">
         select
         <include refid="select_columns"/>
-        from t_permission_relation where id = #{id}
+        from t_permission_relation where id = #{id} and data_state=1
     </select>
 
     <!-- 查询所有 -->
     <select id="queryAll" resultMap="resultMap">
         select
         <include refid="select_columns"/>
-        from t_permission_relation
+        from t_permission_relation where data_state=1
     </select>
     
     <select id="queryByPermissionId" resultMap="resultMap">
         select
         <include refid="select_columns"/>
-        from t_permission_relation where permission_id = #{permissionId}
+        from t_permission_relation where permission_id = #{permissionId} and data_state=1
     </select>
     
     <select id="queryByParentId" resultMap="resultMap">
         select
         <include refid="select_columns"/>
-        from t_permission_relation where parent_permission_id = #{parentId}
+        from t_permission_relation where parent_permission_id = #{parentId} and data_state=1
     </select>
     
     <select id="queryByConditions" resultMap="resultMap">
@@ -49,14 +49,12 @@
         <include refid="select_columns"/>
         from t_permission_relation 
         <trim prefix="WHERE" prefixOverrides="AND">
+            and data_state=1
             <if test="obj.permissionId !=null and obj.permissionId != ''">
                 AND permission_id = #{obj.permissionId}
             </if>
             <if test="obj.parentPermissionId != null and obj.parentPermissionId != '' ">
                 and parent_permission_id = #{obj.parentPermissionId}
-            </if>
-            <if test="obj.parentCode != null and obj.parentCode != ''">
-                and parentCode =#{obj.paretCode}
             </if>
             <if test="obj.dataState != null and obj.dataState != '' or obj.dataState==0">
                 and data_state = #{obj.dataState}

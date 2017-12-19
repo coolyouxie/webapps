@@ -6,7 +6,7 @@
 <html>
 <head>
 	<meta charset="utf-8"/>
-	<title>新增权限</title>
+	<title>新增菜单权限</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 	<link rel="stylesheet" href="${ctx}/js/common/jquery/jquery-ui-1.12.1/jquery-ui.css" type="text/css"/>
 	<link rel="stylesheet" href="${ctx}/js/common/jquery/jqGrid/css/ui.jqgrid.css" type="text/css"/>
@@ -50,10 +50,6 @@
                 alert("请输入权限编号");
                 return;
             }
-            if(!$("#parentCode").val()||!$("#parentCode").val().trim()){
-                alert("请输入父权限编号");
-                return;
-            }
             if(!$("#type").val()||!$("#type").val().trim()){
                 alert("请选择权限类型");
                 return;
@@ -70,7 +66,7 @@
                 data: {
                     "name": $("#name").val(),
                     "code": $("#code").val(),
-                    "parentCode": $("#parentCode").val(),
+	                "parentCode":$("#parentCode").val(),
                     "type": $("#type").val(),
                     "level": $("#level").val(),
                     "childPermission":childPermission
@@ -113,10 +109,6 @@
 
 	</script>
 	<style>
-		.input-group-sm {
-			margin-bottom: 10px;
-		}
-
 		.input-group-sm label {
 			width: 100%;
 		}

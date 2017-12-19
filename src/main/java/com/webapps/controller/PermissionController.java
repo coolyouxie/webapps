@@ -31,12 +31,12 @@ public class PermissionController {
 	private IPermissionService iPermissionService;
 	
 	@RequestMapping("/toMenuPermissionListPage")
-	public String toPermissionListPage(HttpServletRequest request,HttpServletResponse response){
+	public String toMenuPermissionListPage(HttpServletRequest request,HttpServletResponse response){
 		return "/permission/menuPermissionList";
 	}
 
 	@RequestMapping("/toAddMenuPermissionPage")
-	public String toAddPermissionPage(Model model,HttpServletRequest request,HttpServletResponse response){
+	public String toAddMenuPermissionPage(Model model,HttpServletRequest request,HttpServletResponse response){
 		List<Permission> list = iPermissionService.loadAllOperatePermission();
 		model.addAttribute("permissions",list);
 		return "/permission/addMenuPermission";
@@ -44,7 +44,7 @@ public class PermissionController {
 	
 	@ResponseBody
 	@RequestMapping(value="/loadMenuPermissionList",produces ="text/html;charset=UTF-8")
-	public String loadPermissionList(Model model, Page page, PermissionRequestForm form){
+	public String loadMenuPermissionList(Model model, Page page, PermissionRequestForm form){
 		try {
 			if(form!=null&& StringUtils.isNotBlank(form.getName())){
 				form.setName(URLDecoder.decode(form.getName(),"UTF-8"));
@@ -76,7 +76,7 @@ public class PermissionController {
 
 	@ResponseBody
 	@RequestMapping("/saveMenuPermission")
-	public String savePermission(Model model,PermissionRequestForm form,HttpServletRequest request){
+	public String saveMenuPermission(Model model,PermissionRequestForm form,HttpServletRequest request){
 		ResultDto<String> dto = new ResultDto<>();
 		if(null!=form){
 			try {
@@ -132,12 +132,9 @@ public class PermissionController {
 	}
 	
 	@RequestMapping("/getMenuPermissionById")
-	public String getById(Model model,Integer id,String type){
+	public String getMenuPermissionById(Model model,Integer id,String type){
 		try {
-			Permission p = iPermissionService.getById(id);
-			PermissionRequestForm form = new PermissionRequestForm();
-			form.setLevel(3);
-			List<Permission> childrenPermission = iPermissionService.queryByConditions(form);
+			Permission p = iPermissionService.getMenuPermissionById(id);
 			model.addAttribute("permission", p);
 		} catch (Exception e) {
 			e.printStackTrace();

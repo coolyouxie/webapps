@@ -29,4 +29,6 @@ public interface IPermissionService {
 	
 	List<Permission> loadUserPermission(Integer userId);
 
+	Permission getMenuPermissionById(Integer id);
+
 }

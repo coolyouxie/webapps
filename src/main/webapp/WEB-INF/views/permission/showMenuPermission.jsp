@@ -6,7 +6,7 @@
 <html>
 <head>
 	<meta charset="utf-8"/>
-	<title>权限管理</title>
+	<title>菜单权限详情</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 	<link rel="stylesheet" href="${ctx}/js/common/jquery/jquery-ui-1.12.1/jquery-ui.css" type="text/css"/>
 	<link rel="stylesheet" href="${ctx}/js/common/jquery/jqGrid/css/ui.jqgrid.css" type="text/css"/>
@@ -43,9 +43,6 @@
 
 	</script>
 	<style>
-		.input-group-sm {
-			margin-bottom: 10px;
-		}
 
 		.input-group-sm label {
 			width: 100%;
@@ -68,7 +65,7 @@
 	<div class="row">
 		<div class="col-md-4">
 			<h2>
-				权限详情
+				菜单权限详情
 			</h2>
 		</div>
 	</div>
@@ -101,6 +98,31 @@
 			<span>权限类型</span>
 			<span>${permission.type}</span>
 		</label>
+	</div>
+	<br/>
+	<div class="row">
+		<div class="col-md-1"></div>
+		<table>
+			<tr>
+				<td>
+					操作权限
+				</td>
+			</tr>
+			<c:forEach var="p" items="${permission.childPermissions}">
+				<tr>
+					<td>
+						<input disabled="disabled" type="checkbox" name="childPermission"
+						       value="${p.id}" <c:if test="${p.checkFlag=='true'}">checked="checked"</c:if> />
+						${p.name}
+					</td>
+				</tr>
+			</c:forEach>
+		</table>
+	</div>
+	<br/>
+	<div class="row">
+		<div class="col-md-1"></div>
+		<a onclick="window.history.go(-1);" class="btn btn-primary btn-sm">返回</a>
 	</div>
 </div>
 <table id="list"></table>
