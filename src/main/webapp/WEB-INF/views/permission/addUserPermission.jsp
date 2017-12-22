@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <!DOCTYPE html>
 <html>
@@ -38,28 +39,28 @@
         }
 
         function add() {
-            if(!$("#name").val()||!$("#name").val().trim()){
+            if (!$("#name").val() || !$("#name").val().trim()) {
                 alert("请输入权限名称");
                 return;
             }
-            if(!$("#code").val()||!$("#code").val().trim()){
+            if (!$("#code").val() || !$("#code").val().trim()) {
                 alert("请输入权限编号");
                 return;
             }
-            if(!$("#parentCode").val()||!$("#parentCode").val().trim()){
+            if (!$("#parentCode").val() || !$("#parentCode").val().trim()) {
                 alert("请输入父权限编号");
                 return;
             }
-            if(!$("#type").val()||!$("#type").val().trim()){
+            if (!$("#type").val() || !$("#type").val().trim()) {
                 alert("请选择权限类型");
                 return;
             }
-            if(!$("#level").val()||!$("#level").val().trim()){
+            if (!$("#level").val() || !$("#level").val().trim()) {
                 alert("请输入权限层级");
                 return;
             }
             $.ajax({
-                url: "${ctx}/permission/savePermission",
+                url: "${ctx}/permission/saveUserPermission",
                 type: "POST",
                 dataType: "JSON",
                 data: {
@@ -78,11 +79,11 @@
 
         //校验权限是否已存在
         function validate() {
-            if(!$("#name").val()||!$("#name").val().trim()){
+            if (!$("#name").val() || !$("#name").val().trim()) {
                 alert("请输入权限名称");
                 return;
             }
-            if(!$("#code").val()||!$("#code").val().trim()){
+            if (!$("#code").val() || !$("#code").val().trim()) {
                 alert("请输入权限编号");
                 return;
             }
@@ -95,9 +96,9 @@
                     "code": $("#code").val()
                 },
                 success: function (response) {
-                    if(response.result=="S"){
+                    if (response.result == "S") {
                         add();
-                    }else{
+                    } else {
                         alert(response.errorMsg);
                         return;
                     }
@@ -107,10 +108,6 @@
 
 	</script>
 	<style>
-		.input-group-sm {
-			margin-bottom: 10px;
-		}
-
 		.input-group-sm label {
 			width: 100%;
 		}
@@ -129,18 +126,31 @@
 </head>
 <body>
 <div class="container-fluid">
+	<div class="row">
+		<div class="col-md-3">
+			<h2>
+				用户权限管理
+			</h2>
+		</div>
+	</div>
 	<form id="addForm">
-		<table>
-			<tr>
-				<td>
-					<input type="checkbox" id="menu_">
-				</td>
-				<td>
-					<input type="checkbox" id="operate_">
-				</td>
-			</tr>
+		<table style="border:solid 1px grey">
+			<c:forEach var="menu" items="${permissions}">
+				<tr style="border:solid 1px grey">
+					<td width="200px;" style="border:solid 1px grey">
+						<input type="checkbox" name="menuId" value="${menu.id}">${menu.name}
+					</td>
+					<td>
+						<c:forEach var="operate" items="${menu.childPermissions}">
+							<input type="checkbox" name="operateId" value="${operate.id}">${operate.name}
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						</c:forEach>
+					</td>
+				</tr>
+			</c:forEach>
 		</table>
-		<a href="###" onclick="validate()">确定</a>
+		<br/>
+		<a class="btn btn-primary btn-sm" onclick="validate()">确定</a>
 	</form>
 </div>
 <table id="list"></table>

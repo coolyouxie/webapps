@@ -193,4 +193,22 @@ public class PermissionController {
 		}
 	}
 
+	@RequestMapping("/toAddUserPermissionPage")
+	public String toAddUserPermissionPage(Model model,Integer userId){
+		userId = 14;
+		List<Permission> list = iPermissionService.loadAllPermissions(userId);
+		model.addAttribute("userId",userId);
+		model.addAttribute("permissions",list);
+		return "/permission/addUserPermission";
+	}
+
+	@ResponseBody
+    @RequestMapping("/saveUserPermission")
+    public String saveUserPermission(Model model,Integer userId,int[] menus,int[] operates){
+        List<Permission> list = iPermissionService.loadAllPermissions(userId);
+        model.addAttribute("userId",userId);
+        model.addAttribute("permissions",list);
+        return "/permission/addUserPermission";
+    }
+
 }

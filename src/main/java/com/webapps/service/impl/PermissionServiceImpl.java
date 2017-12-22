@@ -221,6 +221,12 @@ public class PermissionServiceImpl implements IPermissionService{
 	            }
 	        }else{
 	            iPermissionMapper.insert(permission);
+	            PermissionRelation pr = new PermissionRelation();
+	            pr.setPermissionId(permission.getId());
+	            pr.setParentPermissionId(1);
+	            pr.setCreateTime(new Date());
+	            pr.setDataState(1);
+	            iPermissionRelationMapper.insert(pr);
 	            if(permission.getChildPermission()!=null&&permission.getChildPermission().length!=0){
 					savePermissionRelation(permission);
 	            }
