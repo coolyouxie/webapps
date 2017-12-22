@@ -42,23 +42,19 @@
             $("input[name=childPermission]:checked").each(function () {
                 childPermission.push($(this).val());
             });
-            if(!$("#name").val()||!$("#name").val().trim()){
+            if (!$("#name").val() || !$("#name").val().trim()) {
                 alert("请输入权限名称");
                 return;
             }
-            if(!$("#code").val()||!$("#code").val().trim()){
+            if (!$("#code").val() || !$("#code").val().trim()) {
                 alert("请输入权限编号");
                 return;
             }
-            if(!$("#parentCode").val()||!$("#parentCode").val().trim()){
-                alert("请输入父权限编号");
-                return;
-            }
-            if(!$("#type").val()||!$("#type").val().trim()){
+            if (!$("#type").val() || !$("#type").val().trim()) {
                 alert("请选择权限类型");
                 return;
             }
-            if(!$("#level").val()||!$("#level").val().trim()){
+            if (!$("#level").val() || !$("#level").val().trim()) {
                 alert("请输入权限层级");
                 return;
             }
@@ -66,21 +62,20 @@
                 url: "${ctx}/permission/saveMenuPermission",
                 type: "POST",
                 dataType: "JSON",
-	            traditional:true,
+                traditional: true,
                 data: {
                     "id": $("#id").val(),
                     "name": $("#name").val(),
                     "code": $("#code").val(),
                     "type": $("#type").val(),
                     "level": $("#level").val(),
-	                "parentCode":$("#parentCode").val(),
-					"childPermission":childPermission
+                    "childPermission": childPermission
                 },
                 success: function (response) {
-                    if(response.result=="F"){
+                    if (response.result == "F") {
                         alert(response.errorMsg);
                         return;
-                    }else{
+                    } else {
                         alert("更新成功");
                         window.location.href = "${ctx}/permission/toMenuPermissionListPage";
                     }
@@ -90,15 +85,11 @@
 
         //校验权限是否已存在
         function validate() {
-            if(!$("#name").val()||!$("#name").val().trim()){
+            if (!$("#name").val() || !$("#name").val().trim()) {
                 alert("请输入权限名称");
                 return;
             }
-            if(!$("#parentCode").val()||!$("#parentCode").val().trim()){
-                alert("请输入父权限编号");
-                return;
-            }
-            if(!$("#code").val()||!$("#code").val().trim()){
+            if (!$("#code").val() || !$("#code").val().trim()) {
                 alert("请输入权限编号");
                 return;
             }
@@ -107,14 +98,14 @@
                 type: "POST",
                 dataType: "JSON",
                 data: {
-                    "id":$("#id").val(),
+                    "id": $("#id").val(),
                     "name": $("#name").val().trim(),
                     "code": $("#code").val()
                 },
                 success: function (response) {
-                    if(response.result=="S"){
+                    if (response.result == "S") {
                         update();
-                    }else{
+                    } else {
                         alert(response.errorMsg);
                         return;
                     }
@@ -156,12 +147,6 @@
 				<input id="code" name="code" value="${permission.code}">
 			</label>
 		</div>
-		<div class="row" style="width:275px;">
-			<label>
-				<span>父权限编号:</span>
-				<input id="parentCode" name="parentCode" value="${permission.parentCode}">
-			</label>
-		</div>
 		<div class="row">
 			<label>
 				<span>权限层级:</span>
@@ -186,8 +171,9 @@
 				<c:forEach var="p" items="${permission.childPermissions}">
 					<tr>
 						<td>
-							<input type="checkbox" name="childPermission" value="${p.id}" <c:if test="${p.checkFlag=='true'}">checked="checked"</c:if>>
-							${p.name}
+							<input type="checkbox" name="childPermission" value="${p.id}"
+							       <c:if test="${p.checkFlag=='true'}">checked="checked"</c:if>>
+								${p.name}
 						</td>
 					</tr>
 				</c:forEach>

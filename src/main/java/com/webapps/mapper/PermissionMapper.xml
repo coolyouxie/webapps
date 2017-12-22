@@ -6,20 +6,19 @@
         <id column="ID" jdbcType="DECIMAL" property="id"/>
         <result column="name" jdbcType="VARCHAR" property="name"/>
         <result column="code" jdbcType="VARCHAR" property="code"/>
-        <result column="parent_code" jdbcType="VARCHAR" property="parentCode"/>
         <result column="level" jdbcType="DECIMAL" property="level"/>
         <result column="type" jdbcType="DECIMAL" property="type"/>
         <result column="create_time" jdbcType="VARCHAR" property="createTime"/>
         <result column="update_time" jdbcType="VARCHAR" property="updateTime"/>
-        <result column="check_flag" jdbcType="VARCHAR" property="checkFlag" />
+        <result column="check_flag" jdbcType="VARCHAR" property="checkFlag"/>
     </resultMap>
 
     <sql id="select_columns">
-		ID,name,code,parent_code,level,type,create_time,update_time
+		ID,name,code,level,type,create_time,update_time
 	</sql>
 
     <sql id="insert_columns">
-		name,code,parent_code,level,type,create_time
+		name,code,level,type,create_time
 	</sql>
 
     <select id="getById" resultMap="resultMap">
@@ -69,6 +68,38 @@
 				ORDER by NAME
     </select>
 
+    <select id="queryPermissionRelationWithUserCheckFlag" resultMap="resultMap">
+        SELECT
+            *, FALSE AS check_flag
+        FROM
+            t_permission_relation
+        WHERE
+            data_state = 1
+        AND id NOT IN (
+            SELECT
+                permission_relation_id
+            FROM
+                t_user_permission
+            WHERE
+                user_id = #{userId}
+        )
+        UNION
+            SELECT
+                *, TRUE AS check_flag
+            FROM
+                t_permission_relation
+            WHERE
+                data_state = 1
+            AND id IN (
+                SELECT
+                    permission_relation_id
+                FROM
+                    t_user_permission
+                WHERE
+                    user_id = #{userId}
+            )
+    </select>
+
     <select id="queryByConditions" resultMap="resultMap">
         select
         <include refid="select_columns"/>
@@ -79,9 +110,6 @@
             </if>
             <if test="obj.code != null and obj.code != '' ">
                 and code = #{obj.code}
-            </if>
-            <if test="obj.parentCode != null and obj.parentCode != ''">
-                and parentCode =#{obj.paretCode}
             </if>
             <if test="obj.level != null and obj.level != '' or obj.level==0">
                 and level = #{obj.level}
@@ -101,10 +129,7 @@
             <if test="obj.code != null and obj.code != '' ">
                 and code = #{obj.code}
             </if>
-            <if test="obj.parentCode != null and obj.parentCode != ''">
-                and parentCode =#{obj.paretCode}
-            </if>
-            <if test="obj.level != null and obj.level != '' or obj.level=0">
+            <if test="obj.level != null and obj.level != '' or obj.level==0">
                 and level = #{obj.level}
             </if>
         </trim>
@@ -123,10 +148,7 @@
             <if test="obj.code != null and obj.code != '' ">
                 and code = #{obj.code}
             </if>
-            <if test="obj.parentCode != null and obj.parentCode != ''">
-                and parentCode =#{obj.paretCode}
-            </if>
-            <if test="obj.level != null and obj.level != '' or obj.level=0">
+            <if test="obj.level != null and obj.level != '' or obj.level==0">
                 and level = #{obj.level}
             </if>
         </trim>
@@ -167,7 +189,6 @@
         (
         #{obj.name},
         #{obj.code},
-        #{obj.parentCode},
         #{obj.level},
         #{obj.type},
         #{obj.createTime}
@@ -178,7 +199,6 @@
         update t_permission set
 		name=#{obj.name},
 		code=#{obj.code},
-		parent_code=#{obj.parentCode},
 		level=#{obj.level},
 		type=#{obj.type},
 		update_time=#{obj.updateTime}

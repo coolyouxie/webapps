@@ -15,12 +15,14 @@ public interface IPermissionRelationMapper extends IBaseMapper<PermissionRelatio
 
     /**
      * 根据permission_id,parent_permission_id,data_state字段查询权限数据
-     * @param form
+     * @param
      * @return
      * @throws Exception
      */
     List<PermissionRelation> queryByConditions(@Param("obj")PermissionRelation pr)throws Exception;
     
     int batchDeleteInLogic(@Param("list")List<PermissionRelation> list);
+
+    List<PermissionRelation> queryPermissionRelationWithUserCheckFlag(@Param("userId")Integer userId) throws Exception;
 
 }

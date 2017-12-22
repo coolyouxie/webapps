@@ -49,7 +49,6 @@ public class PermissionServiceImpl implements IPermissionService{
         Permission p = iPermissionMapper.getById(id);
         PermissionRequestForm form = new PermissionRequestForm();
         form.setLevel(3);
-        form.setParentCode(p.getCode());
         return p;
     }
 
@@ -239,5 +238,29 @@ public class PermissionServiceImpl implements IPermissionService{
             relation.setDataState(1);
             iPermissionRelationMapper.insert(relation);
         }
+	}
+
+	@Override
+	public List<Permission> loadAllPermissions(Integer userId) {
+    	PermissionRequestForm form = new PermissionRequestForm();
+    	form.setLevel(2);
+		try {
+			List<Permission> menuList = iPermissionMapper.queryByConditions(form);
+			List<PermissionRelation> operateList = iPermissionRelationMapper.queryPermissionRelationWithUserCheckFlag(userId);
+			for(Permission menu :menuList){
+				List<Permission> list = new ArrayList<>();
+				for(PermissionRelation operate:operateList){
+					if(operate.getParentPermissionId().equals(menu.getId())){
+						list.add(operate);
+					}
+				}
+				menu.setChildPermissions(list);
+			}
+			return menuList;
+		} catch (Exception e) {
+			logger.error("查询菜单及操作权限异常");
+			e.printStackTrace();
+		}
+		return null;
 	}
 }

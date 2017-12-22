@@ -1,6 +1,6 @@
 package com.webapps.common.entity;
 
-public class PermissionRelation extends Entity {
+public class PermissionRelation extends Permission {
 	
 	private Integer permissionId;
 	

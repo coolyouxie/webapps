@@ -35,11 +35,23 @@ public class PermissionController {
 		return "/permission/menuPermissionList";
 	}
 
+	@RequestMapping("/toOperatePermissionListPage")
+	public String toOperatePermissionListPage(HttpServletRequest request,HttpServletResponse response){
+		return "/permission/operatePermissionList";
+	}
+
 	@RequestMapping("/toAddMenuPermissionPage")
 	public String toAddMenuPermissionPage(Model model,HttpServletRequest request,HttpServletResponse response){
 		List<Permission> list = iPermissionService.loadAllOperatePermission();
 		model.addAttribute("permissions",list);
 		return "/permission/addMenuPermission";
+	}
+
+	@RequestMapping("/toAddOperatePermissionPage")
+	public String toAddOperatePermissionPage(Model model,Integer userId,HttpServletRequest request,HttpServletResponse response){
+		List<Permission> list = iPermissionService.loadAllPermissions(userId);
+		model.addAttribute("permissions",list);
+		return "/permission/addOperatePermission";
 	}
 	
 	@ResponseBody

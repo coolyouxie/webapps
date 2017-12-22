@@ -32,4 +32,6 @@ public interface IPermissionMapper extends IBaseMapper<Permission>,IPageMapper<P
      */
     List<Permission> queryAllLevel3PermByParentId(Integer id);
 
+    List<Permission> queryPermissionRelationWithUserCheckFlag(Integer userId);
+
 }

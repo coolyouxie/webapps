@@ -11,9 +11,7 @@ public class Permission extends Entity {
 	private int level;
 	
 	private Integer type;
-	
-	private String parentCode;
-	
+
 	private boolean checkFlag;
 
 	private List<Permission> childPermissions;
@@ -48,14 +46,6 @@ public class Permission extends Entity {
 
 	public void setType(Integer type) {
 		this.type = type;
-	}
-
-	public String getParentCode() {
-		return parentCode;
-	}
-
-	public void setParentCode(String parentCode) {
-		this.parentCode = parentCode;
 	}
 
 	public List<Permission> getChildPermissions() {

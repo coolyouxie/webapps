@@ -36,11 +36,6 @@
                 }
             });
         }
-
-        //校验名称是否重复
-
-        //校验code是否重复
-
 	</script>
 	<style>
 
@@ -79,12 +74,6 @@
 		<label>
 			<span>权限编号:</span>
 			<span>${permission.code}</span>
-		</label>
-	</div>
-	<div class="row">
-		<label>
-			<span>父权限编号:</span>
-			<span>${permission.parentCode}</span>
 		</label>
 	</div>
 	<div class="row">

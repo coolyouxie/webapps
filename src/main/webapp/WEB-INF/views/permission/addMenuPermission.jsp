@@ -38,23 +38,23 @@
         }
 
         function add() {
-        	var childPermission = [];
-        	$('input[name=childPermission]:checked').each(function(){  
-        		childPermission.push($(this).val());
-        	});
-            if(!$("#name").val()||!$("#name").val().trim()){
+            var childPermission = [];
+            $('input[name=childPermission]:checked').each(function () {
+                childPermission.push($(this).val());
+            });
+            if (!$("#name").val() || !$("#name").val().trim()) {
                 alert("请输入权限名称");
                 return;
             }
-            if(!$("#code").val()||!$("#code").val().trim()){
+            if (!$("#code").val() || !$("#code").val().trim()) {
                 alert("请输入权限编号");
                 return;
             }
-            if(!$("#type").val()||!$("#type").val().trim()){
+            if (!$("#type").val() || !$("#type").val().trim()) {
                 alert("请选择权限类型");
                 return;
             }
-            if(!$("#level").val()||!$("#level").val().trim()){
+            if (!$("#level").val() || !$("#level").val().trim()) {
                 alert("请输入权限层级");
                 return;
             }
@@ -66,10 +66,9 @@
                 data: {
                     "name": $("#name").val(),
                     "code": $("#code").val(),
-	                "parentCode":$("#parentCode").val(),
                     "type": $("#type").val(),
                     "level": $("#level").val(),
-                    "childPermission":childPermission
+                    "childPermission": childPermission
                 },
                 success: function (response) {
                     alert("添加成功");
@@ -80,11 +79,11 @@
 
         //校验权限是否已存在
         function validate() {
-            if(!$("#name").val()||!$("#name").val().trim()){
+            if (!$("#name").val() || !$("#name").val().trim()) {
                 alert("请输入权限名称");
                 return;
             }
-            if(!$("#code").val()||!$("#code").val().trim()){
+            if (!$("#code").val() || !$("#code").val().trim()) {
                 alert("请输入权限编号");
                 return;
             }
@@ -97,9 +96,9 @@
                     "code": $("#code").val()
                 },
                 success: function (response) {
-                    if(response.result=="S"){
+                    if (response.result == "S") {
                         add();
-                    }else{
+                    } else {
                         alert(response.errorMsg);
                         return;
                     }
@@ -147,12 +146,6 @@
 		</div>
 		<div class="row">
 			<label>
-				<span>父权限编号:</span>
-				<input id="parentCode" name="parentCode" value="">
-			</label>
-		</div>
-		<div class="row">
-			<label>
 				<span>权限层级:</span>
 				<input id="level" name="level" value="">
 			</label>
@@ -175,7 +168,7 @@
 					<tr style="border:solid 1px grey">
 						<td style="border:solid 1px grey">
 							<input type="checkbox" name="childPermission" value="${p.id}">
-							${p.name}
+								${p.name}
 						</td>
 					</tr>
 				</c:forEach>

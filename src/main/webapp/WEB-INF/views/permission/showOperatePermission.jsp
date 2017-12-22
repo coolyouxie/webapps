@@ -6,7 +6,7 @@
 <html>
 <head>
 	<meta charset="utf-8"/>
-	<title>权限管理</title>
+	<title>操作权限管理</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 	<link rel="stylesheet" href="${ctx}/js/common/jquery/jquery-ui-1.12.1/jquery-ui.css" type="text/css"/>
 	<link rel="stylesheet" href="${ctx}/js/common/jquery/jqGrid/css/ui.jqgrid.css" type="text/css"/>
@@ -36,17 +36,8 @@
                 }
             });
         }
-
-        //校验名称是否重复
-
-        //校验code是否重复
-
 	</script>
 	<style>
-		.input-group-sm {
-			margin-bottom: 10px;
-		}
-
 		.input-group-sm label {
 			width: 100%;
 		}
@@ -82,12 +73,6 @@
 		<label>
 			<span>权限编号:</span>
 			<span>${permission.code}</span>
-		</label>
-	</div>
-	<div class="row">
-		<label>
-			<span>父权限编号:</span>
-			<span>${permission.parentCode}</span>
 		</label>
 	</div>
 	<div class="row">

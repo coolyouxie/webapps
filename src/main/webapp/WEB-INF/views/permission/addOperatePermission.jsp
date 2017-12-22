@@ -6,7 +6,7 @@
 <html>
 <head>
 	<meta charset="utf-8"/>
-	<title>新增权限</title>
+	<title>新增操作权限</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 	<link rel="stylesheet" href="${ctx}/js/common/jquery/jquery-ui-1.12.1/jquery-ui.css" type="text/css"/>
 	<link rel="stylesheet" href="${ctx}/js/common/jquery/jqGrid/css/ui.jqgrid.css" type="text/css"/>
@@ -46,10 +46,6 @@
                 alert("请输入权限编号");
                 return;
             }
-            if(!$("#parentCode").val()||!$("#parentCode").val().trim()){
-                alert("请输入父权限编号");
-                return;
-            }
             if(!$("#type").val()||!$("#type").val().trim()){
                 alert("请选择权限类型");
                 return;
@@ -59,19 +55,18 @@
                 return;
             }
             $.ajax({
-                url: "${ctx}/permission/savePermission",
+                url: "${ctx}/permission/saveOperatePermission",
                 type: "POST",
                 dataType: "JSON",
                 data: {
                     "name": $("#name").val(),
                     "code": $("#code").val(),
-                    "parentCode": $("#parentCode").val(),
                     "type": $("#type").val(),
                     "level": $("#level").val()
                 },
                 success: function (response) {
                     alert("添加成功");
-                    window.location.href = "${ctx}/permission/toPermissionListPage";
+                    window.location.href = "${ctx}/permission/toOperatePermissionListPage";
                 }
             });
         }
@@ -107,10 +102,6 @@
 
 	</script>
 	<style>
-		.input-group-sm {
-			margin-bottom: 10px;
-		}
-
 		.input-group-sm label {
 			width: 100%;
 		}
@@ -132,7 +123,7 @@
 	<form id="addForm">
 		<div class="row">
 			<h2>
-				菜单权限管理
+				操作权限管理
 			</h2>
 		</div>
 		<div class="row" style="width:255px;">
@@ -149,12 +140,6 @@
 		</div>
 		<div class="row">
 			<label>
-				<span>父权限编号:</span>
-				<input id="parentCode" name="parentCode" value="">
-			</label>
-		</div>
-		<div class="row">
-			<label>
 				<span>权限层级:</span>
 				<input id="level" name="level" value="">
 			</label>
@@ -165,25 +150,7 @@
 				<input id="type" name="type" value="">
 			</label>
 		</div>
-		<div class="row">
-			<div class="col-md-1">&nbsp;</div>
-			<table style="border:solid 1px grey">
-				<tr style="border:solid 1px grey">
-					<td style="border:solid 1px grey">
-						操作权限列表
-					</td>
-				</tr>
-				<c:forEach var="p" items="${permissions}">
-					<tr style="border:solid 1px grey">
-						<td style="border:solid 1px grey">
-							<input type="checkbox" name="childPermission">
-							${p.name}
-						</td>
-					</tr>
-				</c:forEach>
-			</table>
-		</div>
-		<a href="###" onclick="validate()">添加</a>
+		<a onclick="validate()" class="btn btn-primary btn-sm">添加</a>
 	</form>
 </div>
 <table id="list"></table>
