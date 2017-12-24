@@ -97,14 +97,7 @@
         UNION
             SELECT
                 pr.*,
-                <choose>
-                    <when test="userId!=null and userId !=''">
-                        TRUE AS check_flag,
-                    </when>
-                    <otherwise>
-                        FALSE as check_flag,
-                    </otherwise>
-                </choose>
+                TRUE AS check_flag,
                 p.id as p_id,
                 p. NAME AS p_name,
                 p. CODE AS p_code,
@@ -116,6 +109,8 @@
             inner join t_user_permission up on up.permission_relation_id = pr.id
             WHERE
                 pr.data_state = 1
+                and user_id = #{userId}
+            ORDER by p_name
     </select>
 
     <update id="batchDeleteInLogic">
