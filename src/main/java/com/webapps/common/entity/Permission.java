@@ -56,7 +56,7 @@ public class Permission extends Entity {
 		this.childPermissions = childPermissions;
 	}
 
-	public boolean isCheckFlag() {
+	public boolean getCheckFlag() {
 		return checkFlag;
 	}
 

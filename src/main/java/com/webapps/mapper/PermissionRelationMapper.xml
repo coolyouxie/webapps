@@ -6,13 +6,15 @@
         <id column="ID" jdbcType="DECIMAL" property="id"/>
         <result column="permission_id" jdbcType="VARCHAR" property="permissionId"/>
         <result column="parent_permission_id" jdbcType="VARCHAR" property="parentPermissionId"/>
+        <result column="p_id" jdbcType="DECIMAL" property="pId"/>
         <result column="p_name" jdbcType="VARCHAR" property="name"/>
         <result column="p_code" jdbcType="VARCHAR" property="code"/>
-        <result column="p_level" jdbcType="VARCHAR" property="level"/>
-        <result column="p_type" jdbcType="VARCHAR" property="type"/>
+        <result column="p_level" jdbcType="DECIMAL" property="level"/>
+        <result column="p_type" jdbcType="DECIMAL" property="type"/>
         <result column="create_time" jdbcType="VARCHAR" property="createTime"/>
         <result column="update_time" jdbcType="VARCHAR" property="updateTime"/>
         <result column="data_state" jdbcType="DECIMAL" property="dataState"/>
+        <result column="check_flag" jdbcType="VARCHAR" property="checkFlag"/>
     </resultMap>
 
     <sql id="select_columns">
@@ -50,18 +52,21 @@
 
     <select id="queryByConditions" resultMap="resultMap">
         select
-        <include refid="select_columns"/>
-        from t_permission_relation 
+        tpr.*,tp.id as p_id,tp.name as p_name,tp.code as p_code,tp.level as p_level, tp.type as p_type
+        from t_permission_relation tpr INNER JOIN t_permission tp on tp.id=tpr.permission_id
         <trim prefix="WHERE" prefixOverrides="AND">
-            and data_state=1
+            and tpr.data_state=1
             <if test="obj.permissionId !=null and obj.permissionId != ''">
-                AND permission_id = #{obj.permissionId}
+                AND tpr.permission_id = #{obj.permissionId}
             </if>
             <if test="obj.parentPermissionId != null and obj.parentPermissionId != '' ">
-                and parent_permission_id = #{obj.parentPermissionId}
+                and tpr.parent_permission_id = #{obj.parentPermissionId}
             </if>
-            <if test="obj.dataState != null and obj.dataState != '' or obj.dataState==0">
-                and data_state = #{obj.dataState}
+            <if test="obj.level!=null and obj.level!='' or obj.level ==0">
+                and tp.level = #{obj.level}
+            </if>
+            <if test="obj.code!=null and obj.code!=''">
+                and tp.code = #{obj.code}
             </if>
         </trim>
     </select>
@@ -70,6 +75,7 @@
         SELECT
             pr.*,
             FALSE AS check_flag,
+            p.id as p_id,
             p. NAME AS p_name,
             p. CODE AS p_code,
             p. LEVEL AS p_level,
@@ -91,7 +97,15 @@
         UNION
             SELECT
                 pr.*,
-                TRUE AS check_flag,
+                <choose>
+                    <when test="userId!=null and userId !=''">
+                        TRUE AS check_flag,
+                    </when>
+                    <otherwise>
+                        FALSE as check_flag,
+                    </otherwise>
+                </choose>
+                p.id as p_id,
                 p. NAME AS p_name,
                 p. CODE AS p_code,
                 p. LEVEL AS p_level,

@@ -23,89 +23,36 @@
 	<script src="${ctx}/js/common/jquery/jqGrid/js/jquery.jqGrid.js"></script>
 
 	<script type="text/javascript">
-        function deleteById(id) {
-            $.ajax({
-                url: "${ctx}/permission/deleteById",
-                type: "POST",
-                dataType: "JSON",
-                data: {
-                    "id": id
-                },
-                success: function (response) {
-                    alert("添加成功");
-                    window.location.href = "${ctx}/manage/toPermissionListPage";
-                }
+        function save() {
+            var menuId = [];
+            $("input[name=menuId]:checked").each(function () {
+                menuId.push($(this).val());
             });
-        }
-
-        function add() {
-            if (!$("#name").val() || !$("#name").val().trim()) {
-                alert("请输入权限名称");
-                return;
-            }
-            if (!$("#code").val() || !$("#code").val().trim()) {
-                alert("请输入权限编号");
-                return;
-            }
-            if (!$("#parentCode").val() || !$("#parentCode").val().trim()) {
-                alert("请输入父权限编号");
-                return;
-            }
-            if (!$("#type").val() || !$("#type").val().trim()) {
-                alert("请选择权限类型");
-                return;
-            }
-            if (!$("#level").val() || !$("#level").val().trim()) {
-                alert("请输入权限层级");
-                return;
-            }
+            var operateId = [];
+            $("input[name=operateId]:checked").each(function(){
+                operateId.push($(this).val());
+            });
             $.ajax({
                 url: "${ctx}/permission/saveUserPermission",
                 type: "POST",
                 dataType: "JSON",
+	            traditional:true,
                 data: {
-                    "name": $("#name").val(),
-                    "code": $("#code").val(),
-                    "parentCode": $("#parentCode").val(),
-                    "type": $("#type").val(),
-                    "level": $("#level").val()
+                    "userId":$("#userId").val(),
+                    "menuId": menuId,
+                    "operateId": operateId
                 },
                 success: function (response) {
-                    alert("添加成功");
-                    window.location.href = "${ctx}/permission/toPermissionListPage";
-                }
-            });
-        }
-
-        //校验权限是否已存在
-        function validate() {
-            if (!$("#name").val() || !$("#name").val().trim()) {
-                alert("请输入权限名称");
-                return;
-            }
-            if (!$("#code").val() || !$("#code").val().trim()) {
-                alert("请输入权限编号");
-                return;
-            }
-            $.ajax({
-                url: "${ctx}/permission/validatePermission",
-                type: "POST",
-                dataType: "JSON",
-                data: {
-                    "name": $("#name").val().trim(),
-                    "code": $("#code").val()
-                },
-                success: function (response) {
-                    if (response.result == "S") {
-                        add();
-                    } else {
+                    if(response.result=="S"){
+                        window.location.href = "${ctx}/permission/toAddUserPermissionPage";
+                    }else{
                         alert(response.errorMsg);
-                        return;
+                        return ;
                     }
+
                 }
             });
         }
-
 	</script>
 	<style>
 		.input-group-sm label {
@@ -134,15 +81,17 @@
 		</div>
 	</div>
 	<form id="addForm">
+		<input type="hidden" name="userId" id="userId" value="${userId}">
 		<table style="border:solid 1px grey">
 			<c:forEach var="menu" items="${permissions}">
 				<tr style="border:solid 1px grey">
 					<td width="200px;" style="border:solid 1px grey">
-						<input type="checkbox" name="menuId" value="${menu.id}">${menu.name}
+						<input type="checkbox" name="menuId" value="${menu.id}" <c:if test="${menu.checkFlag=='true'}">checked="checked"</c:if>>${menu.name}
 					</td>
 					<td>
 						<c:forEach var="operate" items="${menu.childPermissions}">
-							<input type="checkbox" name="operateId" value="${operate.id}">${operate.name}
+							<input type="checkbox" name="operateId" value="${operate.id}"
+							       <c:if test="${operate.checkFlag=='true'}">checked="checked"</c:if>>${operate.name}
 							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 						</c:forEach>
 					</td>
@@ -150,7 +99,7 @@
 			</c:forEach>
 		</table>
 		<br/>
-		<a class="btn btn-primary btn-sm" onclick="validate()">确定</a>
+		<a class="btn btn-primary btn-sm" onclick="save()">确定</a>
 	</form>
 </div>
 <table id="list"></table>

@@ -1,35 +1,39 @@
 package com.webapps.service.impl;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
+import com.webapps.common.bean.Page;
+import com.webapps.common.bean.ResultDto;
+import com.webapps.common.entity.Permission;
+import com.webapps.common.entity.PermissionRelation;
+import com.webapps.common.entity.UserPermission;
+import com.webapps.common.form.PermissionRequestForm;
+import com.webapps.mapper.IPermissionMapper;
+import com.webapps.mapper.IPermissionRelationMapper;
+import com.webapps.mapper.IUserPermissionMapper;
+import com.webapps.service.IPermissionService;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.webapps.common.bean.Page;
-import com.webapps.common.bean.ResultDto;
-import com.webapps.common.entity.Permission;
-import com.webapps.common.entity.PermissionRelation;
-import com.webapps.common.form.PermissionRequestForm;
-import com.webapps.mapper.IPermissionMapper;
-import com.webapps.mapper.IPermissionRelationMapper;
-import com.webapps.service.IPermissionService;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 @Service
 @Transactional
-public class PermissionServiceImpl implements IPermissionService{
-	
-	private static Logger logger = Logger.getLogger(PermissionServiceImpl.class);
+public class PermissionServiceImpl implements IPermissionService {
+
+    private static Logger logger = Logger.getLogger(PermissionServiceImpl.class);
 
     @Autowired
     private IPermissionMapper iPermissionMapper;
-    
+
     @Autowired
     private IPermissionRelationMapper iPermissionRelationMapper;
+
+    @Autowired
+    private IUserPermissionMapper iUserPermissionMapper;
 
 
     @Override
@@ -37,7 +41,7 @@ public class PermissionServiceImpl implements IPermissionService{
         int startRow = page.getStartRow();
         int offset = page.getRows();
         int total = iPermissionMapper.queryCount(form);
-        List<Permission> list = iPermissionMapper.queryPage(startRow,offset,form);
+        List<Permission> list = iPermissionMapper.queryPage(startRow, offset, form);
         page.setRecords(total);
         page.countRecords(total);
         page.setResultList(list);
@@ -54,10 +58,10 @@ public class PermissionServiceImpl implements IPermissionService{
 
     @Override
     public ResultDto<String> saveOperatePermission(Permission permission) throws Exception {
-        ResultDto<String> dto =new ResultDto<>();
-        if(permission.getId()!=null){
-            iPermissionMapper.updateById(permission.getId(),permission);
-        }else{
+        ResultDto<String> dto = new ResultDto<>();
+        if (permission.getId() != null) {
+            iPermissionMapper.updateById(permission.getId(), permission);
+        } else {
             iPermissionMapper.insert(permission);
         }
         dto.setResult("S");
@@ -71,27 +75,27 @@ public class PermissionServiceImpl implements IPermissionService{
 
     @Override
     public ResultDto<String> validatePermission(PermissionRequestForm form) throws Exception {
-        List<Permission> list = iPermissionMapper.getByNameOrCode(form.getName(),form.getCode());
+        List<Permission> list = iPermissionMapper.getByNameOrCode(form.getName(), form.getCode());
         String errorMsg = "";
-        ResultDto<String> dto = new ResultDto<String>();
+        ResultDto<String> dto = new ResultDto<>();
         dto.setResult("S");
-        if(CollectionUtils.isNotEmpty(list)){
-            for(int i=0;i<list.size();i++){
-            	if(list.get(0).getId().equals(form.getId())){
-            		//如果是更新操作时，则判断id是否相等，如果相等，则不校验，否则校验
-            		continue;
-				}
-                if(form.getName().equalsIgnoreCase(list.get(0).getName())){
-                    if(errorMsg.equalsIgnoreCase("")){
+        if (CollectionUtils.isNotEmpty(list)) {
+            for (int i = 0; i < list.size(); i++) {
+                if (list.get(0).getId().equals(form.getId())) {
+                    //如果是更新操作时，则判断id是否相等，如果相等，则不校验，否则校验
+                    continue;
+                }
+                if (form.getName().equalsIgnoreCase(list.get(0).getName())) {
+                    if (errorMsg.equalsIgnoreCase("")) {
                         errorMsg += "权限名称重复";
-                    }else{
+                    } else {
                         errorMsg += ",权限名称重复";
                     }
                     dto.setResult("F");
-                }else{
-                    if(errorMsg.equalsIgnoreCase("")){
+                } else {
+                    if (errorMsg.equalsIgnoreCase("")) {
                         errorMsg += "权限编号重复";
-                    }else{
+                    } else {
                         errorMsg += ",权限编号重复";
                     }
                     dto.setResult("F");
@@ -108,135 +112,137 @@ public class PermissionServiceImpl implements IPermissionService{
         return list;
     }
 
-	@Override
-	public List<Permission> loadAllOperatePermission() {
-		PermissionRequestForm form = new PermissionRequestForm();
-		form.setLevel(3);
-		try {
-			List<Permission> list = iPermissionMapper.queryByConditions(form);
-			return list;
-		} catch (Exception e) {
-			logger.error("查询操作权限异常");
-			e.printStackTrace();
-		}
-		return null;
-	}
+    @Override
+    public List<Permission> loadAllOperatePermission() {
+        PermissionRequestForm form = new PermissionRequestForm();
+        form.setLevel(3);
+        try {
+            List<Permission> list = iPermissionMapper.queryByConditions(form);
+            return list;
+        } catch (Exception e) {
+            logger.error("查询操作权限异常");
+            e.printStackTrace();
+        }
+        return null;
+    }
 
-	@Override
-	public List<Permission> loadAllMenuPermission() {
-		PermissionRequestForm form = new PermissionRequestForm();
-		form.setLevel(2);
-		try {
-			List<Permission> list = iPermissionMapper.queryByConditions(form);
-			return list;
-		} catch (Exception e) {
-			logger.error("查询菜单权限异常");
-			e.printStackTrace();
-		}
-		return null;
-	}
+    @Override
+    public List<Permission> loadAllMenuPermission() {
+        PermissionRequestForm form = new PermissionRequestForm();
+        form.setLevel(2);
+        try {
+            List<Permission> list = iPermissionMapper.queryByConditions(form);
+            return list;
+        } catch (Exception e) {
+            logger.error("查询菜单权限异常");
+            e.printStackTrace();
+        }
+        return null;
+    }
 
-	@Override
-	public List<Permission> loadUserPermission(Integer userId) {
-		
-		return null;
-	}
+    @Override
+    public List<Permission> loadUserPermission(Integer userId) {
 
-	@Override
-	public Permission getMenuPermissionById(Integer id) {
-		try {
-			Permission pr = iPermissionMapper.getById(id);
-			if(pr!=null){
-				List<Permission> list = iPermissionMapper.queryAllLevel3PermByParentId(id);
-				pr.setChildPermissions(list);
-				return pr;
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
+        return null;
+    }
 
-	@Override
-	public ResultDto<String> saveMenuPermission(PermissionRequestForm permission) throws Exception {
-		 ResultDto<String> dto =new ResultDto<>();
-	        if(permission.getId()!=null){
-	            iPermissionMapper.updateById(permission.getId(),permission);
-	            List<PermissionRelation> deleteList = new ArrayList<>();
-	            PermissionRelation pr = new PermissionRelation();
-	            pr.setParentPermissionId(permission.getId());
-	            List<PermissionRelation> list = iPermissionRelationMapper.queryByConditions(pr);
-	            if(permission.getChildPermission()==null||permission.getChildPermission().length==0){
-	            	if(CollectionUtils.isNotEmpty(list)){
-						iPermissionRelationMapper.batchDeleteInLogic(list);
-						dto.setResult("S");
-						return dto;
-					}
-				}
-	            if(CollectionUtils.isEmpty(list)){
-					if(permission.getChildPermission()!=null&&permission.getChildPermission().length!=0){
-						savePermissionRelation(permission);
-					}
-	            	dto.setResult("S");
-	            	return dto;
-	            }
-	            for(PermissionRelation temp:list){
-	            	boolean flag = false;
-	            	for(int i=0;i<permission.getChildPermission().length;i++){
-	            		if(temp.getPermissionId().equals(permission.getChildPermission()[i])){
-	            			flag = true;
-	            		}
-	            	}
-	            	if(!flag){
-	            		deleteList.add(temp);
-	            	}
-	            }
-	            if(CollectionUtils.isNotEmpty(deleteList)){
-	            	iPermissionRelationMapper.batchDeleteInLogic(deleteList);
-	            }
-	            for(int i=0;i<permission.getChildPermission().length;i++){
-	            	boolean flag = false;
-	            	boolean updateFlag = false;
-	            	PermissionRelation relation = new PermissionRelation();
-	            	relation.setParentPermissionId(permission.getId());
-	            	relation.setPermissionId(permission.getChildPermission()[i]);
-	            	relation.setDataState(1);
-	            	for(PermissionRelation temp:list){
-	            		if(temp.getPermissionId().equals(permission.getChildPermission()[i])){
-	            			flag = true;
-	            			if(temp.getDataState()==0){
-	            				updateFlag = true;
-	            			}
-	            		}
-	            	}
-	            	if(!flag){
-	            		if(!updateFlag){
-	            			relation.setCreateTime(new Date());
-	            			iPermissionRelationMapper.insert(relation);
-	            		}else{
-	            			relation.setUpdateTime(new Date());
-	            			iPermissionRelationMapper.updateById(relation.getId(),relation);
-	            		}
-	            	}
-	            }
-	        }else{
-	            iPermissionMapper.insert(permission);
-	            PermissionRelation pr = new PermissionRelation();
-	            pr.setPermissionId(permission.getId());
-	            pr.setParentPermissionId(1);
-	            pr.setCreateTime(new Date());
-	            pr.setDataState(1);
-	            iPermissionRelationMapper.insert(pr);
-	            if(permission.getChildPermission()!=null&&permission.getChildPermission().length!=0){
-					savePermissionRelation(permission);
-	            }
-	        }
-	        dto.setResult("S");
-	        return dto;
-	}
+    @Override
+    public Permission getMenuPermissionById(Integer id) {
+        try {
+            Permission pr = iPermissionMapper.getById(id);
+            if (pr != null) {
+                List<Permission> list = iPermissionMapper.queryAllLevel3PermByParentId(id);
+                pr.setChildPermissions(list);
+                return pr;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
-	private void savePermissionRelation(PermissionRequestForm permission) {
-		for(int i=0;i<permission.getChildPermission().length;i++){
+    @Override
+    public ResultDto<String> saveMenuPermission(PermissionRequestForm permission) throws Exception {
+        ResultDto<String> dto = new ResultDto<>();
+        if (permission.getId() != null) {
+            iPermissionMapper.updateById(permission.getId(), permission);
+            List<PermissionRelation> deleteList = new ArrayList<>();
+            PermissionRelation pr = new PermissionRelation();
+            pr.setParentPermissionId(permission.getId());
+            List<PermissionRelation> list = iPermissionRelationMapper.queryByConditions(pr);
+            if (permission.getChildPermission() == null || permission.getChildPermission().length == 0) {
+                if (CollectionUtils.isNotEmpty(list)) {
+                    iPermissionRelationMapper.batchDeleteInLogic(list);
+                    dto.setResult("S");
+                    return dto;
+                }
+            }
+            if (CollectionUtils.isEmpty(list)) {
+                if (permission.getChildPermission() != null && permission.getChildPermission().length != 0) {
+                    savePermissionRelation(permission);
+                }
+                dto.setResult("S");
+                return dto;
+            }
+            for (PermissionRelation temp : list) {
+                boolean flag = false;
+                for (int i = 0; i < permission.getChildPermission().length; i++) {
+                    if (temp.getPermissionId().equals(permission.getChildPermission()[i])) {
+                        flag = true;
+                    }
+                }
+                if (!flag) {
+                    deleteList.add(temp);
+                }
+            }
+            if (CollectionUtils.isNotEmpty(deleteList)) {
+                iPermissionRelationMapper.batchDeleteInLogic(deleteList);
+            }
+            for (int i = 0; i < permission.getChildPermission().length; i++) {
+                boolean flag = false;
+                boolean updateFlag = false;
+                PermissionRelation relation = new PermissionRelation();
+                relation.setParentPermissionId(permission.getId());
+                relation.setPermissionId(permission.getChildPermission()[i]);
+                relation.setDataState(1);
+                for (PermissionRelation temp : list) {
+                    if (temp.getPermissionId().equals(permission.getChildPermission()[i])) {
+                        flag = true;
+                        if (temp.getDataState() == 0) {
+                            updateFlag = true;
+                        }
+                    }
+                }
+                if (!flag) {
+                    if (!updateFlag) {
+                        relation.setCreateTime(new Date());
+                        iPermissionRelationMapper.insert(relation);
+                    } else {
+                        relation.setUpdateTime(new Date());
+                        iPermissionRelationMapper.updateById(relation.getId(), relation);
+                    }
+                }
+            }
+        } else {
+            //保存权限
+            iPermissionMapper.insert(permission);
+            //菜单权限保存到权限关系表
+            PermissionRelation pr = new PermissionRelation();
+            pr.setPermissionId(permission.getId());
+            pr.setParentPermissionId(0);
+            pr.setCreateTime(new Date());
+            pr.setDataState(1);
+            iPermissionRelationMapper.insert(pr);
+            if (permission.getChildPermission() != null && permission.getChildPermission().length != 0) {
+                savePermissionRelation(permission);
+            }
+        }
+        dto.setResult("S");
+        return dto;
+    }
+
+    private void savePermissionRelation(PermissionRequestForm permission) {
+        for (int i = 0; i < permission.getChildPermission().length; i++) {
             PermissionRelation relation = new PermissionRelation();
             relation.setParentPermissionId(permission.getId());
             relation.setPermissionId(permission.getChildPermission()[i]);
@@ -244,29 +250,58 @@ public class PermissionServiceImpl implements IPermissionService{
             relation.setDataState(1);
             iPermissionRelationMapper.insert(relation);
         }
-	}
+    }
 
-	@Override
-	public List<Permission> loadAllPermissions(Integer userId) {
-    	PermissionRequestForm form = new PermissionRequestForm();
-    	form.setLevel(2);
-		try {
-			List<Permission> menuList = iPermissionMapper.queryByConditions(form);
-			List<PermissionRelation> operateList = iPermissionRelationMapper.queryPermissionRelationWithUserCheckFlag(userId);
-			for(Permission menu :menuList){
-				List<Permission> list = new ArrayList<>();
-				for(PermissionRelation operate:operateList){
-					if(operate.getParentPermissionId().equals(menu.getId())){
-						list.add(operate);
-					}
-				}
-				menu.setChildPermissions(list);
-			}
-			return menuList;
-		} catch (Exception e) {
-			logger.error("查询菜单及操作权限异常");
-			e.printStackTrace();
-		}
-		return null;
-	}
+    @Override
+    public List<PermissionRelation> loadAllPermissions(Integer userId) {
+        PermissionRelation pr = new PermissionRelation();
+        pr.setLevel(2);
+        try {
+            List<PermissionRelation> menuList = iPermissionRelationMapper.queryByConditions(pr);
+            List<PermissionRelation> operateList = iPermissionRelationMapper.queryPermissionRelationWithUserCheckFlag(userId);
+            for (PermissionRelation menu : menuList) {
+                List<Permission> list = new ArrayList<>();
+                for (PermissionRelation operate : operateList) {
+                    if (operate.getParentPermissionId().equals(menu.getpId())) {
+                        list.add(operate);
+                    }else if(operate.getId().equals(menu.getId())){
+                        menu.setCheckFlag(operate.getCheckFlag());
+                    }
+                }
+                menu.setChildPermissions(list);
+            }
+            return menuList;
+        } catch (Exception e) {
+            logger.error("查询菜单及操作权限异常");
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public ResultDto<String> saveUserPermisson(Integer userId, int[] menuId, int[] operateId) throws Exception {
+        ResultDto<String> dto = new ResultDto<>();
+        saveUserPermissions(userId, menuId);
+        saveUserPermissions(userId, operateId);
+        dto.setResult("S");
+        return dto;
+    }
+
+    private void saveUserPermissions(Integer userId, int[] operateId) {
+        if(operateId!=null&&operateId.length>0){
+            for(int i=0;i<operateId.length;i++){
+                UserPermission up = new UserPermission();
+                up.setPermissionRelationId(operateId[i]);
+                up.setUserId(userId);
+                up.setCreateTime(new Date());
+                up.setDataState(1);
+                iUserPermissionMapper.insert(up);
+            }
+        }
+    }
+
+    public List<PermissionRelation>  loadUserPermissions(Integer userId)throws Exception{
+        List<PermissionRelation> userPermissionList = iPermissionRelationMapper.queryPermissionRelationWithUserCheckFlag(userId);
+        return userPermissionList;
+    }
 }

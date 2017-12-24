@@ -106,6 +106,7 @@
 					var id = ids[i];
 					var rowData = $('#list').jqGrid('getRowData', id);
 					var	operateClick = '<a href="${ctx}/user/toUserInfoPage?type=edit&id='+id+'" style="color:blue">编辑</a> <a href="#" style="color:blue" onclick="deleteById('+ id + ')" >删除</a>';
+					operateClick +='<a href="${ctx}/permission/toAddUserPermissionPage?userId='+id+'" class="btn btn-primary btn-sm">权限管理</a>';
 					jQuery("#list").jqGrid('setRowData', id, {
 						operate : operateClick
 					});

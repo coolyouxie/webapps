@@ -6,6 +6,16 @@ public class PermissionRelation extends Permission {
 	
 	private Integer parentPermissionId;
 
+	private Integer pId;
+
+	public Integer getpId() {
+		return pId;
+	}
+
+	public void setpId(Integer pId) {
+		this.pId = pId;
+	}
+
 	public Integer getPermissionId() {
 		return permissionId;
 	}

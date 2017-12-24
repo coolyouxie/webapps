@@ -6,7 +6,9 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.webapps.common.entity.PermissionRelation;
 import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,6 +28,8 @@ import net.sf.json.util.JSONUtils;
 @Controller
 @RequestMapping(value="permission")
 public class PermissionController {
+
+    private static Logger logger = Logger.getLogger(PermissionController.class);
 
 	@Autowired
 	private IPermissionService iPermissionService;
@@ -49,7 +53,7 @@ public class PermissionController {
 
 	@RequestMapping("/toAddOperatePermissionPage")
 	public String toAddOperatePermissionPage(Model model,Integer userId,HttpServletRequest request,HttpServletResponse response){
-		List<Permission> list = iPermissionService.loadAllPermissions(userId);
+		List<PermissionRelation> list = iPermissionService.loadAllPermissions(userId);
 		model.addAttribute("permissions",list);
 		return "/permission/addOperatePermission";
 	}
@@ -193,22 +197,40 @@ public class PermissionController {
 		}
 	}
 
+    /**
+     * 修改和添加用户操作权限
+     * @param model
+     * @param userId
+     * @return
+     */
 	@RequestMapping("/toAddUserPermissionPage")
 	public String toAddUserPermissionPage(Model model,Integer userId){
-		userId = 14;
-		List<Permission> list = iPermissionService.loadAllPermissions(userId);
-		model.addAttribute("userId",userId);
+        List<PermissionRelation> list = null;
+        try {
+            list = iPermissionService.loadAllPermissions(userId);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        model.addAttribute("userId",userId);
 		model.addAttribute("permissions",list);
 		return "/permission/addUserPermission";
 	}
 
 	@ResponseBody
     @RequestMapping("/saveUserPermission")
-    public String saveUserPermission(Model model,Integer userId,int[] menus,int[] operates){
-        List<Permission> list = iPermissionService.loadAllPermissions(userId);
-        model.addAttribute("userId",userId);
-        model.addAttribute("permissions",list);
-        return "/permission/addUserPermission";
+    public String saveUserPermission(Model model,Integer userId,int[] menuId,int[] operateId){
+	    ResultDto<String> dto = null;
+        try {
+            dto = iPermissionService.saveUserPermisson(userId,menuId,operateId);
+            return JSONUtil.toJSONString(JSONObject.fromObject(dto));
+        } catch (Exception e) {
+            logger.error("保存用户权限异常");
+            e.printStackTrace();
+            dto = new ResultDto<>();
+            dto.setResult("F");
+            dto.setErrorMsg("保存用户权限异常，请稍后重试");
+        }
+        return JSONUtil.toJSONString(JSONObject.fromObject(dto));
     }
 
 }

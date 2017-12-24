@@ -3,6 +3,7 @@ package com.webapps.service;
 import com.webapps.common.bean.Page;
 import com.webapps.common.bean.ResultDto;
 import com.webapps.common.entity.Permission;
+import com.webapps.common.entity.PermissionRelation;
 import com.webapps.common.form.PermissionRequestForm;
 
 import java.util.List;
@@ -31,6 +32,10 @@ public interface IPermissionService {
 
 	Permission getMenuPermissionById(Integer id);
 
-	List<Permission> loadAllPermissions(Integer userId);
+	List<PermissionRelation> loadAllPermissions(Integer userId);
+
+	ResultDto<String> saveUserPermisson(Integer userId,int[] menuId,int[] operateId)throws Exception;
+
+	List<PermissionRelation> loadUserPermissions(Integer userId)throws Exception;
 
 }
