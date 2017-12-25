@@ -169,6 +169,7 @@ public class PermissionServiceImpl implements IPermissionService {
             List<PermissionRelation> deleteList = new ArrayList<>();
             PermissionRelation pr = new PermissionRelation();
             pr.setParentPermissionId(permission.getId());
+            pr.setLevel(3);
             List<PermissionRelation> list = iPermissionRelationMapper.queryByConditions(pr);
             if (permission.getChildPermission() == null || permission.getChildPermission().length == 0) {
                 if (CollectionUtils.isNotEmpty(list)) {
@@ -281,22 +282,69 @@ public class PermissionServiceImpl implements IPermissionService {
     @Override
     public ResultDto<String> saveUserPermisson(Integer userId, int[] menuId, int[] operateId) throws Exception {
         ResultDto<String> dto = new ResultDto<>();
-        saveUserPermissions(userId, menuId);
-        saveUserPermissions(userId, operateId);
+        saveUserPermissions(userId, menuId,2);
+        saveUserPermissions(userId, operateId,3);
         dto.setResult("S");
         return dto;
     }
 
-    private void saveUserPermissions(Integer userId, int[] operateId) {
-        if(operateId!=null&&operateId.length>0){
-            for(int i=0;i<operateId.length;i++){
-                UserPermission up = new UserPermission();
-                up.setPermissionRelationId(operateId[i]);
-                up.setUserId(userId);
-                up.setCreateTime(new Date());
-                up.setDataState(1);
-                iUserPermissionMapper.insert(up);
+    private void saveUserPermissions(Integer userId, int[] permissionRelationId,int level) {
+        UserPermission condition = new UserPermission();
+        condition.setLevel(level);
+        condition.setDataState(1);
+        try {
+            List<UserPermission> list = iUserPermissionMapper.queryByConditions(condition);
+            //如果该用户还没有可用权限，则直接插入权限
+            if(CollectionUtils.isEmpty(list)){
+                if(permissionRelationId!=null&&permissionRelationId.length>0){
+                    for(int i=0;i<permissionRelationId.length;i++){
+                        UserPermission up = new UserPermission();
+                        up.setPermissionRelationId(permissionRelationId[i]);
+                        up.setUserId(userId);
+                        up.setCreateTime(new Date());
+                        up.setDataState(1);
+                        iUserPermissionMapper.insert(up);
+                    }
+                }
+                return;
             }
+            List<UserPermission> deleteList = new ArrayList<>();
+            for(UserPermission temp:list){
+                boolean delFlag = false;
+                for(int i=0;i<permissionRelationId.length;i++){
+                    if(temp.getId().equals(permissionRelationId[i])){
+                        delFlag = true;
+                        break;
+                    }
+                }
+                if(!delFlag){
+                    deleteList.add(temp);
+                }
+            }
+            if(CollectionUtils.isNotEmpty(deleteList)){
+                //逻辑删除取消勾先的权限
+                iUserPermissionMapper.batchDeleteInLogic(deleteList);
+            }
+            for(int i=0;i<permissionRelationId.length;i++){
+                boolean insertFlag = false;
+                for(UserPermission temp:list){
+                    if(temp.getId().equals(permissionRelationId[i])){
+                        insertFlag = true;
+                        break;
+                    }
+                }
+                //如果页面传入的权限关系ID不在该用户对应的用户权限关系中，则插入数据库
+                if(!insertFlag){
+                    UserPermission up = new UserPermission();
+                    up.setDataState(1);
+                    up.setCreateTime(new Date());
+                    up.setPermissionRelationId(permissionRelationId[i]);
+                    up.setUserId(userId);
+                    iUserPermissionMapper.insert(up);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
