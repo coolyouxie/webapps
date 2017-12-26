@@ -292,6 +292,7 @@ public class PermissionServiceImpl implements IPermissionService {
         UserPermission condition = new UserPermission();
         condition.setLevel(level);
         condition.setDataState(1);
+        condition.setUserId(userId);
         try {
             List<UserPermission> list = iUserPermissionMapper.queryByConditions(condition);
             //如果该用户还没有可用权限，则直接插入权限

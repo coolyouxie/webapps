@@ -54,7 +54,6 @@
 						<li><a href="${ctx}/messageConfig/toMessageConfigPage" target="mainContainer">消息管理</a></li>
 						<li><a href="${ctx}/permission/toMenuPermissionListPage" target="mainContainer">菜单权限管理</a></li>
 						<li><a href="${ctx}/permission/toOperatePermissionListPage" target="mainContainer">操作权限管理</a></li>
-						<li><a href="${ctx}/permission/toAddUserPermissionPage" target="mainContainer">用户权限管理</a></li>
 					</ul>
 					<ul class="nav nav-sidebar">
 						<li><a href="${ctx}/enrollment/toEnrollmentListPage" target="mainContainer">报名列表</a></li>

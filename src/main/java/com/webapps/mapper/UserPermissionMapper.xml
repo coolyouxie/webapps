@@ -6,6 +6,13 @@
         <id column="ID" jdbcType="DECIMAL" property="id"/>
         <result column="permission_relation_id" jdbcType="VARCHAR" property="permissionRelationId"/>
         <result column="user_id" jdbcType="VARCHAR" property="userId"/>
+        <result column="pr_id" jdbcType="VARCHAR" property="prId"/>
+        <result column="pr_permission_id" jdbcType="VARCHAR" property="permissionId"/>
+        <result column="pr_parent_permission_id" jdbcType="VARCHAR" property="parentPermissionId"/>
+        <result column="p_name" jdbcType="VARCHAR" property="name"/>
+        <result column="p_code" jdbcType="VARCHAR" property="code"/>
+        <result column="p_level" jdbcType="VARCHAR" property="level"/>
+        <result column="p_type" jdbcType="VARCHAR" property="type"/>
         <result column="create_time" jdbcType="VARCHAR" property="createTime"/>
         <result column="update_time" jdbcType="VARCHAR" property="updateTime"/>
         <result column="data_state" jdbcType="DECIMAL" property="dataState"/>
@@ -46,18 +53,31 @@
     
     <select id="queryByConditions" resultMap="resultMap">
         select
-        <include refid="select_columns"/>
-        from t_user_permission 
+        up.*,
+        p.name AS p_name,
+        p.code AS p_code,
+        p.type AS p_type,
+        p.level AS p_level,
+        pr.permission_id AS pr_permission_id,
+        pr.parent_permission_id as pr_parent_permission_id,
+        pr.id as pr_id
+        from t_user_permission up
+        INNER JOIN t_permission_relation pr on pr.id = up.permission_relation_id
+        INNER JOIN t_permission p on p.id = pr.permission_id
         <trim prefix="WHERE" prefixOverrides="AND">
-            and data_state=1
+            and up.data_state = 1
+            and pr.data_state = 1
             <if test="obj.permissionRelationId !=null and obj.permissionRelationId != ''">
                 AND permission_relation_id = #{obj.permissionRelationId}
             </if>
             <if test="obj.userId != null and obj.userId != '' ">
                 and user_id = #{obj.userId}
             </if>
-            <if test="obj.dataState != null and obj.dataState != '' or obj.dataState==0">
-                and data_state = #{obj.dataState}
+            <if test="obj.level != null and obj.level != '' or level==0">
+                and level = #{obj.level}
+            </if>
+            <if test="obj.type != null and obj.type != '' ">
+                and type = #{obj.type}
             </if>
         </trim>
     </select>

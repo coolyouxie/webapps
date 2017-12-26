@@ -23,6 +23,29 @@
 	<script src="${ctx}/js/common/jquery/jqGrid/js/jquery.jqGrid.js"></script>
 
 	<script type="text/javascript">
+        function changeMenuState(menuId){
+            var list = $("#tdId_"+menuId).find("input[name=operateId]:checked");
+            if(list.length>0){
+                //Id,name等标签属于html元素的属性，它们可以用attr()方法修改
+	            //checked属于html元素的特性，在jqeury1.6版本以后只能使用prop()方法修改
+                $("#menuId_"+menuId).prop('checked',true);
+            }
+        }
+
+        function changeOperateState(menuId) {
+            var isChecked = $('#menuId_'+menuId).prop('checked');
+            var list = $("#tdId_"+menuId).find("input[name=operateId]");
+            if(isChecked){
+                for(var i=0;i<list.length;i++){
+                    $(list[i]).prop("checked",true);
+                }
+            }else{
+                for(var i=0;i<list.length;i++){
+                    $(list[i]).prop("checked",false);
+                }
+            }
+        }
+
         function save() {
             var menuId = [];
             $("input[name=menuId]:checked").each(function () {
@@ -44,7 +67,7 @@
                 },
                 success: function (response) {
                     if(response.result=="S"){
-                        window.location.href = "${ctx}/permission/toAddUserPermissionPage";
+                        window.location.href = "${ctx}/user/toUserListPage";
                     }else{
                         alert(response.errorMsg);
                         return ;
@@ -86,11 +109,12 @@
 			<c:forEach var="menu" items="${permissions}">
 				<tr style="border:solid 1px grey">
 					<td width="200px;" style="border:solid 1px grey">
-						<input type="checkbox" name="menuId" value="${menu.id}" <c:if test="${menu.checkFlag=='true'}">checked="checked"</c:if>>${menu.name}
+						<input type="checkbox" id="menuId_${menu.id}" onchange="changeOperateState(${menu.id})" name="menuId" value="${menu.id}"
+						       <c:if test="${menu.checkFlag=='true'}">checked="checked"</c:if> />${menu.name}
 					</td>
-					<td>
+					<td id="tdId_${menu.id}">
 						<c:forEach var="operate" items="${menu.childPermissions}">
-							<input type="checkbox" name="operateId" value="${operate.id}"
+							<input type="checkbox" name="operateId" group="menu_${menu.id}" value="${operate.id}" onchange="changeMenuState(${menu.id})"
 							       <c:if test="${operate.checkFlag=='true'}">checked="checked"</c:if>>${operate.name}
 							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 						</c:forEach>
