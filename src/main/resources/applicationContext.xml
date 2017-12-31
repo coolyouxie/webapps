@@ -60,6 +60,6 @@
 	</bean>
 	
 	<!-- 定时任务执行 -->
-	<task:annotation-driven scheduler="qbScheduler" mode="proxy"/>
+	<task:annotation-driven scheduler="qbScheduler" mode="proxy" proxy-target-class="true"/>
     <task:scheduler id="qbScheduler" pool-size="10"/>
 </beans>

@@ -5,6 +5,8 @@ import com.webapps.common.bean.ResultDto;
 import com.webapps.common.entity.User;
 import com.webapps.common.form.UserRequestForm;
 
+import java.util.Map;
+
 public interface IUserService {
 	
 	Page loadUserList(Page page, UserRequestForm user) throws Exception;
@@ -22,5 +24,7 @@ public interface IUserService {
 	ResultDto<String> getSmsValidateMsg(String phoneNum);
 	
 	ResultDto<String> resetPassword(String phoneNum, String password);
+
+	Map<String,String> loadUserPermission(Integer userId);
 	
 }

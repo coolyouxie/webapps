@@ -197,7 +197,11 @@ public class PermissionServiceImpl implements IPermissionService {
                 }
             }
             if (CollectionUtils.isNotEmpty(deleteList)) {
-                iPermissionRelationMapper.batchDeleteInLogic(deleteList);
+                //权限关系删除后，用户所拥有的权限关系也需要删除
+                iPermissionRelationMapper.batchDelete(deleteList);
+                for(PermissionRelation del:deleteList){
+                    iUserPermissionMapper.deleteByPermissionRelationId(del.getId());
+                }
             }
             for (int i = 0; i < permission.getChildPermission().length; i++) {
                 boolean flag = false;
@@ -323,8 +327,8 @@ public class PermissionServiceImpl implements IPermissionService {
                 }
             }
             if(CollectionUtils.isNotEmpty(deleteList)){
-                //逻辑删除取消勾先的权限
-                iUserPermissionMapper.batchDeleteInLogic(deleteList);
+                //物理删除数据
+                iUserPermissionMapper.batchDelete(deleteList);
             }
             for(int i=0;i<permissionRelationId.length;i++){
                 boolean insertFlag = false;

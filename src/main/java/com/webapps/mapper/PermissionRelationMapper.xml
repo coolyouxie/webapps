@@ -151,4 +151,32 @@
 		update_time = #{obj.updateTime}
 		where id = #{id}
 	</update>
+
+    <delete id="batchDelete" parameterType="java.util.List">
+        DELETE FROM t_permission_relation WHERE id IN
+        <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+            #{item.id}
+        </foreach>
+    </delete>
+
+    <delete id="deleteByPermissionId">
+        DELETE FROM t_permission_relation where permission_id = #{permissionId}
+    </delete>
+
+    <delete id="deleteByParentPermissionId">
+        DELETE FROM t_permission_relation WHERE parent_permission_id = #{parent_permission_id}
+    </delete>
+
+    <delete id="deleteByFkIds">
+        DELETE FROM t_permission_relation
+        <trim prefix="WHERE" prefixOverrides="AND">
+            <if test="permissionId !=null and permissionId != '' or permissionId==0">
+                AND permission_id = #{permissionId}
+            </if>
+            <if test="parentPermissionId != null and parentPermissionId != '' or parentPermissionId==0">
+                and parent_permission_id = #{parentPermissionId}
+            </if>
+        </trim>
+    </delete>
+
 </mapper>

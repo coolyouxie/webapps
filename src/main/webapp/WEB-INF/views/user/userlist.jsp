@@ -105,8 +105,17 @@
 				for ( var i = 0; i < ids.length; i++) {
 					var id = ids[i];
 					var rowData = $('#list').jqGrid('getRowData', id);
-					var	operateClick = '<a href="${ctx}/user/toUserInfoPage?type=edit&id='+id+'" style="color:blue">编辑</a> <a href="#" style="color:blue" onclick="deleteById('+ id + ')" >删除</a>';
-					operateClick +='<a href="${ctx}/permission/toAddUserPermissionPage?userId='+id+'" class="btn btn-primary btn-sm">权限管理</a>';
+					var	operateClick = '<c:if test="${!empty perMap['RETT_MU_USER_OP_UPDATE']}">'
+						+'<a href="${ctx}/user/toUserInfoPage?type=edit&id='+id+'" class="btn btn-primary btn-sm">' +
+						'编辑' +
+						'</a></c:if>' +
+						'<c:if test="${!empty perMap['RETT_MU_USER_OP_DELETE']}">'+
+						'<a class="btn btn-primary btn-sm" onclick="deleteById('+ id + ')" >' +
+						'删除' +
+						'</a></c:if>';
+					operateClick +='<c:if test="${!empty perMap['RETT_MU_USER_OP_PERMISSION']}">' +
+						'<a href="${ctx}/permission/toAddUserPermissionPage?userId='+id+'" class="btn btn-primary btn-sm">权限管理</a>' +
+						'+</c:if>';
 					jQuery("#list").jqGrid('setRowData', id, {
 						operate : operateClick
 					});
@@ -273,9 +282,11 @@
 				<div class="col-md-2">
 				</div>
 				<div class="col-md-2">
-					<a type='button' class="btn btn-primary btn-sm" href="${ctx}/user/toUserInfoPage?type=add">
-						添加新用户
-					</a>
+					<c:if test="${!empty perMap['RETT_MU_USER_OP_ADD']}">
+						<a type='button' class="btn btn-primary btn-sm" href="${ctx}/user/toUserInfoPage?type=add">
+							添加新用户
+						</a>
+					</c:if>
 				</div>
 			</div>
 		</form>

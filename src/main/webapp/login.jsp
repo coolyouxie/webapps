@@ -99,7 +99,7 @@
 				<i> </i>  <span> </span>
 			</div>
 			<div class="am-u-sm-10 login-am-center">
-				<form class="am-form" name="loginForm" method="post">
+				<form class="am-form" name="loginForm" method="post" action="${ctx}/login/userLogin">
 					<fieldset>
 						<div class="am-form-group">
 							<input type="text" class="" name="account" id="nameId" placeholder="输入账号">

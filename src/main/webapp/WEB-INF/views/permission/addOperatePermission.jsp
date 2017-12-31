@@ -151,6 +151,7 @@
 			</label>
 		</div>
 		<a onclick="validate()" class="btn btn-primary btn-sm">添加</a>
+		<a href="javascript:window.history.go(-1);" class="btn btn-primary btn-sm">返回</a>
 	</form>
 </div>
 <table id="list"></table>

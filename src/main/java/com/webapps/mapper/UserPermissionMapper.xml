@@ -38,19 +38,19 @@
         <include refid="select_columns"/>
         from t_user_permission where data_state=1
     </select>
-    
+
     <select id="queryByPermissionId" resultMap="resultMap">
         select
         <include refid="select_columns"/>
         from t_user_permission where permission_id = #{permissionId} and data_state=1
     </select>
-    
+
     <select id="queryByParentId" resultMap="resultMap">
         select
         <include refid="select_columns"/>
         from t_user_permission where parent_permission_id = #{parentId} and data_state=1
     </select>
-    
+
     <select id="queryByConditions" resultMap="resultMap">
         select
         up.*,
@@ -73,7 +73,7 @@
             <if test="obj.userId != null and obj.userId != '' ">
                 and user_id = #{obj.userId}
             </if>
-            <if test="obj.level != null and obj.level != '' or level==0">
+            <if test="obj.level != null and obj.level != '' ">
                 and level = #{obj.level}
             </if>
             <if test="obj.type != null and obj.type != '' ">
@@ -84,7 +84,7 @@
 
     <update id="batchDeleteInLogic">
         <foreach collection="list" item="item" index="index" open="" close="" separator=";">
-            update t_user_permission 
+            update t_user_permission
             <set>
                 data_state = 0,
                 update_time = #{item.updateTime}
@@ -94,7 +94,7 @@
     </update>
 
     <insert id="insert" useGeneratedKeys="true" keyProperty="obj.id">
-        insert into t_user_permission 
+        insert into t_user_permission
         (<include refid="insert_columns"/>)
         values
         (
@@ -103,6 +103,17 @@
         1,
         #{obj.createTime}
         )
+    </insert>
+
+    <insert id="batchInsert" parameterType="java.util.List">
+        INSERT INTO t_user_permission (<include refid="insert_columns"/>)
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{obj.permissionRelationId},
+            #{obj.userId},
+            1,
+            #{obj.createTime})
+        </foreach>
     </insert>
 
     <update id="updateById">
@@ -120,4 +131,31 @@
 		update_time = #{obj.updateTime}
 		where id = #{id}
 	</update>
+
+    <delete id="batchDelete" parameterType="java.util.List">
+        DELETE FROM t_user_permission WHERE id IN
+        <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+            #{item.id}
+        </foreach>
+    </delete>
+
+    <delete id="deleteByPermissionRelationId">
+        DELETE FROM t_user_permission where permission_relation_id = #{permissionRelationId}
+    </delete>
+
+    <delete id="deleteByUserId">
+        DELETE FROM t_user_permission WHERE user_id = #{userId}
+    </delete>
+
+    <delete id="deleteByFkIds">
+        DELETE FROM t_user_permission
+        <trim prefix="WHERE" prefixOverrides="AND">
+            <if test="permissionRelationId !=null and permissionRelationId != '' or permissionRelationId==0">
+                AND permission_relation_id = #{permissionRelationId}
+            </if>
+            <if test="userId != null and userId != '' or userId==0">
+                and user_id = #{userId}
+            </if>
+        </trim>
+    </delete>
 </mapper>

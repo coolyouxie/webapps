@@ -159,7 +159,8 @@
 				<input id="type" name="type" value="${permission.type}">
 			</label>
 		</div>
-		<a href="###" onclick="validate()">更新</a>
+		<a onclick="validate()">更新</a>
+		<a href="javascript:window.history.go(-1);" class="btn btn-primary btn-sm">返回</a>
 	</form>
 </div>
 <table id="list"></table>

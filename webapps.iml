@@ -123,5 +123,13 @@
     <orderEntry type="library" name="Maven: com.thetransactioncompany:java-property-utils:1.9" level="project" />
     <orderEntry type="library" name="Maven: com.aliyun:aliyun-java-sdk-core:3.2.3" level="project" />
     <orderEntry type="library" name="Maven: com.aliyun:aliyun-java-sdk-dysmsapi:1.0.0-SANPSHOT" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.shiro:shiro-core:1.3.2" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.shiro:shiro-web:1.3.2" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.shiro:shiro-cas:1.3.2" level="project" />
+    <orderEntry type="library" name="Maven: org.jasig.cas.client:cas-client-core:3.2.2" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.shiro:shiro-spring:1.3.2" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.shiro:shiro-ehcache:1.3.0" level="project" />
+    <orderEntry type="library" name="Maven: net.sf.ehcache:ehcache-core:2.5.3" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.commons:commons-lang3:3.4" level="project" />
   </component>
 </module>

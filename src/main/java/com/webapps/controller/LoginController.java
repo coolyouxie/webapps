@@ -1,6 +1,8 @@
 package com.webapps.controller;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.imageio.ImageIO;
 import javax.servlet.ServletOutputStream;
@@ -8,10 +10,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -20,7 +24,7 @@ import com.webapps.common.utils.ValidatorCodeUtil;
 import com.webapps.service.IUserService;
 
 @Controller
-@RequestMapping(value="login")
+@RequestMapping(value="/login")
 public class LoginController {
 
 	@Autowired
@@ -31,7 +35,7 @@ public class LoginController {
 		return "/views/login";
 	}
 
-	@RequestMapping(value = "/userLogin")
+	@RequestMapping(value = "/userLogin",method = RequestMethod.POST)
 	public String login(Model model,
 			@RequestParam("account")String account,
 			@RequestParam("password")String password,
@@ -51,8 +55,9 @@ public class LoginController {
 					model.addAttribute("loginResult", "无登录权限！");
 					return "redirect:/permissionDenied.jsp";
 				}
+				Map<String,String> results = iUserService.loadUserPermission(temp.getId());
 				request.getSession().setAttribute("user", temp);
-				model.addAttribute("user", temp);
+				request.getSession().setAttribute("perMap", results);
 				return "redirect:/index.jsp";
 			} else{
 				return "forward:/index";

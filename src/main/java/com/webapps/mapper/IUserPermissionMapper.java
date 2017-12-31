@@ -22,4 +22,17 @@ public interface IUserPermissionMapper extends IBaseMapper<UserPermission>{
 
     int batchDeleteInLogic(@Param("list") List<UserPermission> list);
 
+    /**
+     * 根据id批量删除
+     * @param list
+     * @return
+     */
+    int batchDelete(@Param("list")List<UserPermission> list);
+
+    int deleteByPermissionRelationId(int permissionRelationId);
+
+    int deleteByUserId(int userId);
+
+    int deleteByFkIds(int permissionRelationId,int userId);
+
 }

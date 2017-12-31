@@ -1,9 +1,12 @@
 package com.webapps.service.impl;
 
 import java.math.BigDecimal;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
+import com.webapps.common.entity.UserPermission;
+import com.webapps.mapper.*;
+import com.webapps.service.IPermissionService;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
@@ -18,9 +21,6 @@ import com.webapps.common.entity.User;
 import com.webapps.common.entity.UserWallet;
 import com.webapps.common.form.UserRequestForm;
 import com.webapps.common.utils.PasswordEncryptUtil;
-import com.webapps.mapper.IAliSmsMsgMapper;
-import com.webapps.mapper.IUserMapper;
-import com.webapps.mapper.IUserWalletMapper;
 import com.webapps.service.IUserService;
 
 @Service
@@ -34,6 +34,15 @@ public class UserServiceImpl implements IUserService {
 	
 	@Autowired
 	private IUserWalletMapper iUserWalletMapper;
+
+	@Autowired
+	private IPermissionMapper iPermissionMapper;
+
+	@Autowired
+	private IPermissionRelationMapper iPermissionRelationMapper;
+
+	@Autowired
+	private IUserPermissionMapper iUserPermissionMapper;
 
 	@Override
 	public Page loadUserList(Page page,UserRequestForm user) throws Exception {
@@ -175,5 +184,32 @@ public class UserServiceImpl implements IUserService {
 		}
 		return dto;
 	}
-	
+
+	@Override
+	public Map<String, String> loadUserPermission(Integer userId) {
+		UserPermission up = new UserPermission();
+		up.setUserId(userId);
+		Map<String,String> permissions = new HashMap<>();
+		try {
+			List<UserPermission> list = iUserPermissionMapper.queryByConditions(up);
+			if(CollectionUtils.isNotEmpty(list)){
+				for(UserPermission temp1 : list){
+					for(UserPermission temp2:list){
+						if(temp1.getLevel()==2){
+							permissions.put(temp1.getCode(),temp1.getCode());
+						}else if(temp1.getLevel()==3){
+							if(temp1.getParentPermissionId().equals(temp2.getPermissionId())){
+								permissions.put(temp2.getCode()+"_"+temp1.getCode(),
+										temp2.getCode()+"_"+temp1.getCode());
+							}
+						}
+					}
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return permissions;
+	}
+
 }
