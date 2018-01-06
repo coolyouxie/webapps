@@ -317,7 +317,7 @@ public class PermissionServiceImpl implements IPermissionService {
             for(UserPermission temp:list){
                 boolean delFlag = false;
                 for(int i=0;i<permissionRelationId.length;i++){
-                    if(temp.getId().equals(permissionRelationId[i])){
+                    if(temp.getPermissionRelationId().equals(permissionRelationId[i])){
                         delFlag = true;
                         break;
                     }
