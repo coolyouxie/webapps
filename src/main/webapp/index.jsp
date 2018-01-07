@@ -40,7 +40,7 @@
 					<ul class="dropdown-menu">
 						<li><a href="#">消息</a></li>
 						<li><a href="#">个人信息</a></li>
-						<li><a href="#">退出系统</a></li>
+						<li><a href="${ctx}/login/logout?userId=${user.id}">退出系统</a></li>
 					</ul>
 				</li>
 			</ul>

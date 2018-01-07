@@ -32,18 +32,18 @@ public class LoginController {
 	
 	@RequestMapping(value="/toLoginPage")
 	public String toLoginPage(Model model){
-		return "/views/login";
+//		return "/views/login";
+		return "redirect:/login.jsp";
 	}
 
 	@RequestMapping(value = "/userLogin",method = RequestMethod.POST)
 	public String login(Model model,
 			@RequestParam("account")String account,
 			@RequestParam("password")String password,
-			@RequestParam("checkCode")String checkCode,
-			HttpServletRequest request,RedirectAttributes attr) {
+			HttpServletRequest request) {
 		if(StringUtils.isBlank(account)||StringUtils.isBlank(password)){
 			model.addAttribute("loginResult", "用户名或密码不能为空！");
-			return "forward:/webapps/login";
+			return "redirect:/login.jsp";
 		}
 		try {
 			User user = new User();
@@ -51,7 +51,7 @@ public class LoginController {
 			user.setPassword(password);
 			User temp = iUserService.login(user);
 			if (temp != null) {
-				if(temp.getUserType()!=1&&temp.getUserType()!=2){
+				if(temp.getUserType()==3){
 					model.addAttribute("loginResult", "无登录权限！");
 					return "redirect:/permissionDenied.jsp";
 				}
@@ -66,6 +66,12 @@ public class LoginController {
 			e.printStackTrace();
 		}
 		return "forward:/views/index";
+	}
+
+	@RequestMapping(value="/logout",method = RequestMethod.GET)
+	public String logout(Model model,@RequestParam("userId") Integer userId,HttpServletRequest request){
+		request.getSession().removeAttribute("user");
+		return "redirect:/login.jsp";
 	}
 	
 	/*
