@@ -24,12 +24,21 @@
 		<result column="expire_date" jdbcType="DECIMAL" property="expireDate" />
 		<result column="cashback_days" jdbcType="DECIMAL" property="cashbackDays" />
 		<result column="is_history" jdbcType="DECIMAL" property="isHistory" />
+		<result column="talker_id" jdbcType="DECIMAL" property="talkerId" />
+		<result column="talker_name" jdbcType="VARCHAR" property="talkerName" />
+		<result column="entry_approver_id" jdbcType="DECIMAL" property="entryApproverId" />
+		<result column="entry_approver_name" jdbcType="VARCHAR" property="entryApproverName" />
+		<result column="is_entry_approved" jdbcType="DECIMAL" property="isEntryApproved" />
+		<result column="expire_approver_id" jdbcType="DECIMAL" property="expireApproverId" />
+		<result column="is_expire_approved" jdbcType="DECIMAL" property="isExpireApproved" />
+		<result column="expire_approver_name" jdbcType="VARCHAR" property="expireApproverName" />
 	</resultMap>
 
 	<sql id="select_columns">
 		te.ID,te.user_id,te.recruitment_id,te.company_id,te.state, te.data_state,
 		te.CREATE_TIME,te.UPDATE_TIME,te.is_talked,te.talk_result,te.remark,te.failed_reason,
-		te.entry_date,te.reward,te.cashback_days,te.is_history
+		te.entry_date,te.reward,te.cashback_days,te.is_history,talker_id,entry_approver_id,is_entry_approved,
+		expire_approver_id,is_expire_approved,talker_name,entry_approver_name,expire_approver_name
 	</sql>
 
 	<sql id="insert_columns">
@@ -103,8 +112,6 @@
 		<include refid="select_columns" />
 		from t_enrollment te where te.state =#{state} and te.user_id = #{userId}
 	</select>
-
-
 	<select id="queryListByUserIdStateAndId" resultMap="resultMap">
 		select
 		<include refid="select_columns" />
@@ -145,6 +152,30 @@
 			</if>
 			<if test="obj.enrollTimeEnd != null and obj.enrollTimeEnd != ''">
 				and #{obj.enrollTimeEnd} >= te.create_time
+			</if>
+			<if test="obj.talkerId != null and obj.talkerId != ''">
+				and #{obj.talkerId} = te.talker_Id
+			</if>
+			<if test="obj.entryApproverId != null and obj.entryApproverId != ''">
+				and #{obj.entryApproverId} = te.entry_approver_id
+			</if>
+			<if test="obj.expireApproverId != null and obj.expireApproverId != ''">
+				and #{obj.expireApproverId} = te.expire_approver_id
+			</if>
+			<if test="obj.isEntryApproved != null and obj.isEntryApproved != '' or obj.isEntryApproved==0">
+				and #{obj.isEntryApproved} = te.is_entry_approved
+			</if>
+			<if test="obj.isExpireApproved != null and obj.isExpireApproved != '' or obj.isExpireApproved==0">
+				and #{obj.isExpireApproved} = te.is_expire_approved
+			</if>
+			<if test="obj.talkerName != null and obj.talkerName != ''">
+				and te.talker_name like concat('%',#{obj.talkerName},'%')
+			</if>
+			<if test="obj.entryApproverName != null and obj.entryApproverName != ''">
+				and te.entry_approver_name like concat('%',#{obj.entryApproverName},'%')
+			</if>
+			<if test="obj.expireApproverName != null and obj.expireApproverName != ''">
+				and te.expire_approver_name like concat('%',#{obj.expireApproverName},'%')
 			</if>
 		</trim>
 	</select>
@@ -187,6 +218,30 @@
 			</if>
 			<if test="obj.enrollTimeEnd != null and obj.enrollTimeEnd != ''">
 				and #{obj.enrollTimeEnd} >= te.create_time
+			</if>
+			<if test="obj.talkerId != null and obj.talkerId != ''">
+				and #{obj.talkerId} = te.talker_Id
+			</if>
+			<if test="obj.entryApproverId != null and obj.entryApproverId != ''">
+				and #{obj.entryApproverId} = te.entry_approver_id
+			</if>
+			<if test="obj.expireApproverId != null and obj.expireApproverId != ''">
+				and #{obj.expireApproverId} = te.expire_approver_id
+			</if>
+			<if test="obj.isEntryApproved != null and obj.isEntryApproved != '' or obj.isEntryApproved==0">
+				and #{obj.isEntryApproved} = te.is_entry_approved
+			</if>
+			<if test="obj.isExpireApproved != null and obj.isExpireApproved != '' or obj.isExpireApproved==0">
+				and #{obj.isExpireApproved} = te.is_expire_approved
+			</if>
+			<if test="obj.talkerName != null and obj.talkerName != ''">
+				and te.talker_name like concat('%',#{obj.talkerName},'%')
+			</if>
+			<if test="obj.entryApproverName != null and obj.entryApproverName != ''">
+				and te.entry_approver_name like concat('%',#{obj.entryApproverName},'%')
+			</if>
+			<if test="obj.expireApproverName != null and obj.expireApproverName != ''">
+				and te.expire_approver_name like concat('%',#{obj.expireApproverName},'%')
 			</if>
 		</trim>
 		order by te.create_time desc
@@ -258,6 +313,41 @@
 			is_talked=#{obj.isTalked},
 			talk_result=#{obj.talkResult}
 		where id=#{id}
+	</update>
+
+	<update id="saveTalkerId">
+		UPDATE t_enrollment SET
+		talker_id = #{obj.talkerId},
+		update_TIME=#{obj.updateTime}
+		where id = #{obj.id}
+	</update>
+
+	<update id="saveEntryApproverId">
+		UPDATE t_enrollment SET
+		entry_approver_id = #{obj.entryApproverId},
+		update_TIME=#{obj.updateTime}
+		where id = #{obj.id}
+	</update>
+
+	<update id="saveEntryApproveInfo">
+		UPDATE t_enrollment SET
+		is_entry_approved = #{obj.isEntryApproved},
+		update_TIME=#{obj.updateTime}
+		where id = #{obj.id}
+	</update>
+
+	<update id="saveExpireApproverId">
+		UPDATE t_enrollment SET
+		expire_approver_id = #{obj.expireApproverId},
+		update_TIME=#{obj.updateTime}
+		where id = #{obj.id}
+	</update>
+
+	<update id="saveExpireApproveInfo">
+		UPDATE t_enrollment SET
+		is_expire_approved = #{obj.isExpireApproved},
+		update_TIME=#{obj.updateTime}
+		where id = #{obj.id}
 	</update>
 	
 	<update id="cancelEnroll">

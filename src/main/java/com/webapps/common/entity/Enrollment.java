@@ -31,6 +31,40 @@ public class Enrollment extends Entity {
 
 	private Integer isHistory;
 
+	private Integer talkerId;
+
+	private Integer entryApproverId;
+
+	private int isEntryApproved;
+
+	private Integer expireApproverId;
+
+	private int isExpireApproved;
+
+	public Integer getTalkerId() {
+		return talkerId;
+	}
+
+	public void setTalkerId(Integer talkerId) {
+		this.talkerId = talkerId;
+	}
+
+	public Integer getEntryApproverId() {
+		return entryApproverId;
+	}
+
+	public void setEntryApproverId(Integer entryApproverId) {
+		this.entryApproverId = entryApproverId;
+	}
+
+	public Integer getExpireApproverId() {
+		return expireApproverId;
+	}
+
+	public void setExpireApproverId(Integer expireApproverId) {
+		this.expireApproverId = expireApproverId;
+	}
+
 	public String getFailedReason() {
 		return failedReason;
 	}
@@ -132,5 +166,21 @@ public class Enrollment extends Entity {
 			return DateUtil.format(this.entryDate,"yyyy-MM-dd");
 		}
 		return null;
+	}
+
+	public int getIsEntryApproved() {
+		return isEntryApproved;
+	}
+
+	public void setIsEntryApproved(int isEntryApproved) {
+		this.isEntryApproved = isEntryApproved;
+	}
+
+	public int getIsExpireApproved() {
+		return isExpireApproved;
+	}
+
+	public void setIsExpireApproved(int isExpireApproved) {
+		this.isExpireApproved = isExpireApproved;
 	}
 }
