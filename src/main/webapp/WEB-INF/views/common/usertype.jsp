@@ -13,7 +13,7 @@
 		<option value="4">客服专员</option>
 		<option value="5">入职审核专员</option>
 		<option value="6">期满审核专员</option>
-		<option value="6">提现审核专员</option>
+		<option value="7">提现审核专员</option>
 	</select>
 </body>
 </html>
