@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.webapps.mapper.IUserApproveCountDtoMapper">
+	<resultMap id="resultMap" type="com.webapps.common.dto.UserApproveCountDto">
+		<id column="id" jdbcType="DECIMAL" property="userId" />
+		<result column="count" jdbcType="DECIMAL" property="count" />
+	</resultMap>
+
+	<select id="queryTalkCount" resultMap="resultMap">
+		SELECT
+		count(t_enrollment.id),
+		t_user.id
+		FROM
+		t_user
+		LEFT JOIN t_enrollment ON t_user.id = entry_approver_id and is_talked <> 1
+		GROUP BY
+		t_user.id
+	</select>
+	
+	<select id="queryEntryApproveCount" resultMap="resultMap">
+		SELECT
+		count(t_enrollment_approval.id),
+		t_user.id
+		FROM
+		t_user
+		LEFT JOIN t_enrollment_approval ON t_user.id = approver_id 
+			and t_enrollment_approval.state = 0 
+			and t_enrollment_approval.type = 1
+		GROUP BY
+		t_user.id
+	</select>
+	
+	<select id="queryEntryApproveCount" resultMap="resultMap">
+		SELECT
+		count(t_enrollment_approval.id),
+		t_user.id
+		FROM
+		t_user
+		LEFT JOIN t_enrollment_approval ON t_user.id = approver_id 
+			and t_enrollment_approval.state = 0 
+			and t_enrollment_approval.type = 2
+		GROUP BY
+		t_user.id
+	</select>
+
+</mapper>

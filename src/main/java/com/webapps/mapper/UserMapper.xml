@@ -187,11 +187,14 @@
 		DELETE t_user where id = #{id,jdbcType=DECIMAL}
 	</select>
 	
+	<select id="queryUsersByUserType" resultMap="resultMap">
+		select * from t_user where user_type=#{userType}
+	</select>
+	
 	<update id="deleteByIdInLogic">
 		update t_user set data_state = 0 where id = #{id,jdbcType=DECIMAL}
 	</update>
-
-
+	
 	<insert id="insert" useGeneratedKeys="true" keyProperty="obj.id">
 		insert into t_user (
 			<include refid="insert_columns" />

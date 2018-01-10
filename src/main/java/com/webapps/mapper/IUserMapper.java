@@ -1,8 +1,11 @@
 package com.webapps.mapper;
 
+import java.util.List;
+
+import org.springframework.stereotype.Repository;
+
 import com.webapps.common.entity.User;
 import com.webapps.common.form.UserRequestForm;
-import org.springframework.stereotype.Repository;
 
 /**
  * Created by xieshuai on 2017-6-28.
@@ -11,5 +14,7 @@ import org.springframework.stereotype.Repository;
 public interface IUserMapper extends IBaseMapper<User>,IPageMapper<User,UserRequestForm>{
 	
 	User queryUserByAccount(String account);
+	
+	List<User> queryUsersByUserType(int userType)throws Exception;
 	
 }
