@@ -1,6 +1,7 @@
 package com.webapps.common.entity;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 public class ApplyExpenditure extends Entity {
 	
@@ -15,6 +16,10 @@ public class ApplyExpenditure extends Entity {
 	private Integer approverId;
 	
 	private String reason;
+	
+	private String approverName;
+	
+	private Date approveTime;
 
 	public BigDecimal getFee() {
 		return fee;
@@ -63,6 +68,22 @@ public class ApplyExpenditure extends Entity {
 
 	public void setReason(String reason) {
 		this.reason = reason;
+	}
+
+	public Date getApproveTime() {
+		return approveTime;
+	}
+
+	public void setApproveTime(Date approveTime) {
+		this.approveTime = approveTime;
+	}
+
+	public String getApproverName() {
+		return approverName;
+	}
+
+	public void setApproverName(String approverName) {
+		this.approverName = approverName;
 	}
 	
 	

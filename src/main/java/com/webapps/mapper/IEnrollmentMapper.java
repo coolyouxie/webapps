@@ -1,12 +1,13 @@
 package com.webapps.mapper;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
 import com.webapps.common.entity.Enrollment;
 import com.webapps.common.form.EnrollmentRequestForm;
-import org.springframework.stereotype.Repository;
 
 /**
  * Created by xieshuai on 2017-6-28.
@@ -33,4 +34,16 @@ public interface IEnrollmentMapper extends IBaseMapper<Enrollment>,IPageMapper<E
 	int batchUpdateToDelete(List<Enrollment> list);
 
 	int batchUpdateToHistory(@Param("list") List<Enrollment> list);
+	
+	int updateTalkInfo(@Param("id")Integer id,@Param("talkerId")Integer talkerId,@Param("isTalked")int isTalked,
+			@Param("talkerName")String talkerName,@Param("updateTime")Date updateTime)throws Exception;
+	
+	int updateEntryApproveInfo(@Param("id")Integer id,@Param("entryApproverId")Integer entryApproverId,
+			@Param("isEntryApproved")int isEntryApproved,@Param("entryApproverName")String entryApproverName,
+			@Param("updateTime")Date updateTime)throws Exception;
+	
+	int updateExpireApproveInfo(@Param("id")Integer id,@Param("expireApproverId")Integer expireApproverId,
+			@Param("isExpireApproved")int isExpireApproved,@Param("expireApproverName")String expireApproverName,
+			@Param("updateTime")Date updateTime)throws Exception;
+	
 }

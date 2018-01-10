@@ -302,7 +302,15 @@
 			failed_reason = #{obj.failedReason},
 			entry_date = #{obj.entryDate},
 			reward = #{obj.reward},
-			cashback_days = #{obj.cashbackDays}
+			cashback_days = #{obj.cashbackDays},
+			talker_id = #{obj.talkerId},
+			entry_approver_id = #{obj.entryApproverId},
+			isEntryApproved = #{obj.isEntryApproved},
+			expire_approver_id = #{obj.expireApproverId},
+			is_expire_approved = #{obj.isExpireApproved},
+			talker_name=#{obj.talkerName},
+			entry_approver_name = #{obj.entryApproverName},
+			expire_approver_name= #{obj.expireApproverName}
 		where id=#{id}
 	</update>
 	
@@ -315,39 +323,31 @@
 		where id=#{id}
 	</update>
 
-	<update id="saveTalkerId">
+	<update id="updateTalkInfo">
 		UPDATE t_enrollment SET
-		talker_id = #{obj.talkerId},
-		update_TIME=#{obj.updateTime}
-		where id = #{obj.id}
+		talker_id = #{talkerId},
+		talker_name = #{talkerName},
+		is_talked = #{isTalked},
+		update_TIME=#{updateTime}
+		where id = #{id}
 	</update>
 
-	<update id="saveEntryApproverId">
+	<update id="updateEntryApproveInfo">
 		UPDATE t_enrollment SET
-		entry_approver_id = #{obj.entryApproverId},
-		update_TIME=#{obj.updateTime}
-		where id = #{obj.id}
+		entry_approver_id = #{entryApproverId},
+		entry_approver_name = #{entryApproverName},
+		is_entry_approved = #{isEntryApproved},
+		update_TIME=#{updateTime}
+		where id = #{id}
 	</update>
 
-	<update id="saveEntryApproveInfo">
+	<update id="updateExpireApproveInfo">
 		UPDATE t_enrollment SET
-		is_entry_approved = #{obj.isEntryApproved},
-		update_TIME=#{obj.updateTime}
-		where id = #{obj.id}
-	</update>
-
-	<update id="saveExpireApproverId">
-		UPDATE t_enrollment SET
-		expire_approver_id = #{obj.expireApproverId},
-		update_TIME=#{obj.updateTime}
-		where id = #{obj.id}
-	</update>
-
-	<update id="saveExpireApproveInfo">
-		UPDATE t_enrollment SET
-		is_expire_approved = #{obj.isExpireApproved},
-		update_TIME=#{obj.updateTime}
-		where id = #{obj.id}
+		expire_approver_id = #{expireApproverId},
+		expire_approver_name = #{expireApproverName},
+		is_expire_approved = #{isExpireApproved},
+		update_TIME=#{updateTime}
+		where id = #{id}
 	</update>
 	
 	<update id="cancelEnroll">

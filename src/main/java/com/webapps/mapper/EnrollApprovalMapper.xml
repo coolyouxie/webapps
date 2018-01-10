@@ -26,12 +26,15 @@
 		<result column="entry_date" jdbcType="VARCHAR" property="entryDate" />
 		<result column="cashback_days" jdbcType="DECIMAL" property="cashbackDays" />
 		<result column="id_Card_No" jdbcType="VARCHAR" property="user.idCardNo" />
+		<result column="approver_id" jdbcType="DECIMAL" property="approverId" />
+		<result column="approver_name" jdbcType="VARCHAR" property="approverName" />
+		<result column="approve_time" jdbcType="VARCHAR" property="approverTime" />
 	</resultMap>
 
 	<sql id="select_columns">
 		tea.ID,tea.user_id,tea.state,tea.type, tea.data_state,tea.CREATE_TIME,tea.UPDATE_TIME,
 		tea.operator_id,tea.remark,tea.is_talked,tea.talk_result,tea.enrollment_id,
-		tea.reward,tea.entry_date,tea.cashback_days,tea.failed_Reason
+		tea.reward,tea.entry_date,tea.cashback_days,tea.failed_Reason,approver_id,approver_name,approver_time
 	</sql>
 
 	<sql id="insert_columns">
@@ -128,6 +131,18 @@
 			<if test="obj.enrollTimeEnd != null and obj.enrollTimeEnd != ''">
 				and #{obj.enrollTimeEnd} >= tea.create_time
 			</if>
+			<if test="obj.approverId != null and obj.approverId != ''">
+				and #{obj.approverId} = tea.approver_id
+			</if>
+			<if test="obj.approverName != null and obj.approverName != ''">
+				and #{obj.approverName} >= tea.approver_name
+			</if>
+			<if test="obj.approveTimeEnd != null and obj.approveTimeEnd != ''">
+				and #{obj.approveTimeEnd} >= tea.approve_time
+			</if>
+			<if test="obj.approveTimeStart != null and obj.approveTimeStart != ''">
+				and tea.approve_time >= #{obj.approveTimeStart}
+			</if>
 		</trim>
 	</select>
 
@@ -170,6 +185,18 @@
 			</if>
 			<if test="obj.enrollTimeEnd != null and obj.enrollTimeEnd != ''">
 				and #{obj.enrollTimeEnd} >= tea.create_time
+			</if>
+			<if test="obj.approverId != null and obj.approverId != ''">
+				and #{obj.approverId} = tea.approver_id
+			</if>
+			<if test="obj.approverName != null and obj.approverName != ''">
+				and #{obj.approverName} >= tea.approver_name
+			</if>
+			<if test="obj.approveTimeEnd != null and obj.approveTimeEnd != ''">
+				and #{obj.approveTimeEnd} >= tea.approve_time
+			</if>
+			<if test="obj.approveTimeStart != null and obj.approveTimeStart != ''">
+				and tea.approve_time >= #{obj.approveTimeStart}
 			</if>
 		</trim>
 		order by tea.create_time desc
@@ -225,7 +252,22 @@
 			update_time = #{obj.updateTime},
 			reward = #{obj.reward},
 			entry_date = #{obj.entryDate},
-			cashback_days = #{obj.cashbackDays}
+			cashback_days = #{obj.cashbackDays},
+			approver_id = #{obj.approverId},
+			approver_name = #{obj.approverName},
+			update_time = #{obj.updateTime},
+			approver_time = #{obj.approveTime}
 		where id = #{id}
 	</update>
+	
+	<update id="updateApproveInfo">
+		update t_enrollment_approval
+		set 
+			approver_id = #{obj.approverId},
+			approver_name = #{obj.approverName},
+			update_time = #{obj.updateTime},
+			approver_time = #{obj.approveTime}
+		where id = #{id}
+	</update>
+	
 </mapper>

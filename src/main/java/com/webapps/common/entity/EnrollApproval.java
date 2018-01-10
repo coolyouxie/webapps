@@ -1,5 +1,7 @@
 package com.webapps.common.entity;
 
+import java.util.Date;
+
 import com.webapps.common.utils.DateUtil;
 
 public class EnrollApproval extends Enrollment {
@@ -15,6 +17,12 @@ public class EnrollApproval extends Enrollment {
     private String failedReason;
 
     private Integer enrollmentExtraId;
+    
+    private Integer approverId;
+    
+    private String approverName;
+    
+    private Date approveTime;
 
     public Integer getState() {
         return state;
@@ -70,4 +78,29 @@ public class EnrollApproval extends Enrollment {
         }
         return null;
     }
+
+	public Integer getApproverId() {
+		return approverId;
+	}
+
+	public void setApproverId(Integer approverId) {
+		this.approverId = approverId;
+	}
+
+	public String getApproverName() {
+		return approverName;
+	}
+
+	public void setApproverName(String approverName) {
+		this.approverName = approverName;
+	}
+
+	public Date getApproveTime() {
+		return approveTime;
+	}
+
+	public void setApproveTime(Date approveTime) {
+		this.approveTime = approveTime;
+	}
+    
 }

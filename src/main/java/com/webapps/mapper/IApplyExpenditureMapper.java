@@ -1,5 +1,6 @@
 package com.webapps.mapper;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
@@ -17,5 +18,8 @@ public interface IApplyExpenditureMapper extends IBaseMapper<ApplyExpenditure>,I
 	List<ApplyExpenditure> queryByWalletId(@Param("walletId")Integer walletId)throws Exception;
 	
 	List<ApplyExpenditure> queryByWalletIdAndState(@Param("walletId")Integer walletId,@Param("state")Integer state)throws Exception;
+	
+	int updateApproveInfo(@Param("id")Integer id,@Param("approverId")Integer approverId,
+			@Param("approverName")String approverName,@Param("approveTime")Date approveTime)throws Exception;
 	
 }

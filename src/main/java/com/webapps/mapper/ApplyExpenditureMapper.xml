@@ -16,11 +16,14 @@
 		<result column="user_mobile" jdbcType="VARCHAR" property="user.mobile" />
 		<result column="id_card_no" jdbcType="VARCHAR" property="user.idCardNo" />
 		<result column="bank_card_num" jdbcType="VARCHAR" property="user.bankCardNum" />
+		<result column="approver_id" jdbcType="DECIMAL" property="approverId" />
+		<result column="approver_name" jdbcType="VARCHAR" property="approverName" />
+		<result column="approver_time" jdbcType="VARCHAR" property="approverTime" />
 	</resultMap>
 
 	<sql id="select_columns">
 		tae.ID,tae.wallet_id,tae.fee, tae.data_state,tae.CREATE_TIME,
-		tae.UPDATE_TIME,tae.approver_id,tae.reason,tae.state
+		tae.UPDATE_TIME,tae.approver_id,tae.reason,tae.state,tae.approver_id,tae.approver_name,tae.approver_time
 	</sql>
 
 	<sql id="insert_columns">
@@ -129,7 +132,20 @@
 		state=#{obj.state},
 		update_time=#{obj.updateTime},
 		approver_id = #{obj.approverId},
-		reason = #{obj.reason}
+		reason = #{obj.reason},
+		approver_id = #{obj.approverId},
+		approver_name = #{obj.approverName},
+		approver_time = #{obj.approverTime}
 		where id=#{id}
+	</update>
+	
+	<update id="updateApproveInfo">
+		update t_apply_expenditure
+		set
+			approver_id = #{approverId},
+			approver_name = #{approverName},
+			approve_time = #{approveTime},
+			update_time = #{approveTime}
+		where id = #{id}
 	</update>
 </mapper>

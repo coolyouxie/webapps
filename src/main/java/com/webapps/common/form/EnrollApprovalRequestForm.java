@@ -23,6 +23,10 @@ public class EnrollApprovalRequestForm extends EnrollApproval implements Request
 	private String enrollTimeStart;
 	
 	private String enrollTimeEnd;
+	
+	private String approveTimeStart;
+	
+	private String approveTimeEnd;
 
 	public String getKeyWords() {
 		return keyWords;
@@ -62,6 +66,22 @@ public class EnrollApprovalRequestForm extends EnrollApproval implements Request
 
 	public void setEnrollTimeEnd(String enrollTimeEnd) {
 		this.enrollTimeEnd = enrollTimeEnd;
+	}
+
+	public String getApproveTimeStart() {
+		return approveTimeStart;
+	}
+
+	public void setApproveTimeStart(String approveTimeStart) {
+		this.approveTimeStart = approveTimeStart;
+	}
+
+	public String getApproveTimeEnd() {
+		return approveTimeEnd;
+	}
+
+	public void setApproveTimeEnd(String approveTimeEnd) {
+		this.approveTimeEnd = approveTimeEnd;
 	}
 
 }
