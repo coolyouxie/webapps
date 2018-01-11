@@ -4,16 +4,19 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.webapps.common.bean.Page;
 import com.webapps.common.bean.ResultDto;
+import com.webapps.common.dto.UserApproveCountDto;
 import com.webapps.common.entity.Enrollment;
 import com.webapps.common.entity.User;
 import com.webapps.common.form.EnrollmentRequestForm;
 import com.webapps.mapper.IEnrollmentMapper;
+import com.webapps.mapper.IUserApproveCountMapper;
 import com.webapps.mapper.IUserMapper;
 import com.webapps.service.IEnrollmentService;
 
@@ -21,11 +24,16 @@ import com.webapps.service.IEnrollmentService;
 @Transactional
 public class EnrollmentServiceImpl implements IEnrollmentService {
 	
+	private static Logger logger = Logger.getLogger(EnrollmentServiceImpl.class);
+	
 	@Autowired
 	private IEnrollmentMapper iEnrollmentMapper;
 	
 	@Autowired
 	private IUserMapper iUserMapper;
+	
+	@Autowired
+	private IUserApproveCountMapper iUserApproveCountMapper;
 
 	@Override
 	public Page loadEnrollmentList(Page page, EnrollmentRequestForm enrollment) throws Exception {
@@ -124,6 +132,8 @@ public class EnrollmentServiceImpl implements IEnrollmentService {
 			}
 		}
 		int result = iEnrollmentMapper.insert(em);
+		//随机分配客服专员
+		setApproverInfo(em);
 		iUserMapper.updateById(user.getId(),user);
 		if(result == 1){
 			dto = new ResultDto<Enrollment>();
@@ -135,6 +145,27 @@ public class EnrollmentServiceImpl implements IEnrollmentService {
 			dto.setResult("F");
 		}
 		return dto;
+	}
+	
+	private void setApproverInfo(Enrollment em){
+		List<UserApproveCountDto> list = iUserApproveCountMapper.queryTalkCount();
+		if(CollectionUtils.isNotEmpty(list)){
+			Integer[] ids = new Integer[list.size()];
+			for(int i=0;i<list.size();i++){
+				ids[i] = list.get(i).getUserId();
+			}
+			int len = ids.length;
+			double dblR = Math.random() * len;
+			int intR = (int) Math.floor(dblR);
+			em.setTalkerId(ids[intR]);
+			em.setUpdateTime(new Date());
+			try {
+				iEnrollmentMapper.updateById(em.getId(), em);
+			} catch (Exception e) {
+				logger.error("设置客服专员时异常");
+				e.printStackTrace();
+			}
+		}
 	}
 
 	@Override

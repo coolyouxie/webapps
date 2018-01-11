@@ -134,15 +134,23 @@ public class SmsUtil {
 	}
 	
 	public static void main(String[] args) throws ClientException, InterruptedException {
-
+		
+		int[] ids = new int[]{1,2,3,4,5,6,7,8,9,10};
+		int len = ids.length;
+		for(int i=0;i<1000;i++){
+			double dblR = Math.random() * len;
+			int intR = (int) Math.floor(dblR);
+			System.out.println(intR);
+		}
+		System.out.println("end");
 		// 发短信
-		String phoneNum = "17321004552";
-		SendSmsResponse response = (SendSmsResponse) sendSms(phoneNum).get("response");
-		System.out.println("短信接口返回的数据----------------");
-		System.out.println("Code=" + response.getCode());
-		System.out.println("Message=" + response.getMessage());
-		System.out.println("RequestId=" + response.getRequestId());
-		System.out.println("BizId=" + response.getBizId());
+//		String phoneNum = "17321004552";
+//		SendSmsResponse response = (SendSmsResponse) sendSms(phoneNum).get("response");
+//		System.out.println("短信接口返回的数据----------------");
+//		System.out.println("Code=" + response.getCode());
+//		System.out.println("Message=" + response.getMessage());
+//		System.out.println("RequestId=" + response.getRequestId());
+//		System.out.println("BizId=" + response.getBizId());
 		//
 		// Thread.sleep(3000L);
 		//

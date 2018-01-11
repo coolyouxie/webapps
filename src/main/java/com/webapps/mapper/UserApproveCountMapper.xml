@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.webapps.mapper.IUserApproveCountDtoMapper">
+<mapper namespace="com.webapps.mapper.IUserApproveCountMapper">
 	<resultMap id="resultMap" type="com.webapps.common.dto.UserApproveCountDto">
 		<id column="id" jdbcType="DECIMAL" property="userId" />
 		<result column="count" jdbcType="DECIMAL" property="count" />
@@ -13,7 +13,8 @@
 		t_user.id
 		FROM
 		t_user
-		LEFT JOIN t_enrollment ON t_user.id = entry_approver_id and is_talked <> 1
+		LEFT JOIN t_enrollment ON t_user.id = entry_approver_id and is_talked <![CDATA[<>]]> 1
+		where t_user.user_type==4
 		GROUP BY
 		t_user.id
 	</select>
@@ -27,11 +28,12 @@
 		LEFT JOIN t_enrollment_approval ON t_user.id = approver_id 
 			and t_enrollment_approval.state = 0 
 			and t_enrollment_approval.type = 1
+		where t_user.user_type = 5
 		GROUP BY
 		t_user.id
 	</select>
 	
-	<select id="queryEntryApproveCount" resultMap="resultMap">
+	<select id="queryExpireApproveCount" resultMap="resultMap">
 		SELECT
 		count(t_enrollment_approval.id),
 		t_user.id
@@ -40,6 +42,20 @@
 		LEFT JOIN t_enrollment_approval ON t_user.id = approver_id 
 			and t_enrollment_approval.state = 0 
 			and t_enrollment_approval.type = 2
+		where t_user.user_type = 6
+		GROUP BY
+		t_user.id
+	</select>
+	
+	<select id="queryExpenditureApproveCount" resultMap="resultMap">
+		SELECT
+		count(t_apply_expenditure.id),
+		t_user.id
+		FROM
+		t_user
+		LEFT JOIN t_apply_expenditure ON t_user.id = approver_id 
+			and t_apply_expenditure.state = 0 
+		where t_user.user_type = 7
 		GROUP BY
 		t_user.id
 	</select>

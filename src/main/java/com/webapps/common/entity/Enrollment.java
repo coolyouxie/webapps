@@ -40,6 +40,12 @@ public class Enrollment extends Entity {
 	private Integer expireApproverId;
 
 	private int isExpireApproved;
+	
+	private String talkerName;
+	
+	private String entryApproverName;
+	
+	private String expireApproverName;
 
 	public Integer getTalkerId() {
 		return talkerId;
@@ -183,4 +189,29 @@ public class Enrollment extends Entity {
 	public void setIsExpireApproved(int isExpireApproved) {
 		this.isExpireApproved = isExpireApproved;
 	}
+
+	public String getTalkerName() {
+		return talkerName;
+	}
+
+	public void setTalkerName(String talkerName) {
+		this.talkerName = talkerName;
+	}
+
+	public String getEntryApproverName() {
+		return entryApproverName;
+	}
+
+	public void setEntryApproverName(String entryApproverName) {
+		this.entryApproverName = entryApproverName;
+	}
+
+	public String getExpireApproverName() {
+		return expireApproverName;
+	}
+
+	public void setExpireApproverName(String expireApproverName) {
+		this.expireApproverName = expireApproverName;
+	}
+	
 }

@@ -305,7 +305,7 @@
 			cashback_days = #{obj.cashbackDays},
 			talker_id = #{obj.talkerId},
 			entry_approver_id = #{obj.entryApproverId},
-			isEntryApproved = #{obj.isEntryApproved},
+			is_Entry_Approved = #{obj.isEntryApproved},
 			expire_approver_id = #{obj.expireApproverId},
 			is_expire_approved = #{obj.isExpireApproved},
 			talker_name=#{obj.talkerName},
