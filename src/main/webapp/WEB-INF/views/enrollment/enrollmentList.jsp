@@ -55,8 +55,22 @@
                 };
                 return params;
             },
-		    colNames : [ '公司名称', '发布单标题', '报名人', '手机号','报名时间','沟通结果','操作'],
+		    colNames : ['操作','公司名称', '发布单标题', '报名人', '手机号','报名时间','客服专员','沟通结果'],
 		    colModel : [ {
+								label : 'operate',
+								name : 'operate',
+								align : 'center',
+								sortable : false,
+								formatter:function(cellValue,options,rowObject){
+									var result = null;
+									if(rowObject.isTalked<=0){
+										result = "<button id='btn_"+rowObject.id+"' class='btn btn-primary btn-sm' data-toggle='modal' onclick='showModal("+rowObject.id+",1)'>沟通</button>&nbsp;&nbsp;&nbsp;&nbsp;";
+									}else if(rowObject.isTalked==1){
+										result = "已沟通&nbsp;&nbsp;&nbsp;&nbsp;";
+									}
+									return result;
+								}
+							}, {
 								label : 'company.name',
 								name : 'company.name',
 								align : 'center',
@@ -95,24 +109,15 @@
 								align : 'center',
 								sortable : false
 							},{
+								label:"talkerName",
+								name:"talkerName",
+								align:"center",
+								sortable:false
+							},{
 								label : 'talkResult',
 								name : 'talkResult',
 								align : 'center',
 								sortable : false
-							},{
-								label : 'operate',
-								name : 'operate',
-								align : 'center',
-								sortable : false,
-								formatter:function(cellValue,options,rowObject){
-									var result = null;
-									if(rowObject.isTalked<=0){
-										result = "<button id='btn_"+rowObject.id+"' class='btn btn-primary btn-sm' data-toggle='modal' onclick='showModal("+rowObject.id+",1)'>沟通</button>&nbsp;&nbsp;&nbsp;&nbsp;";
-									}else if(rowObject.isTalked==1){
-										result = "已沟通&nbsp;&nbsp;&nbsp;&nbsp;";
-									}
-									return result;
-								}
 							} ],
 		    pager: '#pager',
             pagination: true,
@@ -163,7 +168,7 @@
 	}
 	
 	function saveTalkInfo(){
-		$.ajax({		
+		$.ajax({
 			url:"${ctx}/enrollment/saveTalkInfo",
 			type:"POST",
 			dataType:"JSON",

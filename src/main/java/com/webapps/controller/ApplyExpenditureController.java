@@ -42,6 +42,7 @@ public class ApplyExpenditureController {
 	@ResponseBody
 	@RequestMapping(value="/loadPageList",produces = "text/html;charset=UTF-8")
 	public String loadPageList(Page page,ApplyExpenditureRequestForm form,HttpServletRequest request){
+		User user = (User)request.getSession().getAttribute("user");
 		if(form!=null&&form.getUser()!=null&& StringUtils.isNotBlank(form.getUser().getName())){
 			try {
 				form.getUser().setName(URLDecoder.decode(form.getUser().getName(),"UTF-8"));
@@ -49,6 +50,7 @@ public class ApplyExpenditureController {
 				e.printStackTrace();
 			}
 		}
+		form.setApproverId(user.getId());
 		page = iApplyExpenditureService.loadPageList(page, form);
 		return JSONUtil.toJSONString(JSONObject.fromObject(page));
 	}

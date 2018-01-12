@@ -68,6 +68,9 @@
 			<if test="obj.applyTimeEnd != null and obj.applyTimeEnd != ''">
 				and #{obj.applyTimeEnd} >= tae.create_time
 			</if>
+			<if test="obj.approverId != null and obj.approverId !=''">
+				and tu.approver_id = #{obj.approverId}
+			</if>
 		</trim>
 	</select>
 
@@ -102,6 +105,9 @@
 			</if>
 			<if test="obj.applyTimeEnd != null and obj.applyTimeEnd != ''">
 				and #{obj.applyTimeEnd} >= tae.create_time
+			</if>
+			<if test="obj.approverId != null and obj.approverId !=''">
+				and tu.approver_id = #{obj.approverId}
 			</if>
 		</trim>
 		order by tae.create_time desc

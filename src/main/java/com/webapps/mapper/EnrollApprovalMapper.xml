@@ -135,7 +135,7 @@
 				and #{obj.approverId} = tea.approver_id
 			</if>
 			<if test="obj.approverName != null and obj.approverName != ''">
-				and #{obj.approverName} >= tea.approver_name
+				and #{obj.approverName} = tea.approver_name
 			</if>
 			<if test="obj.approveTimeEnd != null and obj.approveTimeEnd != ''">
 				and #{obj.approveTimeEnd} >= tea.approve_time
@@ -190,7 +190,7 @@
 				and #{obj.approverId} = tea.approver_id
 			</if>
 			<if test="obj.approverName != null and obj.approverName != ''">
-				and #{obj.approverName} >= tea.approver_name
+				and #{obj.approverName} = tea.approver_name
 			</if>
 			<if test="obj.approveTimeEnd != null and obj.approveTimeEnd != ''">
 				and #{obj.approveTimeEnd} >= tea.approve_time

@@ -1,21 +1,32 @@
 package com.webapps.controller;
 
-import com.webapps.common.bean.Page;
-import com.webapps.common.bean.ResultDto;
-import com.webapps.common.dto.EnrollApprovalInfoDto;
-import com.webapps.common.entity.*;
-import com.webapps.common.form.EnrollApprovalRequestForm;
-import com.webapps.common.utils.JSONUtil;
-import com.webapps.service.*;
-import net.sf.json.JSONObject;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import com.webapps.common.bean.Page;
+import com.webapps.common.bean.ResultDto;
+import com.webapps.common.dto.EnrollApprovalInfoDto;
+import com.webapps.common.entity.Company;
+import com.webapps.common.entity.EnrollApproval;
+import com.webapps.common.entity.Enrollment;
+import com.webapps.common.entity.Recruitment;
+import com.webapps.common.entity.User;
+import com.webapps.common.form.EnrollApprovalRequestForm;
+import com.webapps.common.utils.JSONUtil;
+import com.webapps.service.ICompanyService;
+import com.webapps.service.IEnrollApprovalService;
+import com.webapps.service.IEnrollmentService;
+import com.webapps.service.IRecruitmentService;
+import com.webapps.service.IUserService;
+
+import net.sf.json.JSONObject;
 
 @Controller
 @RequestMapping("entryApproval")
@@ -43,7 +54,14 @@ public class EntryApprovalController {
 	
 	@ResponseBody
 	@RequestMapping(value="/loadEntryApprovalList",produces = "text/html;charset=UTF-8")
-	public String loadEntryApprovalList(Model model,Page page,EnrollApprovalRequestForm form){
+	public String loadEntryApprovalList(Model model,Page page,EnrollApprovalRequestForm form,HttpSession session){
+		User user = (User)session.getAttribute("user");
+		if(user!=null&&(user.getUserType()!=1&&user.getUserType()!=2)){
+			if(form==null){
+				form = new EnrollApprovalRequestForm();
+			}
+			form.setApproverId(user.getId());
+		}
 		Page page1 = iEnrollApprovalService.getUserApprovalPage(page, form);
 		if (page1 != null) return JSONUtil.toJSONString(JSONObject.fromObject(page));
 		return null;

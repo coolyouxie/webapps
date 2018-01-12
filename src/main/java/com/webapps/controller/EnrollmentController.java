@@ -4,6 +4,7 @@ import java.net.URLDecoder;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.webapps.common.bean.Page;
 import com.webapps.common.bean.ResultDto;
 import com.webapps.common.entity.Enrollment;
+import com.webapps.common.entity.User;
 import com.webapps.common.form.EnrollmentRequestForm;
 import com.webapps.common.utils.JSONUtil;
 import com.webapps.service.IEnrollmentService;
@@ -36,7 +38,7 @@ public class EnrollmentController {
 	
 	@ResponseBody
 	@RequestMapping(value="/loadEnrollmentList",method=RequestMethod.POST,produces ="text/html;charset=UTF-8")
-	public String loadEnrollmentList(Model model,Page page,EnrollmentRequestForm form){
+	public String loadEnrollmentList(Model model,Page page,EnrollmentRequestForm form,HttpSession session){
 		try {
 			if(form!=null&&form.getCompany()!=null&& StringUtils.isNotBlank(form.getCompany().getName())){
 				String companyName = form.getCompany().getName().trim();
@@ -47,6 +49,10 @@ public class EnrollmentController {
 				String userName = form.getUser().getName().trim();
 				userName = URLDecoder.decode(userName,"UTF-8");
 				form.getUser().setName(userName);
+			}
+			User user = (User)session.getAttribute("user");
+			if(user!=null&&(user.getUserType()!=1||user.getUserType()!=2)){
+				form.setTalkerId(user.getId());
 			}
 			page = iEnrollmentService.loadEnrollmentList(page, form);
 			return JSONUtil.toJSONString(JSONObject.fromObject(page));
