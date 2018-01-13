@@ -35,15 +35,29 @@ public class EnrollmentController {
 	public String toEnrollmentListPage(HttpServletRequest request,HttpServletResponse response){
 		return "/enrollment/enrollmentList";
 	}
-	
+
+	/**
+	 * 加载报名列表数据
+	 * @param model
+	 * @param page
+	 * @param form
+	 * @param session
+	 * @return
+	 */
 	@ResponseBody
 	@RequestMapping(value="/loadEnrollmentList",method=RequestMethod.POST,produces ="text/html;charset=UTF-8")
 	public String loadEnrollmentList(Model model,Page page,EnrollmentRequestForm form,HttpSession session){
 		try {
+			//只有中文需要这样转一下，可能是配置不对，也可能是插件bug，具体原因未知.
 			if(form!=null&&form.getCompany()!=null&& StringUtils.isNotBlank(form.getCompany().getName())){
 				String companyName = form.getCompany().getName().trim();
 				companyName = URLDecoder.decode(companyName,"UTF-8");
 				form.getCompany().setName(companyName);
+			}
+			if(form!=null&& StringUtils.isNotBlank(form.getTalkerName())){
+				String talkerName = form.getTalkerName().trim();
+				talkerName = URLDecoder.decode(talkerName,"UTF-8");
+				form.setTalkerName(talkerName);
 			}
 			if(form!=null&&form.getUser()!=null&& StringUtils.isNotBlank(form.getUser().getName())){
 				String userName = form.getUser().getName().trim();
@@ -51,7 +65,7 @@ public class EnrollmentController {
 				form.getUser().setName(userName);
 			}
 			User user = (User)session.getAttribute("user");
-			if(user!=null&&(user.getUserType()!=1||user.getUserType()!=2)){
+			if(user!=null&&(user.getUserType()!=1&&user.getUserType()!=2)){
 				form.setTalkerId(user.getId());
 			}
 			page = iEnrollmentService.loadEnrollmentList(page, form);

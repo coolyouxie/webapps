@@ -91,9 +91,9 @@
 				<option value="1" <c:if test="${user.userType==1}">selected</c:if>>超级管理员</option>
 				<option value="2" <c:if test="${user.userType==2}">selected</c:if>>普通管理员</option>
 				<option value="3" <c:if test="${user.userType==3}">selected</c:if>>普通会员</option>
-				<option value="4" <c:if test="${user.userType==4}">selected</c:if>>客服专员</option>
-				<option value="5" <c:if test="${user.userType==5}">selected</c:if>>入职审核专员</option>
-				<option value="6" <c:if test="${user.userType==6}">selected</c:if>>期满审核专员</option>
+				<option value="4" <c:if test="${user.userType==4}">selected</c:if>>招聘专员</option>
+				<option value="5" <c:if test="${user.userType==5}">selected</c:if>>入职与期满审核专员</option>
+				<%--<option value="6" <c:if test="${user.userType==6}">selected</c:if>>期满审核专员</option>--%>
 				<option value="7" <c:if test="${user.userType==7}">selected</c:if>>提现审核专员</option>
 			</select>
 		</div>

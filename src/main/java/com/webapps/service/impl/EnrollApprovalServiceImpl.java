@@ -272,7 +272,7 @@ public class EnrollApprovalServiceImpl implements IEnrollApprovalService {
 	@Transactional(propagation = Propagation.REQUIRED,rollbackFor={Exception.class, RuntimeException.class,MyBatisSystemException.class})
 	public ResultDto<EnrollApproval> applyEntryApproval(JSONObject params) {
 		ResultDto<EnrollApproval> dto = new ResultDto<EnrollApproval>();
-		Integer enrollemntId = params.getInt("enrollemntId");
+		Integer enrollmentId = params.getInt("enrollmentId");
 		String entryDateStr = params.getString("entryDate");
 		Integer userId = params.getInt("userId");
 		if(StringUtils.isBlank(entryDateStr)){
@@ -282,7 +282,7 @@ public class EnrollApprovalServiceImpl implements IEnrollApprovalService {
 		}
 		Date entryDate = DateUtil.parseDateByStr(entryDateStr, "yyyy-MM-dd");
 		try {
-			Enrollment enrollment = iEnrollmentMapper.getById(enrollemntId);
+			Enrollment enrollment = iEnrollmentMapper.getById(enrollmentId);
 			if(enrollment!=null){
 				User user = iUserMapper.getById(userId);
 				if(StringUtils.isBlank(user.getName())||StringUtils.isBlank(user.getIdCardNo())){
@@ -298,7 +298,7 @@ public class EnrollApprovalServiceImpl implements IEnrollApprovalService {
 				enrollment.setState(20);
 				enrollment.setUpdateTime(new Date());
 				enrollment.setEntryDate(entryDate);
-				iEnrollmentMapper.updateById(enrollemntId, enrollment);
+				iEnrollmentMapper.updateById(enrollmentId, enrollment);
 				EnrollApproval ea = saveEnrollApprova(entryDate, enrollment,1,null,null);
 				dto.setResult("S");
 				dto.setData(ea);

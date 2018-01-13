@@ -10,9 +10,9 @@
 		<option value="1">超级管理员</option>
 		<option value="2">普通管理员</option>
 		<option value="3" selected>普通会员</option>
-		<option value="4">客服专员</option>
-		<option value="5">入职审核专员</option>
-		<option value="6">期满审核专员</option>
+		<option value="4">招聘专员</option>
+		<option value="5">入职与期满审核专员</option>
+		<%--<option value="6">期满审核专员</option>--%>
 		<option value="7">提现审核专员</option>
 	</select>
 </body>

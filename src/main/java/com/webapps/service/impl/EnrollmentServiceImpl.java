@@ -150,14 +150,11 @@ public class EnrollmentServiceImpl implements IEnrollmentService {
 	private void setApproverInfo(Enrollment em){
 		List<UserApproveCountDto> list = iUserApproveCountMapper.queryTalkCount();
 		if(CollectionUtils.isNotEmpty(list)){
-			Integer[] ids = new Integer[list.size()];
-			for(int i=0;i<list.size();i++){
-				ids[i] = list.get(i).getUserId();
-			}
-			int len = ids.length;
+			int len = list.size();
 			double dblR = Math.random() * len;
 			int intR = (int) Math.floor(dblR);
-			em.setTalkerId(ids[intR]);
+			em.setTalkerId(list.get(intR).getUserId());
+			em.setTalkerName(list.get(intR).getName());
 			em.setUpdateTime(new Date());
 			try {
 				iEnrollmentMapper.updateById(em.getId(), em);
