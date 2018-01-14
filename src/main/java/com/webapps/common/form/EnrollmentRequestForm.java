@@ -27,6 +27,12 @@ public class EnrollmentRequestForm extends Enrollment implements RequestForm,Ser
 	
 	private String enrollTimeEnd;
 
+	private String interviewTimeStart;
+
+	private String interviewTimeEnd;
+
+	private String interviewTimeStr;
+
 	public String getKeyWords() {
 		return keyWords;
 	}
@@ -91,4 +97,27 @@ public class EnrollmentRequestForm extends Enrollment implements RequestForm,Ser
 		this.enrollTimeEnd = enrollTimeEnd;
 	}
 
+	public String getInterviewTimeStart() {
+		return interviewTimeStart;
+	}
+
+	public void setInterviewTimeStart(String interviewTimeStart) {
+		this.interviewTimeStart = interviewTimeStart;
+	}
+
+	public String getInterviewTimeEnd() {
+		return interviewTimeEnd;
+	}
+
+	public void setInterviewTimeEnd(String interviewTimeEnd) {
+		this.interviewTimeEnd = interviewTimeEnd;
+	}
+
+	public String getInterviewTimeStr() {
+		return interviewTimeStr;
+	}
+
+	public void setInterviewTimeStr(String interviewTimeStr) {
+		this.interviewTimeStr = interviewTimeStr;
+	}
 }

@@ -56,7 +56,7 @@
                     };
                     return params;
                 },
-                colNames: ['操作', '公司名称', '发布单标题', '报名人', '手机号', '报名时间', '客服专员', '沟通结果'],
+                colNames: ['操作', '公司名称', '发布单标题', '会员姓名', '联系方式', '报名时间', '招聘员', '意向城市','是否面试','面试时间','沟通备注'],
                 colModel: [{
                     label: 'operate',
                     name: 'operate',
@@ -115,9 +115,24 @@
                     align: "center",
                     sortable: false
                 }, {
-                    label: 'talkResult',
-                    name: 'talkResult',
+                    label: "intentionCityId",
+                    name: "intentionCityId",
+                    align: "center",
+                    sortable: false
+                }, {
+                    label: "interviewIntention",
+                    name: "interviewIntention",
+                    align: "center",
+                    sortable: false
+                }, {
+                    label: 'interviewTimeStr',
+                    name: 'interviewTimeStr',
                     align: 'center',
+                    sortable: false
+                }, {
+                    label: "talkResult",
+                    name: "talkResult",
+                    align: "center",
                     sortable: false
                 }],
                 pager: '#pager',
@@ -169,13 +184,28 @@
         }
 
         function saveTalkInfo() {
+            var interviewIntention = $("#interviewIntentionModal").val();
+            var interviewTimeStr = $("#interviewTimeStr").val().trim();
+            if(interviewIntention==1&&!interviewTimeStr){
+	            alert("请选择面试时间");
+	            return;
+            }
+            var intentionCityId = $("#intentionCityIdModal").val();
+            var talkResult = $("#talkResult").val().trim();
+            if(!talkResult){
+                alert("请填写沟通备注");
+                return;
+            }
             $.ajax({
                 url: "${ctx}/enrollment/saveTalkInfo",
                 type: "POST",
                 dataType: "JSON",
                 data: {
                     'id': $("#enrollmentId").val(),
-                    'talkResult': $("#talkResult").val(),
+                    'talkResult': talkResult,
+	                'interviewIntention':interviewIntention,
+	                'interviewTimeStr':interviewTimeStr,
+	                'intentionCityId':intentionCityId,
                     'isTalked': 1
                 },
                 success: function (response) {
@@ -244,8 +274,30 @@
 				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 				<h4 class="modal-title" id="myModalLabel">沟通结果和备注</h4>
 			</div>
+
 			<div class="modal-body">
-				<textarea id="talkResult" class="form-control"></textarea>
+				<div class="row" style="padding-left: 15px;">
+					意向城市：
+					<select id="intentionCityIdModal">
+						<c:forEach var="item" items="${intentionCities}">
+							<option value="${item.id}">${item.city}</option>
+						</c:forEach>
+					</select>
+				</div>
+				<div class="row" style="padding-left: 15px;">
+					是否面试：
+					<select id="interviewIntentionModal" >
+						<option value="1">同意</option>
+						<option value="2">不同意</option>
+					</select>
+				</div>
+				<div class="row" style="padding-left: 15px;">
+					面试时间：<input type="text" id="interviewTimeStr" onClick="WdatePicker({isShowWeek:true})">
+				</div>
+				<div class="row" style="padding-left: 15px;">
+					沟通备注：
+					<textarea id="talkResult" class="form-control"></textarea>
+				</div>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
@@ -292,7 +344,7 @@
 			</tr>
 			<tr>
 				<td>
-					手机号:
+					联系方式:
 				</td>
 				<td>
 					<input type="text" id="userMobile" name="user.mobile" value="">
@@ -302,7 +354,7 @@
 				</td>
 				<td>
 					<select id="isTalked" name="isTalked">
-						<option value="">-请选择-</option>
+						<option value="">全部</option>
 						<option value="0">未沟通</option>
 						<option value="1">已沟通</option>
 					</select>
@@ -327,6 +379,40 @@
 					</c:choose>
 				</td>
 				<td>
+				</td>
+				<td align="right">
+
+				</td>
+			</tr>
+			<tr>
+				<td>
+					意向城市：
+				</td>
+				<td>
+					<select id="intentionCityId" name="intentionCityId">
+						<option value="">全部</option>
+						<c:forEach var="item" items="${intentionCities}">
+							<option value="${item.id}">${item.city}</option>
+						</c:forEach>
+					</select>
+				</td>
+				<td>
+					是否面试：
+				</td>
+				<td>
+					<select id="interviweIntention" name="interviweIntention">
+						<option value="-1">全部</option>
+						<option value="1">同意</option>
+						<option value="2">不同意</option>
+					</select>
+				</td>
+				<td>
+					面试时间：
+				</td>
+				<td colspan="2">
+					<input type="text" id="interviewTimeStart" name="interviewTimeStart" onClick="WdatePicker({isShowWeek:true})">
+					-
+					<input type="text" id="interviewTimeEnd" name="interviewTimeEnd" onClick="WdatePicker({isShowWeek:true})">
 				</td>
 				<td align="right">
 					<button type='button' class="btn btn-primary btn-sm" data-toggle="modal" onclick="search()">

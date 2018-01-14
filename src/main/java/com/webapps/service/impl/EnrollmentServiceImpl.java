@@ -3,6 +3,7 @@ package com.webapps.service.impl;
 import java.util.Date;
 import java.util.List;
 
+import com.webapps.common.utils.DateUtil;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -101,8 +102,15 @@ public class EnrollmentServiceImpl implements IEnrollmentService {
 	}
 
 	@Override
-	public int saveTalkInfoById(Enrollment em) throws Exception {
-		int count = iEnrollmentMapper.saveTalkInfoById(em,em.getId());
+	public int saveTalkInfoById(EnrollmentRequestForm em) throws Exception {
+		Enrollment temp = iEnrollmentMapper.getById(em.getId());
+		temp.setTalkResult(em.getTalkResult());
+		temp.setIsTalked(em.getIsTalked());
+		temp.setInterviewIntention(em.getInterviewIntention());
+		temp.setInterviewTime(DateUtil.parseDateByStr(em.getInterviewTimeStr(),"yyyy-MM-dd"));
+		temp.setIntentionCityId(em.getIntentionCityId());
+		temp.setUpdateTime(new Date());
+		int count = iEnrollmentMapper.saveTalkInfoById(temp,temp.getId());
 		return count;
 	}
 

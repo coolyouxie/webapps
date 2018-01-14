@@ -47,6 +47,20 @@ public class Enrollment extends Entity {
 	
 	private String expireApproverName;
 
+	/**
+	 * 意向城市id
+	 */
+	private Integer intentionCityId;
+	/**
+	 * 是否同意面试，1同意，2不同意
+	 */
+	private int interviewIntention;
+	/**
+	 * 预约的面试时间（不是实际面试时间）
+	 */
+	private Date interviewTime;
+
+
 	public Integer getTalkerId() {
 		return talkerId;
 	}
@@ -213,5 +227,35 @@ public class Enrollment extends Entity {
 	public void setExpireApproverName(String expireApproverName) {
 		this.expireApproverName = expireApproverName;
 	}
-	
+
+	public Integer getIntentionCityId() {
+		return intentionCityId;
+	}
+
+	public void setIntentionCityId(Integer intentionCityId) {
+		this.intentionCityId = intentionCityId;
+	}
+
+	public int getInterviewIntention() {
+		return interviewIntention;
+	}
+
+	public void setInterviewIntention(int interviewIntention) {
+		this.interviewIntention = interviewIntention;
+	}
+
+	public Date getInterviewTime() {
+		return interviewTime;
+	}
+
+	public void setInterviewTime(Date interviewTime) {
+		this.interviewTime = interviewTime;
+	}
+
+	public String getInterviewTimeStr() {
+		if(this.getInterviewTime()!=null){
+			return DateUtil.format(this.getInterviewTime(),"yyyy-MM-dd");
+		}
+		return "";
+	}
 }

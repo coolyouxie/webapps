@@ -19,7 +19,7 @@ public interface IEnrollmentService {
 	
 	List<Enrollment> queryEnrollmentListByUserId(Integer id)throws Exception;
 	
-	int saveTalkInfoById(Enrollment em)throws Exception;
+	int saveTalkInfoById(EnrollmentRequestForm em)throws Exception;
 	
 	/**
 	 * 用户报名接口

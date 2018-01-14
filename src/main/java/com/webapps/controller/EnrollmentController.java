@@ -1,11 +1,14 @@
 package com.webapps.controller;
 
 import java.net.URLDecoder;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.webapps.common.utils.PropertyUtil;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -32,7 +35,18 @@ public class EnrollmentController {
 	private IEnrollmentService iEnrollmentService;
 	
 	@RequestMapping(value="/toEnrollmentListPage")
-	public String toEnrollmentListPage(HttpServletRequest request,HttpServletResponse response){
+	public String toEnrollmentListPage(Model model,HttpServletRequest request,HttpServletResponse response){
+		String intentionCities = (String)PropertyUtil.getProperty("intentionCities");
+		String[] cities = intentionCities.split(",");
+		List<JSONObject> list = new ArrayList<JSONObject>();
+		for (int i=0;i<cities.length;i++){
+			String[] array = cities[i].split("\\:");
+			JSONObject obj = new JSONObject();
+			obj.put("id",array[0]);
+			obj.put("city",array[1]);
+			list.add(obj);
+		}
+		model.addAttribute("intentionCities",list);
 		return "/enrollment/enrollmentList";
 	}
 
@@ -95,7 +109,7 @@ public class EnrollmentController {
 	 */
 	@ResponseBody
 	@RequestMapping(value="/saveTalkInfo")
-	public String saveTalkInfo(Enrollment em){
+	public String saveTalkInfo(EnrollmentRequestForm em){
 		ResultDto<String> dto = new ResultDto<String>();
 		try {
 			int count = iEnrollmentService.saveTalkInfoById(em);
