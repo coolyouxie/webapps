@@ -42,8 +42,26 @@
                     total : 'total', // json中代表页码总数的数据
                     repeatitems : false // 如果设为false，则jqGrid在解析json时，会根据name来搜索对应的数据元素（即可以json中元素可以不按顺序）；而所使用的name是来自于colModel中的name设定。
                 },
-                colNames : [ '报名人', '手机号','身份证号','报名时间','入职公司','入职日期','发布单标题','状态','备注','操作'],
+                colNames : [ '操作','报名人', '手机号','身份证号','报名时间','入职公司','入职日期','发布单标题','状态','备注'],
                 colModel : [ {
+                    label : 'operate',
+                    name : 'operate',
+                    align : 'center',
+                    sortable : false,
+                    formatter:function(cellValue,options,rowObject){
+                        var result = "";
+						if(rowObject.state==0){
+							result = '<c:if test="${!empty perMap[\'RETT_MU_ENTRY_OP_APPROVE\']}">' + 
+								' <a href="${ctx}/expireApproval/toApproveExpireInfoPage?enrollApprovalId='+rowObject.id+'" class="btn btn-primary btn-sm">审核</a>'
+								+'</c:if>';
+						}else{
+							result =  '<c:if test="${!empty perMap[\'RETT_MU_ENTRY_OP_SHOW\']}">' +
+								' <a href="${ctx}/expireApproval/toShowExpireInfoPage?enrollApprovalId='+rowObject.id+'" class="btn btn-primary btn-sm">期满信息</a>'
+								+'</c:if>';
+						}
+                        return result;
+                    }
+                }, {
                     label : 'user.name',
                     name : 'user.name',
                     align : 'center',
@@ -119,20 +137,6 @@
                     name : 'failedReason',
                     align : 'center',
                     sortable : false
-                }, {
-                    label : 'operate',
-                    name : 'operate',
-                    align : 'center',
-                    sortable : false,
-                    formatter:function(cellValue,options,rowObject){
-                        var result = "";
-						if(rowObject.state==0){
-							result = ' <a href="${ctx}/expireApproval/toApproveExpireInfoPage?enrollApprovalId='+rowObject.id+'" class="btn btn-primary btn-sm">审核</a>';
-						}else{
-							result = ' <a href="${ctx}/expireApproval/toShowExpireInfoPage?enrollApprovalId='+rowObject.id+'" class="btn btn-primary btn-sm">期满信息</a>';
-						}
-                        return result;
-                    }
                 } ],
                 pager: '#pager',
                 rowNum:15,

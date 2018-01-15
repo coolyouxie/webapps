@@ -108,9 +108,14 @@
 								formatter:function(cellValue,options,rowObject){
 									var result = null;
 									if(rowObject.state==0){
-                                        result = '<a href="${ctx}/applyExpenditure/toApproveExpenditurePage?id='+rowObject.id+'" class="btn btn-primary btn-sm">审核</a>';
+                                        result = '<c:if test="${!empty perMap[\'RETT_MU_EXPENDITURE_OP_APPROVE\']}">' +
+                                        	'<a href="${ctx}/applyExpenditure/toApproveExpenditurePage?id='+rowObject.id+'" class="btn btn-primary btn-sm">审核</a>'
+                                        	+'</c:if>';
+                                        	
 									}else{
-                                        result = '<a href="${ctx}/applyExpenditure/toShowExpenditurePage?id='+rowObject.id+'" class="btn btn-primary btn-sm">审核信息</a>';
+                                        result = '<c:if test="${!empty perMap[\'RETT_MU_EXPENDITURE_OP_SHOW\']}">' +
+                                        	'<a href="${ctx}/applyExpenditure/toShowExpenditurePage?id='+rowObject.id+'" class="btn btn-primary btn-sm">审核信息</a>'
+                                        		+'</c:if>';
 									}
 									return result;
 								}

@@ -127,9 +127,14 @@
 								formatter:function(cellValue,options,rowObject){
 									var result = "";
 									if(rowObject.state==0){
-										result = ' <a href="${ctx}/entryApproval/toApproveEntryInfoPage?enrollApprovalId='+rowObject.id+'" class="btn btn-primary btn-sm">审核</a>';
+										result = '<c:if test="${!empty perMap[\'RETT_MU_ENTRY_OP_APPROVE\']}">' +
+											' <a href="${ctx}/entryApproval/toApproveEntryInfoPage?enrollApprovalId='+rowObject.id+'"'
+											+'class="btn btn-primary btn-sm">审核</a>'
+											+'</c:if>';
 									}else{
-										result = ' <a href="${ctx}/entryApproval/toShowEntryInfoPage?enrollApprovalId='+rowObject.id+'" class="btn btn-primary btn-sm">入职信息</a>';
+										result = '<c:if test="${!empty perMap[\'RETT_MU_ENTRY_OP_SHOW\']}">' +
+											' <a href="${ctx}/entryApproval/toShowEntryInfoPage?enrollApprovalId='+rowObject.id+'" class="btn btn-primary btn-sm">入职信息</a>'
+											+'</c:if>';
 									}
 									return result;
 								}
