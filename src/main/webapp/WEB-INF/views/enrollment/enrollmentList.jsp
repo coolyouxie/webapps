@@ -115,15 +115,24 @@
                     align: "center",
                     sortable: false
                 }, {
-                    label: "intentionCityId",
-                    name: "intentionCityId",
+                    label: "intentionCityName",
+                    name: "intentionCityName",
                     align: "center",
                     sortable: false
                 }, {
                     label: "interviewIntention",
                     name: "interviewIntention",
                     align: "center",
-                    sortable: false
+                    sortable: false,
+                    formatter: function (cellValue, options, rowObject) {
+                    	var result = null;
+                    	if(cellValue==1){
+                    		result = "是";
+                    	}else if(cellValue==2){
+                    		result = "否";
+                    	}
+                        return result;
+                    }
                 }, {
                     label: 'interviewTimeStr',
                     name: 'interviewTimeStr',
@@ -181,6 +190,7 @@
                 //作废报名
                 cancelEnroll();
             }
+            
         }
 
         function saveTalkInfo() {
@@ -209,8 +219,24 @@
                     'isTalked': 1
                 },
                 success: function (response) {
-                    if (response.result == "S") {
-                        $('#talkInfo').modal('hide');
+					if (response.result == "S") {
+						$("#interviewTimeStr").val("");
+						var select = document.getElementById("interviewIntentionModal");
+						for(var i=0; i<select.options.length; i++){
+						    if(i==0){
+						        select.options[i].selected = true;
+						        break;
+						    }
+						}
+						select = document.getElementById("intentionCityIdModal");
+						for(var i=0; i<select.options.length; i++){
+						    if(i==0){
+						        select.options[i].selected = true;
+						        break;
+						    }
+						}
+						$("#talkResult").val("");
+						$('#talkInfo').modal('hide');
                         alert("保存成功");
                         search();
                     } else {

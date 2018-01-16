@@ -35,6 +35,7 @@
 		<result column="intention_city_id" jdbcType="DECIMAL" property="intentionCityId" />
 		<result column="interview_intention" jdbcType="DECIMAL" property="interviewIntention" />
 		<result column="interview_time" jdbcType="VARCHAR" property="interviewTime" />
+		<result column="intention_city_name" jdbcType="VARCHAR" property="intentionCityName" />
 	</resultMap>
 
 	<sql id="select_columns">
@@ -131,6 +132,7 @@
 		left join t_company tc on tc.id=te.company_id
 		left join t_recruitment tr on tr.id = te.recruitment_id 
 		left join t_user tu on tu.id = te.user_id
+		left join t_province tp on tp.id = te.intention_city_id
 		<trim prefix="WHERE" prefixOverrides="AND">
 			te.data_state = 1 
 			<if test="obj.state != null and obj.state != ''">
@@ -204,11 +206,13 @@
 		tc.name company_name,
 		tr.title recruitment_title,
 		tu.name as user_name,
-		tu.mobile as user_mobile
+		tu.mobile as user_mobile,
+		tp.name as intention_city_name
 		from t_enrollment te 
 		left join t_company tc on tc.id=te.company_id
 		left join t_recruitment tr on tr.id = te.recruitment_id 
 		left join t_user tu on tu.id=te.user_id
+		left join t_province tp on tp.id = te.intention_city_id
 		<trim prefix="WHERE" prefixOverrides="AND">
 			te.data_state = 1 
 			<if test="obj.state != null and obj.state != ''">

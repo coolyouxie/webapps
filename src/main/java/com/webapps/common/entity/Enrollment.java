@@ -59,6 +59,8 @@ public class Enrollment extends Entity {
 	 * 预约的面试时间（不是实际面试时间）
 	 */
 	private Date interviewTime;
+	
+	private String intentionCityName;
 
 
 	public Integer getTalkerId() {
@@ -257,5 +259,13 @@ public class Enrollment extends Entity {
 			return DateUtil.format(this.getInterviewTime(),"yyyy-MM-dd");
 		}
 		return "";
+	}
+
+	public String getIntentionCityName() {
+		return intentionCityName;
+	}
+
+	public void setIntentionCityName(String intentionCityName) {
+		this.intentionCityName = intentionCityName;
 	}
 }
