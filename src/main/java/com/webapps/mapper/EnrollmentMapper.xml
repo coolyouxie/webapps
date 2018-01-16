@@ -385,6 +385,14 @@
 		where id = #{id}
 	</update>
 	
+	<update id="updateInterviewTime">
+		update t_enrollment
+		set
+			interview_time = #{interviewTime},
+			update_time = now()
+		where id = #{id}
+	</update>
+	
 	<update id="cancelEnroll">
 		update t_enrollment 
 		set 

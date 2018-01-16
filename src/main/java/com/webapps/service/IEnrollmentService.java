@@ -39,4 +39,6 @@ public interface IEnrollmentService {
 	 * @return
 	 */
     Enrollment getCurrentStateEnrollmentByUserId(Integer userId);
+    
+    ResultDto<String> updateInterviewTime(EnrollmentRequestForm form);
 }

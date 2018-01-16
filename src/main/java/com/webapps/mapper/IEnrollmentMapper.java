@@ -46,4 +46,6 @@ public interface IEnrollmentMapper extends IBaseMapper<Enrollment>,IPageMapper<E
 			@Param("isExpireApproved")int isExpireApproved,@Param("expireApproverName")String expireApproverName,
 			@Param("updateTime")Date updateTime)throws Exception;
 	
+	int updateInterviewTime(@Param("id")Integer id,@Param("interviewTime")Date interviewTime)throws Exception;
+	
 }

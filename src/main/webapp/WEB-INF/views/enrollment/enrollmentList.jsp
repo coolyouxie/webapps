@@ -130,6 +130,8 @@
                     		result = "是";
                     	}else if(cellValue==2){
                     		result = "否";
+                    	}else{
+                    		result = "未沟通";
                     	}
                         return result;
                     }
@@ -137,7 +139,19 @@
                     label: 'interviewTimeStr',
                     name: 'interviewTimeStr',
                     align: 'center',
-                    sortable: false
+                    sortable: false,
+                    formatter: function (cellValue, options, rowObject) {
+                    	var result = '';
+                    	if(rowObject.interviewIntention==1){
+	                    	result = cellValue+'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'+
+	                    	'<button id="btn_' + rowObject.id + '" '+
+	                    	'class="btn btn-primary btn-sm" data-toggle="modal" '+
+	                    	'onclick="showTimeModal(' + rowObject.id + ',\''+cellValue+'\')">修改</button>';
+                    	}else{
+                    		result = cellValue;
+                    	}
+                        return result;
+                    }
                 }, {
                     label: "talkResult",
                     name: "talkResult",
@@ -181,6 +195,12 @@
             $("#handleType").val(type);
             $('#talkInfo').modal('show');
         }
+        
+        function showTimeModal(id,currentTime) {
+        	$("#enrollmentId").val(id);
+        	$("#interviewTimeStrModal").val(currentTime);
+            $('#interviewTimeModal').modal('show');
+        }
 
         function updateEnrollmentInfo() {
             var handleType = $("#handleType").val();
@@ -190,7 +210,6 @@
                 //作废报名
                 cancelEnroll();
             }
-            
         }
 
         function saveTalkInfo() {
@@ -267,6 +286,32 @@
                 }
             });
         }
+        
+        function updateInterviewTime(){
+        	var interviewTimeStr = $("#interviewTimeStrModal").val().trim();
+        	if(!interviewTimeStr){
+        		alert("请选择面试时间");
+        		return;
+        	}
+        	$.ajax({
+                url: "${ctx}/enrollment/updateInterviewTime",
+                type: "POST",
+                dataType: "JSON",
+                data: {
+                    'id': $("#enrollmentId").val(),
+                    'interviewTimeStr':$("#interviewTimeStrModal").val()
+                },
+                success: function (response) {
+                    if (response.result == "S") {
+                        $('#interviewTimeModal').modal('hide');
+                        alert("修改成功");
+                        search();
+                    } else {
+                        alert(response.errorMsg);
+                    }
+                }
+            });
+        }
 
 	</script>
 	<style>
@@ -328,6 +373,27 @@
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
 				<button type="button" class="btn btn-primary" onclick="updateEnrollmentInfo()">提交</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="interviewTimeModal" tabindex="-1" role="dialog" aria-labelledby="interviewTimeModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title" id="interviewTimeModalLabel">沟通结果和备注</h4>
+			</div>
+
+			<div class="modal-body">
+				<div class="row" style="padding-left: 15px;">
+					面试时间：<input type="text" id="interviewTimeStrModal" value="2017-12-31" onClick="WdatePicker({isShowWeek:true})">
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+				<button type="button" class="btn btn-primary" onclick="updateInterviewTime()">提交</button>
 			</div>
 		</div>
 	</div>
@@ -426,8 +492,8 @@
 					是否面试：
 				</td>
 				<td>
-					<select id="interviweIntention" name="interviweIntention">
-						<option value="-1">全部</option>
+					<select id="interviewIntention" name="interviewIntention">
+						<option value="0">全部</option>
 						<option value="1">同意</option>
 						<option value="2">不同意</option>
 					</select>

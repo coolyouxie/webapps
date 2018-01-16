@@ -135,5 +135,12 @@ public class EnrollmentController {
 	}
 	
 	
+	@ResponseBody
+	@RequestMapping(value="/updateInterviewTime")
+	public String updateInterviewTime(EnrollmentRequestForm form){
+		ResultDto<String> dto = iEnrollmentService.updateInterviewTime(form);
+		return JSONUtil.toJSONString(JSONUtil.toJSONObject(dto));
+	}
+	
 
 }

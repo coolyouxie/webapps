@@ -228,4 +228,19 @@ public class EnrollmentServiceImpl implements IEnrollmentService {
 		return null;
 	}
 
+	@Override
+	public ResultDto<String> updateInterviewTime(EnrollmentRequestForm form) {
+		ResultDto<String> dto = new ResultDto<String>();
+		try {
+			iEnrollmentMapper.updateInterviewTime(form.getId(), DateUtil.parseDateByStr(form.getInterviewTimeStr(), "yyyy-MM-dd"));
+			dto.setResult("S");
+			return dto;
+		} catch (Exception e) {
+			e.printStackTrace();
+			dto.setResult("F");
+			dto.setErrorMsg("更新面试时间异常，请稍后再试");
+		}
+		return dto;
+	}
+
 }
