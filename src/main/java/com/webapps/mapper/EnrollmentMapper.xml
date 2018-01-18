@@ -36,6 +36,7 @@
 		<result column="interview_intention" jdbcType="DECIMAL" property="interviewIntention" />
 		<result column="interview_time" jdbcType="VARCHAR" property="interviewTime" />
 		<result column="intention_city_name" jdbcType="VARCHAR" property="intentionCityName" />
+		<result column="is_latest" jdbcType="VARCHAR" property="isLatest" />
 	</resultMap>
 
 	<sql id="select_columns">
@@ -43,12 +44,12 @@
 		te.CREATE_TIME,te.UPDATE_TIME,te.is_talked,te.talk_result,te.remark,te.failed_reason,
 		te.entry_date,te.reward,te.cashback_days,te.is_history,talker_id,entry_approver_id,is_entry_approved,
 		expire_approver_id,is_expire_approved,talker_name,entry_approver_name,expire_approver_name,
-		intention_city_id,interview_intention,interview_time
+		intention_city_id,interview_intention,interview_time,is_latest
 	</sql>
 
 	<sql id="insert_columns">
 		user_id,recruitment_id,company_id,state, data_state,CREATE_TIME,is_talked,talk_result,failed_reason,
-		entry_date,reward,cashback_days,is_history
+		entry_date,reward,cashback_days,is_history,talker_id,talker_name,is_latest
 	</sql>
 	
 	<select id="getById" resultMap="resultMap">
@@ -134,7 +135,7 @@
 		left join t_user tu on tu.id = te.user_id
 		left join t_province tp on tp.id = te.intention_city_id
 		<trim prefix="WHERE" prefixOverrides="AND">
-			te.data_state = 1 
+			te.data_state = 1 and (te.is_talked = 1 or te.is_latest) 
 			<if test="obj.state != null and obj.state != ''">
 				and te.state = #{obj.state}
 			</if>
@@ -315,7 +316,10 @@
 			#{obj.entryDate},
 			#{obj.reward},
 			#{obj.cashbackDays},
-			#{obj.isHistory}
+			#{obj.isHistory},
+			#{obj.talkerId},
+			#{obj.talkerName},
+			#{obj.isLatest}
 		)
 	</insert>
 	
@@ -423,4 +427,15 @@
 			where id = #{item.id}
 		</foreach>
 	</update>
+	
+	<update id="updateToNotLatest">
+		update t_enrollment set is_latest = 0 where user_id = #{userId}
+	</update>
+	
+	<select id="findLatestByUserId" resultMap="resultMap">
+		select <include refid="select_columns" />
+		from t_enrollment te 
+		where user_id = #{userId}
+		order by create_time desc
+	</select>
 </mapper>

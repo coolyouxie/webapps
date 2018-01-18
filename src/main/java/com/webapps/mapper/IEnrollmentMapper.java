@@ -48,4 +48,8 @@ public interface IEnrollmentMapper extends IBaseMapper<Enrollment>,IPageMapper<E
 	
 	int updateInterviewTime(@Param("id")Integer id,@Param("interviewTime")Date interviewTime)throws Exception;
 	
+	int updateToNotLatest(@Param("userId")Integer userId)throws Exception;
+	
+	List<Enrollment> findLatestByUserId(@Param("userId")Integer userId)throws Exception;
+	
 }

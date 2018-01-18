@@ -61,6 +61,8 @@ public class Enrollment extends Entity {
 	private Date interviewTime;
 	
 	private String intentionCityName;
+	
+	private int isLatest;
 
 
 	public Integer getTalkerId() {
@@ -267,5 +269,13 @@ public class Enrollment extends Entity {
 
 	public void setIntentionCityName(String intentionCityName) {
 		this.intentionCityName = intentionCityName;
+	}
+
+	public int getIsLatest() {
+		return isLatest;
+	}
+
+	public void setIsLatest(int isLatest) {
+		this.isLatest = isLatest;
 	}
 }

@@ -114,6 +114,9 @@ public class EnrollmentServiceImpl implements IEnrollmentService {
 		return count;
 	}
 
+	/**
+	 * 用户报名后要保证报名列表只显示该用户的一条最新数据
+	 */
 	@Override
 	public ResultDto<Enrollment> userEnroll(Enrollment em) throws Exception {
 		ResultDto<Enrollment> dto = null;
@@ -139,9 +142,22 @@ public class EnrollmentServiceImpl implements IEnrollmentService {
 				user.setCurrentState(1);
 			}
 		}
+		//更新最新记录为新插入的数据
+		List<Enrollment> latestList = iEnrollmentMapper.findLatestByUserId(em.getUser().getId());
+		if(CollectionUtils.isNotEmpty(latestList)){
+			//如果当前报名记录之前还存在未沟通的报名记录，则取出之前的最新的报名记录中分配好的招聘专员信息赋值给该报名记录
+			Enrollment latest = latestList.get(0);
+			em.setTalkerId(latest.getTalkerId());
+			em.setTalkerName(latest.getTalkerName());
+			em.setIsLatest(1);
+			//将之前的数据更新为不是最新记录
+			iEnrollmentMapper.updateToNotLatest(em.getUser().getId());
+		}else{
+			//如果该记录之前的报名记录均已沟通完成则随机分配客服专员
+			em.setIsLatest(1);
+			setApproverInfo(em);
+		}
 		int result = iEnrollmentMapper.insert(em);
-		//随机分配客服专员
-		setApproverInfo(em);
 		iUserMapper.updateById(user.getId(),user);
 		if(result == 1){
 			dto = new ResultDto<Enrollment>();
@@ -164,12 +180,12 @@ public class EnrollmentServiceImpl implements IEnrollmentService {
 			em.setTalkerId(list.get(intR).getUserId());
 			em.setTalkerName(list.get(intR).getName());
 			em.setUpdateTime(new Date());
-			try {
+			/*try {
 				iEnrollmentMapper.updateById(em.getId(), em);
 			} catch (Exception e) {
 				logger.error("设置客服专员时异常");
 				e.printStackTrace();
-			}
+			}*/
 		}
 	}
 
