@@ -1,0 +1,3 @@
+ALTER TABLE `t_enrollment`
+ADD COLUMN `is_latest`  int NULL DEFAULT 0 COMMENT '是否最新一次报名信息，0不是，1是' AFTER `interview_time`;
+

@@ -1,0 +1,7 @@
+ALTER TABLE `t_enrollment_approval`
+ADD COLUMN `approver_id`  int NULL COMMENT '分配审核人id' AFTER `cashback_days`,
+ADD COLUMN `approver_name`  varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL COMMENT '分配审核人姓名' AFTER `approver_id`;
+
+ALTER TABLE `t_enrollment_approval`
+ADD COLUMN `approve_time`  datetime NULL COMMENT '审核时间' AFTER `approver_name`;
+

@@ -1,0 +1,4 @@
+ALTER TABLE `t_apply_expenditure`
+ADD COLUMN `approver_name`  varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL COMMENT '分配的审核人姓名' AFTER `update_time`,
+ADD COLUMN `approve_time`  datetime NULL COMMENT '审核时间' AFTER `approver_name`;
+
