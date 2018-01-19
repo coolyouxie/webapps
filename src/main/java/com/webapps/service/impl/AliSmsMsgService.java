@@ -99,6 +99,54 @@ public class AliSmsMsgService implements IAliSmsMsgService {
 		}
 		return dto;
 	}
+	
+	/**
+	 * 发送用户邀请码到指定的手机号码
+	 * @param phoneNum
+	 * @param inviteCode
+	 * @return
+	 * @throws ClientException 
+	 */
+	public ResultDto<String> sendInviteCode(String phoneNum , String inviteCode) throws ClientException{
+		ResultDto<String> dto = new ResultDto<String>();
+		Map<String,Object> resultMap = SmsUtil.sendInviteSms(phoneNum,inviteCode);
+		if(resultMap==null){
+			dto.setResult("F");
+			dto.setErrorMsg("短信发送失败，请稍后重试");
+			logger.error("短信发送失败，请稍后重试");
+			return dto;
+		}
+		SendSmsResponse response = (SendSmsResponse) resultMap.get("response");
+		if(response==null){
+			dto.setResult("F");
+			dto.setErrorMsg("短信响应内容为空，请稍后重试");
+			logger.error("短信响应内容为空，请稍后重试");
+			return dto;
+		}
+		SendSmsRequest request = (SendSmsRequest) resultMap.get("request");
+		AliSmsMsg asm = new AliSmsMsg();
+		asm.setBizId(response.getBizId());
+		asm.setCode(response.getCode());
+		asm.setCreateTime(new Date());
+		asm.setDataState(1);
+		asm.setMessage(response.getMessage());
+		asm.setPhoneNumbers(phoneNum);
+		asm.setRequestId(response.getRequestId());
+		asm.setSignName(request.getSignName());
+		asm.setSmsUpExtendCode(request.getSmsUpExtendCode());
+		asm.setTemplateParam(request.getTemplateParam());
+		asm.setTemplateCode(request.getTemplateCode());
+		asm.setValidateCode((String)resultMap.get("validateCode"));
+		asm.setType(3);
+		int count = iAliSmsMsgMapper.insert(asm);
+		if(count==1){
+			dto.setResult("S");
+		}else{
+			dto.setErrorMsg("短信保存数据库失败，请稍后重试");
+			dto.setResult("F");
+		}
+		return dto;
+	}
 
 	@Override
 	public ResultDto<String> validateAliSmsCode(Integer aliSmsMsgId, String msgCode) {

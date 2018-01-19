@@ -17,4 +17,6 @@ public interface IUserMapper extends IBaseMapper<User>,IPageMapper<User,UserRequ
 	
 	List<User> queryUsersByUserType(int userType)throws Exception;
 	
+	User queryByInviteCode(String inviteCode);
+	
 }

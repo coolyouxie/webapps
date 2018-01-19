@@ -8,6 +8,8 @@ public class Recommend extends Entity {
 	
 	private String mobile;
 	
+	private String inviteCode;
+	
 	private Integer state;
 	
 	private int gender;
@@ -60,6 +62,14 @@ public class Recommend extends Entity {
 
 	public void setUser(User user) {
 		this.user = user;
+	}
+
+	public String getInviteCode() {
+		return inviteCode;
+	}
+
+	public void setInviteCode(String inviteCode) {
+		this.inviteCode = inviteCode;
 	}
 
 }

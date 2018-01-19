@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.webapps.mapper.IParamConfigMapper">
+	<resultMap id="resultMap" type="com.webapps.common.entity.ParamConfig">
+		<id column="ID" jdbcType="DECIMAL" property="id" />
+		<result column="name" jdbcType="VARCHAR" property="name" />
+		<result column="type" jdbcType="DECIMAL" property="type" />
+		<result column="min_num" jdbcType="DECIMAL" property="minNum" />
+		<result column="max_num" jdbcType="DECIMAL" property="maxNum" />
+		<result column="create_time" jdbcType="VARCHAR" property="createTime" />
+		<result column="update_time" jdbcType="VARCHAR" property="updateTime" />
+	</resultMap>
+
+	<sql id="select_columns">
+		ID,name,type,min_num,max_num,create_time,update_time
+	</sql>
+
+	<sql id="insert_columns">
+		name,type,min_num,max_num,create_time,update_time
+	</sql>
+
+	<select id="getById" resultMap="resultMap">
+		select * from t_param_config where id = #{id}
+	</select>
+	
+	<!-- 查询所有 -->
+	<select id="queryAll" resultMap="resultMap">
+		select <include refid="select_columns" /> from t_param_config
+	</select>
+
+	<update id="updateById">
+		UPDATE t_param_config
+		<set>
+			<if test="obj.name != null and obj.name != ''">
+				name = #{obj.name,jdbcType=VARCHAR},
+			</if>
+			<if test="obj.type != null and obj.type != ''">
+				type = #{obj.type,jdbcType=DECIMAL},
+			</if>
+			<if test="obj.minNum != null and obj.minNum != ''">
+				min_num = #{obj.minNum,jdbcType=DECIMAL},
+			</if>
+			<if test="obj.maxNum != null and obj.maxNum != ''">
+				max_num = #{obj.maxNum,jdbcType=DECIMAL},
+			</if>
+			update_time = #{obj.updateTime}
+		</set>
+		WHERE ID = #{id,jdbcType=DECIMAL}
+	</update>
+
+	<insert id="insert" useGeneratedKeys="true" keyProperty="obj.id">
+		insert into t_param_config (
+			<include refid="insert_columns" />
+		)
+		values
+		(
+			#{obj.name},
+			#{obj.type},
+			#{obj.minNum},
+			#{obj.maxNum},
+			#{obj.createTime},
+			#{obj.updateTime}
+		)
+	</insert>
+</mapper>

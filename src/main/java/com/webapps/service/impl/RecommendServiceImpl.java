@@ -1,27 +1,34 @@
 package com.webapps.service.impl;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import com.webapps.common.utils.PropertyUtil;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.log4j.Logger;
-import org.mybatis.spring.MyBatisSystemException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import com.webapps.common.bean.Page;
 import com.webapps.common.bean.ResultDto;
+import com.webapps.common.entity.ParamConfig;
 import com.webapps.common.entity.Recommend;
 import com.webapps.common.entity.User;
 import com.webapps.common.form.RecommendRequestForm;
+import com.webapps.common.form.UserRequestForm;
 import com.webapps.common.utils.DateUtil;
+import com.webapps.common.utils.PropertyUtil;
 import com.webapps.mapper.IRecommendMapper;
 import com.webapps.mapper.IUserMapper;
+import com.webapps.service.IAliSmsMsgService;
+import com.webapps.service.IParamConfigService;
 import com.webapps.service.IRecommendService;
-import org.springframework.transaction.interceptor.TransactionAspectSupport;
+import com.webapps.service.IUserAwardService;
+import com.webapps.service.impl.ParamConfigService.ParamConfigType;
 
 @Service
 @Transactional
@@ -29,11 +36,17 @@ public class RecommendServiceImpl implements IRecommendService {
 	
 	private static Logger logger = Logger.getLogger(RecommendServiceImpl.class);
 	
-	@Autowired
-	private IRecommendMapper iRecommendMapper;
+	private final int timeOverHour = -1;
 	
-	@Autowired
-	private IUserMapper iUserMapper;
+	@Autowired private IRecommendMapper iRecommendMapper;
+	
+	@Autowired private IUserMapper iUserMapper;
+	
+	@Autowired private IAliSmsMsgService iAliSmsMsgService;
+	
+	@Autowired private IUserAwardService iUserAwardService;
+	
+	@Autowired private IParamConfigService iParamConfigService;
 
 	@Override
 	public Page loadRecommendList(Page page, RecommendRequestForm recommend) throws Exception {
@@ -84,6 +97,52 @@ public class RecommendServiceImpl implements IRecommendService {
 				return dto;
 			}
 		}
+	}
+	
+	/**
+	 * 注册用户填写邀请码，进行数据入库
+	 * 如果注册码没有对应的用户，则返回失败提示
+	 * 如果短信发送过邀请码，则更新记录。
+	 * 如果未发送短信，则新增邀请记录。
+	 * 增加逻辑 2018-01-19 scorpio.yang
+	 * 用户用邀请码注册后，发放红包到邀请人账户
+	 * @author scorpio.yang
+	 * @since 2018-01-15
+	 * @param registUser
+	 * @param inviteCode
+	 * @return
+	 * @throws Exception 
+	 */
+	public ResultDto<String> saveInviteRecommend(User registUser , String inviteCode) throws Exception{
+		ResultDto<String> dto = new ResultDto<String>();
+		//获取注册码是否正确，找到对应的用户
+		User user = iUserMapper.queryByInviteCode(inviteCode);
+		if(null != user) {
+			//查找，是否已经有邀请记录
+			Recommend recommend = iRecommendMapper.getByUserIdAndCode(user.getId(), inviteCode);
+			if(null != recommend) {
+				recommend.setState(2);
+				recommend.setUpdateTime(new Date());
+				this.iRecommendMapper.updateById(recommend.getId(), recommend);
+			}else {
+				recommend = this.createNewRecommendByUser(user, registUser.getMobile());
+				recommend.setState(2);
+				this.iRecommendMapper.insert(recommend);
+			}
+			/**
+			 * 增加逻辑 2018-01-19 scorpio.yang
+			 * 用户用邀请码注册后，发放红包到邀请人账户
+			 */
+			ParamConfig pc = iParamConfigService.getParamConfigByAwardType(ParamConfigType.注册红包);
+			pc.setId(1);
+			iUserAwardService.addNewAward(registUser, pc);
+			dto.setResult("S");
+			dto.setData("接受邀请操作成功。");
+		}else {
+			dto.setResult("F");
+			dto.setErrorMsg("邀请码填写错误，请检查！");
+		}
+		return dto;
 	}
 
 	@Override
@@ -155,6 +214,130 @@ public class RecommendServiceImpl implements IRecommendService {
 			dto.setResult("F");
 			dto.setErrorMsg("推荐时异常，请稍后再试");
 			return dto;
+		}
+	}
+	
+	/**
+	 * 发送用户邀请码到指定的手机号码
+	 * 如果对象手机号已经是会员，则提示
+	 * 生成发送邀请记录，24小时有效。
+	 * @author scorpio.yang
+	 * @since 2018-01-15
+	 * @param phoneNum
+	 * @param inviteCode
+	 * @return
+	 * @throws Exception 
+	 */
+	public ResultDto<String> sendUserInviteCode(String phoneNum , User fromUser) throws Exception{
+		ResultDto<String> dto = new ResultDto<String>();
+		//判断对象手机号是否已经是会员
+		UserRequestForm form = new UserRequestForm();
+		form.setMobile(phoneNum);
+		int num = iUserMapper.queryCount(form);
+		if(num == 0) {
+			//判断是否已经有邀请记录，
+			Recommend recommend = this.iRecommendMapper.getByUserIdAndCode(fromUser.getId(), fromUser.getInviteCode());
+			if(null != recommend) {
+				//如果未超过24小时，则提示已经发送，并告知截止使用时间。
+				if(this.checkTimeValid(recommend.getUpdateTime())) {
+					dto.setResult("S");
+					dto.setErrorMsg("被邀请的手机号已经发送短信，使用截止时间为：" + this.deadline(recommend.getUpdateTime()));
+				}else {
+					//是否已经超过24小时，超过则重新发送短信，并更新记录
+					//发送短信
+					ResultDto<String> res = iAliSmsMsgService.sendInviteCode(phoneNum, fromUser.getInviteCode());
+					if(res.getResult().equals("F")){
+						logger.error("短信发送失败，请稍后重试");
+						return res;
+					}
+					//记录信息
+					recommend.setUpdateTime(new Date());
+					this.saveRecommend(recommend);
+					dto.setResult("S");
+					dto.setErrorMsg("被邀请的手机号发送邀请短信成功");
+				}
+			}else {
+				//发送短信
+				ResultDto<String> res = iAliSmsMsgService.sendInviteCode(phoneNum, fromUser.getInviteCode());
+				if(res.getResult().equals("F")){
+					logger.error("短信发送失败，请稍后重试");
+					return res;
+				}
+				//记录信息
+				this.saveRecommend(this.createNewRecommendByUser(fromUser, phoneNum));
+				dto.setResult("S");
+				dto.setErrorMsg("被邀请的手机号发送邀请短信成功");
+			}
+		}else {
+			//电话已经是会员，则返回信息
+			dto.setResult("F");
+			dto.setErrorMsg("被邀请的手机号已经是会员。");
+		}
+		return dto;
+	}
+	
+	/**
+	 * 根据手机号码获取对象。
+	 * 用于被邀请人，获取邀请人信息使用
+	 * 被邀请人可能有多条被邀请记录，所以只获取state=2（已注册）的，记录
+	 * @param mobile
+	 * @return
+	 * @throws Exception 
+	 */
+	public List<Recommend> getByMobile(String mobile) throws Exception {
+		return this.iRecommendMapper.queryByMobile(mobile);
+	}
+	
+	private Recommend createNewRecommendByUser(User user, String phone) {
+		Recommend recommend = new Recommend();
+		recommend.setUser(user);
+		recommend.setName("");
+		recommend.setMobile(phone);
+		recommend.setInviteCode(user.getInviteCode());
+		recommend.setState(1);
+		recommend.setGender(0);
+		recommend.setAge(0);
+		recommend.setCreateTime(new Date());
+		recommend.setUpdateTime(new Date());
+		return recommend;
+	}
+	
+	/**
+	 * 检查是否超过有效期，本类final参数，timeOverHour
+	 * true，有效
+	 * false，无效
+	 * @return
+	 */
+	private boolean checkTimeValid(Date time) {
+		if(timeOverHour >= 0) {
+			Calendar now = Calendar.getInstance();
+			Calendar codeTime = Calendar.getInstance();
+			codeTime.setTime(time);
+			codeTime.add(Calendar.HOUR_OF_DAY,timeOverHour);
+			if(codeTime.compareTo(now) > 0) {
+				return true;
+			}else {
+				return false;
+			}
+		}else {
+			return true;
+		}
+	}
+	
+	/**
+	 * 获取当前邀请码的最后有效日期
+	 * @param time
+	 * @return
+	 */
+	private String deadline(Date time) {
+		if(timeOverHour >= 0) {
+			Calendar codeTime = Calendar.getInstance();
+			codeTime.setTime(time);
+			codeTime.add(Calendar.HOUR_OF_DAY,timeOverHour);
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日HH点mm分ss秒");
+			return sdf.format(codeTime.getTime());
+		}else {
+			return "长期有效";
 		}
 	}
 

@@ -1,32 +1,76 @@
 package com.webapps.controller;
 
-import com.google.gson.Gson;
-import com.webapps.common.bean.Page;
-import com.webapps.common.bean.ResultDto;
-import com.webapps.common.entity.*;
-import com.webapps.common.form.*;
-import com.webapps.common.utils.DataUtil;
-import com.webapps.common.utils.JSONUtil;
-import com.webapps.common.utils.PropertyUtil;
-import com.webapps.mapper.IEnrollmentExtraMapper;
-import com.webapps.service.*;
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.google.gson.Gson;
+import com.webapps.common.bean.Page;
+import com.webapps.common.bean.ResultDto;
+import com.webapps.common.entity.AliSmsMsg;
+import com.webapps.common.entity.ApplyExpenditure;
+import com.webapps.common.entity.BannerConfig;
+import com.webapps.common.entity.BillRecord;
+import com.webapps.common.entity.Company;
+import com.webapps.common.entity.EnrollApproval;
+import com.webapps.common.entity.Enrollment;
+import com.webapps.common.entity.EnrollmentExtra;
+import com.webapps.common.entity.FeeConfig;
+import com.webapps.common.entity.GroupUser;
+import com.webapps.common.entity.MessageConfig;
+import com.webapps.common.entity.Picture;
+import com.webapps.common.entity.Recommend;
+import com.webapps.common.entity.Recruitment;
+import com.webapps.common.entity.User;
+import com.webapps.common.entity.UserAward;
+import com.webapps.common.entity.UserReward;
+import com.webapps.common.entity.UserWallet;
+import com.webapps.common.form.ApplyExpenditureRequestForm;
+import com.webapps.common.form.BannerConfigRequestForm;
+import com.webapps.common.form.BillRecordRequestForm;
+import com.webapps.common.form.MessageConfigRequestForm;
+import com.webapps.common.form.RecruitmentRequestForm;
+import com.webapps.common.form.UserSendInviteCode;
+import com.webapps.common.utils.DataUtil;
+import com.webapps.common.utils.JSONUtil;
+import com.webapps.common.utils.PropertyUtil;
+import com.webapps.mapper.IEnrollmentExtraMapper;
+import com.webapps.service.IAliSmsMsgService;
+import com.webapps.service.IApplyExpenditureService;
+import com.webapps.service.IBannerConfigService;
+import com.webapps.service.IBillRecordService;
+import com.webapps.service.ICompanyService;
+import com.webapps.service.IEnrollApprovalService;
+import com.webapps.service.IEnrollmentService;
+import com.webapps.service.IFeeConfigService;
+import com.webapps.service.IGroupUserService;
+import com.webapps.service.IMessageConfigService;
+import com.webapps.service.IPictureService;
+import com.webapps.service.IRecommendService;
+import com.webapps.service.IRecruitmentService;
+import com.webapps.service.IUserAwardService;
+import com.webapps.service.IUserRewardService;
+import com.webapps.service.IUserService;
+import com.webapps.service.IUserWalletService;
+
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 
 
 @Controller
@@ -85,6 +129,8 @@ public class AppController {
 
 	@Autowired
 	private IGroupUserService iGroupUserService;
+	
+	@Autowired private IUserAwardService iUserAwardService;
 
 	/**
 	 * app端登录接口
@@ -152,6 +198,12 @@ public class AppController {
 		Integer asmId = jsonObj.getInt("asmId");
 		String password = jsonObj.getString("password");
 		String telephone = jsonObj.getString("telephone");
+		/**
+		 * 新增字段，用户注册时，填写邀请码
+		 * @author scorpio.yang
+		 * @since 2018-01-15
+		 */
+		String inviteCode = jsonObj.getString("inviteCode");
 		user.setPassword(password);
 		user.setTelephone(telephone);
 		user.setAccount(telephone);
@@ -161,13 +213,38 @@ public class AppController {
 		try {
 			ResultDto<String> dto1 = iAliSmsMsgService.validateAliSmsCode(asmId, smsCode);
 			if(dto1.getResult().equals("S")){
-				//默认APP注册的全部为普通会员
-				user.setUserType(3);
-				user.setMobile(telephone);
-				dto = iUserService.saveUser(user);
-				User user1 = new User();
-				user1.setId(user.getId());
-				dto.setData(user1);
+				/**
+				 * 新增逻辑，由于没有事务管理，所以一旦保存用户信息后，邀请码异常无法回滚，所以判断邀请码是否正确，需要提前查询，具体业务，后置仍然执行。
+				 * @author scorpio.yang
+				 * @since 2018-01-16
+				 */
+				User tmpUser = iUserService.queryByInviteCode(inviteCode);
+				if(null == tmpUser) {
+					dto = new ResultDto<User>();
+					dto.setResult("F");
+					dto.setErrorMsg("邀请码填写错误，请检查！");
+				}else {
+					//默认APP注册的全部为普通会员
+					user.setUserType(3);
+					user.setMobile(telephone);
+					dto = iUserService.saveUser(user);
+					/**
+					 * 新增逻辑，用户注册保存成功后，判断是否是从邀请码过来的。如果是，则需要记录邀请信息
+					 * @author scorpio.yang
+					 * @since 2018-01-15
+					 */
+					if(StringUtils.isNotBlank(inviteCode)) {
+						ResultDto<String> res = iRecommendService.saveInviteRecommend(user, inviteCode);
+						if(res.getResult().equals("F")) {
+							dto.setResult("F");
+							dto.setErrorMsg(res.getErrorMsg());
+						}
+					}else {
+						User user1 = new User();
+						user1.setId(user.getId());
+						dto.setData(user1);
+					}
+				}
 			}else{
 				return JSONUtil.toJSONString(JSONUtil.toJSONObject(dto1));
 			}
@@ -253,6 +330,125 @@ public class AppController {
 		Gson gson = new Gson();
 		AliSmsMsg asm = gson.fromJson(params, AliSmsMsg.class);
 		ResultDto<String> dto = iAliSmsMsgService.validateAliSmsCode(asm.getId(), asm.getValidateCode());
+		if(flag){
+			return DataUtil.encryptData(JSONUtil.toJSONString(JSONUtil.toJSONObject(dto)));
+		}
+		return JSONUtil.toJSONString(JSONUtil.toJSONObject(dto));
+	}
+	
+	/**
+	 * 用户发送邀请码给手机号
+	 * 如果对象手机号已经是会员，则提示
+	 * 生成发送邀请记录，24小时有效。
+	 * @author scorpio.yang
+	 * @param params
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/userSendInviteCode", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
+	public String userSendInviteCode(@RequestBody String params) {
+		boolean flag = false;
+		if(StringUtils.isNotBlank(params)){
+			if(params.contains("encryptData")){
+				flag = true;
+			}
+		}
+		if(flag){
+			params = DataUtil.decryptData(params);
+		}
+		logger.info("用户发送邀请码给手机号：userSendInviteCode 接收参数:" + params);
+		Gson gson = new Gson();
+		UserSendInviteCode sendCode = gson.fromJson(params, UserSendInviteCode.class);
+		ResultDto<String> dto = null;
+		try {
+			User user = iUserService.getById(sendCode.getFromUserId());
+			
+			dto = iRecommendService.sendUserInviteCode(sendCode.getToPhone(), user);
+		} catch (Exception e) {
+			e.printStackTrace();
+			dto = new ResultDto<String>();
+			dto.setResult("F");
+			dto.setErrorMsg("当前信息错误，请稍后重试。");
+		}
+		if(flag){
+			return DataUtil.encryptData(JSONUtil.toJSONString(JSONUtil.toJSONObject(dto)));
+		}
+		return JSONUtil.toJSONString(JSONUtil.toJSONObject(dto));
+	}
+	
+	/**
+	 * 用户红包列表，根据时间排序，同一用户排序在一起
+	 * 用于APP端显示用户的红包列表，提供红包领取功能
+	 * @param params
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/userAwardList", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
+	public String userAwardList(@RequestBody String params) {
+		ResultDto<List<UserAward>> dto = new ResultDto<List<UserAward>>();
+		boolean flag = false;
+		if(StringUtils.isNotBlank(params)){
+			if(params.contains("encryptData")){
+				flag = true;
+			}
+		}
+		if(flag){
+			params = DataUtil.decryptData(params);
+		}
+		logger.info("获取用户红包列表userAwardList接收参数:" + params);
+		JSONObject jsonObj = JSONUtil.toJSONObject(params);
+		Integer userId = jsonObj.getInt("userId");
+		int currentPage = jsonObj.getInt("page");
+		int rows = jsonObj.getInt("rows");
+		Page page = new Page();
+		page.setPage(currentPage);
+		page.setRows(rows);
+		try {
+			page = this.iUserAwardService.getUserAwardByUserId(page, userId);
+			if (page != null) {
+				dto.setData(page.getResultList());
+				dto.setResult("S");
+			}
+		} catch (Exception e) {
+			dto.setResult("F");
+			dto.setErrorMsg("查询异常，请稍后再试");
+			e.printStackTrace();
+		}
+		if(flag){
+			return DataUtil.encryptData(JSONUtil.toJSONString(JSONUtil.toJSONObject(dto)));
+		}
+		return JSONUtil.toJSONString(JSONUtil.toJSONObject(dto));
+	}
+	
+	/**
+	 * 用户红包领取
+	 * 用于APP端用户领取红包操作
+	 * @param params
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/userAwardTake", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
+	public String userAwardTake(@RequestBody String params) {
+		ResultDto<String> dto = new ResultDto<String>();
+		boolean flag = false;
+		if(StringUtils.isNotBlank(params)){
+			if(params.contains("encryptData")){
+				flag = true;
+			}
+		}
+		if(flag){
+			params = DataUtil.decryptData(params);
+		}
+		logger.info("获取用户领取红包userAwardTake接收参数:" + params);
+		JSONObject jsonObj = JSONUtil.toJSONObject(params);
+		Integer userAwardId = jsonObj.getInt("userAwardId");
+		try {
+			dto = this.iUserAwardService.useAward(userAwardId);
+		} catch (Exception e) {
+			e.printStackTrace();
+			dto.setResult("F");
+			dto.setErrorMsg("红包异常，领取失败。");
+		}
 		if(flag){
 			return DataUtil.encryptData(JSONUtil.toJSONString(JSONUtil.toJSONObject(dto)));
 		}
@@ -438,6 +634,7 @@ public class AppController {
 		Page page = new Page();
 		page.setPage(currentPage);
 		page.setRows(rows);
+		//TODO use
 		if (StringUtils.isNotBlank(companyName)) {
 			Company company = new Company();
 			company.setName(companyName);

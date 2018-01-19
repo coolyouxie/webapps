@@ -53,6 +53,10 @@ public class User extends Entity{
     private List<Picture> pictures;
 
     private String bankCardNum;
+    
+    private String inviteCode;
+    
+    private String awardFlag;
 
     public Integer getIsPayedRecommendFee() {
         return isPayedRecommendFee;
@@ -229,4 +233,20 @@ public class User extends Entity{
     public void setBankCardNum(String bankCardNum) {
         this.bankCardNum = bankCardNum;
     }
+
+	public String getInviteCode() {
+		return inviteCode;
+	}
+
+	public void setInviteCode(String inviteCode) {
+		this.inviteCode = inviteCode;
+	}
+
+	public String getAwardFlag() {
+		return awardFlag;
+	}
+
+	public void setAwardFlag(String awardFlag) {
+		this.awardFlag = awardFlag;
+	}
 }

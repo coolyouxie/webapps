@@ -29,13 +29,15 @@
 		<result column="current_state" jdbcType="DECIMAL" property="currentState" />
 		<result column="is_payed_recommend_fee" jdbcType="DECIMAL" property="isPayedRecommendFee" />
 		<result column="bank_card_num" jdbcType="VARCHAR" property="bankCardNum" />
+		<result column="invite_code" jdbcType="VARCHAR" property="inviteCode" />
+		<result column="award_flag" jdbcType="VARCHAR" property="awardFlag" />
 	</resultMap>
 
 	<sql id="select_columns">
 		tu.ID,tu.account,tu.password,tu.token,tu.name,tu. gender,tu. age,tu. telephone,tu. mobile,
 		tu.qq,tu.weiXin,tu.email,tu.home_Address,tu.address,tu.id_card_no,tu.user_type,tu.login_State,
 		tu.education_Id,tu.data_state,tu.CREATE_TIME,tu.UPDATE_TIME,tu.current_state,tu.is_payed_recommend_fee,
-		tu.bank_card_num
+		tu.bank_card_num,invite_code,award_flag
 	</sql>
 
 	<sql id="insert_columns">
@@ -60,7 +62,9 @@
 		CREATE_TIME,
 		current_state,
 		is_payed_recommend_fee,
-		bank_card_num
+		bank_card_num,
+		invite_code,
+		award_flag
 	</sql>
 
 	<select id="getById" resultMap="resultMap">
@@ -99,6 +103,12 @@
 			</if>
 			<if test="obj.bankCardNum != null and obj.bankCardNum != ''">
 				bank_card_num = #{obj.bankCardNum,jdbcType=VARCHAR},
+			</if>
+			<if test="obj.inviteCode != null and obj.inviteCode != ''">
+				invite_code = #{obj.inviteCode,jdbcType=VARCHAR},
+			</if>
+			<if test="obj.awardFlag != null and obj.awardFlag != ''">
+				award_flag = #{obj.awardFlag,jdbcType=VARCHAR},
 			</if>
 			weiXin = #{obj.weiXin,jdbcType=VARCHAR},
 			email = #{obj.email,jdbcType=VARCHAR},
@@ -182,6 +192,10 @@
 	<select id="queryUserByAccount" resultMap="resultMap">
 		select * from t_user where data_state = 1 and account = #{account}
 	</select>
+	
+	<select id="queryByInviteCode" resultMap="resultMap">
+		select * from t_user where data_state = 1 and invite_code = #{inviteCode}
+	</select>
 
 	<select id="deleteById" resultType="java.lang.Integer">
 		DELETE t_user where id = #{id,jdbcType=DECIMAL}
@@ -222,7 +236,9 @@
 			#{obj.createTime},
 			#{obj.currentState},
 			#{obj.isPayedRecommendFee},
-			#{obj.bankCardNum}
+			#{obj.bankCardNum},
+			#{obj.inviteCode},
+			#{obj.awardFlag}
 		)
 	</insert>
 </mapper>

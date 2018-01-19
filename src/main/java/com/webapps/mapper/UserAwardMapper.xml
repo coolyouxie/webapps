@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.webapps.mapper.IUserAwardMapper">
+	<resultMap id="resultMap" type="com.webapps.common.entity.UserAward">
+		<id column="id" jdbcType="DECIMAL" property="id" />
+		<result column="user_id" jdbcType="DECIMAL" property="userId" />
+		<result column="invite_user_id" jdbcType="DECIMAL" property="inviteUserId" />
+		<result column="param_config_id" jdbcType="DECIMAL" property="paramConfigId" />
+		<result column="price" jdbcType="DECIMAL" property="price" />
+		<result column="stat" jdbcType="DECIMAL" property="stat" />
+		<result column="create_time" jdbcType="VARCHAR" property="createTime" />	
+		<result column="update_time" jdbcType="VARCHAR" property="updateTime" />
+	</resultMap>
+
+	<sql id="select_columns">
+		id,user_id,invite_user_id, param_config_id,price,stat,create_time,update_time
+	</sql>
+
+	<sql id="insert_columns">
+		user_id,invite_user_id, param_config_id,price,stat,create_time,update_time
+	</sql>
+	
+	<select id="getById" resultMap="resultMap">
+		select <include refid="select_columns" /> from t_user_award where id = #{id}
+	</select>
+	
+	<!-- 查询所有 -->
+	<select id="queryAll" resultMap="resultMap">
+		select <include refid="select_columns" /> from t_user_award 
+	</select>
+	
+	<!-- 查询所有 -->
+	<select id="queryByUserId" resultMap="resultMap">
+		select <include refid="select_columns" /> from t_user_award where user_id = #{userId} 
+	</select>
+	
+	<!-- 分页查询行政区信息 -->
+	<select id="queryPage" resultMap="resultMap">
+		SELECT
+		<include refid="select_columns" />
+		FROM t_user_award ua
+		where user_id = #{userId}
+			and invite_user_id in (
+				select invite_user_id from (
+					<include refid="ORACLE.paginationStart" />
+						select invite_user_id 
+						from t_user_award subUA 
+						where user_id = #{userId} 
+						group by invite_user_id
+						order by create_time desc
+					<include refid="ORACLE.paginationEnd" /> 
+				) as inviteTmpTable
+			)
+	</select>
+	
+	<insert id="insert" useGeneratedKeys="true" keyProperty="obj.id">
+		insert into t_user_award
+		(
+			<include refid="insert_columns" />
+		)
+		values
+		(
+			#{obj.userId},
+			#{obj.inviteUserId},
+			#{obj.paramConfigId},
+			#{obj.price},
+			#{obj.stat},
+			#{obj.createTime},
+			#{obj.updateTime}
+		)
+	</insert>
+	
+	<update id="updateById">
+		update t_user_award set 
+		user_id=#{obj.userId},
+		invite_user_id=#{obj.inviteUserId},
+		param_config_id=#{obj.paramConfigId},
+		price=#{obj.price},
+		stat=#{obj.stat},
+		update_time=now()
+		where id=#{id}
+	</update>
+	
+</mapper>

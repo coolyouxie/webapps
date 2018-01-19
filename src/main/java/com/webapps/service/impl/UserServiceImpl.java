@@ -1,12 +1,13 @@
 package com.webapps.service.impl;
 
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-import com.webapps.common.entity.UserPermission;
-import com.webapps.mapper.*;
-import com.webapps.service.IPermissionService;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.math.RandomUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
@@ -18,9 +19,15 @@ import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import com.webapps.common.bean.Page;
 import com.webapps.common.bean.ResultDto;
 import com.webapps.common.entity.User;
+import com.webapps.common.entity.UserPermission;
 import com.webapps.common.entity.UserWallet;
 import com.webapps.common.form.UserRequestForm;
 import com.webapps.common.utils.PasswordEncryptUtil;
+import com.webapps.mapper.IPermissionMapper;
+import com.webapps.mapper.IPermissionRelationMapper;
+import com.webapps.mapper.IUserMapper;
+import com.webapps.mapper.IUserPermissionMapper;
+import com.webapps.mapper.IUserWalletMapper;
 import com.webapps.service.IUserService;
 
 @Service
@@ -96,6 +103,7 @@ public class UserServiceImpl implements IUserService {
 				user1.setQq(user.getQq());
 				user1.setWeiXin(user.getWeiXin());
 				user1.setBankCardNum(user.getBankCardNum());
+				user1.setAwardFlag(user.getAwardFlag());
 				iUserMapper.updateById(user1.getId(), user1);
 				dto.setData(user1);
 				return dto;
@@ -114,6 +122,13 @@ public class UserServiceImpl implements IUserService {
 						dto.setErrorMsg("新增失败");
 						return dto;
 					}
+					//为用户生成邀请码
+					//记录保存后，获取id信息，生成邀请码，然后重新入库
+					user.setInviteCode(this.createInviteCodeCreate(user.getId()));
+					//用户的红包状态标签，此处设置3位，皆是未生成状态。
+					user.setAwardFlag("000");
+					iUserMapper.updateById(user.getId(), user);
+					
 					//会员注册成功后为会员新增钱包信息
 					UserWallet obj = new UserWallet();
 					obj.setCreateTime(new Date());
@@ -212,4 +227,55 @@ public class UserServiceImpl implements IUserService {
 		return permissions;
 	}
 
+	/**
+	 * 根据邀请码查询用户对象。
+	 * @author scorpio.yang
+	 * @since 2018-01-16
+	 * @param inviteCode
+	 * @return
+	 */
+	public User queryByInviteCode(String inviteCode){
+		return this.iUserMapper.queryByInviteCode(inviteCode);
+	}
+	
+	/**
+	 * 根据用户的id，创建用户唯一的邀请码。
+	 * 返回4位字符串，默认4位，如果id值大于能提供唯一代码上限，则将会自动生成多一位的邀请码。
+	 * @author scorpio.yang
+	 * @since 2018-01-14
+	 * @param userId 用户id，用来生成的种子序号，基本上每个人都是不一样的，用于决定邀请码不一致
+	 * @return
+	 */
+	public String createInviteCodeCreate(long userId) {
+		int len = 0;
+		//判断当前userId生成的code，是否长度符合
+		long tmpId = userId;
+		while(tmpId / 26 >1) {
+			tmpId = tmpId / 26;
+			len++;
+		}
+		//默认下限长度4位
+		if(len < 4) {
+			len = 4;
+		}
+		//生成邀请码的基数
+		String[] sourceString = {"D","O","F","H","T","W","Z","M",
+				"B","C","E","G","I","J","K",
+				"L","A","N","P","Y","R","S","U",
+				"V","X","Q"};
+		int mod = 0;
+		System.out.println("sourceString:" + sourceString.length);
+		String code = "";
+		while(userId > 0){
+	        mod = (int)(userId % 26); 
+	        userId = (userId - mod) / 26;
+	        code += sourceString[mod];
+	    }
+		while(code.length()<len) {
+			code += RandomUtils.nextInt(10)%10;
+		}
+		//不用数字0，改用1，区别字母O
+		code = code.replaceAll("0", "1");
+		return code;
+	}
 }

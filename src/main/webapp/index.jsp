@@ -62,7 +62,7 @@
 					<li><a href="${ctx}/recruitment/toRecruitmentPage" target="mainContainer">发布单管理</a></li>
 				</c:if>
 				<c:if test="${!empty perMap['RETT_MU_CONFIG']}">
-					<li><a href="${ctx}/feeConfig/toFeeConfigPage" target="mainContainer">配置管理</a></li>
+					<li><a href="${ctx}/paramConfig/toParamConfigPage" target="mainContainer">配置管理</a></li>
 				</c:if>
 				<c:if test="${!empty perMap['RETT_MU_BANNER']}">
 					<li><a href="${ctx}/bannerConfig/toBannerConfigPage" target="mainContainer">Banner管理</a></li>

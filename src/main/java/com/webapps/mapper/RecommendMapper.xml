@@ -7,6 +7,7 @@
 		<result column="user_id" jdbcType="DECIMAL" property="user.id" />
 		<result column="user_name" jdbcType="DECIMAL" property="user.name" />
 		<result column="user_mobile" jdbcType="DECIMAL" property="user.mobile" />
+		<result column="invite_code" jdbcType="VARCHAR" property="inviteCode" />
 		<result column="name" jdbcType="VARCHAR" property="name" />
 		<result column="mobile" jdbcType="VARCHAR" property="mobile" />
 		<result column="state" jdbcType="DECIMAL" property="state" />
@@ -18,11 +19,11 @@
 	</resultMap>
 
 	<sql id="select_columns">
-		tr.ID,tr.user_id,tr.name,tr.mobile,tr.age,tr.gender,tr.state, tr.data_state,tr.CREATE_TIME,tr.UPDATE_TIME
+		tr.ID,tr.user_id,tr.name,tr.mobile,tr.age,tr.gender,tr.state, tr.data_state,tr.CREATE_TIME,tr.UPDATE_TIME,invite_code
 	</sql>
 
 	<sql id="insert_columns">
-		user_id,name,mobile,age,gender,state, data_state,CREATE_TIME
+		user_id,name,mobile,age,gender,state, data_state,CREATE_TIME,invite_code
 	</sql>
 	
 	<select id="getById" resultMap="resultMap">
@@ -47,9 +48,12 @@
 	</select>
 	
 	<select id="queryByMobile" resultMap="resultMap">
-		select <include refid="select_columns" /> from t_recommend tr where mobile = #{mobile} and data_state = 1 order by create_time desc
+		select <include refid="select_columns" /> from t_recommend tr where mobile = #{mobile} and state=2 order by create_time desc
 	</select>
 	
+	<select id="getByUserIdAndCode" resultMap="resultMap">
+		select <include refid="select_columns" /> from t_recommend tr where user_id = #{userId} and invite_code = #{inviteCode} and data_state = 1 order by UPDATE_TIME desc
+	</select>
 	
 	<!-- 用户推荐时判断被推荐人是否可以被推荐 -->
 	<select id="queryCountForUserRecommend" resultType="java.lang.Integer">
@@ -125,7 +129,8 @@
 			#{obj.gender},
 			#{obj.state},
 			#{obj.dataState},
-			#{obj.createTime}
+			#{obj.createTime},
+			#{obj.inviteCode}
 		)
 	</insert>
 	
@@ -134,6 +139,7 @@
 		set 
 			name = #{obj.name},
 			mobile = #{obj.mobile},
+			invite_code = #{obj.inviteCode},
 			state = #{obj.state},
 			data_state = #{obj.dataState},
 			age = #{obj.age},

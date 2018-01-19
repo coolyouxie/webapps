@@ -27,4 +27,13 @@ public interface IUserService {
 
 	Map<String,String> loadUserPermission(Integer userId);
 	
+	/**
+	 * 根据邀请码查询用户对象。
+	 * @author scorpio.yang
+	 * @since 2018-01-16
+	 * @param inviteCode
+	 * @return
+	 */
+	public User queryByInviteCode(String inviteCode);
+	
 }

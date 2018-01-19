@@ -1,15 +1,11 @@
 package com.webapps.service.impl;
 
-import com.webapps.common.bean.Page;
-import com.webapps.common.bean.ResultDto;
-import com.webapps.common.dto.EnrollApprovalInfoDto;
-import com.webapps.common.entity.*;
-import com.webapps.common.form.EnrollApprovalRequestForm;
-import com.webapps.common.utils.DateUtil;
-import com.webapps.common.utils.PropertyUtil;
-import com.webapps.mapper.*;
-import com.webapps.service.IEnrollApprovalService;
-import net.sf.json.JSONObject;
+import java.math.BigDecimal;
+import java.net.URLDecoder;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -20,11 +16,39 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
-import java.math.BigDecimal;
-import java.net.URLDecoder;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import com.webapps.common.bean.Page;
+import com.webapps.common.bean.ResultDto;
+import com.webapps.common.dto.EnrollApprovalInfoDto;
+import com.webapps.common.entity.BillRecord;
+import com.webapps.common.entity.Company;
+import com.webapps.common.entity.EnrollApproval;
+import com.webapps.common.entity.Enrollment;
+import com.webapps.common.entity.EnrollmentExtra;
+import com.webapps.common.entity.FeeConfig;
+import com.webapps.common.entity.ParamConfig;
+import com.webapps.common.entity.Recommend;
+import com.webapps.common.entity.Recruitment;
+import com.webapps.common.entity.User;
+import com.webapps.common.entity.UserWallet;
+import com.webapps.common.form.EnrollApprovalRequestForm;
+import com.webapps.common.utils.DateUtil;
+import com.webapps.common.utils.PropertyUtil;
+import com.webapps.mapper.IBillRecordMapper;
+import com.webapps.mapper.ICompanyMapper;
+import com.webapps.mapper.IEnrollApprovalMapper;
+import com.webapps.mapper.IEnrollmentExtraMapper;
+import com.webapps.mapper.IEnrollmentMapper;
+import com.webapps.mapper.IFeeConfigMapper;
+import com.webapps.mapper.IRecommendMapper;
+import com.webapps.mapper.IRecruitmentMapper;
+import com.webapps.mapper.IUserMapper;
+import com.webapps.mapper.IUserWalletMapper;
+import com.webapps.service.IEnrollApprovalService;
+import com.webapps.service.IParamConfigService;
+import com.webapps.service.IUserAwardService;
+import com.webapps.service.impl.ParamConfigService.ParamConfigType;
+
+import net.sf.json.JSONObject;
 
 @Service
 @Transactional
@@ -61,7 +85,11 @@ public class EnrollApprovalServiceImpl implements IEnrollApprovalService {
 
 	@Autowired
 	private IRecruitmentMapper iRecruitmentMapper;
-
+	
+	@Autowired private IParamConfigService iParamConfigService;
+	
+	@Autowired private IUserAwardService iUserAwardService;
+	
 	@Override
 	public Page loadEnrollApprovalList(Page page, EnrollApprovalRequestForm form) throws Exception {
 		int startRow = page.getStartRow();
@@ -523,6 +551,13 @@ public class EnrollApprovalServiceImpl implements IEnrollApprovalService {
 				iEnrollmentMapper.updateById(em.getId(), em);
 				iEnrollApprovalMapper.updateById(ea.getId(), ea);
 				dto.setResult("S");
+				/**
+				 * 增加逻辑 2018-01-19 scorpio.yang
+				 * 用户用邀请码注册后，发放红包到邀请人账户
+				 */
+				ParamConfig pc = iParamConfigService.getParamConfigByAwardType(ParamConfigType.入职红包);
+				pc.setId(1);
+				iUserAwardService.addNewAward(user, pc);
 				return dto;
 			}else{
 				dto.setErrorMsg("审核状态不匹配，请刷新页面后再试");
@@ -779,6 +814,13 @@ public class EnrollApprovalServiceImpl implements IEnrollApprovalService {
 				iEnrollmentMapper.updateById(enrollment.getId(), enrollment);
 				iEnrollApprovalMapper.updateById(ea.getId(), ea);
 				dto.setResult("S");
+				/**
+				 * 增加逻辑 2018-01-19 scorpio.yang
+				 * 用户用邀请码注册后，发放红包到邀请人账户
+				 */
+				ParamConfig pc = iParamConfigService.getParamConfigByAwardType(ParamConfigType.期满红包);
+				pc.setId(1);
+				iUserAwardService.addNewAward(user, pc);
 				return dto;
 			}else{
 				dto.setErrorMsg("审核状态不匹配，请刷新页面后再试");
