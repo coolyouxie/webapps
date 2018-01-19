@@ -1,5 +1,10 @@
 package com.webapps.common.dto;
 
+/**
+ * 招聘专员绩效统计信息
+ * @author xieshuai
+ *
+ */
 public class RateDto {
 
     private Integer talkerId;
