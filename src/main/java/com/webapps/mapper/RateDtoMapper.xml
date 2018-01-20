@@ -1,408 +1,203 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.webapps.mapper.IRateDtoMapper">
-	<resultMap id="resultMap" type="com.webapps.common.dto.RateDto">
-		<id column="talker_id" jdbcType="DECIMAL" property="talkerId" />
-		<result column="talker_name" jdbcType="VARCHAR" property="talkerName" />
-		<result column="talker_mobile" jdbcType="VARCHAR" property="talkerMobile" />
-		<result column="talk_count" jdbcType="DECIMAL" property="talkCount" />
-		<result column="entry_count" jdbcType="DECIMAL" property="entryCount" />
-		<result column="expire_count" jdbcType="DECIMAL" property="expire" />
-		<result column="entry_rate" jdbcType="DECIMAL" property="entryRate" />
-		<result column="expire_rate" jdbcType="DECIMAL" property="expireRate" />
-		<result column="state" jdbcType="DECIMAL" property="state" />
-		<result column="type" jdbcType="DECIMAL" property="type" />
-	</resultMap>
+    <resultMap id="resultMap" type="com.webapps.common.dto.RateDto">
+        <id column="talker_id" jdbcType="DECIMAL" property="talkerId"/>
+        <result column="talker_name" jdbcType="VARCHAR" property="talkerName"/>
+        <result column="talker_mobile" jdbcType="VARCHAR" property="talkerMobile"/>
+        <result column="talk_count" jdbcType="DECIMAL" property="talkCount"/>
+        <result column="entry_count" jdbcType="DECIMAL" property="entryCount"/>
+        <result column="expire_count" jdbcType="DECIMAL" property="expireCount"/>
+        <result column="entry_rate" jdbcType="DECIMAL" property="entryRate"/>
+        <result column="expire_rate" jdbcType="DECIMAL" property="expireRate"/>
+        <result column="state" jdbcType="DECIMAL" property="state"/>
+        <result column="type" jdbcType="DECIMAL" property="type"/>
+    </resultMap>
 
-	<sql id="select_columns">
+    <sql id="select_columns">
 		talker_id,talker_name,talker_mobile,talk_count,entry_count,expire_count,entry_rate,expire_rate,state,type
 	</sql>
-	
-	<select id="getById" resultMap="resultMap">
-		select <include refid="select_columns" /> from t_enrollment te where te.id = #{id}
-	</select>
-	
-	<!-- 查询所有 -->
-	<select id="queryAll" resultMap="resultMap">
-		select <include refid="select_columns" /> from t_enrollment te where te.data_state = 1
-	</select>
-	
-	<select id="queryByState" resultMap="resultMap">
-		select <include refid="select_columns" /> from t_enrollment te where state = #{state}
-	</select>
-	
-	<select id="queryListByFkId" resultMap="resultMap">
-		select <include refid="select_columns" />,
-		tc.name as company_name,
-		tc.id as company_id,
-		tr.title as recruitment_title 
-		from t_enrollment te 
-		left join t_company tc on tc.id=te.company_id
-		left join t_recruitment tr on tr.id = te.recruitment_id 
-		<trim prefix="WHERE" prefixOverrides="AND">
-			te.data_state = 1
-			<if test="obj.recruitment != null and obj.recruitment.id != null and obj.recruitment.id != ''">
-				and te.recruitment_id = #{obj.recruitment.id}
-			</if>
-			<if test="obj.company != null and obj.company.id != null and obj.company.id !='' ">
-				and te.company_id = #{obj.company.id}
-			</if>
-			<if test="obj.company != null and obj.company.name !=null and obj.company.name != ''">
-				and tc.name like concat('%',#{obj.company.name},'%')
-			</if>
-			<if test="obj.user != null and obj.user.id != null and obj.user.id != ''">
-				and te.user_id = #{obj.user.id}
-			</if>
-		</trim>
-		order by te.id desc
-	</select>
-	
-	<select id="countByFkIds" resultType="java.lang.Integer">
-		select count(1) from t_enrollment te 
-		<trim prefix="WHERE" prefixOverrides="AND">
-			te.data_state = 1 and state = 1
-			<if test="obj.recruitment != null and obj.recruitment.id != null">
-				and te.recruitment_id = #{obj.recruitment.id}
-			</if>
-			<if test="obj.company != null and obj.company.id != null">
-				and te.company_id = #{obj.company.id}
-			</if>
-			<if test="obj.user != null and obj.user.id != null">
-				and te.user_id = #{obj.user.id}
-			</if>
-		</trim>
-	</select>
-	
-	<select id="queryListByUserIdAndState" resultMap="resultMap">
-		select 
-		<include refid="select_columns" />
-		from t_enrollment te where te.user_id = #{userId} and id != #{emId}
-	</select>
 
-	<select id="queryListByUserIdAndStateNew" resultMap="resultMap">
-		select
-		<include refid="select_columns" />
-		from t_enrollment te where te.state =#{state} and te.user_id = #{userId}
-	</select>
-	<select id="queryListByUserIdStateAndId" resultMap="resultMap">
-		select
-		<include refid="select_columns" />
-		from t_enrollment te where te.state = 1 and te.user_id = #{userId} and te.id != #{id} and data_state=1
-	</select>
+    <select id="queryCount" resultType="java.lang.Integer">
+        SELECT
+        count(1)
+        FROM
+        (
+        SELECT
+        count1 AS entry_count,
+        count2 AS talk_count,
+        count3 AS expire_count,
+        count1 / count2 AS entry_rate,
+        count3 / count2 AS expire_rate,
+        t_user. NAME AS talker_name,
+        t_user.mobile AS talker_mobile,
+        t_user.id AS talker_id
+        FROM
+        (
+        SELECT
+        talker_id,
+        count(state) AS count1
+        FROM
+        t_enrollment
+        WHERE
+        state > 20
+        GROUP BY
+        talker_id
+        ) AS temp_1
+        INNER JOIN (
+        SELECT
+        talker_id,
+        count(is_talked) AS count2
+        FROM
+        t_enrollment
+        WHERE
+        is_talked = 1
+        GROUP BY
+        talker_id
+        ) AS temp_2 ON temp_1.talker_id = temp_2.talker_id
+        INNER JOIN (
+        SELECT
+        talker_id,
+        count(state) AS count3
+        FROM
+        t_enrollment
+        WHERE
+        state = 31
+        GROUP BY
+        talker_id
+        ) AS temp_3 ON temp_1.talker_id = temp_3.talker_id
+        INNER JOIN t_user ON temp_1.talker_id = t_user.id
+        WHERE
+        temp_1.talker_id = temp_2.talker_id
+        AND temp_2.talker_id = temp_3.talker_id
+        ) temp_0
+        <trim prefix="WHERE" prefixOverrides="AND">
+            <if test="obj.talkerName != null and obj.talkerName != ''">
+                and talker_name like concat('%',#{obj.talkerName},'%')
+            </if>
+            <if test="obj.talkerMobile != null and obj.talkerMobile != ''">
+                and talker_mobile = #{obj.talkerMobile}
+            </if>
+            <if test="obj.type != null and obj.type==1">
+                <if test="obj.rateStart != null and obj.rateStart != ''">
+                    and entry_count/talk_count >=(#{obj.rateStart}/100)
+                </if>
+                <if test="obj.rateEnd != null and obj.rateEnd != ''">
+                    and (#{obj.rateEnd}/100) >= entry_count/talk_count
+                </if>
+            </if>
+            <if test="obj.type != null and obj.type==2">
+                <if test="obj.rateStart != null and obj.rateStart != ''">
+                    and expire_count/talk_count >=(#{obj.rateStart}/100)
+                </if>
+                <if test="obj.rateEnd != null and obj.rateEnd != ''">
+                    and (#{obj.rateEnd}/100) >= expire_count/talk_count
+                </if>
+            </if>
+            <if test="obj.type != null and obj.type != '' or obj.type==0">
+                <if test="obj.rateStart != null and obj.rateStart != ''">
+                    and entry_count/talk_count >=(#{obj.rateStart}/100)
+                    and expire_count/talk_count >=(#{obj.rateStart}/100)
+                </if>
+                <if test="obj.rateEnd != null and obj.rateEnd != ''">
+                    and (#{obj.rateEnd}/100) >= entry_count/talk_count
+                    and (#{obj.rateEnd}/100) >= expire_count/talk_count
+                </if>
+            </if>
+        </trim>
+    </select>
 
-	<select id="getCurrentStateEnrollmentByUserId" resultMap="resultMap">
-		select * from t_enrollment where user_id = #{userId} and data_state = 1 order by update_time DESC
-	</select>
-	
-	<select id="queryCount" resultType="java.lang.Integer">
-		SELECT count(1) from t_enrollment te 
-		left join t_company tc on tc.id=te.company_id
-		left join t_recruitment tr on tr.id = te.recruitment_id 
-		left join t_user tu on tu.id = te.user_id
-		left join t_province tp on tp.id = te.intention_city_id
-		<trim prefix="WHERE" prefixOverrides="AND">
-			te.data_state = 1 and (te.is_talked = 1 or te.is_latest) 
-			<if test="obj.state != null and obj.state != ''">
-				and te.state = #{obj.state}
-			</if>
-			<if test="obj.isTalked != null and obj.isTalked != '' or obj.isTalked==0">
-				and te.is_talked = #{obj.isTalked}
-			</if>
-			<if test="obj.user != null and obj.user.name != null and obj.user.name != ''">
-				and tu.name = #{obj.user.name}
-			</if>
-			<if test="obj.user != null and obj.user.id != null and obj.user.id != ''">
-				and te.user_id = #{obj.user.id}
-			</if>
-			<if test="obj.user != null and obj.user.mobile !=null and obj.user.mobile != ''">
-				and tu.mobile = #{obj.user.mobile}
-			</if>
-			<if test="obj.company != null and obj.company.name != null and obj.company.name != ''">
-				and tc.name like concat('%',#{obj.company.name},'%')
-			</if>
-			<if test="obj.enrollTimeStart != null and obj.enrollTimeStart != ''">
-				and te.create_time >= #{obj.enrollTimeStart}
-			</if>
-			<if test="obj.enrollTimeEnd != null and obj.enrollTimeEnd != ''">
-				and #{obj.enrollTimeEnd} >= te.create_time
-			</if>
-			<if test="obj.talkerId != null and obj.talkerId != ''">
-				and #{obj.talkerId} = te.talker_Id
-			</if>
-			<if test="obj.entryApproverId != null and obj.entryApproverId != ''">
-				and #{obj.entryApproverId} = te.entry_approver_id
-			</if>
-			<if test="obj.expireApproverId != null and obj.expireApproverId != ''">
-				and #{obj.expireApproverId} = te.expire_approver_id
-			</if>
-			<if test="obj.isEntryApproved != null and obj.isEntryApproved != '' or obj.isEntryApproved==0">
-				and #{obj.isEntryApproved} = te.is_entry_approved
-			</if>
-			<if test="obj.isExpireApproved != null and obj.isExpireApproved != '' or obj.isExpireApproved==0">
-				and #{obj.isExpireApproved} = te.is_expire_approved
-			</if>
-			<if test="obj.talkerName != null and obj.talkerName != ''">
-				and te.talker_name like concat('%',#{obj.talkerName},'%')
-			</if>
-			<if test="obj.entryApproverName != null and obj.entryApproverName != ''">
-				and te.entry_approver_name like concat('%',#{obj.entryApproverName},'%')
-			</if>
-			<if test="obj.expireApproverName != null and obj.expireApproverName != ''">
-				and te.expire_approver_name like concat('%',#{obj.expireApproverName},'%')
-			</if>
-			<if test="obj.interviewTimeStart != null and obj.interviewTimeStart != ''">
-				and te.interview_time >=#{obj.interviewTimeStart}
-			</if>
-			<if test="obj.interviewTimeEnd != null and obj.interviewTimeEnd != ''">
-				and #{obj.interviewTimeEnd} >=te.interview_time
-			</if>
-			<if test="obj.interviewIntention != null and obj.interviewIntention != ''">
-				and te.interview_intention = #{obj.interviewIntention}
-			</if>
-			<if test="obj.intentionCityId != null and obj.intentionCityId != ''">
-				and te.intention_city_id = #{obj.intentionCityId}
-			</if>
-		</trim>
-	</select>
-
-	<!-- 分页查询行政区信息 -->
-	<select id="queryPage" resultMap="resultMap">
-		<include refid="ORACLE.paginationStart" />
-		SELECT
-		<include refid="select_columns" />,
-		tc.name company_name,
-		tr.title recruitment_title,
-		tu.name as user_name,
-		tu.mobile as user_mobile,
-		tp.name as intention_city_name
-		from t_enrollment te 
-		left join t_company tc on tc.id=te.company_id
-		left join t_recruitment tr on tr.id = te.recruitment_id 
-		left join t_user tu on tu.id=te.user_id
-		left join t_province tp on tp.id = te.intention_city_id
-		<trim prefix="WHERE" prefixOverrides="AND">
-			te.data_state = 1 
-			<if test="obj.state != null and obj.state != ''">
-				and te.state = #{obj.state}
-			</if>
-			<if test="obj.isTalked != null and obj.isTalked != '' or obj.isTalked==0">
-				and te.is_talked = #{obj.isTalked}
-			</if>
-			<if test="obj.user != null and obj.user.id != null and obj.user.id != ''">
-				and te.user_id = #{obj.user.id}
-			</if>
-			<if test="obj.user != null and obj.user.name != null and obj.user.name != ''">
-				and tu.name = #{obj.user.name}
-			</if>
-			<if test="obj.user != null and obj.user.mobile !=null and obj.user.mobile != ''">
-				and tu.mobile = #{obj.user.mobile}
-			</if>
-			<if test="obj.company != null and obj.company.name != null and obj.company.name != ''">
-				and tc.name like concat('%',#{obj.company.name},'%')
-			</if>
-			<if test="obj.enrollTimeStart != null and obj.enrollTimeStart != ''">
-				and te.create_time >= #{obj.enrollTimeStart}
-			</if>
-			<if test="obj.enrollTimeEnd != null and obj.enrollTimeEnd != ''">
-				and #{obj.enrollTimeEnd} >= te.create_time
-			</if>
-			<if test="obj.talkerId != null and obj.talkerId != ''">
-				and #{obj.talkerId} = te.talker_Id
-			</if>
-			<if test="obj.entryApproverId != null and obj.entryApproverId != ''">
-				and #{obj.entryApproverId} = te.entry_approver_id
-			</if>
-			<if test="obj.expireApproverId != null and obj.expireApproverId != ''">
-				and #{obj.expireApproverId} = te.expire_approver_id
-			</if>
-			<if test="obj.isEntryApproved != null and obj.isEntryApproved != '' or obj.isEntryApproved==0">
-				and #{obj.isEntryApproved} = te.is_entry_approved
-			</if>
-			<if test="obj.isExpireApproved != null and obj.isExpireApproved != '' or obj.isExpireApproved==0">
-				and #{obj.isExpireApproved} = te.is_expire_approved
-			</if>
-			<if test="obj.talkerName != null and obj.talkerName != ''">
-				and te.talker_name like concat('%',#{obj.talkerName},'%')
-			</if>
-			<if test="obj.entryApproverName != null and obj.entryApproverName != ''">
-				and te.entry_approver_name like concat('%',#{obj.entryApproverName},'%')
-			</if>
-			<if test="obj.expireApproverName != null and obj.expireApproverName != ''">
-				and te.expire_approver_name like concat('%',#{obj.expireApproverName},'%')
-			</if>
-			<if test="obj.interviewTimeStart != null and obj.interviewTimeStart != ''">
-				and te.interview_time >=#{obj.interviewTimeStart}
-			</if>
-			<if test="obj.interviewTimeEnd != null and obj.interviewTimeEnd != ''">
-				and #{obj.interviewTimeEnd} >=te.interview_time
-			</if>
-			<if test="obj.interviewIntention != null and obj.interviewIntention != ''">
-				and te.interview_intention = #{obj.interviewIntention}
-			</if>
-			<if test="obj.intentionCityId != null and obj.intentionCityId != ''">
-				and te.intention_city_id = #{obj.intentionCityId}
-			</if>
-		</trim>
-		order by te.create_time desc
-		<include refid="ORACLE.paginationEnd" />
-	</select>
-	
-	<!-- 用于初始化数据时使用 -->
-	<update id="batchUpdateToDelete">
-		<foreach collection="list" item="item" index="index" open="" close="" separator=";">
-			update t_enrollment
-			<set>
-				data_state=#{item.dataState},
-				update_time = #{item.updateTime}
-			</set>
-			where id = #{item.id}
-         </foreach>
-	</update>
-	
-	<update id="deleteByIdInLogic">
-		update t_enrollment set data_state = 0 where id = #{id,jdbcType=DECIMAL}
-	</update>
-	
-	<insert id="insert" useGeneratedKeys="true" keyProperty="obj.id" parameterType="com.webapps.common.entity.Enrollment">
-		insert into t_enrollment
-		(
-			<include refid="insert_columns" />
-		)
-		values
-		(
-			#{obj.user.id},
-			#{obj.recruitment.id},
-			#{obj.company.id},
-			#{obj.state},
-			#{obj.dataState},
-			#{obj.createTime},
-			#{obj.isTalked},
-			#{obj.talkResult},
-			#{obj.failedReason},
-			#{obj.entryDate},
-			#{obj.reward},
-			#{obj.cashbackDays},
-			#{obj.isHistory},
-			#{obj.talkerId},
-			#{obj.talkerName},
-			#{obj.isLatest}
-		)
-	</insert>
-	
-	<update id="updateById">
-		update t_enrollment 
-		set 
-			user_id=#{obj.user.id},
-			recruitment_id=#{obj.recruitment.id},
-			company_id=#{obj.company.id},
-			state=#{obj.state}, 
-			data_state=#{obj.dataState},
-			update_TIME=#{obj.updateTime},
-			is_talked=#{obj.isTalked},
-			talk_result=#{obj.talkResult},
-			remark = #{obj.remark},
-			failed_reason = #{obj.failedReason},
-			entry_date = #{obj.entryDate},
-			reward = #{obj.reward},
-			cashback_days = #{obj.cashbackDays},
-			talker_id = #{obj.talkerId},
-			entry_approver_id = #{obj.entryApproverId},
-			is_Entry_Approved = #{obj.isEntryApproved},
-			expire_approver_id = #{obj.expireApproverId},
-			is_expire_approved = #{obj.isExpireApproved},
-			talker_name=#{obj.talkerName},
-			entry_approver_name = #{obj.entryApproverName},
-			expire_approver_name= #{obj.expireApproverName}
-		where id=#{id}
-	</update>
-	
-	<update id="saveTalkInfoById">
-		update t_enrollment 
-		set 
-			update_TIME=#{obj.updateTime},
-			is_talked=#{obj.isTalked},
-			talk_result=#{obj.talkResult},
-			intention_city_id = #{obj.intentionCityId},
-			interview_intention = #{obj.interviewIntention},
-			interview_time = #{obj.interviewTime}
-		where id=#{id}
-	</update>
-
-	<update id="updateTalkInfo">
-		UPDATE t_enrollment SET
-		talker_id = #{talkerId},
-		talker_name = #{talkerName},
-		is_talked = #{isTalked},
-		update_TIME=#{updateTime}
-		where id = #{id}
-	</update>
-
-	<update id="updateEntryApproveInfo">
-		UPDATE t_enrollment SET
-		entry_approver_id = #{entryApproverId},
-		entry_approver_name = #{entryApproverName},
-		is_entry_approved = #{isEntryApproved},
-		update_TIME=#{updateTime}
-		where id = #{id}
-	</update>
-
-	<update id="updateExpireApproveInfo">
-		UPDATE t_enrollment SET
-		expire_approver_id = #{expireApproverId},
-		expire_approver_name = #{expireApproverName},
-		is_expire_approved = #{isExpireApproved},
-		update_TIME=#{updateTime}
-		where id = #{id}
-	</update>
-	
-	<update id="updateInterviewTime">
-		update t_enrollment
-		set
-			interview_time = #{interviewTime},
-			update_time = now()
-		where id = #{id}
-	</update>
-	
-	<update id="cancelEnroll">
-		update t_enrollment 
-		set 
-			update_TIME=#{obj.updateTime},
-			remark=#{obj.remark},
-			data_state=#{obj.talkResult}
-		where id=#{id}
-	</update>
-	
-	<update id="batchUpdate">
-		<foreach collection="list" item="item" index="index" open="" close="" separator=";">
-			update t_enrollment
-			<set>
-				state=#{item.state},
-				update_time = #{item.updateTime}
-			</set>
-			where id = #{item.id}
-         </foreach>
-	</update>
-
-	<update id="batchUpdateToHistory">
-		<foreach collection="list" item="item" index="index" open="" close="" separator=";">
-			update t_enrollment
-			<set>
-				is_history=#{item.isHistory},
-				update_time = #{item.updateTime}
-			</set>
-			where id = #{item.id}
-		</foreach>
-	</update>
-	
-	<update id="updateToNotLatest">
-		update t_enrollment set is_latest = 0 where user_id = #{userId}
-	</update>
-	
-	<select id="findLatestByUserId" resultMap="resultMap">
-		select <include refid="select_columns" />
-		from t_enrollment te 
-		where user_id = #{userId}
-		order by create_time desc
-	</select>
+    <!-- 分页查询行政区信息 -->
+    <select id="queryPage" resultMap="resultMap">
+        <include refid="ORACLE.paginationStart"/>
+        SELECT
+        *
+        FROM
+        (
+        SELECT
+        count1 AS entry_count,
+        count2 AS talk_count,
+        count3 AS expire_count,
+        count1 / count2 AS entry_rate,
+        count3 / count2 AS expire_rate,
+        t_user. NAME AS talker_name,
+        t_user.mobile AS talker_mobile,
+        t_user.id AS talker_id
+        FROM
+        (
+        SELECT
+        talker_id,
+        count(state) AS count1
+        FROM
+        t_enrollment
+        WHERE
+        state > 20
+        GROUP BY
+        talker_id
+        ) AS temp_1
+        INNER JOIN (
+        SELECT
+        talker_id,
+        count(is_talked) AS count2
+        FROM
+        t_enrollment
+        WHERE
+        is_talked = 1
+        GROUP BY
+        talker_id
+        ) AS temp_2 ON temp_1.talker_id = temp_2.talker_id
+        INNER JOIN (
+        SELECT
+        talker_id,
+        count(state) AS count3
+        FROM
+        t_enrollment
+        WHERE
+        state = 31
+        GROUP BY
+        talker_id
+        ) AS temp_3 ON temp_1.talker_id = temp_3.talker_id
+        INNER JOIN t_user ON temp_1.talker_id = t_user.id
+        WHERE
+        temp_1.talker_id = temp_2.talker_id
+        AND temp_2.talker_id = temp_3.talker_id
+        ) temp_0
+        <trim prefix="WHERE" prefixOverrides="AND">
+            <if test="obj.talkerName != null and obj.talkerName != ''">
+                and talker_name like concat('%',#{obj.talkerName},'%')
+            </if>
+            <if test="obj.talkerMobile != null and obj.talkerMobile != ''">
+                and talker_mobile = #{obj.talkerMobile}
+            </if>
+            <if test="obj.type != null and obj.type != '' and obj.type==1">
+                <if test="obj.rateStart != null and obj.rateStart != ''">
+                    and entry_count/talk_count >=(#{obj.rateStart}/100)
+                </if>
+                <if test="obj.rateEnd != null and obj.rateEnd != ''">
+                    and (#{obj.rateEnd}/100) >= entry_count/talk_count
+                </if>
+            </if>
+            <if test="obj.type != null and obj.type != '' and obj.type==2">
+                <if test="obj.rateStart != null and obj.rateStart != ''">
+                    and expire_count/talk_count >=(#{obj.rateStart}/100)
+                </if>
+                <if test="obj.rateEnd != null and obj.rateEnd != ''">
+                    and (#{obj.rateEnd}/100) >= expire_count/talk_count
+                </if>
+            </if>
+            <if test="obj.type != null and obj.type != '' or obj.type==0">
+                <if test="obj.rateStart != null and obj.rateStart != ''">
+                    and entry_count/talk_count >=(#{obj.rateStart}/100)
+                    and expire_count/talk_count >=(#{obj.rateStart}/100)
+                </if>
+                <if test="obj.rateEnd != null and obj.rateEnd != ''">
+                    and (#{obj.rateEnd}/100) >= entry_count/talk_count
+                    and (#{obj.rateEnd}/100) >= expire_count/talk_count
+                </if>
+            </if>
+        </trim>
+        order by talker_name desc
+        <include refid="ORACLE.paginationEnd"/>
+    </select>
 </mapper>
