@@ -15,6 +15,7 @@
         <result column="type" jdbcType="DECIMAL" property="type"/>
     </resultMap>
 
+
     <sql id="select_columns">
 		talker_id,talker_name,talker_mobile,talk_count,entry_count,expire_count,entry_rate,expire_rate,state,type
 	</sql>

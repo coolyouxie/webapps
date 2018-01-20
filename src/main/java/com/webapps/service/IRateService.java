@@ -11,4 +11,10 @@ public interface IRateService {
 	
 	Page loadRateDtoList(Page page, RateDtoRequestForm form) throws Exception;
 
+	Page loadEntryStatisticsList(Page page,RateDtoRequestForm form) throws Exception;
+
+	Page loadExpireStatisticsList(Page page,RateDtoRequestForm form) throws Exception;
+
+	Page loadEntryOrExprieStatisticsList(Page page,RateDtoRequestForm form) throws Exception;
+
 }

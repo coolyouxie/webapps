@@ -31,7 +31,7 @@
         var dataGrid = null;
         jQuery(document).ready(function () {
             dataGrid = jQuery("#list").jqGrid({
-                url: "${ctx}/statistics/loadRateList",
+                url: "${ctx}/statistics/loadEntryStatisticsList",
                 datatype: "json",
                 mtype: "POST",
                 height: 'auto',
@@ -44,55 +44,55 @@
                     total: 'total', // json中代表页码总数的数据
                     repeatitems: false // 如果设为false，则jqGrid在解析json时，会根据name来搜索对应的数据元素（即可以json中元素可以不按顺序）；而所使用的name是来自于colModel中的name设定。
                 },
-                getParam: function () {
-                    var rowListNum = $("#list").jqGrid('getGridParam', 'rowNum');
-                    if (rowListNum == undefined) {
-                        $('#pageSize').val(15);
-                    } else {
-                        $('#pageSize').val(rowListNum);
-                    }
-                    //组装查询的条件参数
-                    var params = {
-                        'company.name': $("#companyName").val()
-                    };
-                    return params;
+                postData: {
+                    'talkerId':$("#talkerId").val(),
+                    'type':0
                 },
-                colNames: ['招聘员', '联系方式', '实际招聘', '入职率', '期满率'],
+                colNames: ['会员姓名', '联系方式', '报名公司', '发布标题','身份证号', '报名日期','状态'],
                 colModel: [{
-                    label: 'talkerName',
-                    name: 'talkerName',
+                    label: 'user.name',
+                    name: 'user.name',
                     align: 'center',
                     sortable: false
                 }, {
-                    label: 'talkerMobile',
-                    name: 'talkerMobile',
+                    label: 'user.mobile',
+                    name: 'user.mobile',
                     align: 'center',
                     sortable: false
                 }, {
-                    label: 'talkCount',
-                    name: 'talkCount',
+                    label: 'company.name',
+                    name: 'company.name',
                     align: 'center',
                     sortable: false
                 }, {
-                    label: 'entryRate',
-                    name: 'entryRate',
+                    label: 'recruitment.title',
+                    name: 'recruitment.title',
+                    align: 'center',
+                    sortable: false
+                }, {
+                    label: 'user.idCardNo',
+                    name: 'user.idCardNo',
+                    align: 'center',
+                    sortable: false
+                }, {
+                    label: 'createTimeStr',
+                    name: 'createTimeStr',
+                    align: 'center',
+                    sortable: false
+                }, {
+                    label: 'state',
+                    name: 'state',
                     align: 'center',
                     sortable: false,
-	                formatter:function (cellValue,options,rowObject) {
-                        var data = (cellValue*100).toFixed(2)+"%";
-                        var result = '<a href="${ctx}/statistics/toStatisticsListPage?talkerId='+rowObject.talkerId+'&type=1" ><font color="blue">'+data+'</font></a>';
-		                return result;
-                    }
-                }, {
-                    label: 'expireRate',
-                    name: 'expireRate',
-                    align: 'center',
-                    sortable: false,
-                    formatter:function (cellValue,options,rowObject) {
-                        var data = (cellValue*100).toFixed(2)+"%";
-                        var result = '<a href="${ctx}/statistics/toStatisticsListPage?talkerId='+rowObject.talkerId+'&type=2"><font color="blue">'+data+'</font></a>';
+	                formatter:function(cellValue,options,rowObjec){
+                        var result = null;
+                        if(cellValue>=21){
+                            result = "已入职";
+                        }else{
+                            result = "未入职";
+                        }
                         return result;
-                    }
+	                }
                 }],
                 pager: '#pager',
                 pagination: true,
@@ -101,13 +101,13 @@
                 sortname: 'id',
                 viewrecords: true,
                 sortorder: "desc",
-                caption: "统计列表"
+                caption: "入职统计列表"
             });
         });
 
         function search() {
             $("#list").setGridParam({
-                url: "${ctx}/statistics/loadRateList?" + encodeURI($("#searchForm").serialize())
+                url: "${ctx}/statistics/loadEntryStatisticsList?" + encodeURI($("#searchForm").serialize())
             }).trigger('reloadGrid');
         }
 	</script>
@@ -131,6 +131,7 @@
 <body>
 <div class="container-fluid" style="padding-right: 15px;">
 	<form id="searchForm">
+		<input type="hidden" id="talkerId" name="talkerId" value="${talkerId}">
 		<table>
 			<tr>
 				<th width="70px;"></th>
@@ -144,44 +145,20 @@
 			</tr>
 			<tr>
 				<td>
-					招聘员:
+					是否入职:
 				</td>
 				<td>
-					<input type="text" id="talkerName" name="talkerName">
-				</td>
-				<td>
-					联系方式:
-				</td>
-				<td>
-					<input type="text" id="talkerMobile" name="talkerMobile">
-				</td>
-				<td>
-					<select id="type" name="type">
+					<select id="state" name="state">
 						<option value="0">-请选择-</option>
-						<option value="1">入职</option>
-						<option value="2">期满</option>
+						<option value="1">已入职</option>
+						<option value="2">未入职</option>
 					</select>
 				</td>
-				<td colspan="2">
-					<input type="text" id="rateStart" name="rateStart" >
-					%-
-					<input type="text" id="rateEnd" name="rateEnd" >%
-				</td>
 				<td></td>
-			</tr>
-			<tr>
-				<td>
-				</td>
-				<td>
-				</td>
-				<td>
-				</td>
-				<td>
-				</td>
-				<td>
-				</td>
-				<td colspan="2">
-				</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
 				<td align="right">
 					<button type='button' class="btn btn-primary btn-sm" data-toggle="modal" onclick="search()">
 						查询

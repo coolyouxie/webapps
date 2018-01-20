@@ -37,6 +37,7 @@
 		<result column="interview_time" jdbcType="VARCHAR" property="interviewTime" />
 		<result column="intention_city_name" jdbcType="VARCHAR" property="intentionCityName" />
 		<result column="is_latest" jdbcType="VARCHAR" property="isLatest" />
+		<result column="id_card_no" jdbcType="VARCHAR" property="user.idCardNo" />
 	</resultMap>
 
 	<sql id="select_columns">
@@ -135,7 +136,7 @@
 		left join t_user tu on tu.id = te.user_id
 		left join t_province tp on tp.id = te.intention_city_id
 		<trim prefix="WHERE" prefixOverrides="AND">
-			te.data_state = 1 and (te.is_talked = 1 or te.is_latest) 
+			te.data_state = 1 and (te.is_talked = 1 or te.is_latest = 1)
 			<if test="obj.state != null and obj.state != ''">
 				and te.state = #{obj.state}
 			</if>
@@ -215,7 +216,7 @@
 		left join t_user tu on tu.id=te.user_id
 		left join t_province tp on tp.id = te.intention_city_id
 		<trim prefix="WHERE" prefixOverrides="AND">
-			te.data_state = 1 
+			te.data_state = 1 and (is_talked=1 or is_latest = 1)
 			<if test="obj.state != null and obj.state != ''">
 				and te.state = #{obj.state}
 			</if>
@@ -437,5 +438,81 @@
 		from t_enrollment te 
 		where user_id = #{userId}
 		order by create_time desc
+	</select>
+
+
+	<select id="queryCountForEntryStatistics" resultType="java.lang.Integer">
+		SELECT count(1) from t_enrollment
+		<trim prefix="WHERE" prefixOverrides="AND">
+			and is_talked = 1 and talker_id = #{obj.talkerId}
+			<if test="obj.state != null and obj.state != ''">
+				and state >= 21
+			</if>
+		</trim>
+	</select>
+
+	<select id="queryPageForEntryStatistics" resultMap="resultMap">
+		<include refid="ORACLE.paginationStart" />
+		SELECT
+		<include refid="select_columns" />,
+		tc.name company_name,
+		tr.title recruitment_title,
+		tu.name as user_name,
+		tu.mobile as user_mobile,
+		tu.id_card_no as id_card_no
+		from t_enrollment te
+		left join t_company tc on tc.id=te.company_id
+		left join t_recruitment tr on tr.id = te.recruitment_id
+		left join t_user tu on tu.id=te.user_id
+		<trim prefix="WHERE" prefixOverrides="AND">
+			and te.is_talked = 1 and talker_id = #{obj.talkerId}
+			<if test="obj.state != null and obj.state ==1">
+				and te.state>=21
+			</if>
+			<if test="obj.state != null and obj.state == 2">
+				and 21>te.state
+			</if>
+		</trim>
+		order by te.create_time desc
+		<include refid="ORACLE.paginationEnd" />
+	</select>
+
+	<select id="queryCountForExpireStatistics" resultType="java.lang.Integer">
+		SELECT count(1) from t_enrollment
+		<trim prefix="WHERE" prefixOverrides="AND">
+			and talker_id = #{obj.talkerId} and is_talked = 1
+			<if test="obj.state != null and obj.state ==1">
+				and state = 31
+			</if>
+			<if test="obj.state != null and obj.state ==2">
+				and state != 31
+			</if>
+		</trim>
+	</select>
+
+	<select id="queryPageForExpireStatistics" resultMap="resultMap">
+		<include refid="ORACLE.paginationStart" />
+		SELECT
+		<include refid="select_columns" />,
+		tc.name company_name,
+		tr.title recruitment_title,
+		tu.name as user_name,
+		tu.mobile as user_mobile,
+		tu.id_card_no as id_card_no
+		from t_enrollment te
+		left join t_company tc on tc.id=te.company_id
+		left join t_recruitment tr on tr.id = te.recruitment_id
+		left join t_user tu on tu.id=te.user_id
+		<trim prefix="WHERE" prefixOverrides="AND">
+			and talker_id = #{obj.talkerId} and is_talked = 1
+			<if test="obj.state != null and obj.state ==1">
+				and te.state = 31
+			</if>
+			<if test="obj.state != null and obj.state ==2">
+				and te.state != 31
+			</if>
+		</trim>
+		order by te.create_time desc
+		<include refid="ORACLE.paginationEnd" />
 	</select>
 </mapper>

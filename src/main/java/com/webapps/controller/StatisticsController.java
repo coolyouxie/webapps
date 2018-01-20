@@ -43,4 +43,41 @@ public class StatisticsController {
         }
         return null;
     }
+
+    @RequestMapping(value="/toStatisticsListPage")
+    public String toStatisticsListPage(Model model,Integer talkerId,int type){
+        model.addAttribute("talkerId",talkerId);
+        if(type==1){
+            return "/statistics/entryStatisticsList";
+        }else if(type==2){
+            return "/statistics/expireStatisticsList";
+        }
+        return null;
+    }
+
+    @ResponseBody
+    @RequestMapping(value="/loadEntryStatisticsList", produces = "text/html;charset=UTF-8")
+    public String loadEntryStatisticsList(Model model,Page page,RateDtoRequestForm form){
+        try {
+            page = iRateService.loadEntryStatisticsList(page,form);
+            return JSONUtil.toJSONString(JSONObject.fromObject(page));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @ResponseBody
+    @RequestMapping(value="/loadExpireStatisticsList", produces = "text/html;charset=UTF-8")
+    public String loadExpireStatisticsList(Model model,Page page,RateDtoRequestForm form){
+        try {
+            form.setType(1);
+            page = iRateService.loadExpireStatisticsList(page,form);
+            return JSONUtil.toJSONString(JSONObject.fromObject(page));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 }
