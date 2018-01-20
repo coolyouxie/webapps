@@ -234,7 +234,7 @@ public class AppController {
 					 * @since 2018-01-15
 					 */
 					if(StringUtils.isNotBlank(inviteCode)) {
-						ResultDto<String> res = iRecommendService.saveInviteRecommend(user, inviteCode);
+						ResultDto<String> res = iRecommendService.saveInviteRecommend(user, inviteCode, null);
 						if(res.getResult().equals("F")) {
 							dto.setResult("F");
 							dto.setErrorMsg(res.getErrorMsg());
@@ -363,7 +363,7 @@ public class AppController {
 		try {
 			User user = iUserService.getById(sendCode.getFromUserId());
 			
-			dto = iRecommendService.sendUserInviteCode(sendCode.getToPhone(), user);
+			dto = iRecommendService.sendUserInviteCode(sendCode.getToPhone(), sendCode.getInviteUserName(), user);
 		} catch (Exception e) {
 			e.printStackTrace();
 			dto = new ResultDto<String>();

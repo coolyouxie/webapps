@@ -8,6 +8,7 @@ import java.util.Map;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.math.RandomUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
@@ -18,6 +19,7 @@ import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import com.webapps.common.bean.Page;
 import com.webapps.common.bean.ResultDto;
+import com.webapps.common.entity.Recommend;
 import com.webapps.common.entity.User;
 import com.webapps.common.entity.UserPermission;
 import com.webapps.common.entity.UserWallet;
@@ -28,6 +30,7 @@ import com.webapps.mapper.IPermissionRelationMapper;
 import com.webapps.mapper.IUserMapper;
 import com.webapps.mapper.IUserPermissionMapper;
 import com.webapps.mapper.IUserWalletMapper;
+import com.webapps.service.IRecommendService;
 import com.webapps.service.IUserService;
 
 @Service
@@ -50,6 +53,8 @@ public class UserServiceImpl implements IUserService {
 
 	@Autowired
 	private IUserPermissionMapper iUserPermissionMapper;
+	
+	@Autowired private IRecommendService iRecommendService;
 
 	@Override
 	public Page loadUserList(Page page,UserRequestForm user) throws Exception {
@@ -106,6 +111,21 @@ public class UserServiceImpl implements IUserService {
 				user1.setAwardFlag(user.getAwardFlag());
 				iUserMapper.updateById(user1.getId(), user1);
 				dto.setData(user1);
+				/**
+				 * 增加用户更新信息后，邀请列表中的被邀请人姓名，也进行同步更新。
+				 * @author scorpio.yang
+				 * @since 2018-01-20
+				 */
+				if(StringUtils.isNotBlank(user1.getName())) {
+					List<Recommend> recommendList = iRecommendService.getByMobile(user1.getMobile());
+					if(null != recommendList && recommendList.size()>0) {
+						Recommend recommend = recommendList.get(0);
+						if(null != recommend) {
+							recommend.setName(user1.getName());
+							iRecommendService.saveRecommend(recommend);
+						}
+					}
+				}
 				return dto;
 			}else{
 				String password = user.getPassword();

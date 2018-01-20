@@ -29,13 +29,19 @@ public interface IRecommendService {
 	 * 生成发送邀请记录，24小时有效。
 	 * @author scorpio.yang
 	 * @since 2018-01-15
+	 * 
+	 * 增加被邀请人姓名，用户红包列表用户名称显示
+	 * @author scorpio.yang
+	 * @since 2018-01-20
+	 * 
 	 * @param phoneNum
 	 * @param inviteCode
+	 * @param inviteUserName
 	 * @return
 	 * @throws ClientException 
 	 * @throws Exception 
 	 */
-	public ResultDto<String> sendUserInviteCode(String phoneNum , User fromUser) throws ClientException, Exception;
+	public ResultDto<String> sendUserInviteCode(String phoneNum , String inviteUserName, User fromUser) throws ClientException, Exception;
 	
 	/**
 	 * 注册用户填写邀请码，进行数据入库
@@ -46,10 +52,11 @@ public interface IRecommendService {
 	 * @since 2018-01-15
 	 * @param registUser
 	 * @param inviteCode
+	 * @param inviteUserName
 	 * @return
 	 * @throws Exception 
 	 */
-	public ResultDto<String> saveInviteRecommend(User registUser , String inviteCode) throws Exception;
+	public ResultDto<String> saveInviteRecommend(User registUser , String inviteCode, String inviteUserName) throws Exception;
 	
 	/**
 	 * 根据手机号码获取对象。

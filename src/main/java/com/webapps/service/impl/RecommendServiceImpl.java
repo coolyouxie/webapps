@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -113,7 +114,7 @@ public class RecommendServiceImpl implements IRecommendService {
 	 * @return
 	 * @throws Exception 
 	 */
-	public ResultDto<String> saveInviteRecommend(User registUser , String inviteCode) throws Exception{
+	public ResultDto<String> saveInviteRecommend(User registUser , String inviteCode, String inviteUserName) throws Exception{
 		ResultDto<String> dto = new ResultDto<String>();
 		//获取注册码是否正确，找到对应的用户
 		User user = iUserMapper.queryByInviteCode(inviteCode);
@@ -125,7 +126,7 @@ public class RecommendServiceImpl implements IRecommendService {
 				recommend.setUpdateTime(new Date());
 				this.iRecommendMapper.updateById(recommend.getId(), recommend);
 			}else {
-				recommend = this.createNewRecommendByUser(user, registUser.getMobile());
+				recommend = this.createNewRecommendByUser(user, registUser.getMobile(), inviteUserName);
 				recommend.setState(2);
 				this.iRecommendMapper.insert(recommend);
 			}
@@ -223,12 +224,17 @@ public class RecommendServiceImpl implements IRecommendService {
 	 * 生成发送邀请记录，24小时有效。
 	 * @author scorpio.yang
 	 * @since 2018-01-15
+	 * 
+	 * 增加被邀请人姓名，用户红包列表用户名称显示
+	 * @author scorpio.yang
+	 * @since 2018-01-20
+	 * 
 	 * @param phoneNum
 	 * @param inviteCode
 	 * @return
 	 * @throws Exception 
 	 */
-	public ResultDto<String> sendUserInviteCode(String phoneNum , User fromUser) throws Exception{
+	public ResultDto<String> sendUserInviteCode(String phoneNum, String inviteUserName, User fromUser) throws Exception{
 		ResultDto<String> dto = new ResultDto<String>();
 		//判断对象手机号是否已经是会员
 		UserRequestForm form = new UserRequestForm();
@@ -252,6 +258,7 @@ public class RecommendServiceImpl implements IRecommendService {
 					}
 					//记录信息
 					recommend.setUpdateTime(new Date());
+					recommend.setName(inviteUserName);
 					this.saveRecommend(recommend);
 					dto.setResult("S");
 					dto.setErrorMsg("被邀请的手机号发送邀请短信成功");
@@ -264,7 +271,7 @@ public class RecommendServiceImpl implements IRecommendService {
 					return res;
 				}
 				//记录信息
-				this.saveRecommend(this.createNewRecommendByUser(fromUser, phoneNum));
+				this.saveRecommend(this.createNewRecommendByUser(fromUser, phoneNum, inviteUserName));
 				dto.setResult("S");
 				dto.setErrorMsg("被邀请的手机号发送邀请短信成功");
 			}
@@ -288,10 +295,14 @@ public class RecommendServiceImpl implements IRecommendService {
 		return this.iRecommendMapper.queryByMobile(mobile);
 	}
 	
-	private Recommend createNewRecommendByUser(User user, String phone) {
+	private Recommend createNewRecommendByUser(User user, String phone, String inviteUserName) {
 		Recommend recommend = new Recommend();
 		recommend.setUser(user);
-		recommend.setName("");
+		if(StringUtils.isNoneBlank(inviteUserName)) {
+			recommend.setName(inviteUserName);
+		}else {
+			recommend.setName("");
+		}
 		recommend.setMobile(phone);
 		recommend.setInviteCode(user.getInviteCode());
 		recommend.setState(1);

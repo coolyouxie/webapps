@@ -11,6 +11,13 @@ public class UserSendInviteCode {
 	private Integer fromUserId;
 
 	private String toPhone;
+	
+	/**
+	 * 增加被邀请人姓名，用户红包列表用户名称显示
+	 * @author scorpio.yang
+	 * @since 2018-01-20
+	 */
+	private String inviteUserName;
 
 	public Integer getFromUserId() {
 		return fromUserId;
@@ -26,6 +33,14 @@ public class UserSendInviteCode {
 
 	public void setToPhone(String toPhone) {
 		this.toPhone = toPhone;
+	}
+
+	public String getInviteUserName() {
+		return inviteUserName;
+	}
+
+	public void setInviteUserName(String inviteUserName) {
+		this.inviteUserName = inviteUserName;
 	}
 	
 	
