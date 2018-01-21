@@ -444,9 +444,12 @@
 	<select id="queryCountForEntryStatistics" resultType="java.lang.Integer">
 		SELECT count(1) from t_enrollment
 		<trim prefix="WHERE" prefixOverrides="AND">
-			and is_talked = 1 and talker_id = #{obj.talkerId}
-			<if test="obj.state != null and obj.state != ''">
-				and state >= 21
+			and te.is_talked = 1 and talker_id = #{obj.talkerId}
+			<if test="obj.state != null and obj.state ==1">
+				and te.state>=21
+			</if>
+			<if test="obj.state != null and obj.state == 2">
+				and 21>te.state
 			</if>
 		</trim>
 	</select>

@@ -96,7 +96,7 @@
                     and (#{obj.rateEnd}/100) >= expire_count/talk_count
                 </if>
             </if>
-            <if test="obj.type != null and obj.type != '' or obj.type==0">
+            <if test="obj.type != null and obj.type==0">
                 <if test="obj.rateStart != null and obj.rateStart != ''">
                     and entry_count/talk_count >=(#{obj.rateStart}/100)
                     and expire_count/talk_count >=(#{obj.rateStart}/100)
@@ -171,7 +171,7 @@
             <if test="obj.talkerMobile != null and obj.talkerMobile != ''">
                 and talker_mobile = #{obj.talkerMobile}
             </if>
-            <if test="obj.type != null and obj.type != '' and obj.type==1">
+            <if test="obj.type != null and obj.type==1">
                 <if test="obj.rateStart != null and obj.rateStart != ''">
                     and entry_count/talk_count >=(#{obj.rateStart}/100)
                 </if>
@@ -179,7 +179,7 @@
                     and (#{obj.rateEnd}/100) >= entry_count/talk_count
                 </if>
             </if>
-            <if test="obj.type != null and obj.type != '' and obj.type==2">
+            <if test="obj.type != null and obj.type==2">
                 <if test="obj.rateStart != null and obj.rateStart != ''">
                     and expire_count/talk_count >=(#{obj.rateStart}/100)
                 </if>
@@ -187,7 +187,7 @@
                     and (#{obj.rateEnd}/100) >= expire_count/talk_count
                 </if>
             </if>
-            <if test="obj.type != null and obj.type != '' or obj.type==0">
+            <if test="obj.type != null and obj.type==0">
                 <if test="obj.rateStart != null and obj.rateStart != ''">
                     and entry_count/talk_count >=(#{obj.rateStart}/100)
                     and expire_count/talk_count >=(#{obj.rateStart}/100)
