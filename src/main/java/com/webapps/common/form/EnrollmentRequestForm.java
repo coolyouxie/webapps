@@ -33,6 +33,24 @@ public class EnrollmentRequestForm extends Enrollment implements RequestForm,Ser
 
 	private String interviewTimeStr;
 
+	private int[] stateGroup;
+
+	private int entryState;
+
+	private int partExpireState;
+
+	private int allExpireState;
+
+	private int unTalk;
+
+	public int getPartExpireState() {
+		return partExpireState;
+	}
+
+	public void setPartExpireState(int partExpireState) {
+		this.partExpireState = partExpireState;
+	}
+
 	public String getKeyWords() {
 		return keyWords;
 	}
@@ -119,5 +137,37 @@ public class EnrollmentRequestForm extends Enrollment implements RequestForm,Ser
 
 	public void setInterviewTimeStr(String interviewTimeStr) {
 		this.interviewTimeStr = interviewTimeStr;
+	}
+
+	public int[] getStateGroup() {
+		return stateGroup;
+	}
+
+	public void setStateGroup(int[] stateGroup) {
+		this.stateGroup = stateGroup;
+	}
+
+	public int getEntryState() {
+		return entryState;
+	}
+
+	public void setEntryState(int entryState) {
+		this.entryState = entryState;
+	}
+
+	public int getAllExpireState() {
+		return allExpireState;
+	}
+
+	public void setAllExpireState(int allExpireState) {
+		this.allExpireState = allExpireState;
+	}
+
+	public int getUnTalk() {
+		return unTalk;
+	}
+
+	public void setUnTalk(int unTalk) {
+		this.unTalk = unTalk;
 	}
 }

@@ -257,7 +257,18 @@ public class UserServiceImpl implements IUserService {
 	public User queryByInviteCode(String inviteCode){
 		return this.iUserMapper.queryByInviteCode(inviteCode);
 	}
-	
+
+	@Override
+	public List<User> queryUserByType(int type) {
+		try {
+			List<User> list = iUserMapper.queryUsersByUserType(type);
+			return list;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
 	/**
 	 * 根据用户的id，创建用户唯一的邀请码。
 	 * 返回4位字符串，默认4位，如果id值大于能提供唯一代码上限，则将会自动生成多一位的邀请码。

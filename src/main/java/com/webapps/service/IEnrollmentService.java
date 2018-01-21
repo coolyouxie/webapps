@@ -41,4 +41,8 @@ public interface IEnrollmentService {
     Enrollment getCurrentStateEnrollmentByUserId(Integer userId);
     
     ResultDto<String> updateInterviewTime(EnrollmentRequestForm form);
+
+    Page loadRecruitProcess(Page page ,EnrollmentRequestForm form);
+
+    ResultDto<String> updateTalkerInfo(EnrollmentRequestForm form);
 }

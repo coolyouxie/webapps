@@ -36,8 +36,10 @@
 		<result column="interview_intention" jdbcType="DECIMAL" property="interviewIntention" />
 		<result column="interview_time" jdbcType="VARCHAR" property="interviewTime" />
 		<result column="intention_city_name" jdbcType="VARCHAR" property="intentionCityName" />
-		<result column="is_latest" jdbcType="VARCHAR" property="isLatest" />
+		<result column="is_latest" jdbcType="DECIMAL" property="isLatest" />
 		<result column="id_card_no" jdbcType="VARCHAR" property="user.idCardNo" />
+		<result column="old_talker_id" jdbcType="DECIMAL" property="oldTalkerId" />
+		<result column="old_talker_name" jdbcType="VARCHAR" property="oldTalkerName" />
 	</resultMap>
 
 	<sql id="select_columns">
@@ -45,7 +47,7 @@
 		te.CREATE_TIME,te.UPDATE_TIME,te.is_talked,te.talk_result,te.remark,te.failed_reason,
 		te.entry_date,te.reward,te.cashback_days,te.is_history,talker_id,entry_approver_id,is_entry_approved,
 		expire_approver_id,is_expire_approved,talker_name,entry_approver_name,expire_approver_name,
-		intention_city_id,interview_intention,interview_time,is_latest
+		intention_city_id,interview_intention,interview_time,is_latest,old_talker_id,old_talker_name
 	</sql>
 
 	<sql id="insert_columns">
@@ -518,4 +520,130 @@
 		order by te.create_time desc
 		<include refid="ORACLE.paginationEnd" />
 	</select>
+
+	<select id="queryCountForRecruitProcess" resultType="java.lang.Integer">
+		SELECT count(1) from t_enrollment te
+		left join t_company tc on tc.id=te.company_id
+		left join t_recruitment tr on tr.id = te.recruitment_id
+		left join t_user tu on tu.id = te.user_id
+		left join t_province tp on tp.id = te.intention_city_id
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			and (te.is_talked = 1 or te.is_latest = 1)
+			<trim prefix=" and (" prefixOverrides="OR" suffix=")">
+				<if test="obj.unTalk != null and obj.unTalk ==1">
+					or (te.is_talked = 0 and te.is_latest = 1)
+				</if>
+				<if test="obj.isTalked != null and obj.isTalked ==1">
+					or te.is_talked = 1
+				</if>
+				<if test="obj.entryState != null and obj.entryState ==1">
+					or te.state = 21
+				</if>
+				<if test="obj.partExpireState != null and obj.partExpireState ==1">
+					or te.state = 51
+				</if>
+				<if test="obj.allExpireState != null and obj.allExpireState ==1">
+					or te.state = 31
+				</if>
+			</trim>
+			<if test="obj.user != null and obj.user.name != null and obj.user.name != ''">
+				and tu.name like concat('%',#{obj.user.name},'%')
+			</if>
+			<if test="obj.user != null and obj.user.mobile != null and obj.user.mobile != ''">
+				and tu.mobile  = #{obj.user.mobile}
+			</if>
+			<if test="obj.company != null and obj.company.name != null and obj.company.name != ''">
+				and tc.name like concat('%',#{obj.company.name},'%')
+			</if>
+			<if test="obj.enrollTimeStart != null and obj.enrollTimeStart != ''">
+				and te.create_time >= #{obj.enrollTimeStart}
+			</if>
+			<if test="obj.enrollTimeEnd != null and obj.enrollTimeEnd != ''">
+				and #{obj.enrollTimeEnd} >= te.create_time
+			</if>
+			<if test="obj.talkerId != null and obj.talkerId != ''">
+				and #{obj.talkerId} = te.talker_Id
+			</if>
+			<if test="obj.talkerName != null and obj.talkerName != ''">
+				and te.talker_name like concat('%',#{obj.talkerName},'%')
+			</if>
+			<if test="obj.intentionCityId != null and obj.intentionCityId != ''">
+				and te.intention_city_id = #{obj.intentionCityId}
+			</if>
+		</trim>
+	</select>
+
+	<!-- 分页查询行政区信息 -->
+	<select id="queryPageForRecruitProcess" resultMap="resultMap">
+		<include refid="ORACLE.paginationStart" />
+		SELECT
+		<include refid="select_columns" />,
+		tc.name company_name,
+		tr.title recruitment_title,
+		tu.name as user_name,
+		tu.mobile as user_mobile,
+		tp.name as intention_city_name
+		from t_enrollment te
+		left join t_company tc on tc.id=te.company_id
+		left join t_recruitment tr on tr.id = te.recruitment_id
+		left join t_user tu on tu.id=te.user_id
+		left join t_province tp on tp.id = te.intention_city_id
+		<trim prefix="WHERE" prefixOverrides="AND">
+			and (te.is_talked = 1 or te.is_latest = 1)
+			<trim prefix=" and (" prefixOverrides="OR" suffix=")">
+				<if test="obj.unTalk != null and obj.unTalk ==1">
+					or (te.is_talked = 0 and te.is_latest = 1)
+				</if>
+				<if test="obj.isTalked != null and obj.isTalked ==1">
+					or te.is_talked = 1
+				</if>
+				<if test="obj.entryState != null and obj.entryState ==1">
+					or te.state = 21
+				</if>
+				<if test="obj.partExpireState != null and obj.partExpireState ==1">
+					or te.state = 51
+				</if>
+				<if test="obj.allExpireState != null and obj.allExpireState ==1">
+					or te.state = 31
+				</if>
+			</trim>
+			<if test="obj.user != null and obj.user.name != null and obj.user.name != ''">
+				and tu.name like concat('%',#{obj.user.name},'%')
+			</if>
+			<if test="obj.user != null and obj.user.mobile != null and obj.user.mobile != ''">
+				and tu.mobile  = #{obj.user.mobile}
+			</if>
+			<if test="obj.company != null and obj.company.name != null and obj.company.name != ''">
+				and tc.name like concat('%',#{obj.company.name},'%')
+			</if>
+			<if test="obj.enrollTimeStart != null and obj.enrollTimeStart != ''">
+				and te.create_time >= #{obj.enrollTimeStart}
+			</if>
+			<if test="obj.enrollTimeEnd != null and obj.enrollTimeEnd != ''">
+				and #{obj.enrollTimeEnd} >= te.create_time
+			</if>
+			<if test="obj.talkerId != null and obj.talkerId != ''">
+				and #{obj.talkerId} = te.talker_Id
+			</if>
+			<if test="obj.talkerName != null and obj.talkerName != ''">
+				and te.talker_name like concat('%',#{obj.talkerName},'%')
+			</if>
+			<if test="obj.intentionCityId != null and obj.intentionCityId != ''">
+				and te.intention_city_id = #{obj.intentionCityId}
+			</if>
+		</trim>
+		order by te.create_time desc
+		<include refid="ORACLE.paginationEnd" />
+	</select>
+
+	<update id="updateTalkerInfo">
+		UPDATE t_enrollment
+		SET
+			old_talker_id=talker_id,
+			old_talker_name=talker_name,
+			talker_id=#{obj.talkerId},
+			talker_name=#{obj.talkerName},
+			update_time=#{obj.updateTime}
+		WHERE id = #{obj.id}
+	</update>
 </mapper>

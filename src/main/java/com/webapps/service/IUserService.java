@@ -5,6 +5,7 @@ import com.webapps.common.bean.ResultDto;
 import com.webapps.common.entity.User;
 import com.webapps.common.form.UserRequestForm;
 
+import java.util.List;
 import java.util.Map;
 
 public interface IUserService {
@@ -35,5 +36,7 @@ public interface IUserService {
 	 * @return
 	 */
 	public User queryByInviteCode(String inviteCode);
+
+	List<User> queryUserByType(int type);
 	
 }

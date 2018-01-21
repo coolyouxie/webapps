@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.webapps.common.utils.PropertyUtil;
+import com.webapps.service.IUserService;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -33,19 +34,13 @@ public class EnrollmentController {
 	
 	@Autowired
 	private IEnrollmentService iEnrollmentService;
-	
+
 	@RequestMapping(value="/toEnrollmentListPage")
 	public String toEnrollmentListPage(Model model,HttpServletRequest request,HttpServletResponse response){
 		String intentionCities = (String)PropertyUtil.getProperty("intentionCities");
 		String[] cities = intentionCities.split(",");
 		List<JSONObject> list = new ArrayList<JSONObject>();
-		for (int i=0;i<cities.length;i++){
-			String[] array = cities[i].split("\\:");
-			JSONObject obj = new JSONObject();
-			obj.put("id",array[0]);
-			obj.put("city",array[1]);
-			list.add(obj);
-		}
+		RecruitProcessController.getIntentionCities(cities, list);
 		model.addAttribute("intentionCities",list);
 		return "/enrollment/enrollmentList";
 	}
@@ -141,6 +136,14 @@ public class EnrollmentController {
 		ResultDto<String> dto = iEnrollmentService.updateInterviewTime(form);
 		return JSONUtil.toJSONString(JSONUtil.toJSONObject(dto));
 	}
+
+	@ResponseBody
+	@RequestMapping(value = "/updateTalkerInfo")
+	public String updateTalkerInfo(EnrollmentRequestForm form){
+		ResultDto<String> dto = iEnrollmentService.updateTalkerInfo(form);
+		return JSONUtil.toJSONString(JSONUtil.toJSONObject(dto));
+	}
+
 	
 
 }

@@ -31,7 +31,7 @@
         var dataGrid = null;
         jQuery(document).ready(function () {
             dataGrid = jQuery("#list").jqGrid({
-                url: "${ctx}/enrollment/loadEnrollmentList",
+                url: "${ctx}/recruitProcess/loadRecruitProcessList",
                 datatype: "json",
                 mtype: "POST",
                 height: 'auto',
@@ -44,37 +44,19 @@
                     total: 'total', // json中代表页码总数的数据
                     repeatitems: false // 如果设为false，则jqGrid在解析json时，会根据name来搜索对应的数据元素（即可以json中元素可以不按顺序）；而所使用的name是来自于colModel中的name设定。
                 },
-                getParam: function () {
-                    var rowListNum = $("#list").jqGrid('getGridParam', 'rowNum');
-                    if (rowListNum == undefined) {
-                        $('#pageSize').val(15);
-                    } else {
-                        $('#pageSize').val(rowListNum);
-                    }
-                    //组装查询的条件参数
-                    var params = {
-                        'company.name': $("#companyName").val()
-                    };
-                    return params;
-                },
-                colNames: ['操作', '公司名称', '发布单标题', '会员姓名', '联系方式', '报名时间', '招聘员', '意向城市','是否面试','面试时间','沟通备注'],
+                colNames: ['操作', '会员姓名','会员手机','状态', '报名公司', '报名时间', '入职时间', '期满时间', '招聘员','交接人'],
                 colModel: [{
                     label: 'operate',
                     name: 'operate',
                     align: 'center',
                     sortable: false,
                     formatter: function (cellValue, options, rowObject) {
-                        var result = null;
-                        if (rowObject.isTalked <= 0) {
-                            result = "<button id='btn_" + rowObject.id + "' class='btn btn-primary btn-sm' data-toggle='modal' onclick='showModal(" + rowObject.id + ",1)'>沟通</button>&nbsp;&nbsp;&nbsp;&nbsp;";
-                        } else if (rowObject.isTalked == 1) {
-                            result = "已沟通&nbsp;&nbsp;&nbsp;&nbsp;";
-                        }
+                        var result =  "<button id='btn_" + rowObject.id + "' class='btn btn-primary btn-sm' data-toggle='modal' onclick='showModal(" + rowObject.id + ")'>转交</button>";
                         return result;
                     }
                 }, {
-                    label: 'company.name',
-                    name: 'company.name',
+                    label: 'user.name',
+                    name: 'user.name',
                     align: 'center',
                     sortable: false,
                     formatter: function (cellValue, options, rowObject) {
@@ -85,24 +67,44 @@
                         }
                     }
                 }, {
-                    label: 'recruitment.title',
-                    name: 'recruitment.title',
+                    label: 'user.mobile',
+                    name: 'user.mobile',
                     align: 'center',
                     sortable: false,
                     formatter: function (cellValue, options, rowObject) {
                         return '<a href="${ctx}/recruitment/getById?id=' + rowObject.recruitment.id + '" style="color:blue">' + cellValue + '</a>';
                     }
                 }, {
-                    label: 'user.name',
-                    name: 'user.name',
+                    label: 'state',
+                    name: 'state',
                     align: 'center',
                     sortable: false,
                     formatter: function (cellValue, options, rowObject) {
-                        return '<a href="${ctx}/user/getById?id=' + rowObject.user.id + '" style="color:blue">' + cellValue + '</a>';
+                        var result = "";
+                        if(cellValue==20){
+                            result = "入职待审核";
+                        }else if(cellValue==21){
+                            result = "已入职";
+                        }else if(cellValue==22){
+                            result = "入职审核未通过";
+                        }else if(cellValue==30){
+                            result = "全部期满待审核";
+                        }else if(cellValue==31){
+                            result = "全部期满";
+                        }else if(cellValue==32){
+                            result = "全部期满审核未通过";
+                        }else if(cellValue==50){
+                            result = "阶段期满待审核";
+                        }else if(cellValue==51){
+                            result = "阶段期满";
+                        }else if(cellValue==52){
+                            result = "阶段期满审核未通过";
+                        }
+                        return result;
                     }
                 }, {
-                    label: 'user.mobile',
-                    name: 'user.mobile',
+                    label: 'company.name',
+                    name: 'company.name',
                     align: 'center',
                     sortable: false
                 }, {
@@ -111,51 +113,30 @@
                     align: 'center',
                     sortable: false
                 }, {
-                    label: "talkerName",
-                    name: "talkerName",
+                    label: "entryDateStr",
+                    name: "entryDateStr",
                     align: "center",
                     sortable: false
                 }, {
-                    label: "intentionCityName",
-                    name: "intentionCityName",
-                    align: "center",
-                    sortable: false
-                }, {
-                    label: "interviewIntention",
-                    name: "interviewIntention",
+                    label: "expireDateStr",
+                    name: "expireDateStr",
                     align: "center",
                     sortable: false,
                     formatter: function (cellValue, options, rowObject) {
-                    	var result = null;
-                    	if(cellValue==1){
-                    		result = "是";
-                    	}else if(cellValue==2){
-                    		result = "否";
-                    	}else{
-                    		result = "未沟通";
+                    	var result = "";
+                    	if(rowObject.state==31){
+                    		result = rowObject.updateTimeStr;
                     	}
                         return result;
                     }
                 }, {
-                    label: 'interviewTimeStr',
-                    name: 'interviewTimeStr',
+                    label: 'talkerName',
+                    name: 'talkerName',
                     align: 'center',
-                    sortable: false,
-                    formatter: function (cellValue, options, rowObject) {
-                    	var result = '';
-                    	if(rowObject.interviewIntention==1){
-	                    	result = cellValue+'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'+
-	                    	'<button id="btn_' + rowObject.id + '" '+
-	                    	'class="btn btn-primary btn-sm" data-toggle="modal" '+
-	                    	'onclick="showTimeModal(' + rowObject.id + ',\''+cellValue+'\')">修改</button>';
-                    	}else{
-                    		result = cellValue;
-                    	}
-                        return result;
-                    }
+                    sortable: false
                 }, {
-                    label: "talkResult",
-                    name: "talkResult",
+                    label: "oldTalkerName",
+                    name: "oldTalkerName",
                     align: "center",
                     sortable: false
                 }],
@@ -172,142 +153,33 @@
 
         function search() {
             $("#list").setGridParam({
-                url: "${ctx}/enrollment/loadEnrollmentList?" + encodeURI($("#searchForm").serialize())
+                url: "${ctx}/recruitProcess/loadRecruitProcessList?" + encodeURI($("#searchForm").serialize())
             }).trigger('reloadGrid');
         }
 
-        function deleteById(id) {
-            $.ajax({
-                url: "${ctx}/company/deleteCompanyById",
-                type: "POST",
-                dataType: "JSON",
-                data: {
-                    "id": id
-                },
-                success: function (response) {
-                    alert("删除成功");
-                    dataGrid.trigger("reloadGrid");
-                }
-            });
-        }
-
-        function showModal(id, type) {
+        function showModal(id) {
             $("#enrollmentId").val(id);
-            $("#handleType").val(type);
-            $('#talkInfo').modal('show');
+            $('#talkerInfo').modal('show');
         }
         
-        function showTimeModal(id,currentTime) {
-        	$("#enrollmentId").val(id);
-        	$("#interviewTimeStrModal").val(currentTime);
-            $('#interviewTimeModal').modal('show');
-        }
-
-        function updateEnrollmentInfo() {
-            var handleType = $("#handleType").val();
-            if (handleType == 1) {
-                saveTalkInfo();
-            } else if (handleType == 2) {
-                //作废报名
-                cancelEnroll();
-            }
-        }
-
-        function saveTalkInfo() {
-            var interviewIntention = $("#interviewIntentionModal").val();
-            var interviewTimeStr = $("#interviewTimeStr").val().trim();
-            if(interviewIntention==1&&!interviewTimeStr){
-	            alert("请选择面试时间");
-	            return;
-            }
-            var intentionCityId = $("#intentionCityIdModal").val();
-            var talkResult = $("#talkResult").val().trim();
-            if(!talkResult){
-                alert("请填写沟通备注");
-                return;
-            }
+        function updateTalkerInfo() {
+            var talkerId = $("#talkerModal").val();
             $.ajax({
-                url: "${ctx}/enrollment/saveTalkInfo",
+                url: "${ctx}/enrollment/updateTalkerInfo",
                 type: "POST",
                 dataType: "JSON",
                 data: {
                     'id': $("#enrollmentId").val(),
-                    'talkResult': talkResult,
-	                'interviewIntention':interviewIntention,
-	                'interviewTimeStr':interviewTimeStr,
-	                'intentionCityId':intentionCityId,
-                    'isTalked': 1
+                    'talkerId': talkerId,
+	                'talkerName':$("#talkerId_"+talkerId).html()
                 },
                 success: function (response) {
 					if (response.result == "S") {
-						$("#interviewTimeStr").val("");
-						var select = document.getElementById("interviewIntentionModal");
-						for(var i=0; i<select.options.length; i++){
-						    if(i==0){
-						        select.options[i].selected = true;
-						        break;
-						    }
-						}
-						select = document.getElementById("intentionCityIdModal");
-						for(var i=0; i<select.options.length; i++){
-						    if(i==0){
-						        select.options[i].selected = true;
-						        break;
-						    }
-						}
-						$("#talkResult").val("");
-						$('#talkInfo').modal('hide');
+                        $('#talkerInfo').modal('hide');
                         alert("保存成功");
                         search();
                     } else {
-                        alert(response.errorMsg);
-                    }
-                }
-            });
-        }
-
-        function cancelEnroll() {
-            $.ajax({
-                url: "${ctx}/enrollment/cancelEnroll",
-                type: "POST",
-                dataType: "JSON",
-                data: {
-                    'id': $("#enrollmentId").val(),
-                    'remark': $("#talkResult").val(),
-                    'dataState': 0
-                },
-                success: function (response) {
-                    if (response.result == "S") {
-                        $('#talkInfo').modal('hide');
-                        alert("保存成功");
-                        search();
-                    } else {
-                        alert(response.errorMsg);
-                    }
-                }
-            });
-        }
-        
-        function updateInterviewTime(){
-        	var interviewTimeStr = $("#interviewTimeStrModal").val().trim();
-        	if(!interviewTimeStr){
-        		alert("请选择面试时间");
-        		return;
-        	}
-        	$.ajax({
-                url: "${ctx}/enrollment/updateInterviewTime",
-                type: "POST",
-                dataType: "JSON",
-                data: {
-                    'id': $("#enrollmentId").val(),
-                    'interviewTimeStr':$("#interviewTimeStrModal").val()
-                },
-                success: function (response) {
-                    if (response.result == "S") {
-                        $('#interviewTimeModal').modal('hide');
-                        alert("修改成功");
-                        search();
-                    } else {
+                        $('#talkerInfo').modal('hide');
                         alert(response.errorMsg);
                     }
                 }
@@ -316,9 +188,6 @@
 
 	</script>
 	<style>
-		.input-group-sm {
-			margin-bottom: 10px;
-		}
 
 		.input-group-sm label {
 			width: 100%;
@@ -339,66 +208,31 @@
 <body>
 <input type="hidden" id="enrollmentId">
 <input type="hidden" id="handleType">
-<div class="modal fade" id="talkInfo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="talkerInfo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-				<h4 class="modal-title" id="myModalLabel">沟通结果和备注</h4>
+				<h4 class="modal-title" id="myModalLabel">修改招聘员</h4>
 			</div>
-
 			<div class="modal-body">
 				<div class="row" style="padding-left: 15px;">
-					意向城市：
-					<select id="intentionCityIdModal">
-						<c:forEach var="item" items="${intentionCities}">
-							<option value="${item.id}">${item.city}</option>
+					招聘员：
+					<select id="talkerModal">
+						<c:forEach var="item" items="${talkers}">
+							<option id="talkerId_${item.id}" value="${item.id}">${item.name}</option>
 						</c:forEach>
 					</select>
 				</div>
-				<div class="row" style="padding-left: 15px;">
-					是否面试：
-					<select id="interviewIntentionModal" >
-						<option value="1">同意</option>
-						<option value="2">不同意</option>
-					</select>
-				</div>
-				<div class="row" style="padding-left: 15px;">
-					面试时间：<input type="text" id="interviewTimeStr" onClick="WdatePicker({isShowWeek:true})">
-				</div>
-				<div class="row" style="padding-left: 15px;">
-					沟通备注：
-					<textarea id="talkResult" class="form-control"></textarea>
-				</div>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-				<button type="button" class="btn btn-primary" onclick="updateEnrollmentInfo()">提交</button>
+				<button type="button" class="btn btn-primary" onclick="updateTalkerInfo()">提交</button>
 			</div>
 		</div>
 	</div>
 </div>
 
-<div class="modal fade" id="interviewTimeModal" tabindex="-1" role="dialog" aria-labelledby="interviewTimeModalLabel" aria-hidden="true">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-				<h4 class="modal-title" id="interviewTimeModalLabel">沟通结果和备注</h4>
-			</div>
-
-			<div class="modal-body">
-				<div class="row" style="padding-left: 15px;">
-					面试时间：<input type="text" id="interviewTimeStrModal" value="2017-12-31" onClick="WdatePicker({isShowWeek:true})">
-				</div>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-				<button type="button" class="btn btn-primary" onclick="updateInterviewTime()">提交</button>
-			</div>
-		</div>
-	</div>
-</div>
 <div class="container-fluid" style="padding-right: 15px;">
 	<form id="searchForm">
 		<table>
@@ -414,72 +248,31 @@
 			</tr>
 			<tr>
 				<td>
-					公司名称:
-				</td>
-				<td>
-					<input type="text" id="companyName" name="company.name" value="">
-				</td>
-				<td>
-					报名人:
+					会员姓名:
 				</td>
 				<td>
 					<input type="text" id="userName" name="user.name" value="">
 				</td>
 				<td>
-					报名时间:
-				</td>
-				<td colspan="2">
-					<input type="text" id="enrollTimeStart" name="enrollTimeStart" onClick="WdatePicker({isShowWeek:true})">
-					-
-					<input type="text" id="enrollTimeEnd" name="enrollTimeEnd" onClick="WdatePicker({isShowWeek:true})">
-				</td>
-				<td></td>
-			</tr>
-			<tr>
-				<td>
-					联系方式:
+					报名公司:
 				</td>
 				<td>
-					<input type="text" id="userMobile" name="user.mobile" value="">
+					<input type="text" id="companyName" name="company.name" value="">
 				</td>
 				<td>
-					状态:
+					会员手机:
 				</td>
 				<td>
-					<select id="isTalked" name="isTalked">
-						<option value="">全部</option>
-						<option value="0">未沟通</option>
-						<option value="1">已沟通</option>
-					</select>
-				</td>
-				<td>
-					<c:choose>
-						<c:when test="${user.userType==1 or user.userType==2}">
-							招聘专员：
-						</c:when>
-						<c:otherwise>
-						</c:otherwise>
-					</c:choose>
-				</td>
-				<td>
-					<c:choose>
-						<c:when test="${user.userType==1 or user.userType==2}">
-							<input id="talkerName" name="talkerName" value="">
-						</c:when>
-						<c:otherwise>
-							<input type="hidden" id="talkerName" name="talkerName" value="">
-						</c:otherwise>
-					</c:choose>
+					<input type="text" id="userMobile" name="user.mobile" >
 				</td>
 				<td>
 				</td>
-				<td align="right">
-
+				<td>
 				</td>
 			</tr>
 			<tr>
 				<td>
-					意向城市：
+					意向城市:
 				</td>
 				<td>
 					<select id="intentionCityId" name="intentionCityId">
@@ -490,22 +283,35 @@
 					</select>
 				</td>
 				<td>
-					是否面试：
+					招聘员:
 				</td>
 				<td>
-					<select id="interviewIntention" name="interviewIntention">
-						<option value="0">全部</option>
-						<option value="1">同意</option>
-						<option value="2">不同意</option>
-					</select>
+					<input type="text" id="talkerName" name="talkerName" value="">
 				</td>
 				<td>
-					面试时间：
+					报名时间：
 				</td>
-				<td colspan="2">
-					<input type="text" id="interviewTimeStart" name="interviewTimeStart" onClick="WdatePicker({isShowWeek:true})">
+				<td colspan="3">
+					<input type="text" id="enrollTimeStart" name="enrollTimeStart" onClick="WdatePicker({isShowWeek:true})">
 					-
-					<input type="text" id="interviewTimeEnd" name="interviewTimeEnd" onClick="WdatePicker({isShowWeek:true})">
+					<input type="text" id="enrollTimeEnd" name="enrollTimeEnd" onClick="WdatePicker({isShowWeek:true})">
+				</td>
+			</tr>
+			<tr>
+				<td colspan="3">
+					<input type="checkbox" name="unTalk" value="1">未沟通
+					<input type="checkbox" name="isTalked" value="1">已沟通
+					<input type="checkbox" name="entryState" value="1">已入职
+					<input type="checkbox" name="partExpireState" value="1">阶段期满
+					<input type="checkbox" name="allExpireState" value="1">全部期满
+				</td>
+				<td>
+				</td>
+				<td>
+				</td>
+				<td>
+				</td>
+				<td>
 				</td>
 				<td align="right">
 					<button type='button' class="btn btn-primary btn-sm" data-toggle="modal" onclick="search()">

@@ -63,4 +63,12 @@ public interface IEnrollmentMapper extends IBaseMapper<Enrollment>,IPageMapper<E
 
 	List<Enrollment> queryPageForExpireStatistics(@Param("startRow") int startRow, @Param("endRow") int endRow,
 												 @Param("obj")RateDtoRequestForm form)throws Exception;
+
+	int queryCountForRecruitProcess(@Param("obj")EnrollmentRequestForm from);
+
+	List<Enrollment> queryPageForRecruitProcess(@Param("startRow") int startRow,
+												@Param("endRow") int endRow,
+												@Param("obj")EnrollmentRequestForm form)throws Exception;
+
+	int updateTalkerInfo(@Param("obj")Enrollment em)throws Exception;
 }

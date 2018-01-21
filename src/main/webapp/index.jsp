@@ -76,8 +76,11 @@
 				<c:if test="${!empty perMap['RETT_MU_OPERATE']}">
 					<li><a href="${ctx}/permission/toOperatePermissionListPage" target="mainContainer">操作权限管理</a></li>
 				</c:if>
-				<c:if test="${!empty perMap['RETT_MU_OPERATE']}">
+				<c:if test="${!empty perMap['RETT_MU_RECRUIT_STATISTICS']}">
 					<li><a href="${ctx}/statistics/toRateListPage" target="mainContainer">招聘统计</a></li>
+				</c:if>
+				<c:if test="${!empty perMap['RETT_MU_RECRUIT_PROCESS']}">
+					<li><a href="${ctx}/recruitProcess/toRecruitProcessListPage" target="mainContainer">招聘进度</a></li>
 				</c:if>
 			</ul>
 			<ul class="nav nav-sidebar">

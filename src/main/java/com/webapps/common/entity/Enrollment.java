@@ -64,6 +64,9 @@ public class Enrollment extends Entity {
 	
 	private int isLatest;
 
+	private Integer oldTalkerId;
+
+	private String oldTalkerName;
 
 	public Integer getTalkerId() {
 		return talkerId;
@@ -277,5 +280,21 @@ public class Enrollment extends Entity {
 
 	public void setIsLatest(int isLatest) {
 		this.isLatest = isLatest;
+	}
+
+	public Integer getOldTalkerId() {
+		return oldTalkerId;
+	}
+
+	public void setOldTalkerId(Integer oldTalkerId) {
+		this.oldTalkerId = oldTalkerId;
+	}
+
+	public String getOldTalkerName() {
+		return oldTalkerName;
+	}
+
+	public void setOldTalkerName(String oldTalkerName) {
+		this.oldTalkerName = oldTalkerName;
 	}
 }

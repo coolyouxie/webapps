@@ -259,4 +259,39 @@ public class EnrollmentServiceImpl implements IEnrollmentService {
 		return dto;
 	}
 
+	@Override
+	public Page loadRecruitProcess(Page page,EnrollmentRequestForm form) {
+		int startRow = page.getStartRow();
+		int rows = page.getRows();
+		int count = iEnrollmentMapper.queryCountForRecruitProcess(form);
+		List<Enrollment> list = null;
+		try {
+			list = iEnrollmentMapper.queryPageForRecruitProcess(startRow, rows, form);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		page.setResultList(list);
+		page.setRecords(count);
+		page.countRecords(count);
+		return page;
+	}
+
+    @Override
+    public ResultDto<String> updateTalkerInfo(EnrollmentRequestForm form) {
+        ResultDto<String> dto = new ResultDto<>();
+	    try {
+            Enrollment temp = iEnrollmentMapper.getById(form.getId());
+            temp.setTalkerName(form.getTalkerName());
+            temp.setTalkerId(form.getTalkerId());
+            temp.setUpdateTime(new Date());
+            iEnrollmentMapper.updateTalkerInfo(temp);
+            dto.setResult("S");
+        } catch (Exception e) {
+            e.printStackTrace();
+            dto.setResult("F");
+            dto.setErrorMsg("更新招聘员信息时异常，请稍后再试");
+        }
+        return dto;
+    }
+
 }
