@@ -14,6 +14,9 @@ public class UserAward extends Entity{
 	private Integer paramConfigId;
 	private BigDecimal price;
 	private Integer stat;
+	//查询功能，返回字段增加关联信息
+	private String inviteUserName;
+	private String mobile;
 	
 	public Integer getUserId() {
 		return userId;
@@ -44,6 +47,18 @@ public class UserAward extends Entity{
 	}
 	public void setStat(Integer stat) {
 		this.stat = stat;
+	}
+	public String getInviteUserName() {
+		return inviteUserName;
+	}
+	public void setInviteUserName(String inviteUserName) {
+		this.inviteUserName = inviteUserName;
+	}
+	public String getMobile() {
+		return mobile;
+	}
+	public void setMobile(String mobile) {
+		this.mobile = mobile;
 	}
 	
 }

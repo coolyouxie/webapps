@@ -11,6 +11,8 @@
 		<result column="stat" jdbcType="DECIMAL" property="stat" />
 		<result column="create_time" jdbcType="VARCHAR" property="createTime" />	
 		<result column="update_time" jdbcType="VARCHAR" property="updateTime" />
+		<result column="invite_user_name" jdbcType="VARCHAR" property="inviteUserName" />
+		<result column="mobile" jdbcType="VARCHAR" property="mobile" />
 	</resultMap>
 
 	<sql id="select_columns">
@@ -38,8 +40,10 @@
 	<!-- 分页查询行政区信息 -->
 	<select id="queryPage" resultMap="resultMap">
 		SELECT
-		<include refid="select_columns" />
+		ua.id, ua.user_id, ua.invite_user_id, ua.param_config_id, ua.price, ua.stat, ua.create_time, ua.update_time
+		 , tu.`name` as invite_user_name, tu.mobile as mobile
 		FROM t_user_award ua
+			left join t_user tu on ua.invite_user_id = tu.id
 		where user_id = #{userId}
 			and invite_user_id in (
 				select invite_user_id from (

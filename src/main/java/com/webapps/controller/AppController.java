@@ -23,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.google.gson.Gson;
 import com.webapps.common.bean.Page;
 import com.webapps.common.bean.ResultDto;
+import com.webapps.common.dto.AppConfigDTO;
 import com.webapps.common.entity.AliSmsMsg;
 import com.webapps.common.entity.ApplyExpenditure;
 import com.webapps.common.entity.BannerConfig;
@@ -34,6 +35,7 @@ import com.webapps.common.entity.EnrollmentExtra;
 import com.webapps.common.entity.FeeConfig;
 import com.webapps.common.entity.GroupUser;
 import com.webapps.common.entity.MessageConfig;
+import com.webapps.common.entity.ParamConfig;
 import com.webapps.common.entity.Picture;
 import com.webapps.common.entity.Recommend;
 import com.webapps.common.entity.Recruitment;
@@ -61,6 +63,7 @@ import com.webapps.service.IEnrollmentService;
 import com.webapps.service.IFeeConfigService;
 import com.webapps.service.IGroupUserService;
 import com.webapps.service.IMessageConfigService;
+import com.webapps.service.IParamConfigService;
 import com.webapps.service.IPictureService;
 import com.webapps.service.IRecommendService;
 import com.webapps.service.IRecruitmentService;
@@ -131,6 +134,8 @@ public class AppController {
 	private IGroupUserService iGroupUserService;
 	
 	@Autowired private IUserAwardService iUserAwardService;
+	
+	@Autowired private IParamConfigService iParamConfigService;
 
 	/**
 	 * app端登录接口
@@ -746,10 +751,20 @@ public class AppController {
 		if(flag){
 			params = DataUtil.decryptData(params);
 		}
-		ResultDto<List<FeeConfig>> dto = new ResultDto<List<FeeConfig>>();
+		/**
+		 * 需要修改APP启动时的参数列表。
+		 * 修改返回对象类型
+		 * @author scorpio.yang
+		 */
+		ResultDto<AppConfigDTO> dto = new ResultDto<AppConfigDTO>();
 		try {
 			List<FeeConfig> temp = iFeeConfigService.queryAll();
-			dto.setData(temp);
+			AppConfigDTO configDTO = new AppConfigDTO();
+			configDTO.setFeeConfigList(temp);
+			//增加红包配置的信息
+			List<ParamConfig> pcList = this.iParamConfigService.queryAll();
+			configDTO.setParamConfigList(pcList);
+			dto.setData(configDTO);
 			dto.setResult("S");
 		} catch (Exception e) {
 			e.printStackTrace();

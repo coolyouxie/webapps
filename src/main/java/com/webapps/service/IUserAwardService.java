@@ -1,5 +1,7 @@
 package com.webapps.service;
 
+import java.util.List;
+
 import com.webapps.common.bean.Page;
 import com.webapps.common.bean.ResultDto;
 import com.webapps.common.entity.ParamConfig;
@@ -8,7 +10,9 @@ import com.webapps.common.entity.UserAward;
 
 public interface IUserAwardService {
 	
-	UserAward getById(Integer id) throws Exception;
+	public UserAward getById(Integer id) throws Exception;
+	
+	public List<UserAward> findAll() throws Exception;
 	
 	/**
 	 * 根据参数，生成新的红包记录。
