@@ -25,6 +25,7 @@
 	<!-- 日期时间控件 -->
 	<script src="${ctx}/js/common/jquery/My97DatePicker/WdatePicker.js"></script>
 	<script src="${ctx}/js/common/jquery/My97DatePicker/lang/zh-cn.js"></script>
+	<script src="${ctx}/js/common/common.js"></script>
 
 
 	<script type="text/javascript">
@@ -110,6 +111,7 @@
                 url: "${ctx}/statistics/loadExpireStatisticsList?" + encodeURI($("#searchForm").serialize())
             }).trigger('reloadGrid');
         }
+
 	</script>
 	<style>
 		.input-group-sm label {
@@ -158,10 +160,14 @@
 				<td></td>
 				<td></td>
 				<td></td>
-				<td></td>
 				<td align="right">
 					<button type='button' class="btn btn-primary btn-sm" data-toggle="modal" onclick="search()">
 						查询
+					</button>
+				</td>
+				<td align="right">
+					<button type='button' class="btn btn-primary btn-sm" data-toggle="modal" onclick="goBack()">
+						返回
 					</button>
 				</td>
 			</tr>
