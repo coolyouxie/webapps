@@ -367,8 +367,14 @@ public class AppController {
 		ResultDto<String> dto = null;
 		try {
 			User user = iUserService.getById(sendCode.getFromUserId());
-			
-			dto = iRecommendService.sendUserInviteCode(sendCode.getToPhone(), sendCode.getInviteUserName(), user);
+			if(null == user || StringUtils.isBlank(user.getInviteCode())) {
+				//如果用户获取失败，或者邀请码不存在，则需要返回错误
+				dto = new ResultDto<String>();
+				dto.setResult("F");
+				dto.setErrorMsg("当前用户暂无邀请码。");
+			}else {
+				dto = iRecommendService.sendUserInviteCode(sendCode.getToPhone(), sendCode.getInviteUserName(), user);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			dto = new ResultDto<String>();
