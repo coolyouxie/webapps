@@ -120,7 +120,7 @@ public class RecommendServiceImpl implements IRecommendService {
 		User user = iUserMapper.queryByInviteCode(inviteCode);
 		if(null != user) {
 			//查找，是否已经有邀请记录
-			Recommend recommend = iRecommendMapper.getByUserIdAndCode(user.getId(), inviteCode);
+			Recommend recommend = iRecommendMapper.getByUserIdAndCodeAndPhone(user.getId(), inviteCode, registUser.getMobile());
 			if(null != recommend) {
 				recommend.setState(2);
 				recommend.setUpdateTime(new Date());
@@ -242,7 +242,7 @@ public class RecommendServiceImpl implements IRecommendService {
 		int num = iUserMapper.queryCount(form);
 		if(num == 0) {
 			//判断是否已经有邀请记录，
-			Recommend recommend = this.iRecommendMapper.getByUserIdAndCode(fromUser.getId(), fromUser.getInviteCode());
+			Recommend recommend = this.iRecommendMapper.getByUserIdAndCodeAndPhone(fromUser.getId(), fromUser.getInviteCode(), phoneNum);
 			if(null != recommend) {
 				//如果未超过24小时，则提示已经发送，并告知截止使用时间。
 				if(this.checkTimeValid(recommend.getUpdateTime())) {

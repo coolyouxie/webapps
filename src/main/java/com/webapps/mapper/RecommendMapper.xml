@@ -51,8 +51,14 @@
 		select <include refid="select_columns" /> from t_recommend tr where mobile = #{mobile} and state=2 order by create_time desc
 	</select>
 	
-	<select id="getByUserIdAndCode" resultMap="resultMap">
-		select <include refid="select_columns" /> from t_recommend tr where user_id = #{userId} and invite_code = #{inviteCode} and data_state = 1 order by UPDATE_TIME desc
+	<select id="getByUserIdAndCodeAndPhone" resultMap="resultMap">
+		select <include refid="select_columns" /> 
+		from t_recommend tr 
+		where user_id = #{userId} 
+			and invite_code = #{inviteCode}
+			and mobile = #{mobile} 
+			and data_state = 1 
+		order by UPDATE_TIME desc
 	</select>
 	
 	<!-- 用户推荐时判断被推荐人是否可以被推荐 -->

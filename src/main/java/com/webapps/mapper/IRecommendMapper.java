@@ -27,6 +27,6 @@ public interface IRecommendMapper extends IBaseMapper<Recommend>,IPageMapper<Rec
 	 * @param inviteCode
 	 * @return
 	 */
-	Recommend getByUserIdAndCode(@Param("userId") Integer userId, @Param("inviteCode") String inviteCode);
+	Recommend getByUserIdAndCodeAndPhone(@Param("userId") Integer userId, @Param("inviteCode") String inviteCode, @Param("mobile") String mobile);
 	
 }
