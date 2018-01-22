@@ -13,7 +13,7 @@ public class Entity {
     
     private Date createTime = new Date();
     
-    private Date updateTime = new Date();
+    private Date updateTime;
     
     /**
      * 操作人ID

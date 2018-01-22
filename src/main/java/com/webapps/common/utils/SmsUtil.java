@@ -16,7 +16,9 @@ import com.aliyuncs.dysmsapi.model.v20170525.SendSmsResponse;
 import com.aliyuncs.exceptions.ClientException;
 import com.aliyuncs.profile.DefaultProfile;
 import com.aliyuncs.profile.IClientProfile;
+import org.springframework.stereotype.Component;
 
+@Component
 public class SmsUtil {
 	
 	private static Logger logger = Logger.getLogger(SmsUtil.class);
@@ -29,33 +31,16 @@ public class SmsUtil {
 	// TODO 此处需要替换成开发者自己的AK(在阿里云访问控制台寻找)
 	private static String accessKeyId = "LTAIoWytea2T5OH4";
 	private static String accessKeySecret = "sPs7AQ6hwKwsWunSiuq9aqTwh5jTc3";
-	private static String signName = "送达招聘";
-	private static String templateCode = null;
-	private static String inviteTemplateCode = null;
-	
-	public static void setTemplateCodes(){
-		try {
-			templateCode = (String) PropertyUtil.getProperty("template_code");
-			inviteTemplateCode = (String) PropertyUtil.getProperty("invite_template_code");
-		} catch (Exception e) {
-			logger.error("读取短信模板配置异常");
-			e.printStackTrace();
-		}finally{
-			if(templateCode==null){
-				templateCode = "SMS_121906938";
-			}
-			if(templateCode==null){
-				inviteTemplateCode = "SMS_121907464";
-			}
-		}
-	}
+	private static String signName = "送达";
+	private static String templateCode = (String) PropertyUtil.getProperty("template_code");
+	private static String inviteTemplateCode = (String) PropertyUtil.getProperty("invite_template_code");
 
 	public static Map<String,Object> sendSms(String phoneNum) throws ClientException {
 
 		if (accessKeyId == null || accessKeySecret == null) {
 			accessKeyId = (String) PropertyUtil.getProperty("ali_accessKeyId");
 			accessKeySecret = (String) PropertyUtil.getProperty("ali_accessKeySecret");
-			signName = (String) PropertyUtil.getProperty("project_name");
+			signName = (String) PropertyUtil.getProperty("sign_name");
 		}
 
 		// 可自助调整超时时间
@@ -107,7 +92,7 @@ public class SmsUtil {
 		if (accessKeyId == null || accessKeySecret == null) {
 			accessKeyId = (String) PropertyUtil.getProperty("ali_accessKeyId");
 			accessKeySecret = (String) PropertyUtil.getProperty("ali_accessKeySecret");
-			signName = (String) PropertyUtil.getProperty("project_name");
+			signName = (String) PropertyUtil.getProperty("sign_name");
 		}
 
 		// 可自助调整超时时间
@@ -207,54 +192,10 @@ public class SmsUtil {
 	}
 	
 	public static void main(String[] args) throws ClientException, InterruptedException {
-		
-		int[] ids = new int[]{1,2,3,4,5,6,7,8,9,10};
-		int len = ids.length;
-		for(int i=0;i<1000;i++){
-			double dblR = Math.random() * len;
-			int intR = (int) Math.floor(dblR);
-			System.out.println(intR);
-		}
-		System.out.println("end");
+
 		// 发短信
-//		String phoneNum = "17321004552";
-//		SendSmsResponse response = (SendSmsResponse) sendSms(phoneNum).get("response");
-//		System.out.println("短信接口返回的数据----------------");
-//		System.out.println("Code=" + response.getCode());
-//		System.out.println("Message=" + response.getMessage());
-//		System.out.println("RequestId=" + response.getRequestId());
-//		System.out.println("BizId=" + response.getBizId());
-		//
-		// Thread.sleep(3000L);
-		//
-		// //查明细
-		// if(response.getCode() != null && response.getCode().equals("OK")) {
-		// QuerySendDetailsResponse querySendDetailsResponse =
-		// querySendDetails(response.getBizId());
-		// System.out.println("短信明细查询接口返回数据----------------");
-		// System.out.println("Code=" + querySendDetailsResponse.getCode());
-		// System.out.println("Message=" +
-		// querySendDetailsResponse.getMessage());
-		// int i = 0;
-		// for(QuerySendDetailsResponse.SmsSendDetailDTO smsSendDetailDTO :
-		// querySendDetailsResponse.getSmsSendDetailDTOs())
-		// {
-		// System.out.println("SmsSendDetailDTO["+i+"]:");
-		// System.out.println("Content=" + smsSendDetailDTO.getContent());
-		// System.out.println("ErrCode=" + smsSendDetailDTO.getErrCode());
-		// System.out.println("OutId=" + smsSendDetailDTO.getOutId());
-		// System.out.println("PhoneNum=" + smsSendDetailDTO.getPhoneNum());
-		// System.out.println("ReceiveDate=" +
-		// smsSendDetailDTO.getReceiveDate());
-		// System.out.println("SendDate=" + smsSendDetailDTO.getSendDate());
-		// System.out.println("SendStatus=" + smsSendDetailDTO.getSendStatus());
-		// System.out.println("Template=" + smsSendDetailDTO.getTemplateCode());
-		// }
-		// System.out.println("TotalCount=" +
-		// querySendDetailsResponse.getTotalCount());
-		// System.out.println("RequestId=" +
-		// querySendDetailsResponse.getRequestId());
-		// }
+		String phoneNum = "17321004552";
+		sendInviteSms(phoneNum,"1234");
 
 	}
 }
