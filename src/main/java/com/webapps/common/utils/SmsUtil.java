@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
+
 import com.aliyuncs.DefaultAcsClient;
 import com.aliyuncs.IAcsClient;
 import com.aliyuncs.dysmsapi.model.v20170525.QuerySendDetailsRequest;
@@ -16,6 +18,8 @@ import com.aliyuncs.profile.DefaultProfile;
 import com.aliyuncs.profile.IClientProfile;
 
 public class SmsUtil {
+	
+	private static Logger logger = Logger.getLogger(SmsUtil.class);
 
 	// 产品名称:云通信短信API产品,开发者无需替换
 	static final String product = "Dysmsapi";
@@ -25,9 +29,26 @@ public class SmsUtil {
 	// TODO 此处需要替换成开发者自己的AK(在阿里云访问控制台寻找)
 	private static String accessKeyId = "LTAIoWytea2T5OH4";
 	private static String accessKeySecret = "sPs7AQ6hwKwsWunSiuq9aqTwh5jTc3";
-	private static String signName = "嘉聘网";
-	private static String templateCode = "SMS_89545074";
-	private static String inviteTemplateCode = "SMS_121906938";
+	private static String signName = "送达招聘";
+	private static String templateCode = null;
+	private static String inviteTemplateCode = null;
+	
+	public static void setTemplateCodes(){
+		try {
+			templateCode = (String) PropertyUtil.getProperty("template_code");
+			inviteTemplateCode = (String) PropertyUtil.getProperty("invite_template_code");
+		} catch (Exception e) {
+			logger.error("读取短信模板配置异常");
+			e.printStackTrace();
+		}finally{
+			if(templateCode==null){
+				templateCode = "SMS_121906938";
+			}
+			if(templateCode==null){
+				inviteTemplateCode = "SMS_121907464";
+			}
+		}
+	}
 
 	public static Map<String,Object> sendSms(String phoneNum) throws ClientException {
 
