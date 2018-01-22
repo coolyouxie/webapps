@@ -36,7 +36,7 @@
 				total : 'total', // json中代表页码总数的数据
 				repeatitems : false // 如果设为false，则jqGrid在解析json时，会根据name来搜索对应的数据元素（即可以json中元素可以不按顺序）；而所使用的name是来自于colModel中的name设定。
 			},
-		    colNames : [ '操作','姓名', '手机号', '性别', '身份证号','银行卡号', '微信号', 'QQ号','总金额' ],
+		    colNames : [ '操作','姓名','类型','手机号','性别', '身份证号','银行卡号','总金额' ],
 		    colModel : [ {
 				label : 'operate',
 				name : 'operate',
@@ -49,6 +49,26 @@
 				sortable : false,
 				formatter:function(cellValue,options,rowObject){
 					return '<a href="${ctx}/user/getById?id='+rowObject.id+'" style="color:blue">'+cellValue+'</a>';
+				}
+			},{
+				label : 'type',
+				name : 'type',
+				align : 'center',
+				sortable : false,
+				formatter:function(cellValue,options,rowObject){
+					var result = "";
+					if(cellValue==1||cellValue==2){
+						result = "系统管理员";
+					}else if(cellValue==3){
+						result = "普通会员";
+					}else if(cellValue==4){
+						result = "招聘员";
+					}else if(cellValue==5){
+						result = "入职与期满审核员";
+					}else if(cellValue==7){
+						result = "提现审核员";
+					}
+					return result;
 				}
 			}, {
 				label : 'mobile',
@@ -78,16 +98,6 @@
 				align : 'center',
 				sortable : false
 			}, {
-				label : 'weiXin',
-				name : 'weiXin',
-				align : 'center',
-				sortable : false
-			}, {
-				label : 'qq',
-				name : 'qq',
-				align : 'center',
-				sortable : false
-			},{
 				label:'userWallet.fee',
 				name:'userWallet.fee',
 				align:'center',
