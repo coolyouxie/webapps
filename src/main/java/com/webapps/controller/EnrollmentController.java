@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import com.webapps.common.utils.PropertyUtil;
+import com.webapps.common.utils.PropertiesUtil;
 import com.webapps.service.IUserService;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +37,7 @@ public class EnrollmentController {
 
 	@RequestMapping(value="/toEnrollmentListPage")
 	public String toEnrollmentListPage(Model model,HttpServletRequest request,HttpServletResponse response){
-		String intentionCities = (String)PropertyUtil.getProperty("intentionCities");
+		String intentionCities = (String)PropertiesUtil.getProperty("intentionCities");
 		String[] cities = intentionCities.split(",");
 		List<JSONObject> list = new ArrayList<JSONObject>();
 		RecruitProcessController.getIntentionCities(cities, list);

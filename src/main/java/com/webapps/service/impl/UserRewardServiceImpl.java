@@ -11,7 +11,7 @@ import com.webapps.common.bean.ResultDto;
 import com.webapps.common.entity.UserReward;
 import com.webapps.common.entity.UserWallet;
 import com.webapps.common.utils.DateUtil;
-import com.webapps.common.utils.PropertyUtil;
+import com.webapps.common.utils.PropertiesUtil;
 import com.webapps.mapper.IUserRewardMapper;
 import com.webapps.mapper.IUserWalletMapper;
 import com.webapps.service.IUserRewardService;
@@ -42,7 +42,7 @@ public class UserRewardServiceImpl implements IUserRewardService {
 				ur.setFee(new BigDecimal(0));
 				ur.setUserId(userId);
 				ur.setType(type);
-				int leftTimes = Integer.valueOf((String)PropertyUtil.getProperty("initleftTimes"));
+				int leftTimes = Integer.valueOf((String)PropertiesUtil.getProperty("initleftTimes"));
 				ur.setLeftTimes(leftTimes);
 				ur.setDataState(1);
 				iUserRewardMapper.insert(ur);
@@ -94,7 +94,7 @@ public class UserRewardServiceImpl implements IUserRewardService {
 
 	@Override
 	public ResultDto<String> resetLeftTimes() {
-		int leftTimes = Integer.valueOf((String)PropertyUtil.getProperty("initLeftTimes"));
+		int leftTimes = Integer.valueOf((String)PropertiesUtil.getProperty("initLeftTimes"));
 		iUserRewardMapper.resetLeftTimes(leftTimes);
 		return null;
 	}

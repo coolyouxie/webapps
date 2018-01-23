@@ -32,15 +32,15 @@ public class SmsUtil {
 	private static String accessKeyId = "LTAIoWytea2T5OH4";
 	private static String accessKeySecret = "sPs7AQ6hwKwsWunSiuq9aqTwh5jTc3";
 	private static String signName = "送达";
-	private static String templateCode = (String) PropertyUtil.getProperty("template_code");
-	private static String inviteTemplateCode = (String) PropertyUtil.getProperty("invite_template_code");
+	private static String templateCode = (String) PropertiesUtil.getProperty("template_code");
+	private static String inviteTemplateCode = (String) PropertiesUtil.getProperty("invite_template_code");
 
 	public static Map<String,Object> sendSms(String phoneNum) throws ClientException {
 
 		if (accessKeyId == null || accessKeySecret == null) {
-			accessKeyId = (String) PropertyUtil.getProperty("ali_accessKeyId");
-			accessKeySecret = (String) PropertyUtil.getProperty("ali_accessKeySecret");
-			signName = (String) PropertyUtil.getProperty("sign_name");
+			accessKeyId = (String) PropertiesUtil.getProperty("ali_accessKeyId");
+			accessKeySecret = (String) PropertiesUtil.getProperty("ali_accessKeySecret");
+			signName = (String) PropertiesUtil.getProperty("sign_name");
 		}
 
 		// 可自助调整超时时间
@@ -90,9 +90,9 @@ public class SmsUtil {
 	 */
 	public static Map<String,Object> sendInviteSms(String phoneNum, String inviteCode) throws ClientException {
 		if (accessKeyId == null || accessKeySecret == null) {
-			accessKeyId = (String) PropertyUtil.getProperty("ali_accessKeyId");
-			accessKeySecret = (String) PropertyUtil.getProperty("ali_accessKeySecret");
-			signName = (String) PropertyUtil.getProperty("sign_name");
+			accessKeyId = (String) PropertiesUtil.getProperty("ali_accessKeyId");
+			accessKeySecret = (String) PropertiesUtil.getProperty("ali_accessKeySecret");
+			signName = (String) PropertiesUtil.getProperty("sign_name");
 		}
 
 		// 可自助调整超时时间

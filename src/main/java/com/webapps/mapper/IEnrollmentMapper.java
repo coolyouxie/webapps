@@ -71,4 +71,8 @@ public interface IEnrollmentMapper extends IBaseMapper<Enrollment>,IPageMapper<E
 												@Param("obj")EnrollmentRequestForm form)throws Exception;
 
 	int updateTalkerInfo(@Param("obj")Enrollment em)throws Exception;
+	
+	List<Enrollment> queryEntryStatisticsForExport(@Param("obj")RateDtoRequestForm form)throws Exception;
+	
+	List<Enrollment> queryExpireStatisticsForExport(@Param("obj")RateDtoRequestForm form)throws Exception;
 }

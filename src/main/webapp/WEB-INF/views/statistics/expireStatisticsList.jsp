@@ -30,8 +30,8 @@
 
 	<script type="text/javascript">
         var dataGrid = null;
-        jQuery(document).ready(function () {
-            dataGrid = jQuery("#list").jqGrid({
+        $(document).ready(function () {
+            dataGrid = $("#list").jqGrid({
                 url: "${ctx}/statistics/loadExpireStatisticsList",
                 datatype: "json",
                 mtype: "POST",
@@ -107,9 +107,21 @@
         });
 
         function search() {
+        	$("#stateForExport").val($("#state").val());
             $("#list").setGridParam({
                 url: "${ctx}/statistics/loadExpireStatisticsList?" + encodeURI($("#searchForm").serialize())
             }).trigger('reloadGrid');
+        }
+        
+        function exportExcel(type){
+        	var rows = $("#list").jqGrid('getGridParam', 'records');
+        	if(rows==0){
+        		alert("无可导出数据");
+        		return ;
+        	}
+        	var state = $("#stateForExport").val();
+        	$("#exportExcel").attr("href","${ctx}/statistics/exportStatistics?talkerId="
+        			+$("#talkerId").val()+"&state="+state+"&type="+type);
         }
 
 	</script>
@@ -134,6 +146,7 @@
 <div class="container-fluid" style="padding-right: 15px;">
 	<form id="searchForm">
 		<input type="hidden" id="talkerId" name="talkerId" value="${talkerId}">
+		<input type="hidden" id="stateForExport" name="stateForExport" value='0'>
 		<table>
 			<tr>
 				<th width="70px;"></th>
@@ -159,7 +172,13 @@
 				<td></td>
 				<td></td>
 				<td></td>
-				<td></td>
+				<td align="right">
+					<a id="exportExcel" href="#">
+						<button onclick="exportExcel(2)" type="button" class="btn btn-primary" >
+							导出
+						</button>
+					</a>
+				</td>
 				<td align="right">
 					<button type='button' class="btn btn-primary btn-sm" data-toggle="modal" onclick="search()">
 						查询

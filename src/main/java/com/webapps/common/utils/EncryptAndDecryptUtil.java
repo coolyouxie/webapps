@@ -12,9 +12,9 @@ public class EncryptAndDecryptUtil {
 	
 	private static Logger logger = Logger.getLogger(EncryptAndDecryptUtil.class);
 	
-	private static String rsaPublicKey = (String) PropertyUtil.getProperty("serverPubKey");
+	private static String rsaPublicKey = (String) PropertiesUtil.getProperty("serverPubKey");
 	
-	private static String rasPrivateKey = (String) PropertyUtil.getProperty("serverPriKey");
+	private static String rasPrivateKey = (String) PropertiesUtil.getProperty("serverPriKey");
 	
 	public static String dataEncrypt(String data){
 		JSONObject result = new JSONObject();

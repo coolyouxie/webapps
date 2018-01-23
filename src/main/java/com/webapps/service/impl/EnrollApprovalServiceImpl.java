@@ -32,7 +32,7 @@ import com.webapps.common.entity.User;
 import com.webapps.common.entity.UserWallet;
 import com.webapps.common.form.EnrollApprovalRequestForm;
 import com.webapps.common.utils.DateUtil;
-import com.webapps.common.utils.PropertyUtil;
+import com.webapps.common.utils.PropertiesUtil;
 import com.webapps.mapper.IBillRecordMapper;
 import com.webapps.mapper.ICompanyMapper;
 import com.webapps.mapper.IEnrollApprovalMapper;
@@ -184,7 +184,7 @@ public class EnrollApprovalServiceImpl implements IEnrollApprovalService {
 			return dto;
 		}
 		Recommend re = reList.get(0);
-		Integer overDays = Integer.valueOf((String)PropertyUtil.getProperty("recommend_over_days"));
+		Integer overDays = Integer.valueOf((String)PropertiesUtil.getProperty("recommend_over_days"));
 		//如果用户注册时间超过了推荐超期天数，则不返费给推荐者
 		Date registerDate = user.getCreateTime();
 		Date recommendDate = re.getCreateTime();
@@ -194,7 +194,7 @@ public class EnrollApprovalServiceImpl implements IEnrollApprovalService {
 			return updateUserIsPayedRecommedFee(dto, user);
 		}
 		//如果用户入职后没在规定天数入职成功，也不能返费给推荐者
-		Integer entryOverDays = Integer.valueOf((String)PropertyUtil.getProperty("entry_over_days"));
+		Integer entryOverDays = Integer.valueOf((String)PropertiesUtil.getProperty("entry_over_days"));
 		Date entryDate = enrollment.getEntryDate();
 		days = DateUtil.getDaysBetweenTwoDates(registerDate, entryDate);
 		if(days>entryOverDays){

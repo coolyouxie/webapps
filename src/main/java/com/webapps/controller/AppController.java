@@ -51,7 +51,7 @@ import com.webapps.common.form.RecruitmentRequestForm;
 import com.webapps.common.form.UserSendInviteCode;
 import com.webapps.common.utils.DataUtil;
 import com.webapps.common.utils.JSONUtil;
-import com.webapps.common.utils.PropertyUtil;
+import com.webapps.common.utils.PropertiesUtil;
 import com.webapps.mapper.IEnrollmentExtraMapper;
 import com.webapps.service.IAliSmsMsgService;
 import com.webapps.service.IApplyExpenditureService;
@@ -1150,9 +1150,9 @@ public class AppController {
 		ResultDto<JSONObject> dto = new ResultDto<JSONObject>();
 		try {
 			JSONObject obj = new JSONObject();
-			String weiXin = (String) PropertyUtil.getProperty("weiXin");
-			String telephone = (String) PropertyUtil.getProperty("telephone");
-			String qq = (String) PropertyUtil.getProperty("qq");
+			String weiXin = (String) PropertiesUtil.getProperty("weiXin");
+			String telephone = (String) PropertiesUtil.getProperty("telephone");
+			String qq = (String) PropertiesUtil.getProperty("qq");
 			obj.put("weiXin", weiXin);
 			obj.put("telephone", telephone);
 			obj.put("qq", qq);
@@ -1311,9 +1311,9 @@ public class AppController {
 	
 	@RequestMapping(value="/toSharePage")
 	public String toSharePage(Model model){
-		String downloadUrl = (String)PropertyUtil.getProperty("downloadUrl");
-		String androidVersion = (String)PropertyUtil.getProperty("androidVersion");
-		String iosUrl = (String)PropertyUtil.getProperty("iosUrl");
+		String downloadUrl = (String)PropertiesUtil.getProperty("downloadUrl");
+		String androidVersion = (String)PropertiesUtil.getProperty("androidVersion");
+		String iosUrl = (String)PropertiesUtil.getProperty("iosUrl");
 		model.addAttribute("downloadUrl",downloadUrl);
 		model.addAttribute("androidVersion",androidVersion);
 		model.addAttribute("iosUrl",iosUrl);
@@ -1323,12 +1323,12 @@ public class AppController {
 	@ResponseBody
 	@RequestMapping(value = "/appVersion",produces = "text/html;charset=UTF-8")
 	public String appVersion(){
-		String iosVersion = (String)PropertyUtil.getProperty("iosVersion");
-		String androidVersion = (String)PropertyUtil.getProperty("androidVersion");
-		String iosUrl = (String)PropertyUtil.getProperty("iosUrl");
-		String androidUrl = (String)PropertyUtil.getProperty("androidUrl");
-		String iosUpdateLog = (String)PropertyUtil.getProperty("iosUpdateLog");
-		String androidUpdateLog = (String)PropertyUtil.getProperty("androidUpdateLog");
+		String iosVersion = (String)PropertiesUtil.getProperty("iosVersion");
+		String androidVersion = (String)PropertiesUtil.getProperty("androidVersion");
+		String iosUrl = (String)PropertiesUtil.getProperty("iosUrl");
+		String androidUrl = (String)PropertiesUtil.getProperty("androidUrl");
+		String iosUpdateLog = (String)PropertiesUtil.getProperty("iosUpdateLog");
+		String androidUpdateLog = (String)PropertiesUtil.getProperty("androidUpdateLog");
 		ResultDto<JSONObject> dto = new ResultDto<JSONObject>();
 		JSONObject obj = new JSONObject();
 		obj.put("iosVersion",iosVersion);
@@ -1344,9 +1344,9 @@ public class AppController {
 
 	@RequestMapping(value="/download")
 	public String downloadApp(Model model){
-		String downloadUrl = (String)PropertyUtil.getProperty("downloadUrl");
-		String androidVersion = (String)PropertyUtil.getProperty("androidVersion");
-		String iosUrl = (String)PropertyUtil.getProperty("iosUrl");
+		String downloadUrl = (String)PropertiesUtil.getProperty("downloadUrl");
+		String androidVersion = (String)PropertiesUtil.getProperty("androidVersion");
+		String iosUrl = (String)PropertiesUtil.getProperty("iosUrl");
 		model.addAttribute("downloadUrl",downloadUrl);
 		model.addAttribute("androidVersion",androidVersion);
 		model.addAttribute("iosUrl",iosUrl);

@@ -17,7 +17,7 @@ import com.webapps.common.bean.ResultDto;
 import com.webapps.common.entity.AliSmsMsg;
 import com.webapps.common.entity.User;
 import com.webapps.common.utils.DateUtil;
-import com.webapps.common.utils.PropertyUtil;
+import com.webapps.common.utils.PropertiesUtil;
 import com.webapps.common.utils.SmsUtil;
 import com.webapps.mapper.IAliSmsMsgMapper;
 import com.webapps.mapper.IUserMapper;
@@ -160,7 +160,7 @@ public class AliSmsMsgService implements IAliSmsMsgService {
 				return dto;
 			}
 			int minitus = DateUtil.getMinsBetweenTwoDate(asm.getCreateTime(), new Date());
-			int overtimeMins = Integer.valueOf((String)PropertyUtil.getProperty("code_timeout"));
+			int overtimeMins = Integer.valueOf((String)PropertiesUtil.getProperty("code_timeout"));
 			if(minitus>overtimeMins){
 				dto.setErrorMsg("验证码已过期");
 				dto.setResult("F");
@@ -191,7 +191,7 @@ public class AliSmsMsgService implements IAliSmsMsgService {
 			}
 			AliSmsMsg asm = list.get(0);
 			int minitus = DateUtil.getMinsBetweenTwoDate(asm.getCreateTime(), new Date());
-			int overtimeMins = Integer.valueOf((String)PropertyUtil.getProperty("code_timeout"));
+			int overtimeMins = Integer.valueOf((String)PropertiesUtil.getProperty("code_timeout"));
 			if(minitus>overtimeMins){
 				dto.setErrorMsg("验证码已过期");
 				dto.setResult("F");

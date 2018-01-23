@@ -444,7 +444,7 @@
 
 
 	<select id="queryCountForEntryStatistics" resultType="java.lang.Integer">
-		SELECT count(1) from t_enrollment
+		SELECT count(1) from t_enrollment te
 		<trim prefix="WHERE" prefixOverrides="AND">
 			and te.is_talked = 1 and talker_id = #{obj.talkerId}
 			<if test="obj.state != null and obj.state ==1">
@@ -646,4 +646,52 @@
 			update_time=#{obj.updateTime}
 		WHERE id = #{obj.id}
 	</update>
+	
+	<select id="queryEntryStatisticsForExport" resultMap="resultMap">
+		SELECT
+		<include refid="select_columns" />,
+		tc.name company_name,
+		tr.title recruitment_title,
+		tu.name as user_name,
+		tu.mobile as user_mobile,
+		tu.id_card_no as id_card_no
+		from t_enrollment te
+		left join t_company tc on tc.id=te.company_id
+		left join t_recruitment tr on tr.id = te.recruitment_id
+		left join t_user tu on tu.id=te.user_id
+		<trim prefix="WHERE" prefixOverrides="AND">
+			and te.is_talked = 1 and talker_id = #{obj.talkerId}
+			<if test="obj.state != null and obj.state ==1">
+				and te.state>=21
+			</if>
+			<if test="obj.state != null and obj.state == 2">
+				and 21>te.state
+			</if>
+		</trim>
+		order by te.create_time desc
+	</select>
+	
+	<select id="queryExpireStatisticsForExport" resultMap="resultMap">
+		SELECT
+		<include refid="select_columns" />,
+		tc.name company_name,
+		tr.title recruitment_title,
+		tu.name as user_name,
+		tu.mobile as user_mobile,
+		tu.id_card_no as id_card_no
+		from t_enrollment te
+		left join t_company tc on tc.id=te.company_id
+		left join t_recruitment tr on tr.id = te.recruitment_id
+		left join t_user tu on tu.id=te.user_id
+		<trim prefix="WHERE" prefixOverrides="AND">
+			and te.is_talked = 1 and talker_id = #{obj.talkerId}
+			<if test="obj.state != null and obj.state ==1">
+				and te.state>=21
+			</if>
+			<if test="obj.state != null and obj.state == 2">
+				and 21>te.state
+			</if>
+		</trim>
+		order by te.create_time desc
+	</select>
 </mapper>

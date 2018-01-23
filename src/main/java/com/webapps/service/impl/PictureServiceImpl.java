@@ -26,7 +26,7 @@ import com.webapps.common.bean.Page;
 import com.webapps.common.bean.ResultDto;
 import com.webapps.common.entity.Picture;
 import com.webapps.common.form.PictureRequestForm;
-import com.webapps.common.utils.PropertyUtil;
+import com.webapps.common.utils.PropertiesUtil;
 import com.webapps.mapper.IPictureMapper;
 import com.webapps.service.IPictureService;
 
@@ -63,8 +63,8 @@ public class PictureServiceImpl implements IPictureService {
         // 获取对应file对象
         Map<String, MultipartFile> fileMap = multipartRequest.getFileMap();
         Iterator<String> fileIterator = multipartRequest.getFileNames();
-        String projectPath = (String) PropertyUtil.getProperty("WebApp_Path");
-        String path=(String) PropertyUtil.getProperty("FileUpload_Path");
+        String projectPath = (String) PropertiesUtil.getProperty("WebApp_Path");
+        String path=(String) PropertiesUtil.getProperty("FileUpload_Path");
         path += sourceType+File.separator;
         File dir = new File(path);
         if(!dir.exists()){
@@ -171,7 +171,7 @@ public class PictureServiceImpl implements IPictureService {
 					String dirName = fileNameAndType[0];//文件名作为文件夹名使用
 					String type = fileNameAndType[1];
 					File destFile = null;
-					String destFilePath = (String)PropertyUtil.getProperty("FileUpload_Path");
+					String destFilePath = (String)PropertiesUtil.getProperty("FileUpload_Path");
 					File dir = null;
 					if(StringUtils.isNotBlank(dirName)){
 						//取文件名作为文件夹名
@@ -185,7 +185,7 @@ public class PictureServiceImpl implements IPictureService {
 					//保存源文件到目标文件
 					destFile = new File(destFilePath);
 					file.transferTo(destFile);
-					String projectPath = (String) PropertyUtil.getProperty("WebApp_Path");
+					String projectPath = (String) PropertiesUtil.getProperty("WebApp_Path");
 					String picUrl = projectPath+"fileupload/"+dirName+File.separator+destFile.getName();
 					dto = saveBankAndIdCardPic(picUrl, dirName, type, userId);
 					if("F".equals(dto.getResult())){

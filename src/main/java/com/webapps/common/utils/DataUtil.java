@@ -11,13 +11,13 @@ public class DataUtil {
 
     private static Logger logger = Logger.getLogger(DataUtil.class);
 
-    private static String serverPriKey = (String)PropertyUtil.getProperty("serverPriKey");
+    private static String serverPriKey = (String)PropertiesUtil.getProperty("serverPriKey");
 
-    private static String serverPubKey = (String)PropertyUtil.getProperty("serverPubKey");
+    private static String serverPubKey = (String)PropertiesUtil.getProperty("serverPubKey");
 
-    private static String appPubKey = (String)PropertyUtil.getProperty("appPubKey");
+    private static String appPubKey = (String)PropertiesUtil.getProperty("appPubKey");
 
-    private static String appPriKey = (String)PropertyUtil.getProperty("appPriKey");
+    private static String appPriKey = (String)PropertiesUtil.getProperty("appPriKey");
 
     private static String randomStr = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
 

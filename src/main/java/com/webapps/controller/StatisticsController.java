@@ -1,21 +1,26 @@
 package com.webapps.controller;
 
-import com.webapps.common.bean.Page;
-import com.webapps.common.form.RateDtoRequestForm;
-import com.webapps.common.utils.JSONUtil;
-import com.webapps.service.IPictureService;
-import com.webapps.service.IRateService;
-import net.sf.json.JSONObject;
+import java.net.URLDecoder;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.net.URLDecoder;
+import com.webapps.common.bean.Page;
+import com.webapps.common.entity.User;
+import com.webapps.common.form.RateDtoRequestForm;
+import com.webapps.common.utils.JSONUtil;
+import com.webapps.service.IRateService;
+
+import net.sf.json.JSONObject;
 
 @Controller
 @RequestMapping("statistics")
@@ -78,6 +83,12 @@ public class StatisticsController {
             e.printStackTrace();
         }
         return null;
+    }
+    
+    @RequestMapping(value="/exportStatistics", method = RequestMethod.GET)
+    public void exportEntryStatistics(Model model,HttpSession session,
+    		HttpServletResponse response,int talkerId,int state,int type){
+    	iRateService.exportStatistics(session,response,talkerId,state,type);
     }
 
 }

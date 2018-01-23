@@ -22,7 +22,7 @@ import com.webapps.common.entity.User;
 import com.webapps.common.form.RecommendRequestForm;
 import com.webapps.common.form.UserRequestForm;
 import com.webapps.common.utils.DateUtil;
-import com.webapps.common.utils.PropertyUtil;
+import com.webapps.common.utils.PropertiesUtil;
 import com.webapps.mapper.IRecommendMapper;
 import com.webapps.mapper.IUserMapper;
 import com.webapps.service.IAliSmsMsgService;
@@ -190,7 +190,7 @@ public class RecommendServiceImpl implements IRecommendService {
 			//如果被推荐人之前被推荐过，则要判断之前最近一条推荐记录是否在有效期内，目前为20天
 			Date now = new Date();
 			double days = DateUtil.getDaysBetweenTwoDates(r.getCreateTime(), now);
-			Integer recommendOverDays = Integer.valueOf((String)PropertyUtil.getProperty("recommend_over_days"));
+			Integer recommendOverDays = Integer.valueOf((String)PropertiesUtil.getProperty("recommend_over_days"));
 			if(days>recommendOverDays){
 				recommend.setDataState(1);
 				recommend.setCreateTime(new Date());

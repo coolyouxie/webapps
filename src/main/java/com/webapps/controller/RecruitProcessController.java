@@ -6,7 +6,7 @@ import com.webapps.common.entity.User;
 import com.webapps.common.form.EnrollmentRequestForm;
 import com.webapps.common.form.RateDtoRequestForm;
 import com.webapps.common.utils.JSONUtil;
-import com.webapps.common.utils.PropertyUtil;
+import com.webapps.common.utils.PropertiesUtil;
 import com.webapps.mapper.IEnrollmentMapper;
 import com.webapps.service.IEnrollmentService;
 import com.webapps.service.IRateService;
@@ -40,7 +40,7 @@ public class RecruitProcessController {
 
     @RequestMapping("/toRecruitProcessListPage")
     public String toRecruitProcessListPage(Model model,HttpServletRequest request, HttpServletResponse response) {
-        String intentionCities = (String) PropertyUtil.getProperty("intentionCities");
+        String intentionCities = (String) PropertiesUtil.getProperty("intentionCities");
         String[] cities = intentionCities.split(",");
         List<JSONObject> list = new ArrayList<JSONObject>();
         getIntentionCities(cities, list);
