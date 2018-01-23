@@ -116,11 +116,6 @@
 			<version>chargebee-1.0</version>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.poi</groupId>
-			<artifactId>poi</artifactId>
-			<version>3.10.1</version>
-		</dependency>
-		<dependency>
 			<groupId>com.whalin</groupId>
 			<artifactId>Memcached-Java-Client</artifactId>
 			<version>3.0.2</version>
