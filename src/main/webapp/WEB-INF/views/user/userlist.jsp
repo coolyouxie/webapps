@@ -217,6 +217,18 @@
 		});
 	}
 	
+	function test(){
+		$.ajax({
+			url:"${ctx}/user/transactionTest",
+			type:"POST",
+			dataType:"JSON",
+			success:function(response){
+				alert("删除成功");
+				dataGrid.trigger("reloadGrid");
+			}
+		});
+	}
+	
 </script>
 <style>
 	.input-group-sm {
@@ -297,6 +309,9 @@
 							添加新用户
 						</a>
 					</c:if>
+					<!-- <a type='button' class="btn btn-primary btn-sm" onclick="test()">
+						transactionTest
+					</a> -->
 				</div>
 			</div>
 		</form>

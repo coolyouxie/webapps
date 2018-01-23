@@ -136,4 +136,15 @@ public class UserController {
 		return JSONUtils.valueToString(dto);
 	}
 	
+	@ResponseBody
+	@RequestMapping(value="/transactionTest")
+	public String transactionTest(){
+		try {
+			iUserService.transactionTest();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "";
+	}
+	
 }

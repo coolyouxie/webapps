@@ -39,4 +39,6 @@ public interface IUserService {
 
 	List<User> queryUserByType(int type);
 	
+	void transactionTest() throws Exception;
+	
 }

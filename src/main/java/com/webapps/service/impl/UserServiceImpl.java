@@ -309,4 +309,19 @@ public class UserServiceImpl implements IUserService {
 		code = code.replaceAll("0", "1");
 		return code;
 	}
+
+	@Override
+	public void transactionTest()throws Exception {
+		//经测试，这里如果捕获异常后，数据库不回滚。
+//		try {
+			User user = iUserMapper.getById(1);
+			user.setGender(2);
+			iUserMapper.updateById(1, user);
+			User test = new User();
+			test.setAccount("admin");
+			iUserMapper.insert(test);
+//		} catch (Exception e) {
+//			
+//		}
+	}
 }
