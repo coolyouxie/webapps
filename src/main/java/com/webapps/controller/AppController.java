@@ -223,31 +223,32 @@ public class AppController {
 				 * @author scorpio.yang
 				 * @since 2018-01-16
 				 */
-				User tmpUser = iUserService.queryByInviteCode(inviteCode);
-				if(null == tmpUser) {
-					dto = new ResultDto<User>();
-					dto.setResult("F");
-					dto.setErrorMsg("邀请码填写错误，请检查！");
-				}else {
-					//默认APP注册的全部为普通会员
-					user.setUserType(3);
-					user.setMobile(telephone);
-					dto = iUserService.saveUser(user);
-					/**
-					 * 新增逻辑，用户注册保存成功后，判断是否是从邀请码过来的。如果是，则需要记录邀请信息
-					 * @author scorpio.yang
-					 * @since 2018-01-15
-					 */
-					if(StringUtils.isNotBlank(inviteCode)) {
-						ResultDto<String> res = iRecommendService.saveInviteRecommend(user, inviteCode, null);
-						if(res.getResult().equals("F")) {
-							dto.setResult("F");
-							dto.setErrorMsg(res.getErrorMsg());
-						}
-					}else {
-						User user1 = new User();
-						user1.setId(user.getId());
-						dto.setData(user1);
+				if(StringUtils.isNotBlank(inviteCode)) {
+					User tmpUser = iUserService.queryByInviteCode(inviteCode);
+					if(null == tmpUser) {
+						dto = new ResultDto<User>();
+						dto.setResult("F");
+						dto.setErrorMsg("邀请码填写错误，请检查！");
+					}
+				}
+				//默认APP注册的全部为普通会员
+				user.setUserType(3);
+				user.setMobile(telephone);
+				dto = iUserService.saveUser(user);
+				User user1 = new User();
+				user1.setId(user.getId());
+				dto.setData(user1);
+				
+				/**
+				 * 新增逻辑，用户注册保存成功后，判断是否是从邀请码过来的。如果是，则需要记录邀请信息
+				 * @author scorpio.yang
+				 * @since 2018-01-15
+				 */
+				if(StringUtils.isNotBlank(inviteCode)) {
+					ResultDto<String> res = iRecommendService.saveInviteRecommend(user, inviteCode, null);
+					if(res.getResult().equals("F")) {
+						dto.setResult("F");
+						dto.setErrorMsg(res.getErrorMsg());
 					}
 				}
 			}else{

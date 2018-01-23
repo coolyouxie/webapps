@@ -18,6 +18,7 @@ import com.webapps.common.entity.UserAward;
 import com.webapps.common.entity.UserWallet;
 import com.webapps.mapper.IUserAwardMapper;
 import com.webapps.mapper.IUserWalletMapper;
+import com.webapps.service.IBillRecordService;
 import com.webapps.service.IParamConfigService;
 import com.webapps.service.IRecommendService;
 import com.webapps.service.IUserAwardService;
@@ -39,6 +40,8 @@ public class UserAwardServiceImpl implements IUserAwardService {
 	@Autowired private IParamConfigService iParamConfigService;
 	
 	@Autowired private IUserService iUserService;
+	
+	@Autowired private IBillRecordService iBillRecordService;
 	
 	/**
 	 * 根据id，获取记录
@@ -118,6 +121,7 @@ public class UserAwardServiceImpl implements IUserAwardService {
 		ResultDto<String> dto = new ResultDto<String>();
 		//获取红包记录
 		UserAward ua = this.iUserAwardMapper.getById(id);
+		User user = this.iUserService.getById(ua.getUserId());
 		if(null != ua) {
 			//判断红包金额是否正确，如果不正确，抛出错误，避免钱包金额异常
 			if(null != ua.getPrice() && ua.getPrice().compareTo(BigDecimal.ZERO)==1){
@@ -128,6 +132,8 @@ public class UserAwardServiceImpl implements IUserAwardService {
 				//邀请人的钱包，余额增加红包的金额
 				userWallet.setFee( userWallet.getFee().add(ua.getPrice()) );
 				userWallet.setUpdateTime(new Date());
+				//增加推荐费下发记录 - 类型指定：2、红包收入
+				iBillRecordService.addBillRecord(userWallet.getId(), ua.getPrice(), 2, user, null);
 				//保存变更
 				this.iUserWalletMapper.updateById(userWallet.getId(), userWallet);
 				this.iUserAwardMapper.updateById(ua.getId(), ua);
