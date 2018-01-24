@@ -34,7 +34,7 @@
 	<sql id="select_columns">
 		tea.ID,tea.user_id,tea.state,tea.type, tea.data_state,tea.CREATE_TIME,tea.UPDATE_TIME,
 		tea.operator_id,tea.remark,tea.is_talked,tea.talk_result,tea.enrollment_id,
-		tea.reward,tea.entry_date,tea.cashback_days,tea.failed_Reason,approver_id,approver_name,approver_time
+		tea.reward,tea.entry_date,tea.cashback_days,tea.failed_Reason,approver_id,approver_name,approve_time
 	</sql>
 
 	<sql id="insert_columns">
@@ -256,7 +256,7 @@
 			approver_id = #{obj.approverId},
 			approver_name = #{obj.approverName},
 			update_time = #{obj.updateTime},
-			approver_time = #{obj.approveTime}
+			approve_time = #{obj.approveTime}
 		where id = #{id}
 	</update>
 	
@@ -266,7 +266,7 @@
 			approver_id = #{obj.approverId},
 			approver_name = #{obj.approverName},
 			update_time = #{obj.updateTime},
-			approver_time = #{obj.approveTime}
+			approve_time = #{obj.approveTime}
 		where id = #{id}
 	</update>
 	

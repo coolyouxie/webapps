@@ -35,6 +35,7 @@
                 mtype : "POST",
                 height : "auto",
                 width : 'auto',
+	            rownumbers:true,
                 jsonReader : {
                     root : "resultList", // json中代表实际模型数据的入口
                     page : "page", // json中代表当前页码的数据
@@ -51,11 +52,11 @@
                     formatter:function(cellValue,options,rowObject){
                         var result = "";
 						if(rowObject.state==0){
-							result = '<c:if test="${!empty perMap[\'RETT_MU_ENTRY_OP_APPROVE\']}">' + 
+							result = '<c:if test="${!empty perMap[\'RETT_MU_EXPIREAPPROVE_OP_APPROVE\']}">' +
 								' <a href="${ctx}/expireApproval/toApproveExpireInfoPage?enrollApprovalId='+rowObject.id+'" class="btn btn-primary btn-sm">审核</a>'
 								+'</c:if>';
 						}else{
-							result =  '<c:if test="${!empty perMap[\'RETT_MU_ENTRY_OP_SHOW\']}">' +
+							result =  '<c:if test="${!empty perMap[\'RETT_MU_EXPIREAPPROVE_OP_VIEW\']}">' +
 								' <a href="${ctx}/expireApproval/toShowExpireInfoPage?enrollApprovalId='+rowObject.id+'" class="btn btn-primary btn-sm">期满信息</a>'
 								+'</c:if>';
 						}

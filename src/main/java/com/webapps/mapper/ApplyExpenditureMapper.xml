@@ -16,14 +16,13 @@
 		<result column="user_mobile" jdbcType="VARCHAR" property="user.mobile" />
 		<result column="id_card_no" jdbcType="VARCHAR" property="user.idCardNo" />
 		<result column="bank_card_num" jdbcType="VARCHAR" property="user.bankCardNum" />
-		<result column="approver_id" jdbcType="DECIMAL" property="approverId" />
 		<result column="approver_name" jdbcType="VARCHAR" property="approverName" />
-		<result column="approver_time" jdbcType="VARCHAR" property="approverTime" />
+		<result column="approve_time" jdbcType="VARCHAR" property="approveTime" />
 	</resultMap>
 
 	<sql id="select_columns">
 		tae.ID,tae.wallet_id,tae.fee, tae.data_state,tae.CREATE_TIME,
-		tae.UPDATE_TIME,tae.approver_id,tae.reason,tae.state,tae.approver_id,tae.approver_name,tae.approver_time
+		tae.UPDATE_TIME,tae.approver_id,tae.reason,tae.state,tae.approver_name,tae.approve_time
 	</sql>
 
 	<sql id="insert_columns">
@@ -69,7 +68,7 @@
 				and #{obj.applyTimeEnd} >= tae.create_time
 			</if>
 			<if test="obj.approverId != null and obj.approverId !=''">
-				and tu.approver_id = #{obj.approverId}
+				and tu.id = #{obj.approverId}
 			</if>
 		</trim>
 	</select>
@@ -107,7 +106,7 @@
 				and #{obj.applyTimeEnd} >= tae.create_time
 			</if>
 			<if test="obj.approverId != null and obj.approverId !=''">
-				and tu.approver_id = #{obj.approverId}
+				and tu.id = #{obj.approverId}
 			</if>
 		</trim>
 		order by tae.create_time desc
@@ -137,7 +136,6 @@
 		fee=#{obj.fee},
 		state=#{obj.state},
 		update_time=#{obj.updateTime},
-		approver_id = #{obj.approverId},
 		reason = #{obj.reason},
 		approver_id = #{obj.approverId},
 		approver_name = #{obj.approverName},
