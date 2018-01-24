@@ -19,7 +19,7 @@
 	</resultMap>
 
 	<sql id="select_columns">
-		tr.ID,tr.user_id,tr.name,tr.mobile,tr.age,tr.gender,tr.state, tr.data_state,tr.CREATE_TIME,tr.UPDATE_TIME,invite_code
+		tr.ID,tr.user_id,tr.name,tr.mobile,tr.age,tr.gender,tr.state, tr.data_state,tr.CREATE_TIME,tr.UPDATE_TIME,tr.invite_code
 	</sql>
 
 	<sql id="insert_columns">
