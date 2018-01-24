@@ -76,7 +76,6 @@ public class StatisticsController {
     @RequestMapping(value="/loadExpireStatisticsList", produces = "text/html;charset=UTF-8")
     public String loadExpireStatisticsList(Model model,Page page,RateDtoRequestForm form){
         try {
-            form.setType(1);
             page = iRateService.loadExpireStatisticsList(page,form);
             return JSONUtil.toJSONString(JSONObject.fromObject(page));
         } catch (Exception e) {

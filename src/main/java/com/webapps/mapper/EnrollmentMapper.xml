@@ -694,4 +694,64 @@
 		</trim>
 		order by te.create_time desc
 	</select>
+
+	<select id="queryRecruitProcessForExport" resultMap="resultMap">
+		SELECT
+		<include refid="select_columns" />,
+		tc.name company_name,
+		tr.title recruitment_title,
+		tu.name as user_name,
+		tu.mobile as user_mobile,
+		tp.name as intention_city_name
+		from t_enrollment te
+		left join t_company tc on tc.id=te.company_id
+		left join t_recruitment tr on tr.id = te.recruitment_id
+		left join t_user tu on tu.id=te.user_id
+		left join t_province tp on tp.id = te.intention_city_id
+		<trim prefix="WHERE" prefixOverrides="AND">
+			and (te.is_talked = 1 or te.is_latest = 1)
+			<trim prefix=" and (" prefixOverrides="OR" suffix=")">
+				<if test="obj.unTalk != null and obj.unTalk ==1">
+					or (te.is_talked = 0 and te.is_latest = 1)
+				</if>
+				<if test="obj.isTalked != null and obj.isTalked ==1">
+					or te.is_talked = 1
+				</if>
+				<if test="obj.entryState != null and obj.entryState ==1">
+					or te.state = 21
+				</if>
+				<if test="obj.partExpireState != null and obj.partExpireState ==1">
+					or te.state = 51
+				</if>
+				<if test="obj.allExpireState != null and obj.allExpireState ==1">
+					or te.state = 31
+				</if>
+			</trim>
+			<if test="obj.user != null and obj.user.name != null and obj.user.name != ''">
+				and tu.name like concat('%',#{obj.user.name},'%')
+			</if>
+			<if test="obj.user != null and obj.user.mobile != null and obj.user.mobile != ''">
+				and tu.mobile  = #{obj.user.mobile}
+			</if>
+			<if test="obj.company != null and obj.company.name != null and obj.company.name != ''">
+				and tc.name like concat('%',#{obj.company.name},'%')
+			</if>
+			<if test="obj.enrollTimeStart != null and obj.enrollTimeStart != ''">
+				and te.create_time >= #{obj.enrollTimeStart}
+			</if>
+			<if test="obj.enrollTimeEnd != null and obj.enrollTimeEnd != ''">
+				and #{obj.enrollTimeEnd} >= te.create_time
+			</if>
+			<if test="obj.talkerId != null and obj.talkerId != ''">
+				and #{obj.talkerId} = te.talker_Id
+			</if>
+			<if test="obj.talkerName != null and obj.talkerName != ''">
+				and te.talker_name like concat('%',#{obj.talkerName},'%')
+			</if>
+			<if test="obj.intentionCityId != null and obj.intentionCityId != ''">
+				and te.intention_city_id = #{obj.intentionCityId}
+			</if>
+		</trim>
+		order by te.create_time desc
+	</select>
 </mapper>

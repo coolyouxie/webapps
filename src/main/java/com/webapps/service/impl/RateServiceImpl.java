@@ -10,6 +10,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.webapps.common.form.EnrollmentRequestForm;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -93,14 +94,16 @@ public class RateServiceImpl implements IRateService {
     	List<Enrollment> list = null;
     	String filePath = null;
     	String excelPath = null;
+    	String title = null;
     	try {
 			if(type==1){
 				list = iEnrollmentMapper.queryEntryStatisticsForExport(form);
 				excelPath = (String) PropertiesUtil.getProperty("entry_excel_path");
-				
+				title = "入职数据统计";
 			}else if(type==2){
 				list = iEnrollmentMapper.queryExpireStatisticsForExport(form);
 				excelPath = (String) PropertiesUtil.getProperty("expire_excel_path");
+				title = "期满数据统计";
 			}
 			if(CollectionUtils.isNotEmpty(list)){
 				List<EnrollmentExportDto> dtoList = getEnrollmentExportDtoList(list);
@@ -112,14 +115,37 @@ public class RateServiceImpl implements IRateService {
 					e.printStackTrace();
 				}
 				ExcelPoiUtil<EnrollmentExportDto> poi = new ExcelPoiUtil<>();
-				poi.exportExcel("入职统计数据", ExcelHeaders.EXPORT_ENTRY_STATISTICS_HEADERS, ExcelHeaders.EXPORT_ENTRY_STATISTICS_FIELDS, dtoList, out);
+				poi.exportExcel(title, ExcelHeaders.EXPORT_ENTRY_STATISTICS_HEADERS,
+						ExcelHeaders.EXPORT_ENTRY_STATISTICS_FIELDS, dtoList, out);
 				FileUtil.downloadFile(response, filePath);
 			}
     	} catch (Exception e) {
     		e.printStackTrace();
     	}
 	}
-	
+
+	@Override
+	public void exportRecruitProcess(HttpSession session, HttpServletResponse response,
+									 EnrollmentRequestForm form) throws Exception {
+		List<Enrollment> list = iEnrollmentMapper.queryRecruitProcessForExport(form);
+		String filePath = "";
+		String excelPath = (String) PropertiesUtil.getProperty("recruit_process_excel_path");
+		if(CollectionUtils.isNotEmpty(list)){
+			List<EnrollmentExportDto> dtoList = getEnrollmentExportDtoList(list);
+			filePath = excelPath + File.separator + CommonUtil.getUUID() + ".xls";
+			OutputStream out = null;
+			try {
+				out = new FileOutputStream(filePath);
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			}
+			ExcelPoiUtil<EnrollmentExportDto> poi = new ExcelPoiUtil<>();
+			poi.exportExcel("进度管理", ExcelHeaders.EXPORT_RECRUIT_PROCESS_HEADERS,
+					ExcelHeaders.EXPORT_RECRUIT_PROCESS_FIELDS, dtoList, out);
+			FileUtil.downloadFile(response, filePath);
+		}
+	}
+
 	private List<EnrollmentExportDto> getEnrollmentExportDtoList(List<Enrollment> list){
 		List<EnrollmentExportDto> resultList = new ArrayList<EnrollmentExportDto>();
 		int index = 1;
@@ -154,6 +180,7 @@ public class RateServiceImpl implements IRateService {
 			dto.setReward(em.getReward());
 			dto.setState(em.getState());
 			dto.setTalkerId(em.getTalkerId());
+			dto.setTalkerName(em.getTalkerName());
 			dto.setTalkResult(em.getTalkResult());
 			dto.setUpdateTime(em.getUpdateTime());
 			dto.setUser(em.getUser());

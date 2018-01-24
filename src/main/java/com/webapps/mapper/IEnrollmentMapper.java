@@ -75,4 +75,6 @@ public interface IEnrollmentMapper extends IBaseMapper<Enrollment>,IPageMapper<E
 	List<Enrollment> queryEntryStatisticsForExport(@Param("obj")RateDtoRequestForm form)throws Exception;
 	
 	List<Enrollment> queryExpireStatisticsForExport(@Param("obj")RateDtoRequestForm form)throws Exception;
+
+	List<Enrollment> queryRecruitProcessForExport(@Param("obj")EnrollmentRequestForm form)throws Exception;
 }

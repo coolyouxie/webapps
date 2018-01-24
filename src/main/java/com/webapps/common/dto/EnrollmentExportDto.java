@@ -79,5 +79,12 @@ public class EnrollmentExportDto extends Enrollment {
 		}
 		return "";
 	}
+
+	public String getExpireDateStr(){
+		if(this.getState()!=null&&this.getState()==31){
+			return getUpdateTimeStr();
+		}
+		return "";
+	}
 	
 }

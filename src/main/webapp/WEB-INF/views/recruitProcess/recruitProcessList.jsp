@@ -36,7 +36,7 @@
                 mtype: "POST",
                 height: 'auto',
                 width: 'auto',
-                rownumbers:true,
+                rownumbers: true,
                 jsonReader: {
                     root: "resultList", // json中代表实际模型数据的入口
                     page: "page", // json中代表当前页码的数据
@@ -44,14 +44,14 @@
                     total: 'total', // json中代表页码总数的数据
                     repeatitems: false // 如果设为false，则jqGrid在解析json时，会根据name来搜索对应的数据元素（即可以json中元素可以不按顺序）；而所使用的name是来自于colModel中的name设定。
                 },
-                colNames: ['操作', '会员姓名','会员手机','状态', '报名公司', '报名时间', '入职时间', '期满时间', '招聘员','交接人'],
+                colNames: ['操作', '会员姓名', '会员手机', '状态', '报名公司', '报名时间', '入职时间', '期满时间', '招聘员', '交接人'],
                 colModel: [{
                     label: 'operate',
                     name: 'operate',
                     align: 'center',
                     sortable: false,
                     formatter: function (cellValue, options, rowObject) {
-                        var result =  "<button id='btn_" + rowObject.id + "' class='btn btn-primary btn-sm' data-toggle='modal' onclick='showModal(" + rowObject.id + ")'>转交</button>";
+                        var result = "<button id='btn_" + rowObject.id + "' class='btn btn-primary btn-sm' data-toggle='modal' onclick='showModal(" + rowObject.id + ")'>转交</button>";
                         return result;
                     }
                 }, {
@@ -81,23 +81,23 @@
                     sortable: false,
                     formatter: function (cellValue, options, rowObject) {
                         var result = "";
-                        if(cellValue==20){
+                        if (cellValue == 20) {
                             result = "入职待审核";
-                        }else if(cellValue==21){
+                        } else if (cellValue == 21) {
                             result = "已入职";
-                        }else if(cellValue==22){
+                        } else if (cellValue == 22) {
                             result = "入职审核未通过";
-                        }else if(cellValue==30){
+                        } else if (cellValue == 30) {
                             result = "全部期满待审核";
-                        }else if(cellValue==31){
+                        } else if (cellValue == 31) {
                             result = "全部期满";
-                        }else if(cellValue==32){
+                        } else if (cellValue == 32) {
                             result = "全部期满审核未通过";
-                        }else if(cellValue==50){
+                        } else if (cellValue == 50) {
                             result = "阶段期满待审核";
-                        }else if(cellValue==51){
+                        } else if (cellValue == 51) {
                             result = "阶段期满";
-                        }else if(cellValue==52){
+                        } else if (cellValue == 52) {
                             result = "阶段期满审核未通过";
                         }
                         return result;
@@ -123,10 +123,10 @@
                     align: "center",
                     sortable: false,
                     formatter: function (cellValue, options, rowObject) {
-                    	var result = "";
-                    	if(rowObject.state==31){
-                    		result = rowObject.updateTimeStr;
-                    	}
+                        var result = "";
+                        if (rowObject.state == 31) {
+                            result = rowObject.updateTimeStr;
+                        }
                         return result;
                     }
                 }, {
@@ -152,6 +152,18 @@
         });
 
         function search() {
+            $("#userNameForExport").val($("#userName").val());
+            $("#userMobileForExport").val($("#userMobile").val());
+            $("#companyNameForExport").val($("#companyName").val());
+            $("#intentionCityIdForExport").val($("#intentionCityId").val());
+            $("#talkerNameForExport").val($("#talkerName").val());
+            $("#enrollTimeStartForExport").val($("#enrollTimeStart").val());
+            $("#enrollTimeEndForExport").val($("#enrollTimeEnd").val());
+            $("#unTalkForExport").val($("#unTalk").val());
+            $("#isTalkedForExport").val($("#isTalked").val());
+            $("#entryStateForExport").val($("#entryState").val());
+            $("#partExpireStateForExport").val($("#partExpireState").val());
+            $("#allExpireStateForExport").val($("#allExpireState").val());
             $("#list").setGridParam({
                 url: "${ctx}/recruitProcess/loadRecruitProcessList?" + encodeURI($("#searchForm").serialize())
             }).trigger('reloadGrid');
@@ -161,7 +173,7 @@
             $("#enrollmentId").val(id);
             $('#talkerInfo').modal('show');
         }
-        
+
         function updateTalkerInfo() {
             var talkerId = $("#talkerModal").val();
             $.ajax({
@@ -171,10 +183,10 @@
                 data: {
                     'id': $("#enrollmentId").val(),
                     'talkerId': talkerId,
-	                'talkerName':$("#talkerId_"+talkerId).html()
+                    'talkerName': $("#talkerId_" + talkerId).html()
                 },
                 success: function (response) {
-					if (response.result == "S") {
+                    if (response.result == "S") {
                         $('#talkerInfo').modal('hide');
                         alert("保存成功");
                         search();
@@ -184,6 +196,32 @@
                     }
                 }
             });
+        }
+
+        function exportExcel(){
+            var rows = $("#list").jqGrid('getGridParam', 'records');
+            if(rows==0){
+                alert("无数据可导出");
+                return ;
+            }
+            var userName = $("#userNameForExport").val();
+            var userMobile = $("#userMobileForExport").val();
+            var companyName = $("#companyNameForExport").val();
+            var intentionCityId = $("#intentionCityIdForExport").val();
+            var talkerName = $("#talkerNameForExport").val();
+            var enrollTimeStart = $("#enrollTimeStartForExport").val();
+            var enrollTimeEnd = $("#enrollTimeEndForExport").val();
+            var unTalk = $("#unTalkForExport").val();
+            var isTalked = $("#isTalkedForExport").val();
+            var entryState = $("#entryStateForExport").val();
+            var partExpireState = $("#partExpireStateForExport").val();
+            var allExpireState = $("#allExpireStateForExport").val();
+            $("#exportExcel").attr("href","${ctx}/recruitProcess/exportRecruitProcess?userName="+userName+
+		            "&userMobile="+userMobile+"&companyName="+companyName+"&intentionCityId="+intentionCityId+
+		            "&talkerName="+talkerName+"&enrollTimeStart="+enrollTimeStart+"&enrollTimeEnd="+enrollTimeEnd+
+		            "&unTalk="+unTalk+"&isTalked="+isTalked+"&entryState="+entryState+"&partExpireState="+partExpireState+
+		            "&allExpireState="+allExpireState
+            );
         }
 
 	</script>
@@ -234,6 +272,18 @@
 </div>
 
 <div class="container-fluid" style="padding-right: 15px;">
+	<input type="hidden" id="userNameForExport" name="userNameForExport">
+	<input type="hidden" id="userMobileForExport" name="userMobileForExport">
+	<input type="hidden" id="companyNameForExport" name="companyNameForExport">
+	<input type="hidden" id="intentionCityIdForExport" name="intentionCityIdForExport" value="0">
+	<input type="hidden" id="talkerNameForExport" name="talkerNameForExport">
+	<input type="hidden" id="enrollTimeStartForExport" name="enrollTimeStartForExport">
+	<input type="hidden" id="enrollTimeEndForExport" name="enrollTimeEndForExport">
+	<input type="hidden" id="unTalkForExport" name="unTalkForExport" value="0">
+	<input type="hidden" id="isTalkedForExport" name="isTalkedForExport" value="0">
+	<input type="hidden" id="entryStateForExport" name="entryStateForExport" value="0">
+	<input type="hidden" id="partExpireStateForExport" name="partExpireStateForExport" value="0">
+	<input type="hidden" id="allExpireStateForExport" name="allExpireStateForExport" value="0">
 	<form id="searchForm">
 		<table>
 			<tr>
@@ -263,7 +313,7 @@
 					会员手机:
 				</td>
 				<td>
-					<input type="text" id="userMobile" name="user.mobile" >
+					<input type="text" id="userMobile" name="user.mobile">
 				</td>
 				<td>
 				</td>
@@ -292,7 +342,8 @@
 					报名时间：
 				</td>
 				<td colspan="3">
-					<input type="text" id="enrollTimeStart" name="enrollTimeStart" onClick="WdatePicker({isShowWeek:true})">
+					<input type="text" id="enrollTimeStart" name="enrollTimeStart"
+					       onClick="WdatePicker({isShowWeek:true})">
 					-
 					<input type="text" id="enrollTimeEnd" name="enrollTimeEnd" onClick="WdatePicker({isShowWeek:true})">
 				</td>
@@ -311,7 +362,12 @@
 				</td>
 				<td>
 				</td>
-				<td>
+				<td align="right">
+					<a id="exportExcel" href="#">
+						<button onclick="exportExcel()" type="button" class="btn btn-primary" >
+							导出
+						</button>
+					</a>
 				</td>
 				<td align="right">
 					<button type='button' class="btn btn-primary btn-sm" data-toggle="modal" onclick="search()">
