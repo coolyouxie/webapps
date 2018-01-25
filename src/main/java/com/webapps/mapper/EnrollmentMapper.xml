@@ -432,7 +432,7 @@
 	</update>
 	
 	<update id="updateToNotLatest">
-		update t_enrollment set is_latest = 0 where user_id = #{userId}
+		update t_enrollment set is_latest = 0,update_time=now() where user_id = #{userId}
 	</update>
 	
 	<select id="findLatestByUserId" resultMap="resultMap">
