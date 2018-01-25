@@ -37,6 +37,9 @@
                 height: "auto",
                 width: 'auto',
                 rownumbers: true,
+                postData: {
+                    'type':1
+                },
                 jsonReader: {
                     root: "resultList", // json中代表实际模型数据的入口
                     page: "page", // json中代表当前页码的数据
@@ -429,7 +432,8 @@
 				<label>
 					<span>状态:</span>
 					<select id="state" name="state">
-						<option value="">-请选择-</option>
+						<option value="">全部</option>
+						<option value="0">待审核</option>
 						<option value="1">通过</option>
 						<option value="2">不通过</option>
 					</select>

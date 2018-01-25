@@ -110,11 +110,17 @@
 		left join t_user tu on tu.id = tea.user_id
 		<trim prefix="WHERE" prefixOverrides="AND">
 			tea.data_state = 1 
-			<if test="obj.type != null and obj.type != ''">
+			<if test="obj.type != null and obj.type == 1">
 				and tea.type = #{obj.type}
+				<if test="obj.state != null and obj.state != '' or obj.state == 0">
+					and tea.state = #{obj.state}
+				</if>
 			</if>
-			<if test="obj.state != null and obj.state != ''">
-				and tea.state = #{obj.state}
+			<if test="obj.type != null and obj.type == 2">
+				and tea.type = #{obj.type}
+				<if test="obj.state != null and obj.state != '' or obj.state == 0">
+					and tea.state = #{obj.state}
+				</if>
 			</if>
 			<if test="obj.user != null and obj.user.name != null and obj.user.name != ''">
 				and tu.name = #{obj.user.name}
@@ -164,12 +170,18 @@
 		left join t_company tc on tc.id=tr.company_id
 		left join t_user tu on tu.id=tea.user_id
 		<trim prefix="WHERE" prefixOverrides="AND">
-			tea.data_state = 1 
-			<if test="obj.type != null and obj.type != ''">
+			tea.data_state = 1
+			<if test="obj.type != null and obj.type == 1">
 				and tea.type = #{obj.type}
+				<if test="obj.state != null and obj.state != '' or obj.state == 0">
+					and tea.state = #{obj.state}
+				</if>
 			</if>
-			<if test="obj.state != null and obj.state != ''">
-				and tea.state = #{obj.state}
+			<if test="obj.type != null and obj.type == 2">
+				and tea.type = #{obj.type}
+				<if test="obj.state != null and obj.state != '' or obj.state == 0">
+					and tea.state = #{obj.state}
+				</if>
 			</if>
 			<if test="obj.user != null and obj.user.name != null and obj.user.name != ''">
 				and tu.name = #{obj.user.name}
