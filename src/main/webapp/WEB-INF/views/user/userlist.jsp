@@ -29,6 +29,7 @@
 		    mtype : "POST",
 		    height:"auto",
 		    width:'auto',
+			rownumbers:true,
 		    jsonReader : {
 				root : "resultList", // json中代表实际模型数据的入口
 				page : "page", // json中代表当前页码的数据
@@ -51,8 +52,8 @@
 					return '<a href="${ctx}/user/getById?id='+rowObject.id+'" style="color:blue">'+cellValue+'</a>';
 				}
 			},{
-				label : 'type',
-				name : 'type',
+				label : 'userType',
+				name : 'userType',
 				align : 'center',
 				sortable : false,
 				formatter:function(cellValue,options,rowObject){
@@ -251,69 +252,62 @@
 <body>
 	<div class="container-fluid">
 		<form id="searchForm">
-			<div class="row" style="margin-bottom:5px">
-				<div class="col-md-3">
-					<label>
-						<!-- <span>姓名/账号/身份证:</span> -->
-						<input type="hidden" id="keyWords" name="keyWords" >
-						<span>姓名:</span>
+			<table>
+				<tr>
+					<th width="70px;"></th>
+					<th width="200px;"></th>
+					<th width="70px;"></th>
+					<th width="200px;"></th>
+					<th width="70px;"></th>
+					<th width="200px;"></th>
+					<th width="65px;"></th>
+					<th width="150px;"></th>
+				</tr>
+				<tr>
+					<td>
+						姓名：
+					</td>
+					<td>
 						<input type="text" id="name" name="name" >
-					</label>
-				</div>
-				<div class="col-md-3">
-					<label>
-						<!-- <span>学历:</span>
-						<select id="eductionId" name="educationId">
-							<option value="" selected>-请选择-</option>
-							<option value="1">小学</option>
-							<option value="2">初中</option>
-							<option value="3">高中</option>
-							<option value="4">中专</option>
-							<option value="5">职高</option>
-							<option value="6">大专</option>
-							<option value="7">本科</option>
-							<option value="8">硕士</option>
-							<option value="9">博士</option>
-							<option value="10">博士后</option>
-						</select> -->
-						<span>手机号：</span>
+					</td>
+					<td>
+						手机号：
+					</td>
+					<td>
 						<input type="text" id="mobile" name="mobile" >
-					</label>
-				</div>
-				<div class="col-md-1">
-					<!-- <label>
-						<span>性别:</span>
+					</td>
+					<td colspan="3">
+						性别：
 						<select id="genderType" name="gender">
 							<option value="" selected>-请选择-</option>
 							<option value="1">男</option>
 							<option value="0">女</option>
 						</select>
-					</label> -->
-				</div>
-				<div class="col-md-2">
-					<button type='button' class="btn btn-primary btn-sm" data-toggle="modal" onclick="search()">
+						类型：
+						<select id="userType" name="userType">
+							<option value="0" selected>全部</option>
+							<option value="1">超级管理员</option>
+							<option value="2">普通管理员</option>
+							<option value="3">普通会员</option>
+							<option value="4">招聘员</option>
+							<option value="5">入职与期满审核员</option>
+							<option value="7">提现审核员</option>
+						</select>
+
+					</td>
+					<td align="right">
+						<c:if test="${!empty perMap['RETT_MU_USER_OP_ADD']}">
+							<a type='button' class="btn btn-primary btn-sm" href="${ctx}/user/toUserInfoPage?type=add">
+								添加新用户
+							</a>
+							&nbsp;&nbsp;
+						</c:if>
+						<button type='button' class="btn btn-primary btn-sm" data-toggle="modal" onclick="search()">
 							查询
-					</button>
-				</div>
-			</div>
-			<div class="row" style="margin-bottom:5px">
-				<div class="col-md-3">
-				</div>
-				<div class="col-md-2">
-				</div>
-				<div class="col-md-2">
-				</div>
-				<div class="col-md-2">
-					<c:if test="${!empty perMap['RETT_MU_USER_OP_ADD']}">
-						<a type='button' class="btn btn-primary btn-sm" href="${ctx}/user/toUserInfoPage?type=add">
-							添加新用户
-						</a>
-					</c:if>
-					<!-- <a type='button' class="btn btn-primary btn-sm" onclick="test()">
-						transactionTest
-					</a> -->
-				</div>
-			</div>
+						</button>
+					</td>
+				</tr>
+			</table>
 		</form>
 		<div class="row">
 			<div class="col-md-9">
