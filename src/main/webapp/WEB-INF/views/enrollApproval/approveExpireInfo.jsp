@@ -202,7 +202,7 @@
 						<input type="text" class="form-control" value="${item.cashbackDays}" readonly="readonly">
 					</div>
 	
-					<label class="col-md-2 control-label" for="fee${status}">期满天数：</label>
+					<label class="col-md-2 control-label" for="fee${status}">期满返费：</label>
 					<div class="col-md-2" id="fee${status}">
 						<input type="text" class="form-control" value="${item.fee}" readonly="readonly">
 					</div>
