@@ -1106,6 +1106,15 @@ public class AppController {
 		return JSONUtil.toJSONString(JSONUtil.toJSONObject(dto));
 	}
 	
+	/**
+	 * 变更接口功能，由原先只支持type=1（推荐费）查询，扩展为，提供type参数，由APP决定需要查询的范围。
+	 * 为支持以后的统一扩展，支持type值不传递，查询所有的功能。
+	 * 当前接口，查询内容，包括收入和支持，暂未提供所有收入，和支出的分类。
+	 * @author scorpio.yang
+	 * @since 2018-01-15
+	 * @param params
+	 * @return
+	 */
 	@ResponseBody
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/loanBillRecordList", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
@@ -1123,9 +1132,10 @@ public class AppController {
 		ResultDto<List<BillRecord>> dto = new ResultDto<List<BillRecord>>();
 		JSONObject obj = JSONUtil.toJSONObject(params);
 		Integer walletId = obj.getInt("walletId");
+		Integer typeId = obj.getInt("type");
 		BillRecordRequestForm form = new BillRecordRequestForm();
 		form.setWalletId(walletId);
-		form.setType(1);
+		form.setType(typeId);
 		Page page = new Page();
 		page.setPage(1);
 		page.setEndRow(10);
@@ -1137,7 +1147,6 @@ public class AppController {
 			e.printStackTrace();
 			dto.setResult("F");
 			dto.setErrorMsg("推荐费记录查询异常");
-			return JSONUtil.toJSONString(JSONUtil.toJSONObject(dto));
 		}
 		if(flag){
 			return DataUtil.encryptData(JSONUtil.toJSONString(JSONUtil.toJSONObject(dto)));
