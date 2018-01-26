@@ -294,54 +294,51 @@
 <div class="container-fluid">
 	<form id="searchForm">
 		<input type="hidden" name="type" value="2" >
-		<div class="row" style="margin-bottom:8px">
-			<div class="col-sm-3" style="width:255px">
-				<label>
-					<span>公司名称:</span>
-					<input type="text" id="companyName" name="company.name" value="">
-				</label>
-			</div>
-			<div class="col-sm-3" style="width:255px">
-				<label>
-					<span>报名人:</span>
-					<input type="text" id="userName" name="user.name" value="">
-				</label>
-			</div>
-			<div class="col-sm-3" style="width:255px">
-				<label>
-					<span>手机号:</span>
-					<input type="text" id="userMobile" name="user.mobile" value="">
-				</label>
-			</div>
-			<div class="col-sm-1" style="text-align:right;width:200px">
-				<button type='button' class="btn btn-primary btn-sm" data-toggle="modal" onclick="search()">
-					查询
-				</button>
-			</div>
-		</div>
-		<div class="row">
-			<div class="col-sm-4">
-				<label>
-					<span>报名时间:</span>
+		<table>
+			<tr>
+				<th width="70px;"></th>
+				<th width="200px;"></th>
+				<th width="70px;"></th>
+				<th width="200px;"></th>
+				<th width="70px;"></th>
+				<th width="200px;"></th>
+				<th width="135px;"></th>
+				<th width="50px;"></th>
+			</tr>
+			<tr>
+				<td>公司名称:</td>
+				<td><input type="text" id="companyName" name="company.name" value=""></td>
+				<td>报名人:</td>
+				<td><input type="text" id="userName" name="user.name" value=""></td>
+				<td>手机号:</td>
+				<td><input type="text" id="userMobile" name="user.mobile" value=""></td>
+				<td></td>
+				<td align="right">
+					<button type='button' class="btn btn-primary btn-sm" data-toggle="modal" onclick="search()">
+						查询
+					</button>
+				</td>
+			</tr>
+			<tr>
+				<td>报名时间:</td>
+				<td colspan="3">
 					<input type="text" id="enrollTimeStart" name="enrollTimeStart" onClick="WdatePicker({isShowWeek:true})" style="width: 122px;">
 					-
 					<input type="text" id="enrollTimeEnd" name="enrollTimeEnd" onClick="WdatePicker({isShowWeek:true})" style="width: 122px;">
-				</label>
-			</div>
-			<div class="col-sm-2">
-			</div>
-			<div class="col-sm-2">
-				<label>
-					<span>状态:</span>
+				</td>
+				<td>状态:</td>
+				<td>
 					<select id="state" name="state">
 						<option value="">全部</option>
 						<option value="0">待审核</option>
 						<option value="1">通过</option>
 						<option value="2">不通过</option>
 					</select>
-				</label>
-			</div>
-		</div>
+				</td>
+				<td></td>
+				<td></td>
+			</tr>
+		</table>
 	</form>
 </div>
 <table id="list"></table>
