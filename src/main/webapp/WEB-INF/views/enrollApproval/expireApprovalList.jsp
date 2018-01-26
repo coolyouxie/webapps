@@ -37,7 +37,7 @@
                 width : 'auto',
 	            rownumbers:true,
                 postData: {
-                    'type':1
+                    'type':2
                 },
                 jsonReader : {
                     root : "resultList", // json中代表实际模型数据的入口
