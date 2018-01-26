@@ -52,7 +52,7 @@
 		left join t_user tu on tuw.user_id=tu.id
 		<trim prefix="WHERE" prefixOverrides="AND">
 			tae.data_state = 1 
-			<if test="obj.state != null and obj.state != ''">
+			<if test="obj.state != null and obj.state != '' or obj.state==0 ">
 				and tae.state = #{obj.state}
 			</if>
 			<if test="obj.user != null and obj.user.name != null and obj.user.name != ''">
@@ -87,7 +87,7 @@
 		left join t_user tu on tuw.user_id=tu.id
 		<trim prefix="WHERE" prefixOverrides="AND">
 			tae.data_state = 1 
-			<if test="obj.state != null and obj.state != ''">
+			<if test="obj.state != null and obj.state != '' or obj.state==0 ">
 				and tae.state = #{obj.state}
 			</if>
 			<if test="obj.walletId != null and obj.walletId != ''">

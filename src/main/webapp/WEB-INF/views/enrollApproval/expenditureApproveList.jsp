@@ -44,7 +44,7 @@
                     total: 'total', // json中代表页码总数的数据
                     repeatitems: false // 如果设为false，则jqGrid在解析json时，会根据name来搜索对应的数据元素（即可以json中元素可以不按顺序）；而所使用的name是来自于colModel中的name设定。
                 },
-                colNames: ['姓名', '手机号', '身份证号', '银行卡号', '提现金额', '状态', "申请时间", '备注', '操作'],
+                colNames: ['操作','姓名', '手机号', '身份证号', '银行卡号', '提现金额', '状态', "申请时间", '备注'],
                 colModel: [{
                     label: 'operate',
                     name: 'operate',
@@ -56,7 +56,6 @@
                             result = '<c:if test="${!empty perMap[\'RETT_MU_EXPENDITURE_OP_APPROVE\']}">' +
                                 '<a href="${ctx}/applyExpenditure/toApproveExpenditurePage?id=' + rowObject.id + '" class="btn btn-primary btn-sm">审核</a>'
                                 + '</c:if>';
-
                         } else {
                             result = '<c:if test="${!empty perMap[\'RETT_MU_EXPENDITURE_OP_VIEW\']}">' +
                                 '<a href="${ctx}/applyExpenditure/toShowExpenditurePage?id=' + rowObject.id + '" class="btn btn-primary btn-sm">审核信息</a>'
@@ -227,37 +226,67 @@
 </div>
 <div class="container-fluid">
 	<form id="searchForm">
-		<div class="row" style="margin-bottom:8px">
-			<div class="col-sm-3" style="width:255px">
-				<label>
-					<span>会员姓名:</span>
+		<table>
+			<tr>
+				<th width="70px;"></th>
+				<th width="200px;"></th>
+				<th width="70px;"></th>
+				<th width="200px;"></th>
+				<th width="70px;"></th>
+				<th width="200px;"></th>
+				<th width="135px;"></th>
+				<th width="50px;"></th>
+			</tr>
+			<tr>
+				<td>
+					会员姓名:
+				</td>
+				<td>
 					<input type="text" id="userName" name="user.name" value="">
-				</label>
-			</div>
-			<div class="col-sm-3" style="width:255px">
-				<label>
-					<span>手机号:</span>
+				</td>
+				<td>
+					手机号:
+				</td>
+				<td>
 					<input type="text" id="userMobile" name="user.mobile" value="">
-				</label>
-			</div>
-			<div class="col-sm-1" style="text-align:right;width:200px">
-				<button type='button' class="btn btn-primary btn-sm" data-toggle="modal" onclick="search()">
-					查询
-				</button>
-			</div>
-		</div>
-		<div class="row">
-			<div class="col-sm-4">
-				<label>
-					<span>申请时间:</span>
+				</td>
+				<td>申请时间:</td>
+				<td colspan="2">
 					<input type="text" id="applyTimeStart" name="applyTimeStart"
 					       onClick="WdatePicker({isShowWeek:true})" style="width: 120px;">
 					-
 					<input type="text" id="applyTimeEnd" name="applyTimeEnd" onClick="WdatePicker({isShowWeek:true})"
 					       style="width: 120px;">
-				</label>
-			</div>
-		</div>
+				</td>
+				<td align="right">
+					<button type='button' class="btn btn-primary btn-sm" data-toggle="modal" onclick="search()">
+						查询
+					</button>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					状态
+				</td>
+				<td>
+					<select id="state" name="state">
+						<option value="">全部</option>
+						<option value="0">待审核</option>
+						<option value="1">通过</option>
+						<option value="2">不通过</option>
+					</select>
+				</td>
+				<td>
+				</td>
+				<td>
+				</td>
+				<td></td>
+				<td colspan="2">
+				</td>
+				<td align="right">
+				</td>
+			</tr>
+		</table>
 	</form>
 </div>
 <table id="list"></table>
