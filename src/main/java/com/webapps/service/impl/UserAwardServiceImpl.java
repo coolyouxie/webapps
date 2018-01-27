@@ -1,6 +1,7 @@
 package com.webapps.service.impl;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -11,6 +12,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.webapps.common.bean.Page;
 import com.webapps.common.bean.ResultDto;
+import com.webapps.common.dto.AwardInfoDTO;
+import com.webapps.common.dto.UserAwardListDTO;
 import com.webapps.common.entity.ParamConfig;
 import com.webapps.common.entity.Recommend;
 import com.webapps.common.entity.User;
@@ -164,6 +167,42 @@ public class UserAwardServiceImpl implements IUserAwardService {
 		List<UserAward> list = iUserAwardMapper.queryPage(startRow, rows, userId);
 		page.setResultList(list);
 		return page;
+	}
+	
+	/**
+	 * @author scorpio.yang
+	 * @since 2018-01-27
+	 * 转换用户红包信息记录，转换为，每一个用户，分类记录红包信息
+	 */
+	public List<UserAwardListDTO> convertListToDTO(List<UserAward> list){
+		List<UserAwardListDTO> dtoList = new ArrayList<UserAwardListDTO>();
+		if(null != list && list.size()>0) {
+			List<Integer> rootIds = new ArrayList<Integer>();
+			for(UserAward rootUA : list) {
+				if(!rootIds.contains(rootUA.getInviteUserId())) {
+					UserAwardListDTO dto = new UserAwardListDTO();
+					dto.setInviteUserId(rootUA.getInviteUserId());
+					dto.setInviteUserName(rootUA.getInviteUserName());
+					dto.setMobile(rootUA.getMobile());
+					List<AwardInfoDTO> aiDTOList = new ArrayList<AwardInfoDTO>();
+					rootIds.add(rootUA.getInviteUserId());
+					for(UserAward leafUA : list) {
+						//同一个被邀请人，记录到列表
+						if(leafUA.getInviteUserId().equals(rootUA.getInviteUserId())) {
+							AwardInfoDTO aiDTO = new AwardInfoDTO();
+							aiDTO.setId(leafUA.getId());
+							aiDTO.setParamConfigId(leafUA.getParamConfigId());
+							aiDTO.setPrice(leafUA.getPrice());
+							aiDTO.setStat(leafUA.getStat());
+							aiDTOList.add(aiDTO);
+						}
+					}
+					dto.setAwardInfo(aiDTOList);
+					dtoList.add(dto);
+				}
+			}
+		}
+		return dtoList;
 	}
 	
 	/**

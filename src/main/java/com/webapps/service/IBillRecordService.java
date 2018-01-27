@@ -10,7 +10,7 @@ import com.webapps.common.form.BillRecordRequestForm;
 public interface IBillRecordService {
 	
 
-	Page loadPageList(Page page, BillRecordRequestForm form);
+	Page loadPageList(Page page, BillRecordRequestForm form) throws Exception;
 	
 	/**
 	 * 增加方法，用于收入信息的新增操作

@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.webapps.common.bean.Page;
 import com.webapps.common.bean.ResultDto;
+import com.webapps.common.dto.UserAwardListDTO;
 import com.webapps.common.entity.ParamConfig;
 import com.webapps.common.entity.User;
 import com.webapps.common.entity.UserAward;
@@ -13,6 +14,13 @@ public interface IUserAwardService {
 	public UserAward getById(Integer id) throws Exception;
 	
 	public List<UserAward> findAll() throws Exception;
+	
+	/**
+	 * @author scorpio.yang
+	 * @since 2018-01-27
+	 * 转换用户红包信息记录，转换为，每一个用户，分类记录红包信息
+	 */
+	public List<UserAwardListDTO> convertListToDTO(List<UserAward> list);
 	
 	/**
 	 * 根据参数，生成新的红包记录。

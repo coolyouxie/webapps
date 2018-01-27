@@ -24,6 +24,7 @@ import com.google.gson.Gson;
 import com.webapps.common.bean.Page;
 import com.webapps.common.bean.ResultDto;
 import com.webapps.common.dto.AppConfigDTO;
+import com.webapps.common.dto.UserAwardListDTO;
 import com.webapps.common.entity.AliSmsMsg;
 import com.webapps.common.entity.ApplyExpenditure;
 import com.webapps.common.entity.BannerConfig;
@@ -40,7 +41,6 @@ import com.webapps.common.entity.Picture;
 import com.webapps.common.entity.Recommend;
 import com.webapps.common.entity.Recruitment;
 import com.webapps.common.entity.User;
-import com.webapps.common.entity.UserAward;
 import com.webapps.common.entity.UserReward;
 import com.webapps.common.entity.UserWallet;
 import com.webapps.common.form.ApplyExpenditureRequestForm;
@@ -397,7 +397,7 @@ public class AppController {
 	@ResponseBody
 	@RequestMapping(value = "/userAwardList", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
 	public String userAwardList(@RequestBody String params) {
-		ResultDto<List<UserAward>> dto = new ResultDto<List<UserAward>>();
+		ResultDto<List<UserAwardListDTO>> dto = new ResultDto<List<UserAwardListDTO>>();
 		boolean flag = false;
 		if(StringUtils.isNotBlank(params)){
 			if(params.contains("encryptData")){
@@ -418,7 +418,7 @@ public class AppController {
 		try {
 			page = this.iUserAwardService.getUserAwardByUserId(page, userId);
 			if (page != null) {
-				dto.setData(page.getResultList());
+				dto.setData(this.iUserAwardService.convertListToDTO(page.getResultList()));
 				dto.setResult("S");
 			}
 		} catch (Exception e) {
@@ -1109,7 +1109,7 @@ public class AppController {
 	/**
 	 * 变更接口功能，由原先只支持type=1（推荐费）查询，扩展为，提供type参数，由APP决定需要查询的范围。
 	 * 为支持以后的统一扩展，支持type值不传递，查询所有的功能。
-	 * 当前接口，查询内容，包括收入和支持，暂未提供所有收入，和支出的分类。
+	 * 当前接口，查询内容，包括收入和支出，暂未提供所有收入，和支出的分类。
 	 * @author scorpio.yang
 	 * @since 2018-01-15
 	 * @param params
@@ -1146,7 +1146,7 @@ public class AppController {
 		} catch (Exception e) {
 			e.printStackTrace();
 			dto.setResult("F");
-			dto.setErrorMsg("推荐费记录查询异常");
+			dto.setErrorMsg("收支记录查询异常");
 		}
 		if(flag){
 			return DataUtil.encryptData(JSONUtil.toJSONString(JSONUtil.toJSONObject(dto)));

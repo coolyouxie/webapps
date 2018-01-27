@@ -10,10 +10,13 @@ import org.springframework.transaction.annotation.Transactional;
 import com.webapps.common.bean.Page;
 import com.webapps.common.bean.ResultDto;
 import com.webapps.common.entity.BillRecord;
+import com.webapps.common.entity.Recommend;
 import com.webapps.common.entity.User;
 import com.webapps.common.form.BillRecordRequestForm;
 import com.webapps.mapper.IBillRecordMapper;
 import com.webapps.service.IBillRecordService;
+import com.webapps.service.IRecommendService;
+import com.webapps.service.IUserService;
 
 @Service
 @Transactional
@@ -21,13 +24,30 @@ public class BillRecordServiceImpl implements IBillRecordService {
 	
 	@Autowired
 	private IBillRecordMapper iBillRecordMapper;
+	@Autowired private IUserService iUserService;
+	@Autowired private IRecommendService iRecommendService;
 
 	@Override
-	public Page loadPageList(Page page, BillRecordRequestForm form) {
+	public Page loadPageList(Page page, BillRecordRequestForm form) throws Exception {
 		int startRow = page.getStartRow();
 		int rows = page.getRows();
 		int count = iBillRecordMapper.queryCount(form);
 		List<BillRecord> list = iBillRecordMapper.queryPage(startRow, rows, form);
+		/**
+		 * @author scorpio.yang
+		 * @since 2018-01-27
+		 * 新增需求，返回对象列表中，user参数放入对应的被邀请人的信息
+		 * 暂缓（2018-01-27）
+		 */
+//		if(null != list && list.size()>0) {
+//			for(BillRecord br : list) {
+//				User user = this.iUserService.getById(br.getWalletId());
+//				List<Recommend> rList = iRecommendService.getByMobile(user.getMobile());
+//				if(null != rList && rList.size()==1) {
+//					br.setUser(rList.get(0).getUser());
+//				}
+//			}
+//		}
 		page.setRecords(count);
 		page.setResultList(list);
 		page.countRecords(count);

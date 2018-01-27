@@ -56,6 +56,7 @@
 					<include refid="ORACLE.paginationEnd" /> 
 				) as inviteTmpTable
 			)
+		order by ua.invite_user_id, ua.param_config_id 
 	</select>
 	
 	<insert id="insert" useGeneratedKeys="true" keyProperty="obj.id">
