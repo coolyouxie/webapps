@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.webapps.common.utils.JSONUtil;
+import net.sf.json.JSONObject;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.math.RandomUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -32,6 +34,8 @@ import com.webapps.mapper.IUserPermissionMapper;
 import com.webapps.mapper.IUserWalletMapper;
 import com.webapps.service.IRecommendService;
 import com.webapps.service.IUserService;
+
+import javax.servlet.http.HttpSession;
 
 @Service
 @Transactional(propagation = Propagation.REQUIRED,rollbackFor={Exception.class, RuntimeException.class})
@@ -323,5 +327,60 @@ public class UserServiceImpl implements IUserService {
 //		} catch (Exception e) {
 //			
 //		}
+	}
+
+	public ResultDto<String> resetPassword(HttpSession session, Integer id, String oldPwd,
+										   String newPwd, String confirmNewPwd)throws Exception{
+		ResultDto<String> dto = new ResultDto<String>();
+		if(id==null){
+			dto.setErrorMsg("用户信息异常");
+			dto.setResult("F");
+			return dto;
+		}
+		if(org.apache.commons.lang.StringUtils.isBlank(oldPwd)){
+			dto.setErrorMsg("请输入原密码");
+			dto.setResult("F");
+			return dto;
+		}
+		if(org.apache.commons.lang.StringUtils.isBlank(newPwd)){
+			dto.setErrorMsg("请输入新密码");
+			dto.setResult("F");
+			return dto;
+		}
+		if(org.apache.commons.lang.StringUtils.isBlank(confirmNewPwd)){
+			dto.setErrorMsg("请输入确认密码");
+			dto.setResult("F");
+			return dto;
+		}
+		if(!newPwd.equals(confirmNewPwd)){
+			dto.setErrorMsg("两次输入的新密码不一致");
+			dto.setResult("F");
+			return dto;
+		}
+		User user = iUserMapper.getById(id);
+		User sessionUser = (User)session.getAttribute("user");
+		if(sessionUser==null||user==null){
+			dto.setErrorMsg("获取用户信息异常");
+			dto.setResult("F");
+			return dto;
+		}
+		if(!user.getId().equals(sessionUser.getId())){
+			dto.setErrorMsg("重置密码权限异常");
+			dto.setResult("F");
+			return dto;
+		}
+		if(!PasswordEncryptUtil.authenticate(oldPwd,user.getPassword(),user.getToken())){
+			dto.setErrorMsg("原密码错误");
+			dto.setResult("F");
+			return dto;
+		}
+		String newToken = PasswordEncryptUtil.generateSalt();
+		String encrptNewPwd = PasswordEncryptUtil.getEncryptedPassword(newPwd,newToken);
+		user.setToken(newToken);
+		user.setPassword(encrptNewPwd);
+		user.setUpdateTime(new Date());
+		iUserMapper.updateById(user.getId(),user);
+		dto.setResult("S");
+		return dto;
 	}
 }

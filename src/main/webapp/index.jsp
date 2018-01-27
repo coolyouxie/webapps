@@ -38,8 +38,7 @@
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
 					   aria-expanded="false">${user.name} <span class="caret"></span></a>
 					<ul class="dropdown-menu">
-						<li><a href="#">消息</a></li>
-						<li><a href="#">个人信息</a></li>
+						<li><a href="${ctx}/user/toResetPasswordPage?id=${user.id}" target="mainContainer">重置密码</a></li>
 						<li><a href="${ctx}/login/logout?userId=${user.id}">退出系统</a></li>
 					</ul>
 				</li>

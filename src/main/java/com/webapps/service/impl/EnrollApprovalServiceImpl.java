@@ -168,61 +168,62 @@ public class EnrollApprovalServiceImpl implements IEnrollApprovalService {
 			saveBillRecrod(enrollment,uw,3,null,fee);
 		}
 		//2.判断是否需要支付推荐费给推荐用户
-		if(user.getIsPayedRecommendFee()==1){
-			//如果已经支付过推荐费，则不需要再次支付
-			dto.setResult("S");
-			return dto;
-		}
-		//如果报名信息状态为31，则说明是最后一次期满审核，此时才能发放推荐费
-		if (enrollment.getState()!=31){
-			dto.setResult("S");
-			return dto;
-		}
-		List<Recommend> reList = iRecommendMapper.queryByMobile(user.getTelephone());
-		if(CollectionUtils.isEmpty(reList)){
-			dto.setResult("S");
-			return dto;
-		}
-		Recommend re = reList.get(0);
-		Integer overDays = Integer.valueOf((String)PropertiesUtil.getProperty("recommend_over_days"));
-		//如果用户注册时间超过了推荐超期天数，则不返费给推荐者
-		Date registerDate = user.getCreateTime();
-		Date recommendDate = re.getCreateTime();
-		double days = DateUtil.getDaysBetweenTwoDates(recommendDate, registerDate);
-		if(days>overDays){
-			//更新用户推荐费为已支付
-			return updateUserIsPayedRecommedFee(dto, user);
-		}
-		//如果用户入职后没在规定天数入职成功，也不能返费给推荐者
-		Integer entryOverDays = Integer.valueOf((String)PropertiesUtil.getProperty("entry_over_days"));
-		Date entryDate = enrollment.getEntryDate();
-		days = DateUtil.getDaysBetweenTwoDates(registerDate, entryDate);
-		if(days>entryOverDays){
-			return updateUserIsPayedRecommedFee(dto, user);
-		}
-		//如果即满足在推荐有效期注册会员，又满足在入职期内成功入职的，则返费给推荐者
-		UserWallet uw1 = iUserWalletMapper.queryByUserId(re.getUser().getId());
-		List<FeeConfig> fcList = iFeeConfigMapper.queryAllByDataState(1);
-		FeeConfig fc = null;
-		for (FeeConfig temp:fcList){
-			if(temp.getType()==3){
-				fc = temp;
-			}
-		}
-		//如果用户还没有钱包记录,则需要生成一条
-		if(uw1==null||uw1.getId()==null){
-			return saveRecommendFee(enrollment, dto, user, re, fc);
-		}
-		BigDecimal fee1 = uw1.getFee();
-		fee1 = fee1.add(fc.getFee());
-		uw1.setFee(fee1);
-		uw1.setUpdateTime(new Date());
-		iUserWalletMapper.updateById(uw1.getId(),uw1);
-		//更新用户推荐费为已支付
-		user.setIsPayedRecommendFee(1);
-		user.setUpdateTime(new Date());
-		iUserMapper.updateById(user.getId(),user);
-		saveBillRecrod(enrollment, uw1,1,fc);
+		//2018-01-21,Alex,取消推荐费
+//		if(user.getIsPayedRecommendFee()==1){
+//			//如果已经支付过推荐费，则不需要再次支付
+//			dto.setResult("S");
+//			return dto;
+//		}
+//		//如果报名信息状态为31，则说明是最后一次期满审核，此时才能发放推荐费
+//		if (enrollment.getState()!=31){
+//			dto.setResult("S");
+//			return dto;
+//		}
+//		List<Recommend> reList = iRecommendMapper.queryByMobile(user.getTelephone());
+//		if(CollectionUtils.isEmpty(reList)){
+//			dto.setResult("S");
+//			return dto;
+//		}
+//		Recommend re = reList.get(0);
+//		Integer overDays = Integer.valueOf((String)PropertiesUtil.getProperty("recommend_over_days"));
+//		//如果用户注册时间超过了推荐超期天数，则不返费给推荐者
+//		Date registerDate = user.getCreateTime();
+//		Date recommendDate = re.getCreateTime();
+//		double days = DateUtil.getDaysBetweenTwoDates(recommendDate, registerDate);
+//		if(days>overDays){
+//			//更新用户推荐费为已支付
+//			return updateUserIsPayedRecommedFee(dto, user);
+//		}
+//		//如果用户入职后没在规定天数入职成功，也不能返费给推荐者
+//		Integer entryOverDays = Integer.valueOf((String)PropertiesUtil.getProperty("entry_over_days"));
+//		Date entryDate = enrollment.getEntryDate();
+//		days = DateUtil.getDaysBetweenTwoDates(registerDate, entryDate);
+//		if(days>entryOverDays){
+//			return updateUserIsPayedRecommedFee(dto, user);
+//		}
+//		//如果即满足在推荐有效期注册会员，又满足在入职期内成功入职的，则返费给推荐者
+//		UserWallet uw1 = iUserWalletMapper.queryByUserId(re.getUser().getId());
+//		List<FeeConfig> fcList = iFeeConfigMapper.queryAllByDataState(1);
+//		FeeConfig fc = null;
+//		for (FeeConfig temp:fcList){
+//			if(temp.getType()==3){
+//				fc = temp;
+//			}
+//		}
+//		//如果用户还没有钱包记录,则需要生成一条
+//		if(uw1==null||uw1.getId()==null){
+//			return saveRecommendFee(enrollment, dto, user, re, fc);
+//		}
+//		BigDecimal fee1 = uw1.getFee();
+//		fee1 = fee1.add(fc.getFee());
+//		uw1.setFee(fee1);
+//		uw1.setUpdateTime(new Date());
+//		iUserWalletMapper.updateById(uw1.getId(),uw1);
+//		//更新用户推荐费为已支付
+//		user.setIsPayedRecommendFee(1);
+//		user.setUpdateTime(new Date());
+//		iUserMapper.updateById(user.getId(),user);
+//		saveBillRecrod(enrollment, uw1,1,fc);
 		dto.setResult("S");
 		return dto;
 	}

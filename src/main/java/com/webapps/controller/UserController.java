@@ -5,8 +5,10 @@ import javax.servlet.http.HttpSession;
 
 import com.webapps.common.entity.Picture;
 import com.webapps.common.utils.JSONUtil;
+import com.webapps.common.utils.PasswordEncryptUtil;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,6 +31,8 @@ import java.util.List;
 @Controller
 @RequestMapping("user")
 public class UserController {
+
+	private static Logger logger = Logger.getLogger(UserController.class);
 	
 	@Autowired
 	private IUserService iUserService;
@@ -145,6 +149,33 @@ public class UserController {
 			e.printStackTrace();
 		}
 		return "";
+	}
+
+	@RequestMapping(value = "/toResetPasswordPage")
+	public String toResetPasswordPage(Model model,Integer id){
+		try {
+			User user = iUserService.getById(id);
+			model.addAttribute("user",user);
+		} catch (Exception e) {
+			logger.error("查询用户信息异常");
+			e.printStackTrace();
+		}
+		return "/user/resetPassword";
+	}
+
+	@ResponseBody
+	@RequestMapping("/resetPassword")
+	public String resetPassword(HttpSession session,Integer id,String oldPwd,String newPwd,String confirmNewPwd){
+		ResultDto<String> dto = null;
+		try {
+			dto = iUserService.resetPassword(session,id,oldPwd,newPwd,confirmNewPwd);
+		} catch (Exception e) {
+			e.printStackTrace();
+			dto = new ResultDto<String>();
+			dto.setResult("F");
+			dto.setErrorMsg("重置密码异常");
+		}
+		return JSONUtil.toJSONString(JSONObject.fromObject(dto));
 	}
 	
 }

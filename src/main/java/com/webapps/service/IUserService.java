@@ -5,6 +5,7 @@ import com.webapps.common.bean.ResultDto;
 import com.webapps.common.entity.User;
 import com.webapps.common.form.UserRequestForm;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Map;
 
@@ -35,10 +36,13 @@ public interface IUserService {
 	 * @param inviteCode
 	 * @return
 	 */
-	public User queryByInviteCode(String inviteCode);
+	User queryByInviteCode(String inviteCode);
 
 	List<User> queryUserByType(int type);
 	
 	void transactionTest() throws Exception;
+
+	ResultDto<String> resetPassword(HttpSession session, Integer id, String oldPwd,
+										   String newPwd, String confirmNewPwd)throws Exception;
 	
 }
