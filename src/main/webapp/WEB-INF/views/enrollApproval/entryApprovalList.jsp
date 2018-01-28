@@ -47,7 +47,7 @@
                     total: 'total', // json中代表页码总数的数据
                     repeatitems: false // 如果设为false，则jqGrid在解析json时，会根据name来搜索对应的数据元素（即可以json中元素可以不按顺序）；而所使用的name是来自于colModel中的name设定。
                 },
-                colNames: ['操作','报名人', '手机号', '身份证号', '报名时间', '入职公司', '入职日期', '发布单标题', '状态', '备注'],
+                colNames: ['操作','报名人', '手机号', '身份证号','招聘员', '报名时间', '入职公司', '入职日期', '发布单标题', '状态', '备注'],
                 colModel: [{
                     label: 'operate',
                     name: 'operate',
@@ -86,6 +86,11 @@
                 }, {
                     label: 'user.idCardNo',
                     name: 'user.idCardNo',
+                    align: 'center',
+                    sortable: false
+                }, {
+                    label: 'talkerName',
+                    name: 'talkerName',
                     align: 'center',
                     sortable: false
                 }, {
