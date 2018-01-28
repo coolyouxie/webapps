@@ -94,4 +94,9 @@ public class DataUtil {
         }
         return null;
     }
+
+    public static void main(String[] args){
+       String date = "{\"encryptData\":\"SnAHiHOt8rzqtUwox0KYFYkrvxQfX37Vr/tDxQGEPg8BJVcGaY/N4LSznjXu7aEwwzcO7mD5vuACzegiQtck0FVJo3iR94PsghW2pF0BwaB9PpvCstUU1bE612Zz7yZVr4pgjnbzcV0Bu751lfviGUKW9fqc0srtwBgU+cWHhBI=|AXEUVRTZCCkQBY2ED1W9sTloPHO7jtURFyfrV1DgTBt+4Ab/YOcgX0HT1E6WfIrDxTk/J/F86Bi7QyxCwm2dg9Put8g1OUbngcfgqrb86o4vQgeDg9R0VcZLh+MKpr2bCfUsyMPMOZtwjy2UebFzKItJTQk/lcGG6I6t+u2/wz6Gl0wcXLn0l76RMLN9sM7sbEOYEKQaszV6T40MQdtsx1LBvZv6fb+ue2pXjZ26MiISfxOSQ/6I5wTgXFma2TT9yZH3KheuiY9+3pYi1j+Ijb1B9SuL/j+UMIgyMRuqc430Wg0vFzzyLcwvvf1se3Kkx8NKAFoMzLPPsfuXo7wp0guEwki3SvKzEQyYmPRNmPG+0z1emVjOLpZPL0/CA3O1fdI11nF5EDwBrkfhUCNwhMa4CVf0/qNrWxg8K4evb2S4XdeIz+jROX1zQ6vFWsAaPTeEYo2FwWLtnvvSawWmJ4GVNQK5IiE/rIqMI9PSVjE+9O+/au320XCKn0j1eCVZJEyaVrxCPZHr/GBHR5Oc8syqyOckfn/UV/x+UNyM2RK35r6ERvDVEsMV8kZpjCD5wo2HBwEqoQx9q5Me/HRQM59YmajbDYwWmBhzlqTZbZufQOjp3TgJnnJW1+XR9u7K3dDUSgS7zuIQDL2auyGF9DVYNc/UwIN1FYA06iFdy3vPJL5iypadFj7uoi9X4k/s19L+eznjy7pCHA1rXGyi7g9gNOsdafQNRhi7V9iVE0oEbNl3zZv53uK7AZ9kduc+LhfeWYGI7Q5up1znUKK/Oy8RJU5umvKpWyHLelDGMXE6Y7APXrp/rRwtvWYV7+wdN7xqVPTa5aqowvyJCsE52T+7aYuQBQSgJyV1uZvGzZUx7vtl0pnTRA/1BTHqZ51oAzt0gxzbtj8r7okz5WlP93nXV94/2qObYdUKCYAozyKeRF/V+rKqZW5jq3rAfo7Q\"}";
+       System.out.println(decryptData(date));
+    }
 }

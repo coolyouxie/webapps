@@ -139,7 +139,7 @@
 		reason = #{obj.reason},
 		approver_id = #{obj.approverId},
 		approver_name = #{obj.approverName},
-		approver_time = #{obj.approverTime}
+		approve_time = #{obj.approveTime}
 		where id=#{id}
 	</update>
 	

@@ -53,7 +53,7 @@
 			dataType:"JSON",
 	        traditional: true,//必须指定为true
 			data:{
-				"id":$("#expenditureApprovalById").val(),
+				"id":$("#applyExpenditureId").val(),
 				"state":1
 			},
 			success:function(response){
@@ -94,10 +94,6 @@
 	}
 </script>
 <style>
-.input-group-sm {
-	margin-bottom: 10px;
-}
-
 .input-group-sm label {
 	width: 100%;
 }
