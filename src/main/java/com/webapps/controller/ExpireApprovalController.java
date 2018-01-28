@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("expireApproval")
@@ -32,10 +33,25 @@ public class ExpireApprovalController {
 	
 	@ResponseBody
 	@RequestMapping(value="/loadExpireApprovalList",produces = "text/html;charset=UTF-8")
-	public String loadExpireApprovalList(Model model,Page page,EnrollApprovalRequestForm form){
+	public String loadExpireApprovalList(Model model, HttpSession session, Page page, EnrollApprovalRequestForm form){
+		User user = (User)session.getAttribute("user");
+		form = getEnrollApprovalRequestForm(form, user);
 		Page page1 = iEnrollApprovalService.getUserApprovalPage(page, form);
-		if (page1 != null) return JSONUtil.toJSONString(JSONObject.fromObject(page));
+		if (page1 != null) {
+			return JSONUtil.toJSONString(JSONObject.fromObject(page));
+		}
 		return null;
+	}
+
+	static EnrollApprovalRequestForm getEnrollApprovalRequestForm(EnrollApprovalRequestForm form, User user) {
+		if(user!=null&&(user.getUserType()!=1&&user.getUserType()!=2)){
+			if(form==null){
+				form = new EnrollApprovalRequestForm();
+			}
+			form.setApproverId(user.getId());
+			form.setTalkerId(user.getId());
+		}
+		return form;
 	}
 
 	@RequestMapping("/getById")

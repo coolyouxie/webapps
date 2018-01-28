@@ -56,12 +56,7 @@ public class EntryApprovalController {
 	@RequestMapping(value="/loadEntryApprovalList",produces = "text/html;charset=UTF-8")
 	public String loadEntryApprovalList(Model model,Page page,EnrollApprovalRequestForm form,HttpSession session){
 		User user = (User)session.getAttribute("user");
-		if(user!=null&&(user.getUserType()!=1&&user.getUserType()!=2)){
-			if(form==null){
-				form = new EnrollApprovalRequestForm();
-			}
-			form.setApproverId(user.getId());
-		}
+		form = ExpireApprovalController.getEnrollApprovalRequestForm(form, user);
 		Page page1 = iEnrollApprovalService.getUserApprovalPage(page, form);
 		if (page1 != null) return JSONUtil.toJSONString(JSONObject.fromObject(page));
 		return null;

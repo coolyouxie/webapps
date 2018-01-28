@@ -86,7 +86,7 @@
 
 
 <body data-type="login" onload="Code(loginForm.yzImg);">
-	<input id="loginResult" value="${loginResult}" />
+	<input id="loginResult" value="${loginResult}" style="display:none;"/>
 	<div class="am-g myapp-login">
 		<div class="myapp-login-logo-block  tpl-login-max">
 			<div class="myapp-login-logo-text">

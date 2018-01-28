@@ -28,7 +28,7 @@
 		<result column="id_Card_No" jdbcType="VARCHAR" property="user.idCardNo" />
 		<result column="approver_id" jdbcType="DECIMAL" property="approverId" />
 		<result column="approver_name" jdbcType="VARCHAR" property="approverName" />
-		<result column="approve_time" jdbcType="VARCHAR" property="approverTime" />
+		<result column="approve_time" jdbcType="VARCHAR" property="approveTime" />
 	</resultMap>
 
 	<sql id="select_columns">
@@ -109,7 +109,10 @@
 		left join t_company tc on tc.id=tr.company_id
 		left join t_user tu on tu.id = tea.user_id
 		<trim prefix="WHERE" prefixOverrides="AND">
-			tea.data_state = 1 
+			tea.data_state = 1
+			<if test="obj.talkerId !=null and obj.talkerId != ''">
+				and te.talker_id = #{obj.talkerId}
+			</if>
 			<if test="obj.type != null and obj.type == 1">
 				and tea.type = #{obj.type}
 				<if test="obj.state != null and obj.state != '' or obj.state == 0">
@@ -137,9 +140,9 @@
 			<if test="obj.enrollTimeEnd != null and obj.enrollTimeEnd != ''">
 				and #{obj.enrollTimeEnd} >= tea.create_time
 			</if>
-			<if test="obj.approverId != null and obj.approverId != ''">
-				and #{obj.approverId} = tea.approver_id
-			</if>
+			<!--<if test="obj.approverId != null and obj.approverId != ''">-->
+				<!--and #{obj.approverId} = tea.approver_id-->
+			<!--</if>-->
 			<if test="obj.approverName != null and obj.approverName != ''">
 				and #{obj.approverName} = tea.approver_name
 			</if>
@@ -165,12 +168,15 @@
 		tu.mobile as user_mobile,
 		tu.id_card_no as id_card_no
 		from t_enrollment_approval tea 
-		left join t_enrollment te on te.id = tea.enrollment_id
+		INNER join t_enrollment te on te.id = tea.enrollment_id
 		left join t_recruitment tr on tr.id = te.recruitment_id 
 		left join t_company tc on tc.id=tr.company_id
 		left join t_user tu on tu.id=tea.user_id
 		<trim prefix="WHERE" prefixOverrides="AND">
 			tea.data_state = 1
+			<if test="obj.talkerId !=null and obj.talkerId != ''">
+				and te.talker_id = #{obj.talkerId}
+			</if>
 			<if test="obj.type != null and obj.type == 1">
 				and tea.type = #{obj.type}
 				<if test="obj.state != null and obj.state != '' or obj.state == 0">
@@ -198,9 +204,9 @@
 			<if test="obj.enrollTimeEnd != null and obj.enrollTimeEnd != ''">
 				and #{obj.enrollTimeEnd} >= tea.create_time
 			</if>
-			<if test="obj.approverId != null and obj.approverId != ''">
-				and #{obj.approverId} = tea.approver_id
-			</if>
+			<!--<if test="obj.approverId != null and obj.approverId != ''">-->
+				<!--and #{obj.approverId} = tea.approver_id-->
+			<!--</if>-->
 			<if test="obj.approverName != null and obj.approverName != ''">
 				and #{obj.approverName} = tea.approver_name
 			</if>
