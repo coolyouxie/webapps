@@ -36,6 +36,7 @@
                 mtype: "POST",
                 height: 'auto',
                 width: 'auto',
+                rownumbers: true,
                 jsonReader: {
                     root: "resultList", // json中代表实际模型数据的入口
                     page: "page", // json中代表当前页码的数据
