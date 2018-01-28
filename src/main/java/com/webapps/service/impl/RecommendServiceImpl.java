@@ -122,6 +122,7 @@ public class RecommendServiceImpl implements IRecommendService {
 			//查找，是否已经有邀请记录
 			Recommend recommend = iRecommendMapper.getByUserIdAndCodeAndPhone(user.getId(), inviteCode, registUser.getMobile());
 			if(null != recommend) {
+				inviteUserName = recommend.getName();
 				recommend.setState(2);
 				recommend.setUpdateTime(new Date());
 				this.iRecommendMapper.updateById(recommend.getId(), recommend);
@@ -138,7 +139,8 @@ public class RecommendServiceImpl implements IRecommendService {
 			pc.setId(1);
 			iUserAwardService.addNewAward(registUser, pc);
 			dto.setResult("S");
-			dto.setData("接受邀请操作成功。");
+			dto.setErrorMsg("接受邀请操作成功。");
+			dto.setData(inviteUserName);
 		}else {
 			dto.setResult("F");
 			dto.setErrorMsg("邀请码填写错误，请检查！");

@@ -209,6 +209,8 @@ public class AppController {
 		 * @since 2018-01-15
 		 */
 		String inviteCode = jsonObj.getString("inviteCode");
+		//支持APP端填写小写字母，后端统一用大写。
+		inviteCode = inviteCode.toUpperCase();
 		user.setPassword(password);
 		user.setTelephone(telephone);
 		user.setAccount(telephone);
@@ -250,6 +252,8 @@ public class AppController {
 						dto.setResult("F");
 						dto.setErrorMsg(res.getErrorMsg());
 					}
+					user.setName(res.getData());
+					dto = iUserService.saveUser(user);
 				}
 			}else{
 				return JSONUtil.toJSONString(JSONUtil.toJSONObject(dto1));
