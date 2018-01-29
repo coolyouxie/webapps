@@ -557,7 +557,6 @@ public class EnrollApprovalServiceImpl implements IEnrollApprovalService {
 				 * 用户用邀请码注册后，发放红包到邀请人账户
 				 */
 				ParamConfig pc = iParamConfigService.getParamConfigByAwardType(ParamConfigType.入职红包);
-				pc.setId(1);
 				iUserAwardService.addNewAward(user, pc);
 				return dto;
 			}else{
@@ -820,7 +819,6 @@ public class EnrollApprovalServiceImpl implements IEnrollApprovalService {
 				 * 用户用邀请码注册后，发放红包到邀请人账户
 				 */
 				ParamConfig pc = iParamConfigService.getParamConfigByAwardType(ParamConfigType.期满红包);
-				pc.setId(1);
 				iUserAwardService.addNewAward(user, pc);
 				return dto;
 			}else{
