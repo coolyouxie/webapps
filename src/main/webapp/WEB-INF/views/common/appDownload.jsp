@@ -7,8 +7,12 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1"/>
-	<title>微信弹出遮罩</title>
+	<!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
+	<link rel="stylesheet" href="${ctx}/js/common/bootstrap/bootstrap-3.3.7/dist/css/bootstrap.min.css" type="text/css" />
 	<script src="${ctx}/js/jquery/jQuery-1.12.4.0.js"></script>
+	<!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+	<script src="${ctx}/js/common/bootstrap/bootstrap-3.3.7/dist/js/bootstrap.min.js"></script>
+	<title>下载应用</title>
 </head>
 <body>
 <style type="text/css">
@@ -42,12 +46,41 @@
 	}
 </style>
 <div class="test">
-	<a id="J_weixin" class="android-btn" href="${downloadUrl}/android${androidVersion}.apk">
-		<img src="${ctx}/img/android-btn.png" alt="安卓版下载"/>
-	</a>
-	<a id="I_weixin" class="android-btn" href="${iosUrl}">
-		<img src="${ctx}/img/ios-btn.png" alt="苹果版下载" />
-	</a>
+	<div class="row">
+		<div class="text-center">
+			<span class="text-center"><h3>选择相应版本点击下载</h3></span>
+		</div>
+	</div>
+	<div class="row">
+		<div class="text-center">
+			<span class="text-center">&nbsp;</span>
+		</div>
+	</div>
+	<div class="row">
+		<div class="text-center">
+			<span class="text-center">&nbsp;</span>
+		</div>
+	</div>
+	<div class="row">
+		<div class="text-center">
+			<span class="text-center">&nbsp;</span>
+		</div>
+	</div>
+	<div class="row">
+		<div class="text-center">
+			<span class="text-center">&nbsp;</span>
+		</div>
+	</div>
+	<div class="row">
+		<a id="J_weixin" class="android-btn" href="${downloadUrl}/android${androidVersion}.apk">
+			<img class="center-block" src="${ctx}/img/android-btn.png" alt="安卓版下载"/>
+		</a>
+	</div>
+	<div class="row">
+		<a id="I_weixin" class="android-btn" href="${iosUrl}">
+			<img class="center-block" src="${ctx}/img/ios-btn.png" alt="苹果版下载" />
+		</a>
+	</div>
 	<div id="weixin-tip">
 		<p>
 			<img src="${ctx}/img/live_weixin.png" alt="微信打开" style="width:100%;"/>
