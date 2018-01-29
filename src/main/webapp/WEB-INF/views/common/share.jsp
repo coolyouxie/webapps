@@ -67,7 +67,7 @@
 	
 	    // 是微信内部webView
 	    if (is_weixn()) {
-	        alert("请点击右上角按钮, 点击使用浏览器打开");
+	        alert("点击后进入浏览器下载页面");
 	    }
 	
 	    // 是PC端
@@ -109,7 +109,7 @@
     $(function () {
         $("#touchDiv").on({
             touchstart:function (e) {
-                timeOutEvent = setTimeout('open()',500);
+                timeOutEvent = setTimeout('open()',400);
 //                e.preventDefault();
             },
             touchmove:function () {
@@ -141,7 +141,8 @@
 <div class="container">
     <div class="row">
         <div id="touchDiv" class="col-sm-12" style="padding-left: 0px;padding-right: 0px;">
-            <img src="${ctx}/img/shareImg.png" style="width:100%"/>
+            <%--<img src="${ctx}/img/shareImg.png" style="width:100%"/>--%>
+            <img src="${ctx}/img/toAppDownload.png" style="width:100%"/>
         </div>
     </div>
 </div>

@@ -1512,6 +1512,17 @@ public class AppController {
         return request.getRemoteAddr();
     }
 
+    @RequestMapping(value="/toAppDownloadPage")
+	public String toAppDownloadPage(Model model){
+        String downloadUrl = (String)PropertiesUtil.getProperty("downloadUrl");
+        String androidVersion = (String)PropertiesUtil.getProperty("androidVersion");
+        String iosUrl = (String)PropertiesUtil.getProperty("iosUrl");
+        model.addAttribute("downloadUrl",downloadUrl);
+        model.addAttribute("androidVersion",androidVersion);
+        model.addAttribute("iosUrl",iosUrl);
+		return "/common/appDownload";
+	}
+
 	public static void main(String[] args){
 		GroupUser user = new GroupUser();
 		user.setUserName("test");
