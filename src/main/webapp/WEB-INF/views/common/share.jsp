@@ -141,8 +141,8 @@
 <div class="container">
     <div class="row">
         <div id="touchDiv" class="col-sm-12" style="padding-left: 0px;padding-right: 0px;">
-            <%--<img src="${ctx}/img/shareImg.png" style="width:100%"/>--%>
-            <img src="${ctx}/img/toAppDownload.png" style="width:100%"/>
+            <img src="${ctx}/img/shareImg_20180130.png" style="width:100%"/>
+            <%--<img src="${ctx}/img/toAppDownload.png" style="width:100%"/>--%>
         </div>
     </div>
 </div>
