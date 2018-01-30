@@ -216,15 +216,11 @@ public class UserAwardServiceImpl implements IUserAwardService {
 		int site = pc.getId();
 		//长度正常，则判断位置是否为0
 		if(userAwardFlag.length() >= site) {
-			if(userAwardFlag.toCharArray()[site-1] == '0') {
-				return true;
-			}else {
+			if(userAwardFlag.toCharArray()[site-1] != '0') {
 				return false;
 			}
-		}else {
-			//长度不正常，说明没有处理过，返回true
-			return true;
 		}
+		return true;
 	}
 	
 	/**
