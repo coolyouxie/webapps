@@ -555,9 +555,14 @@ public class EnrollApprovalServiceImpl implements IEnrollApprovalService {
 				/**
 				 * 增加逻辑 2018-01-19 scorpio.yang
 				 * 用户用邀请码注册后，发放红包到邀请人账户
+				 * 增加逻辑 2018-01-30 scorpio.yang
+				 * 判断用户当前，是否是入职，如果是入职成功，才发放红包
+				 * 21入职审核成功，
 				 */
-				ParamConfig pc = iParamConfigService.getParamConfigByAwardType(ParamConfigType.入职红包);
-				iUserAwardService.addNewAward(user, pc);
+				if(em.getState() == 21) {
+					ParamConfig pc = iParamConfigService.getParamConfigByAwardType(ParamConfigType.入职红包);
+					iUserAwardService.addNewAward(user, pc);
+				}
 				return dto;
 			}else{
 				dto.setErrorMsg("审核状态不匹配，请刷新页面后再试");
@@ -817,9 +822,15 @@ public class EnrollApprovalServiceImpl implements IEnrollApprovalService {
 				/**
 				 * 增加逻辑 2018-01-19 scorpio.yang
 				 * 用户用邀请码注册后，发放红包到邀请人账户
+				 * 增加逻辑 2018-01-30 scorpio.yang
+				 * 判断用户当前，是否是期满，如果是期满成功，才发放红包
+				 * 31全部期满审核通过，
+				 * 51分阶段期满审核通过，
 				 */
-				ParamConfig pc = iParamConfigService.getParamConfigByAwardType(ParamConfigType.期满红包);
-				iUserAwardService.addNewAward(user, pc);
+				if(enrollment.getState() == 31 || enrollment.getState() == 51) {
+					ParamConfig pc = iParamConfigService.getParamConfigByAwardType(ParamConfigType.期满红包);
+					iUserAwardService.addNewAward(user, pc);
+				}
 				return dto;
 			}else{
 				dto.setErrorMsg("审核状态不匹配，请刷新页面后再试");
