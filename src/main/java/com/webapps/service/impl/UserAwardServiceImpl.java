@@ -65,7 +65,7 @@ public class UserAwardServiceImpl implements IUserAwardService {
 	 * 根据参数，生成新的红包记录。
 	 * 该方法调用，是被邀请人在触发需要发放红包的状态节点时调用。
 	 * 如果邀请人，和被邀请人存在同类型的红包，则抛出异常，目前邀请一个人，每个红包，只能领取一份
-	 * @param curroutUser
+	 * @param currentUser
 	 * @param pc
 	 * @return
 	 */

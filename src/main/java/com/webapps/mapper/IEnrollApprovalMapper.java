@@ -3,6 +3,7 @@ package com.webapps.mapper;
 import java.util.Date;
 import java.util.List;
 
+import com.webapps.common.form.EnrollmentRequestForm;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
@@ -32,4 +33,10 @@ public interface IEnrollApprovalMapper extends IBaseMapper<EnrollApproval>,IPage
 	
 	int updateApproveInfo(@Param("id")Integer id,@Param("approverId")Integer approverId,
 			@Param("approverName")String approverName,@Param("approveTime")Date approveTime)throws Exception;
+
+	int queryExpireApproveCount(@Param("startRow")int startRow, @Param("endRow")int endRow,
+								@Param("obj")EnrollApprovalRequestForm form)throws Exception;
+
+	List<EnrollApproval> queryExpireApproveList(@Param("startRow")int startRow, @Param("endRow")int endRow,
+												@Param("obj")EnrollApprovalRequestForm form)throws Exception;
 }

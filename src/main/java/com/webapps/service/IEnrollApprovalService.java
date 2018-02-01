@@ -1,16 +1,13 @@
 package com.webapps.service;
 
-import java.math.BigDecimal;
-import java.util.List;
-
 import com.webapps.common.bean.Page;
 import com.webapps.common.bean.ResultDto;
 import com.webapps.common.dto.EnrollApprovalInfoDto;
 import com.webapps.common.entity.EnrollApproval;
-import com.webapps.common.entity.EnrollmentExtra;
 import com.webapps.common.form.EnrollApprovalRequestForm;
-
 import net.sf.json.JSONObject;
+
+import java.util.List;
 
 public interface IEnrollApprovalService {
 	
@@ -71,5 +68,7 @@ public interface IEnrollApprovalService {
 	EnrollApprovalInfoDto loadEnrollApprovalInfo(Integer enrollApprovalId)throws Exception;
 
 	Page getUserApprovalPage(Page page, EnrollApprovalRequestForm form);
+
+	Page loadExpireApprovePage(Page page, EnrollApprovalRequestForm form);
 														
 }

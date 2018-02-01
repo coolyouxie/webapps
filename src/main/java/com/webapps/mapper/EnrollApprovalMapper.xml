@@ -289,5 +289,115 @@
 			approve_time = #{obj.approveTime}
 		where id = #{id}
 	</update>
+
+	<select id="queryExpireApproveCount" resultType="java.lang.Integer">
+		SELECT
+		count(1)
+		from t_enrollment_approval tea
+		INNER join t_enrollment te on te.id = tea.enrollment_id
+		left join t_recruitment tr on tr.id = te.recruitment_id
+		left join t_company tc on tc.id=tr.company_id
+		left join t_user tu on tu.id=tea.user_id
+		<trim prefix="WHERE" prefixOverrides="AND">
+			tea.data_state = 1
+			<if test="obj.talkerId !=null and obj.talkerId != ''">
+				and te.talker_id = #{obj.talkerId}
+			</if>
+			<if test="obj.type != null and obj.type !=''">
+				and tea.type = #{obj.type}
+			</if>
+			<if test="obj.state != null and obj.state != ''">
+				and tea.state = #{obj.state}
+			</if>
+			<if test="obj.user != null and obj.user.id != null and obj.user.id != ''">
+				and tu.id = #{obj.user.id}
+			</if>
+			<if test="obj.user != null and obj.user.name != null and obj.user.name != ''">
+				and tu.name = #{obj.user.name}
+			</if>
+			<if test="obj.user != null and obj.user.mobile !=null and obj.user.mobile != ''">
+				and tu.mobile = #{obj.user.mobile}
+			</if>
+			<if test="obj.company != null and obj.company.name != null and obj.company.name != ''">
+				and tc.name like concat('%',#{obj.company.name},'%')
+			</if>
+			<if test="obj.enrollTimeStart != null and obj.enrollTimeStart != ''">
+				and tea.create_time >= #{obj.enrollTimeStart}
+			</if>
+			<if test="obj.enrollTimeEnd != null and obj.enrollTimeEnd != ''">
+				and #{obj.enrollTimeEnd} >= tea.create_time
+			</if>
+			<if test="obj.approverName != null and obj.approverName != ''">
+				and #{obj.approverName} = tea.approver_name
+			</if>
+			<if test="obj.approveTimeEnd != null and obj.approveTimeEnd != ''">
+				and #{obj.approveTimeEnd} >= tea.approve_time
+			</if>
+			<if test="obj.approveTimeStart != null and obj.approveTimeStart != ''">
+				and tea.approve_time >= #{obj.approveTimeStart}
+			</if>
+		</trim>
+		order by tea.create_time desc
+	</select>
+
+	<select id="queryExpireApproveList" resultMap="resultMap">
+		<include refid="ORACLE.paginationStart" />
+		SELECT
+		<include refid="select_columns" />,
+		tc.id company_id,
+		tc.name company_name,
+		tr.id recruitment_id,
+		tr.title recruitment_title,
+		tu.name as user_name,
+		tu.mobile as user_mobile,
+		tu.id_card_no as id_card_no,
+		te.talker_name as talker_name
+		from t_enrollment_approval tea
+		INNER join t_enrollment te on te.id = tea.enrollment_id
+		left join t_recruitment tr on tr.id = te.recruitment_id
+		left join t_company tc on tc.id=tr.company_id
+		left join t_user tu on tu.id=tea.user_id
+		<trim prefix="WHERE" prefixOverrides="AND">
+			tea.data_state = 1
+			<if test="obj.talkerId !=null and obj.talkerId != ''">
+				and te.talker_id = #{obj.talkerId}
+			</if>
+			<if test="obj.type != null and obj.type !=''">
+				and tea.type = #{obj.type}
+			</if>
+			<if test="obj.state != null and obj.state != ''">
+				and tea.state = #{obj.state}
+			</if>
+			<if test="obj.user != null and obj.user.id != null and obj.user.id != ''">
+				and tu.id = #{obj.user.id}
+			</if>
+			<if test="obj.user != null and obj.user.name != null and obj.user.name != ''">
+				and tu.name = #{obj.user.name}
+			</if>
+			<if test="obj.user != null and obj.user.mobile !=null and obj.user.mobile != ''">
+				and tu.mobile = #{obj.user.mobile}
+			</if>
+			<if test="obj.company != null and obj.company.name != null and obj.company.name != ''">
+				and tc.name like concat('%',#{obj.company.name},'%')
+			</if>
+			<if test="obj.enrollTimeStart != null and obj.enrollTimeStart != ''">
+				and tea.create_time >= #{obj.enrollTimeStart}
+			</if>
+			<if test="obj.enrollTimeEnd != null and obj.enrollTimeEnd != ''">
+				and #{obj.enrollTimeEnd} >= tea.create_time
+			</if>
+			<if test="obj.approverName != null and obj.approverName != ''">
+				and #{obj.approverName} = tea.approver_name
+			</if>
+			<if test="obj.approveTimeEnd != null and obj.approveTimeEnd != ''">
+				and #{obj.approveTimeEnd} >= tea.approve_time
+			</if>
+			<if test="obj.approveTimeStart != null and obj.approveTimeStart != ''">
+				and tea.approve_time >= #{obj.approveTimeStart}
+			</if>
+		</trim>
+		order by tea.create_time desc
+		<include refid="ORACLE.paginationEnd" />
+	</select>
 	
 </mapper>

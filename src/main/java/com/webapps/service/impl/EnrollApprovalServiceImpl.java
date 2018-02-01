@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.webapps.common.form.EnrollmentRequestForm;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -884,6 +885,23 @@ public class EnrollApprovalServiceImpl implements IEnrollApprovalService {
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	@Override
+	public Page loadExpireApprovePage(Page page, EnrollApprovalRequestForm form) {
+		int startRow = page.getStartRow();
+		int offset = page.getRows();
+		try {
+			int total = iEnrollApprovalMapper.queryExpireApproveCount(startRow,offset,form);
+			List<EnrollApproval> list = iEnrollApprovalMapper.queryExpireApproveList(startRow,offset,form);
+			page.setResultList(list);
+			page.setRecords(total);
+			return page;
+		} catch (Exception e) {
+			logger.error("PC端查询补贴记录异常");
+			e.printStackTrace();
+			return page;
+		}
 	}
 
 }
