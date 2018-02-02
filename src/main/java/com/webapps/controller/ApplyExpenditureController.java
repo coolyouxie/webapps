@@ -86,7 +86,6 @@ public class ApplyExpenditureController {
 			Integer walletId = dto.getWalletId();
 			ApplyExpenditureRequestForm form = new ApplyExpenditureRequestForm();
 			form.setWalletId(walletId);
-
 		}
 		model.addAttribute("dto",dto);
 		return "/enrollApproval/approveExpenditure";

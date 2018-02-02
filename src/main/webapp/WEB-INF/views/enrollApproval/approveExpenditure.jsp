@@ -320,6 +320,8 @@
 </head>
 <body>
 <input type="hidden" id="applyExpenditureId" value="${dto.id}">
+<input type="hidden" id="walletId" value="${dto.walletId}">
+<input type="hidden" id="userId" value="${dto.user.id}">
 <!-- 不通过原因模态框 -->
 <div class="modal fade" id="remarkModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 	<div class="modal-dialog">
@@ -388,7 +390,6 @@
 </div>
 <table id="list"></table>
 <div id="pager"></div>
-
 <table id="list1"></table>
 <div id="pager1"></div>
 
