@@ -65,7 +65,6 @@ SET FOREIGN_KEY_CHECKS = 1;
 
 ALTER TABLE `recruitment`.`t_user` ADD COLUMN `award_flag` varchar(10) AFTER `invite_code`;
 
-update t_user set award_flag = ‘000’;
+update t_user set award_flag = '000';
 
-ALTER TABLE `recruitment`.`t_user` CHANGE COLUMN `award_flag` `award_flag` varchar(10) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL COMMENT '用户被邀请后，邀请人的红包生成状态，按位获取，分别为，注册，入职，期满，0为未获取，1为已获取或获取一次’;
-
+ALTER TABLE `recruitment`.`t_user` CHANGE COLUMN `award_flag` `award_flag` varchar(10) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL COMMENT '用户被邀请后，邀请人的红包生成状态，按位获取，分别为，注册，入职，期满，0为未获取，1为已获取或获取一次';

@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.webapps.common.utils.DateUtil;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -147,8 +148,12 @@ public class EnrollmentServiceImpl implements IEnrollmentService {
 		if(CollectionUtils.isNotEmpty(latestList)){
 			//如果当前报名记录之前还存在未沟通的报名记录，则取出之前的最新的报名记录中分配好的招聘专员信息赋值给该报名记录
 			Enrollment latest = latestList.get(0);
-			em.setTalkerId(latest.getTalkerId());
-			em.setTalkerName(latest.getTalkerName());
+			if(latest.getTalkerId()!=null&& StringUtils.isNotBlank(latest.getTalkerName())){
+				em.setTalkerId(latest.getTalkerId());
+				em.setTalkerName(latest.getTalkerName());
+			}else{
+				setApproverInfo(em);
+			}
 			em.setIsLatest(1);
 			//将之前的数据更新为不是最新记录
 			iEnrollmentMapper.updateToNotLatest(em.getUser().getId());
