@@ -426,8 +426,11 @@ public class AppController {
 				dto.setResult("S");
 			}
 		} catch (Exception e) {
-			dto.setResult("F");
-			dto.setErrorMsg("查询异常，请稍后再试");
+//			dto.setResult("F");
+//			dto.setErrorMsg("查询异常，请稍后再试");
+			//临时方案，返回空列表
+			dto.setData(new ArrayList<UserAwardListDTO>());
+			dto.setResult("S");
 			e.printStackTrace();
 		}
 		if(flag){
