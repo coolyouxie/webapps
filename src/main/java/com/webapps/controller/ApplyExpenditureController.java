@@ -65,7 +65,7 @@ public class ApplyExpenditureController {
 					e.printStackTrace();
 				}
 			}
-			form.setApproverId(user.getId());
+//			form.setApproverId(user.getId());
 		}
 		page = iApplyExpenditureService.loadPageList(page, form);
 		return JSONUtil.toJSONString(JSONObject.fromObject(page));
