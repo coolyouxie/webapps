@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.webapps.mapper.IGroupUserMapper">
-	<resultMap id="resultMap" type="com.webapps.common.entity.GroupUser">
+<mapper namespace="com.webapps.mapper.ITalkerTaskMapper">
+	<resultMap id="resultMap" type="com.webapps.common.entity.TalkerTask">
 		<id column="ID" jdbcType="DECIMAL" property="id" />
 		<result column="talker_id" jdbcType="DECIMAL" property="talkerId" />
 		<result column="talker_name" jdbcType="VARCHAR" property="talker_name" />
