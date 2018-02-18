@@ -1,9 +1,12 @@
 package com.webapps.service.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.webapps.common.entity.TalkerTask;
 import com.webapps.common.utils.DateUtil;
+import com.webapps.mapper.ITalkerTaskMapper;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -36,6 +39,9 @@ public class EnrollmentServiceImpl implements IEnrollmentService {
 	
 	@Autowired
 	private IUserApproveCountMapper iUserApproveCountMapper;
+
+	@Autowired
+	private ITalkerTaskMapper iTalkerTaskMapper;
 
 	@Override
 	public Page loadEnrollmentList(Page page, EnrollmentRequestForm enrollment) throws Exception {
@@ -177,21 +183,68 @@ public class EnrollmentServiceImpl implements IEnrollmentService {
 	}
 	
 	private void setApproverInfo(Enrollment em){
-		List<UserApproveCountDto> list = iUserApproveCountMapper.queryTalkCount();
-		if(CollectionUtils.isNotEmpty(list)){
-			int len = list.size();
-			double dblR = Math.random() * len;
-			int intR = (int) Math.floor(dblR);
-			em.setTalkerId(list.get(intR).getUserId());
-			em.setTalkerName(list.get(intR).getName());
+		try {
+			/*
+			 * 招聘员查询规则：
+			 * 根据招聘员拥有的待沟通会员数量进行排序，从低到高，取到待沟通人数最少的招聘员分配
+			 * 如果拥有待沟通人数相等，则取到更新时间最远的招聘员进行分配
+			 */
+			List<TalkerTask> talkerTasks = iTalkerTaskMapper.queryAllForUserEnroll();
+			List<User> talkerList = iUserMapper.queryUsersByUserType(4);
+			List<UserApproveCountDto> list = iUserApproveCountMapper.queryTalkCount();
+			//初始化招聘员数据进入t_talker_task表
+			if(CollectionUtils.isEmpty(talkerTasks)){
+				List<TalkerTask> newTalkerList = new ArrayList<>();
+				for(int i = 0;i<talkerList.size();i++){
+					TalkerTask tt = new TalkerTask();
+					tt.setCreateTime(new Date());
+					tt.setTalkerId(talkerList.get(i).getId());
+					tt.setTalkerName(talkerList.get(i).getName());
+					tt.setDataState(1);
+					tt.setJobsCount(0);
+					if(i==0){
+						//如果是初始化数据则
+						tt.setJobsCount(1);
+						em.setUpdateTime(new Date());
+						em.setTalkerId(tt.getTalkerId());
+						em.setTalkerName(tt.getTalkerName());
+					}
+					newTalkerList.add(tt);
+				}
+				iTalkerTaskMapper.batchInsert(newTalkerList);
+				return;
+			}
+			//如果有新注册的招聘员若未生成待沟通数据，则生成一条
+			if(CollectionUtils.isNotEmpty(talkerList)&&CollectionUtils.isNotEmpty(talkerTasks)){
+				List<TalkerTask> newList = new ArrayList<TalkerTask>();
+				for(User talker:talkerList){
+					for(TalkerTask tt:talkerTasks){
+						if(!talker.getId().equals(tt.getTalkerId())){
+							TalkerTask temp = new TalkerTask();
+							temp.setJobsCount(0);
+							temp.setDataState(1);
+							temp.setCreateTime(new Date());
+							temp.setTalkerName(talker.getName());
+							temp.setTalkerId(talker.getId());
+							newList.add(temp);
+						}
+					}
+				}
+				iTalkerTaskMapper.batchInsert(newList);
+			}
+			TalkerTask tt = talkerTasks.get(0);
+			int jobsCount = tt.getJobsCount();
+			jobsCount++;
+			tt.setJobsCount(jobsCount);
+			tt.setUpdateTime(new Date());
+			iTalkerTaskMapper.updateById(tt.getId(),tt);
+			em.setTalkerId(tt.getTalkerId());
+			em.setTalkerName(tt.getTalkerName());
 			em.setUpdateTime(new Date());
-			/*try {
-				iEnrollmentMapper.updateById(em.getId(), em);
-			} catch (Exception e) {
-				logger.error("设置客服专员时异常");
-				e.printStackTrace();
-			}*/
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
+
 	}
 
 	@Override

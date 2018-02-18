@@ -6,7 +6,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.webapps.common.entity.*;
 import com.webapps.common.utils.JSONUtil;
+import com.webapps.mapper.*;
 import net.sf.json.JSONObject;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.math.RandomUtils;
@@ -21,17 +23,8 @@ import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import com.webapps.common.bean.Page;
 import com.webapps.common.bean.ResultDto;
-import com.webapps.common.entity.Recommend;
-import com.webapps.common.entity.User;
-import com.webapps.common.entity.UserPermission;
-import com.webapps.common.entity.UserWallet;
 import com.webapps.common.form.UserRequestForm;
 import com.webapps.common.utils.PasswordEncryptUtil;
-import com.webapps.mapper.IPermissionMapper;
-import com.webapps.mapper.IPermissionRelationMapper;
-import com.webapps.mapper.IUserMapper;
-import com.webapps.mapper.IUserPermissionMapper;
-import com.webapps.mapper.IUserWalletMapper;
 import com.webapps.service.IRecommendService;
 import com.webapps.service.IUserService;
 
@@ -59,6 +52,9 @@ public class UserServiceImpl implements IUserService {
 	private IUserPermissionMapper iUserPermissionMapper;
 	
 	@Autowired private IRecommendService iRecommendService;
+
+	@Autowired
+	private ITalkerTaskMapper iTalkerTaskMapper;
 
 	@Override
 	public Page loadUserList(Page page,UserRequestForm user) throws Exception {
@@ -146,6 +142,16 @@ public class UserServiceImpl implements IUserService {
 						dto.setErrorMsg("新增失败");
 						return dto;
 					}
+					//如果是招聘员，则创建招聘员待沟通数据记录
+					if(user.getUserType()==4){
+						TalkerTask tt = new TalkerTask();
+						tt.setCreateTime(new Date());
+						tt.setTalkerId(user.getId());
+						tt.setTalkerName(user.getName());
+						tt.setDataState(1);
+						tt.setJobsCount(0);
+						iTalkerTaskMapper.insert(tt);
+					}
 					//为用户生成邀请码
 					//记录保存后，获取id信息，生成邀请码，然后重新入库
 					user.setInviteCode(this.createInviteCodeCreate(user.getId()));
@@ -160,7 +166,7 @@ public class UserServiceImpl implements IUserService {
 					obj.setFee(new BigDecimal(0));
 					obj.setState(0);
 					obj.setUserId(user.getId());
-					iUserWalletMapper.insert(obj );
+					iUserWalletMapper.insert(obj);
 				} catch (DuplicateKeyException e) {
 					TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 					logger.error(e.getMessage());
