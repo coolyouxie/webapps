@@ -1,7 +1,11 @@
 package com.webapps.service.impl;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
+import com.webapps.common.entity.*;
+import com.webapps.mapper.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,17 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.webapps.common.bean.Page;
 import com.webapps.common.bean.ResultDto;
-import com.webapps.common.entity.BannerConfig;
-import com.webapps.common.entity.Company;
-import com.webapps.common.entity.MessageConfig;
-import com.webapps.common.entity.Picture;
-import com.webapps.common.entity.Recruitment;
 import com.webapps.common.form.RecruitmentRequestForm;
-import com.webapps.mapper.IBannerConfigMapper;
-import com.webapps.mapper.ICompanyMapper;
-import com.webapps.mapper.IMessageConfigMapper;
-import com.webapps.mapper.IPictureMapper;
-import com.webapps.mapper.IRecruitmentMapper;
 import com.webapps.service.IRecruitmentService;
 
 @Service
@@ -44,18 +38,74 @@ public class RecruitmentServiceImpl implements IRecruitmentService {
 	@Autowired
 	private IMessageConfigMapper iMessageConfigMapper;
 
+	@Autowired
+	private IRecruitmentTagMapper iRecruitmentTagMapper;
+
 	@Override
-	public ResultDto<RecruitmentRequestForm> saveRecruitment(RecruitmentRequestForm form) {
-		ResultDto<RecruitmentRequestForm> dto = new ResultDto<RecruitmentRequestForm>();
+	public ResultDto<RecruitmentRequestForm> saveRecruitment(RecruitmentRequestForm form)throws Exception {
+		ResultDto<RecruitmentRequestForm> dto = new ResultDto<>();
 		int result = 0;
 		String errorMsg = null;
 		if(form.getId()==null){
 			result = iRecruitmentMapper.insert(form);
+			if(form.getId()!=null&&form.getTags()!=null&&form.getTags().length>0){
+				List<RecruitmentTag> tags = new ArrayList<>();
+				for(int i=0;i<form.getTags().length;i++){
+					RecruitmentTag tag = new RecruitmentTag();
+					tag.setRecruitmentId(form.getId());
+					tag.setTagId(form.getTags()[i]);
+					tag.setCreateTime(new Date());
+					tag.setDataState(1);
+					tags.add(tag);
+				}
+				if(CollectionUtils.isNotEmpty(tags)){
+					//添加发布单标题
+					iRecruitmentTagMapper.batchInsert(tags);
+				}
+			}
 			dto.setData(form);
 			errorMsg = "新增失败";
 		}else{
 			try {
 				result = iRecruitmentMapper.updateById(form.getId(), form);
+				//删除页面上取消勾取的与发布单相关联的标签数据
+				if(form.getTags()!=null&&form.getTags().length>0){
+					List<RecruitmentTag> temp = new ArrayList<>();
+					for(int i=0;i<form.getTags().length;i++){
+						RecruitmentTag rt = new RecruitmentTag();
+						rt.setTagId(form.getTags()[i]);
+						temp.add(rt);
+					}
+					iRecruitmentTagMapper.batchDeleteByIdNotIn(temp,form.getId());
+				}else{
+					iRecruitmentTagMapper.batchDeleteByRecruimentId(form.getId());
+				}
+				//查询发布单当前所拥有的标签信息
+				List<RecruitmentTag> rList = iRecruitmentTagMapper.queryAllByRecruitmentId(form.getId());
+				//排除已有的标签，将新标签保存到数据库
+				List<RecruitmentTag> newList = new ArrayList<>();
+				if(CollectionUtils.isNotEmpty(rList)){
+					for(int i=0;i<form.getTags().length;i++){
+						boolean flag = true;
+						for(RecruitmentTag rt : rList){
+							if(rt.getTagId().equals(form.getTags()[i])){
+								flag = false;
+								break;
+							}
+						}
+						if(flag){
+							setNewRecruitmentTags(form, newList, i);
+						}
+					}
+					iRecruitmentTagMapper.batchInsert(newList);
+				}else{
+					if(form.getTags()!=null&&form.getTags().length>0){
+						for(int i=0;i<form.getTags().length;i++){
+							setNewRecruitmentTags(form, newList, i);
+						}
+						iRecruitmentTagMapper.batchInsert(newList);
+					}
+				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -75,7 +125,16 @@ public class RecruitmentServiceImpl implements IRecruitmentService {
 		dto.setData(form);
 		return dto;
 	}
-	
+
+	private void setNewRecruitmentTags(RecruitmentRequestForm form, List<RecruitmentTag> newList, int i) {
+		RecruitmentTag rt = new RecruitmentTag();
+		rt.setTagId(form.getTags()[i]);
+		rt.setRecruitmentId(form.getId());
+		rt.setCreateTime(new Date());
+		rt.setDataState(1);
+		newList.add(rt);
+	}
+
 	private ResultDto<BannerConfig> saveBannerForRecruitment(RecruitmentRequestForm form){
 		ResultDto<BannerConfig> dto = new ResultDto<BannerConfig>();
 		dto.setResult("S");

@@ -175,7 +175,7 @@
 		<div class="form-group">
 			<label class="col-md-2 control-label" for="publishType">招工类型：</label>
 			<div class="col-md-4">
-				<select id="type" name="publishType" class="form-control">
+				<select id="publishType" name="publishType" class="form-control">
 					<option value="1">普招</option>
 					<option value="2">直招</option>
 					<option value="3">假期工</option>
@@ -241,6 +241,19 @@
 			<label class="col-md-2 control-label" for="cashbackDays">期满天数：</label>
 			<div class="col-md-4">
 				<input class="form-control" id="cashbackDays" name="cashbackDays" value="" placeholder="期满天数">
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label class="col-md-2 control-label">标签：</label>
+			<div class="col-md-4">
+				<c:forEach var="item" items="${tags}">
+					<span style="padding-top: 7px;">
+						<input type="checkbox"  name="tags" value="${item.id}" >
+						${item.name}
+					</span>
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				</c:forEach>
 			</div>
 		</div>
 

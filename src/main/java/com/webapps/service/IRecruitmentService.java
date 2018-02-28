@@ -9,7 +9,7 @@ import com.webapps.common.form.RecruitmentRequestForm;
 
 public interface IRecruitmentService {
 	
-	ResultDto<RecruitmentRequestForm> saveRecruitment(RecruitmentRequestForm form);
+	ResultDto<RecruitmentRequestForm> saveRecruitment(RecruitmentRequestForm form)throws Exception;
 	
 	List<Recruitment> queryListByCompanyId(Integer companyId)throws Exception;
 	

@@ -284,6 +284,19 @@
 			</div>
 		</div>
 
+		<div class="form-group">
+			<label class="col-md-2 control-label">标签：</label>
+			<div class="col-md-4">
+				<c:forEach var="item" items="${tags}">
+					<span style="padding-top: 7px;">
+						<input type="checkbox"  name="tags" value="${item.id}" ${item.checkStatus}>
+						${item.name}
+					</span>
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				</c:forEach>
+			</div>
+		</div>
+
 		<div class="">
 			<label class="col-md-4 control-label"></label>
 			<div class="col-md-4">

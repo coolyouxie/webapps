@@ -25,6 +25,8 @@ public class RecruitmentRequestForm extends Recruitment implements RequestForm,S
 	
 	private String publishTimeEnd;
 
+	private Integer[] tags;
+
 	public String getKeyWords() {
 		return keyWords;
 	}
@@ -79,6 +81,14 @@ public class RecruitmentRequestForm extends Recruitment implements RequestForm,S
 
 	public void setPublishTimeEnd(String publishTimeEnd) {
 		this.publishTimeEnd = publishTimeEnd;
+	}
+
+	public Integer[] getTags() {
+		return tags;
+	}
+
+	public void setTags(Integer[] tags) {
+		this.tags = tags;
 	}
 
 }

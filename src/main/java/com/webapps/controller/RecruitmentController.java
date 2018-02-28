@@ -1,39 +1,43 @@
 package com.webapps.controller;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import com.webapps.common.bean.Page;
+import com.webapps.common.bean.ResultDto;
+import com.webapps.common.entity.Company;
+import com.webapps.common.entity.Recruitment;
+import com.webapps.common.entity.Tag;
+import com.webapps.common.form.RecruitmentRequestForm;
+import com.webapps.common.utils.JSONUtil;
+import com.webapps.service.ICompanyService;
+import com.webapps.service.IRecruitmentService;
+import com.webapps.service.ITagService;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.google.gson.Gson;
-import com.webapps.common.bean.Page;
-import com.webapps.common.bean.ResultDto;
-import com.webapps.common.entity.Company;
-import com.webapps.common.entity.Recruitment;
-import com.webapps.common.form.RecruitmentRequestForm;
-import com.webapps.common.utils.JSONUtil;
-import com.webapps.service.ICompanyService;
-import com.webapps.service.IRecruitmentService;
-
-import net.sf.json.util.JSONUtils;
-
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.net.URLDecoder;
+import java.util.List;
 
 @Controller
 @RequestMapping("recruitment")
 public class RecruitmentController {
+
+	private static Logger logger = Logger.getLogger(RecruitmentController.class);
 	
 	@Autowired
 	private ICompanyService iCompanyService;
 	
 	@Autowired
 	private IRecruitmentService iRecruitmentService;
+
+	@Autowired
+	private ITagService iTagService;
 	
 	@RequestMapping(value="/toRecruitmentPage")
 	public String toRecruitmentPage(){
@@ -45,7 +49,9 @@ public class RecruitmentController {
 		Company company;
 		try {
 			company = iCompanyService.getById(companyId);
+			List<Tag> list = iTagService.queryAllTags();
 			model.addAttribute("company", company);
+			model.addAttribute("tags",list);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -83,6 +89,12 @@ public class RecruitmentController {
 			e.printStackTrace();
 		}
 		model.addAttribute("recruitment", r);
+		try {
+			List<Tag> list = iTagService.queryAllTagsWithCheckStatus(id);
+			model.addAttribute("tags", list);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		if("editFromList".equals(type)||"edit".equals(type)){
 			model.addAttribute("handleType", type);
 			return "/recruitment/editRecruitment";
@@ -110,7 +122,14 @@ public class RecruitmentController {
 		model.addAttribute("id", companyId);
 		model.addAttribute("type",handleType);
 		if (null != recruitment) {
-			dto = iRecruitmentService.saveRecruitment(recruitment);
+			try {
+				dto = iRecruitmentService.saveRecruitment(recruitment);
+			}catch (Exception e){
+				logger.error("保存发布单信息时异常");
+				e.printStackTrace();
+				dto.setResult("F");
+				dto.setErrorMsg("保存发布单信息时异常");
+			}
 			model.addAttribute("recruitment", recruitment);
 			if ("F".equals(dto.getResult())) {
 				if (recruitment.getId() == null) {
@@ -160,6 +179,12 @@ public class RecruitmentController {
 	public String getById(Model model,Integer id,HttpServletRequest request,HttpServletResponse response){
 		try {
 			Recruitment r = iRecruitmentService.getById(id);
+			try {
+				List<Tag> list = iTagService.queryAllTagsWithCheckStatus(id);
+				model.addAttribute("tags", list);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 			model.addAttribute("recruitment", r);
 		} catch (Exception e) {
 			e.printStackTrace();
