@@ -83,6 +83,13 @@
 			where id = #{item.id}
          </foreach>
 	</update>
+
+	<select id="queryByIds" >
+		SELECT * from t_tag where id in
+		<foreach collection="array" item="item" index="index" open="(" separator="," close=")">
+			id = #{item}
+		</foreach>
+	</select>
 	
 	<insert id="insert" useGeneratedKeys="true" keyProperty="obj.id">
 		insert into t_tag 

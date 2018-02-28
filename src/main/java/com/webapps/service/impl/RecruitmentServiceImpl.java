@@ -41,6 +41,9 @@ public class RecruitmentServiceImpl implements IRecruitmentService {
 	@Autowired
 	private IRecruitmentTagMapper iRecruitmentTagMapper;
 
+	@Autowired
+	private ITagMapper iTagMapper;
+
 	@Override
 	public ResultDto<RecruitmentRequestForm> saveRecruitment(RecruitmentRequestForm form)throws Exception {
 		ResultDto<RecruitmentRequestForm> dto = new ResultDto<>();
@@ -247,6 +250,15 @@ public class RecruitmentServiceImpl implements IRecruitmentService {
 				List<Picture> pictures = iPictureMapper.queryListByFkIdAndType(recruitment.getCompany().getId(),1);
 				if(CollectionUtils.isNotEmpty(pictures)){
 					recruitment.setPicUrl(pictures.get(0).getPicUrl());
+					List<RecruitmentTag> rTags = iRecruitmentTagMapper.queryAllByRecruitmentId(recruitment.getId());
+					if(CollectionUtils.isNotEmpty(rTags)){
+						Integer[] ids = new Integer[rTags.size()];
+						for(int i=0;i<rTags.size();i++){
+							ids[i]=rTags.get(i).getTagId();
+						}
+						List<Tag> tags = iTagMapper.queryByIds(ids);
+						recruitment.setTagList(tags);
+					}
 				}
 			}
 		}

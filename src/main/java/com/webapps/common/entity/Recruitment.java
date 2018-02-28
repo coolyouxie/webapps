@@ -2,6 +2,7 @@ package com.webapps.common.entity;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by xieshuai on 2017-6-28.
@@ -71,6 +72,8 @@ public class Recruitment extends Entity{
      * 用于APP发布单列表展示使用的图片地址，目前使用的是发布单对应公司的首页图片
      */
     private String picUrl;
+
+    private List<Tag> tagList;
     
     public String getPicUrl() {
         return picUrl;
@@ -304,4 +307,11 @@ public class Recruitment extends Entity{
 		this.message = message;
 	}
 
+    public List<Tag> getTagList() {
+        return tagList;
+    }
+
+    public void setTagList(List<Tag> tagList) {
+        this.tagList = tagList;
+    }
 }
