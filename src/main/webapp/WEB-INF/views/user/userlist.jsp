@@ -37,7 +37,7 @@
 				total : 'total', // json中代表页码总数的数据
 				repeatitems : false // 如果设为false，则jqGrid在解析json时，会根据name来搜索对应的数据元素（即可以json中元素可以不按顺序）；而所使用的name是来自于colModel中的name设定。
 			},
-		    colNames : [ '操作','姓名','类型','手机号','性别', '身份证号','银行卡号','总金额' ],
+		    colNames : [ '操作','姓名','注册时间','类型','手机号','性别', '身份证号','银行卡号','总金额' ],
 		    colModel : [ {
 				label : 'operate',
 				name : 'operate',
@@ -51,7 +51,12 @@
 				formatter:function(cellValue,options,rowObject){
 					return '<a href="${ctx}/user/getById?id='+rowObject.id+'" style="color:blue">'+cellValue+'</a>';
 				}
-			},{
+			}, {
+                label : 'createTimeStr',
+                name : 'createTimeStr',
+                align : 'center',
+                sortable : false
+            }, {
 				label : 'userType',
 				name : 'userType',
 				align : 'center',

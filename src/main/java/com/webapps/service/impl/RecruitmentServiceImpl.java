@@ -247,18 +247,18 @@ public class RecruitmentServiceImpl implements IRecruitmentService {
 		//查询发布单对应公司信息，并取公司信息中的图片作为发布单列表图片
 		if(CollectionUtils.isNotEmpty(list)){
 			for(Recruitment recruitment:list){
+				List<RecruitmentTag> rTags = iRecruitmentTagMapper.queryAllByRecruitmentId(recruitment.getId());
+				if(CollectionUtils.isNotEmpty(rTags)){
+					Integer[] ids = new Integer[rTags.size()];
+					for(int i=0;i<rTags.size();i++){
+						ids[i]=rTags.get(i).getTagId();
+					}
+					List<Tag> tags = iTagMapper.queryByIds(ids);
+					recruitment.setTagList(tags);
+				}
 				List<Picture> pictures = iPictureMapper.queryListByFkIdAndType(recruitment.getCompany().getId(),1);
 				if(CollectionUtils.isNotEmpty(pictures)){
 					recruitment.setPicUrl(pictures.get(0).getPicUrl());
-					List<RecruitmentTag> rTags = iRecruitmentTagMapper.queryAllByRecruitmentId(recruitment.getId());
-					if(CollectionUtils.isNotEmpty(rTags)){
-						Integer[] ids = new Integer[rTags.size()];
-						for(int i=0;i<rTags.size();i++){
-							ids[i]=rTags.get(i).getTagId();
-						}
-						List<Tag> tags = iTagMapper.queryByIds(ids);
-						recruitment.setTagList(tags);
-					}
 				}
 			}
 		}

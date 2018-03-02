@@ -84,7 +84,7 @@
          </foreach>
 	</update>
 
-	<select id="queryByIds" >
+	<select id="queryByIds" resultMap="resultMap">
 		SELECT * from t_tag where id in
 		<foreach collection="array" item="item" index="index" open="(" separator="," close=")">
 			id = #{item}
