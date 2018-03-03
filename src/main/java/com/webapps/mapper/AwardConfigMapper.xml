@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.webapps.mapper.IAwardConfigMapper">
+	<resultMap id="resultMap" type="com.webapps.common.entity.AwardConfig">
+		<id column="ID" jdbcType="DECIMAL" property="id" />
+		<result column="name" jdbcType="VARCHAR" property="name" />
+		<result column="pr" jdbcType="DECIMAL" property="pr" />
+		<result column="fk_id" jdbcType="VARCHAR" property="fkId" />
+		<result column="data_state" jdbcType="DECIMAL" property="dataState" />
+		<result column="create_time" jdbcType="VARCHAR" property="createTime" />
+		<result column="update_time" jdbcType="VARCHAR" property="updateTime" />
+	</resultMap>
+
+	<sql id="select_columns">
+		ID,name,pr,fk_id,CREATE_TIME,update_time,data_state
+	</sql>
+
+	<sql id="insert_columns">
+		name,pr,fk_id,CREATE_TIME,data_state
+	</sql>
+	
+	<select id="getById" resultMap="resultMap">
+		select <include refid="select_columns" /> from t_award_config where id = #{id} and data_state = 1
+	</select>
+	
+	<!-- 查询所有 -->
+	<select id="queryAll" resultMap="resultMap">
+		select <include refid="select_columns" /> from t_award_config where data_state = 1 
+	</select>
+	
+	<!-- 查询行政区总数 -->
+	<select id="queryCount" resultType="java.lang.Integer">
+		SELECT count(1) FROM t_award_config
+		<trim prefix="WHERE" prefixOverrides="AND">
+			data_state = 1 
+			<if test="obj.name !=null and obj.name != ''">
+				AND name like concat('%',#{obj.name},'%')
+			</if>
+		</trim>
+	</select>
+
+	<!-- 分页查询行政区信息 -->
+	<select id="queryPage" resultMap="resultMap">
+		<include refid="ORACLE.paginationStart" />
+		SELECT
+		<include refid="select_columns" />
+		FROM t_award_config
+		<trim prefix="WHERE" prefixOverrides="AND">
+			data_state = 1 
+			<if test="obj.name !=null and obj.name != ''">
+				AND name like concat('%',#{obj.name},'%')
+			</if>
+		</trim>
+		order by name
+		<include refid="ORACLE.paginationEnd" />
+	</select>
+
+	<update id="batchDeleteInLogic" >
+		<foreach collection="list" item="item" index="index" open="" close="" separator=";">
+			update t_award_config
+			<set>
+				data_state = 0,
+				update_time = #{item.updateTime}
+			</set>
+			where id = #{item.id}
+         </foreach>
+	</update>
+	
+	<insert id="insert" useGeneratedKeys="true" keyProperty="obj.id">
+		insert into t_award_config 
+		(<include refid="insert_columns" />)
+		values
+		(
+			#{obj.name},
+			#{obj.pr},
+			#{obj.fkId},
+			#{obj.createTime},
+			#{obj.dataState}
+		)
+	</insert>
+	
+	<update id="updateById" >
+		data_state=#{obj.dataState},
+		update_time=#{obj.updateTime}
+		where id=#{id}
+	</update>
+	
+	<update id="deleteByIdInLogic" >
+		update t_award_config
+		set data_state = 0,
+		update_time = now()
+		where id = #{id}
+	</update>
+</mapper>
