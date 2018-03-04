@@ -89,6 +89,11 @@
 	</insert>
 	
 	<update id="updateById" >
+		update t_award_config
+		set name = #{obj.name},
+		pr = #{obj.pr},
+		fk_id = #{obj.fkId},
+		remark = #{obj.remark},
 		data_state=#{obj.dataState},
 		update_time=#{obj.updateTime}
 		where id=#{id}

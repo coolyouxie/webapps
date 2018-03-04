@@ -84,6 +84,9 @@
 				<c:if test="${!empty perMap['RETT_MU_AWARD_CONFIG']}">
 					<li><a href="${ctx}/awardConfig/toAwardConfigPage" target="mainContainer">奖品配置</a></li>
 				</c:if>
+				<c:if test="${!empty perMap['RETT_MU_PROMOTION_CONFIG']}">
+					<li><a href="${ctx}/promotionConfig/toPromotionConfigPage" target="mainContainer">活动发布列表</a></li>
+				</c:if>
 			</ul>
 			<ul class="nav nav-sidebar">
 				<c:if test="${!empty perMap['RETT_MU_ENROLLMENT']}">

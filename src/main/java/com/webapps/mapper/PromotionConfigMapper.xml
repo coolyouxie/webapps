@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.webapps.mapper.IPromotionConfigMapper">
+	<resultMap id="resultMap" type="com.webapps.common.entity.PromotionConfig">
+		<id column="ID" jdbcType="DECIMAL" property="id" />
+		<result column="name" jdbcType="VARCHAR" property="name" />
+		<result column="remark" jdbcType="VARCHAR" property="remark" />
+		<result column="brief" jdbcType="VARCHAR" property="brief" />
+		<result column="status" jdbcType="INTEGER" property="status" />
+		<result column="effective_date" jdbcType="VARCHAR" property="effectiveDate" />
+		<result column="expiry_date" jdbcType="VARCHAR" property="expiryDate" />
+		<result column="data_state" jdbcType="DECIMAL" property="dataState" />
+		<result column="create_time" jdbcType="VARCHAR" property="createTime" />
+		<result column="update_time" jdbcType="VARCHAR" property="updateTime" />
+	</resultMap>
+
+	<sql id="select_columns">
+		ID,name,remark,brief,status,effective_date,expiry_date,CREATE_TIME,update_time,data_state
+	</sql>
+
+	<sql id="insert_columns">
+		name,remark,brief,status,effective_date,expiry_date,CREATE_TIME,data_state
+	</sql>
+	
+	<select id="getById" resultMap="resultMap">
+		select <include refid="select_columns" /> from t_promotion_config where id = #{id} and data_state = 1
+	</select>
+	
+	<!-- 查询所有 -->
+	<select id="queryAll" resultMap="resultMap">
+		select <include refid="select_columns" /> from t_promotion_config where data_state = 1 
+	</select>
+	
+	<!-- 查询行政区总数 -->
+	<select id="queryCount" resultType="java.lang.Integer">
+		SELECT count(1) FROM t_promotion_config
+		<trim prefix="WHERE" prefixOverrides="AND">
+			data_state = 1 
+			<if test="obj.name !=null and obj.name != ''">
+				AND name like concat('%',#{obj.name},'%')
+			</if>
+			<if test="obj.status !=null and obj.status != '' and obj.status!=-1">
+				AND status = #{obj.status}
+			</if>
+			<if test="obj.effectiveDateStart !=null and obj.effectiveDateStart != ''">
+				AND effective_Date >= #{obj.effectiveDateStart}
+			</if>
+			<if test="obj.effectiveDateEnd !=null and obj.effectiveDateEnd != ''">
+				AND #{obj.effectiveDateEnd}>=effective_Date
+			</if>
+			<if test="obj.expiryDateStart !=null and obj.expiryDateStart != ''">
+				AND expiry_date >= #{obj.expiryDateStart}
+			</if>
+			<if test="obj.expiryDateEnd !=null and obj.expiryDateEnd != ''">
+				AND #{obj.expiryDateEnd}>=expiry_date
+			</if>
+		</trim>
+	</select>
+
+	<!-- 分页查询行政区信息 -->
+	<select id="queryPage" resultMap="resultMap">
+		<include refid="ORACLE.paginationStart" />
+		SELECT
+		<include refid="select_columns" />
+		FROM t_promotion_config
+		<trim prefix="WHERE" prefixOverrides="AND">
+			data_state = 1
+			<if test="obj.name !=null and obj.name != ''">
+				AND name like concat('%',#{obj.name},'%')
+			</if>
+			<if test="obj.status !=null and obj.status != '' and obj.status!=-1">
+				AND status = #{obj.status}
+			</if>
+			<if test="obj.effectiveDateStart !=null and obj.effectiveDateStart != ''">
+				AND effective_Date >= #{obj.effectiveDateStart}
+			</if>
+			<if test="obj.effectiveDateEnd !=null and obj.effectiveDateEnd != ''">
+				AND #{obj.effectiveDateEnd}>=effective_Date
+			</if>
+			<if test="obj.expiryDateStart !=null and obj.expiryDateStart != ''">
+				AND expiry_date >= #{obj.expiryDateStart}
+			</if>
+			<if test="obj.expiryDateEnd !=null and obj.expiryDateEnd != ''">
+				AND #{obj.expiryDateEnd}>=expiry_date
+			</if>
+		</trim>
+		order by name
+		<include refid="ORACLE.paginationEnd" />
+	</select>
+
+	<update id="batchDeleteInLogic" >
+		<foreach collection="list" item="item" index="index" open="" close="" separator=";">
+			update t_promotion_config
+			<set>
+				data_state = 0,
+				update_time = #{item.updateTime}
+			</set>
+			where id = #{item.id}
+         </foreach>
+	</update>
+	
+	<insert id="insert" useGeneratedKeys="true" keyProperty="obj.id">
+		insert into t_promotion_config 
+		(<include refid="insert_columns" />)
+		values
+		(
+			#{obj.name},
+			#{obj.remark},
+			#{obj.brief},
+			#{obj.status},
+			#{obj.effectiveDate},
+			#{obj.expiryDate},
+			#{obj.createTime},
+			#{obj.dataState}
+		)
+	</insert>
+	
+	<update id="updateById" >
+		update t_promotion_config
+		set name = #{obj.name},
+		remark = #{obj.remark},
+		brief = #{obj.brief},
+		data_state=#{obj.dataState},
+		status = #{obj.status},
+		effective_date = #{obj.effectiveDate},
+		expiry_date = #{obj.expiryDate},
+		update_time=#{obj.updateTime}
+		where id=#{id}
+	</update>
+	
+	<update id="updateStatusById" >
+		update t_promotion_config
+		set status = #{status},
+		update_time = now()
+		where id = #{id}
+	</update>
+
+	<update id="deleteByIdInLogic" >
+		update t_promotion_config
+		set data_state = 0,
+		update_time = now()
+		where id = #{id}
+	</update>
+</mapper>
