@@ -10,6 +10,8 @@ public class AwardConfig extends Entity {
 
 	private Integer fkId;
 
+	private String remark;
+
 	public String getName() {
 		return name;
 	}
@@ -32,5 +34,13 @@ public class AwardConfig extends Entity {
 
 	public void setFkId(Integer fkId) {
 		this.fkId = fkId;
+	}
+
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
 	}
 }

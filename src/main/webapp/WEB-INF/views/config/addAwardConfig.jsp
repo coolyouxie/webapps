@@ -35,7 +35,7 @@
 	</div>
 	<form id="saveForm" class="form-horizontal" action="${ctx}/awardConfig/saveAwardConfig" method="post">
 		<div class="form-group">
-			<label class="col-md-2 control-label" for="name">公司名称：</label>
+			<label class="col-md-2 control-label" for="name">奖品名称：</label>
 			<div class="col-md-4">
 				<input type="text" id="name" name="name" class="form-control" placeholder="请输入奖品名称">
 			</div>
@@ -46,7 +46,12 @@
 				<input type="text" id="pr" name="pr" class="form-control" placeholder="请输入中奖率">
 			</div>
 		</div>
-
+		<div class="form-group">
+			<label class="col-md-2 control-label" for="pr">备注：</label>
+			<div class="col-md-4">
+				<input type="text" id="remark" name="remark" class="form-control" placeholder="请输入备注信息">
+			</div>
+		</div>
 		<div class="">
 			<label class="col-md-4 control-label"></label>
 			<div class="col-md-4">

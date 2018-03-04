@@ -81,10 +81,8 @@
 				<c:if test="${!empty perMap['RETT_MU_RECRUIT_PROCESS']}">
 					<li><a href="${ctx}/recruitProcess/toRecruitProcessListPage" target="mainContainer">招聘进度</a></li>
 				</c:if>
-				<c:if test="${!empty perMap['RETT_MU_EXPENDITURE']}">
-					<li>
-						<a href="${ctx}/userAwardExchange/toUserAwardExchangePage" target="mainContainer">会员兑奖列表</a>
-					</li>
+				<c:if test="${!empty perMap['RETT_MU_AWARD_CONFIG']}">
+					<li><a href="${ctx}/awardConfig/toAwardConfigPage" target="mainContainer">奖品配置</a></li>
 				</c:if>
 			</ul>
 			<ul class="nav nav-sidebar">
@@ -107,14 +105,17 @@
 					<li><a href="${ctx}/applyExpenditure/toExpenditureApproveListPage" target="mainContainer">提现审核列表</a>
 					</li>
 				</c:if>
+				<c:if test="${!empty perMap['RETT_MU_USER_EXCHANGE']}">
+					<li>
+						<a href="${ctx}/userAwardExchange/toUserAwardExchangePage" target="mainContainer">会员兑奖列表</a>
+					</li>
+				</c:if>
 			</ul>
 			<ul class="nav nav-sidebar">
 				<c:if test="${!empty perMap['RETT_MU_SHARE']}">
 					<li><a href="${ctx}/appServer/toSharePage">分享页面</a></li>
 				</c:if>
-				<c:if test="${!empty perMap['RETT_MU_SHARE']}">
-					<li><a href="${ctx}/awardConfig/toAwardConfigPage" target="mainContainer">奖品配置</a></li>
-				</c:if>
+
 				<c:if test="${!empty perMap['RETT_MU_PRIZEDRAW']}">
 					<li><a href="${ctx}/appServer/toPrizeDraw?params={userId:19}">抽奖页面</a></li>
 				</c:if>

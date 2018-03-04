@@ -6,18 +6,19 @@
 		<id column="ID" jdbcType="DECIMAL" property="id" />
 		<result column="name" jdbcType="VARCHAR" property="name" />
 		<result column="pr" jdbcType="DECIMAL" property="pr" />
-		<result column="fk_id" jdbcType="VARCHAR" property="fkId" />
+		<result column="fk_id" jdbcType="INTEGER" property="fkId" />
+		<result column="remark" jdbcType="VARCHAR" property="remark" />
 		<result column="data_state" jdbcType="DECIMAL" property="dataState" />
 		<result column="create_time" jdbcType="VARCHAR" property="createTime" />
 		<result column="update_time" jdbcType="VARCHAR" property="updateTime" />
 	</resultMap>
 
 	<sql id="select_columns">
-		ID,name,pr,fk_id,CREATE_TIME,update_time,data_state
+		ID,name,pr,fk_id,CREATE_TIME,update_time,data_state,remark
 	</sql>
 
 	<sql id="insert_columns">
-		name,pr,fk_id,CREATE_TIME,data_state
+		name,pr,fk_id,CREATE_TIME,data_state,remark
 	</sql>
 	
 	<select id="getById" resultMap="resultMap">
@@ -37,6 +38,9 @@
 			<if test="obj.name !=null and obj.name != ''">
 				AND name like concat('%',#{obj.name},'%')
 			</if>
+			<if test="obj.remark !=null and obj.remark != ''">
+				AND remark = #{obj.remark}
+			</if>
 		</trim>
 	</select>
 
@@ -50,6 +54,9 @@
 			data_state = 1 
 			<if test="obj.name !=null and obj.name != ''">
 				AND name like concat('%',#{obj.name},'%')
+			</if>
+			<if test="obj.remark !=null and obj.remark != ''">
+				AND remark = #{obj.remark}
 			</if>
 		</trim>
 		order by name
@@ -76,7 +83,8 @@
 			#{obj.pr},
 			#{obj.fkId},
 			#{obj.createTime},
-			#{obj.dataState}
+			#{obj.dataState},
+			#{obj.remark}
 		)
 	</insert>
 	

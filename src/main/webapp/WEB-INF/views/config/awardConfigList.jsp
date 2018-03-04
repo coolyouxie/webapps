@@ -6,7 +6,7 @@
 <html>
 <head>
 	<meta charset="utf-8"/>
-	<title>企业信息管理</title>
+	<title>奖品配置管理</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 	<link rel="stylesheet" href="${ctx}/js/common/jquery/jquery-ui-1.12.1/jquery-ui.css" type="text/css"/>
 	<link rel="stylesheet" href="${ctx}/js/common/jquery/jqGrid/css/ui.jqgrid.css" type="text/css"/>
@@ -38,7 +38,7 @@
                     total: 'total', // json中代表页码总数的数据
                     repeatitems: false // 如果设为false，则jqGrid在解析json时，会根据name来搜索对应的数据元素（即可以json中元素可以不按顺序）；而所使用的name是来自于colModel中的name设定。
                 },
-                colNames: ['奖品名称', '中奖率', '操作'],
+                colNames: ['奖品名称', '中奖率','备注', '操作'],
                 colModel: [{
                     label: 'name',
                     name: 'name',
@@ -47,6 +47,11 @@
                 }, {
                     label: 'pr',
                     name: 'pr',
+                    align: 'center',
+                    sortable: false
+                }, {
+                    label: 'remark',
+                    name: 'remark',
                     align: 'center',
                     sortable: false
                 }, {
