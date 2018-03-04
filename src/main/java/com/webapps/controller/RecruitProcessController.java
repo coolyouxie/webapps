@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
@@ -117,14 +118,15 @@ public class RecruitProcessController {
         return null;
     }
 
-    @RequestMapping(value = "/exportRecruitProcess", method = RequestMethod.GET)
+    @RequestMapping(value = "/exportRecruitProcess", produces = "text/html;charset=UTF-8",method = RequestMethod.POST)
     public void exportRecruitProcess(Model model, HttpSession session, HttpServletResponse response,
-                                     String userName, String companyName, String userMobile,
-                                     Integer intentionCityId, String talkerName, String enrollTimeStart,
-                                     String enrollTimeEnd, int isTalked, int unTalk, int entryState,
-                                     int partExpireState, int allExpireState) {
-        EnrollmentRequestForm form = setCondition(userName, companyName, userMobile, intentionCityId,
-                talkerName, enrollTimeStart, enrollTimeEnd, isTalked, unTalk, entryState, partExpireState, allExpireState);
+                                     String userNameForExport, String companyNameForExport, String userMobileForExport,
+                                     Integer intentionCityIdForExport, String talkerNameForExport, String enrollTimeStartForExport,
+                                     String enrollTimeEndForExport, Integer isTalkedForExport, Integer unTalkForExport,
+                                     Integer entryStateForExport, Integer partExpireStateForExport, Integer allExpireStateForExport) {
+        EnrollmentRequestForm form = setCondition(userNameForExport, companyNameForExport, userMobileForExport, intentionCityIdForExport,
+                talkerNameForExport, enrollTimeStartForExport, enrollTimeEndForExport, isTalkedForExport, unTalkForExport,
+                entryStateForExport, partExpireStateForExport, allExpireStateForExport);
         try {
             iRateService.exportRecruitProcess(session, response, form);
         } catch (Exception e) {
@@ -134,8 +136,8 @@ public class RecruitProcessController {
 
     private EnrollmentRequestForm setCondition(String userName, String companyName, String userMobile,
                                                Integer intentionCityId, String talkerName, String enrollTimeStart,
-                                               String enrollTimeEnd, int isTalked, int unTalk, int entryState,
-                                               int partExpireState, int allExpireState) {
+                                               String enrollTimeEnd, Integer isTalked, Integer unTalk, Integer entryState,
+                                               Integer partExpireState, Integer allExpireState) {
         EnrollmentRequestForm form = new EnrollmentRequestForm();
         User user = new User();
         Company company = new Company();
@@ -147,22 +149,22 @@ public class RecruitProcessController {
         form.setEnrollTimeStart(enrollTimeStart);
         form.setEnrollTimeEnd(enrollTimeEnd);
         form.setTalkerName(talkerName);
-        if(intentionCityId!=0){
+        if (intentionCityId != 0) {
             form.setIntentionCityId(intentionCityId);
         }
-        if(isTalked!=0){
+        if (isTalked != 0) {
             form.setIsTalked(isTalked);
         }
-        if(unTalk!=0){
+        if (unTalk != 0) {
             form.setUnTalk(unTalk);
         }
-        if(entryState!=0){
+        if (entryState != 0) {
             form.setEntryState(entryState);
         }
-        if(allExpireState!=0){
+        if (allExpireState != 0) {
             form.setAllExpireState(allExpireState);
         }
-        if(partExpireState!=0){
+        if (partExpireState != 0) {
             form.setPartExpireState(partExpireState);
         }
         return form;

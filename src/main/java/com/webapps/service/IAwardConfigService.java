@@ -8,6 +8,7 @@ import com.webapps.common.form.AwardConfigRequestForm;
 import com.webapps.common.form.BillRecordRequestForm;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 public interface IAwardConfigService {
 	
@@ -24,5 +25,7 @@ public interface IAwardConfigService {
 	public ResultDto<String> addAwardConfig(AwardConfig config) throws Exception;
 
 	public ResultDto<String> deleteAwardConfigById(Integer id )throws Exception;
+
+	List<AwardConfig> queryAllAwardConfig() throws Exception;
 	
 }

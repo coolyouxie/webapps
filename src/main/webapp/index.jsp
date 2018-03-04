@@ -81,6 +81,11 @@
 				<c:if test="${!empty perMap['RETT_MU_RECRUIT_PROCESS']}">
 					<li><a href="${ctx}/recruitProcess/toRecruitProcessListPage" target="mainContainer">招聘进度</a></li>
 				</c:if>
+				<c:if test="${!empty perMap['RETT_MU_EXPENDITURE']}">
+					<li>
+						<a href="${ctx}/userAwardExchange/toUserAwardExchangePage" target="mainContainer">会员兑奖列表</a>
+					</li>
+				</c:if>
 			</ul>
 			<ul class="nav nav-sidebar">
 				<c:if test="${!empty perMap['RETT_MU_ENROLLMENT']}">

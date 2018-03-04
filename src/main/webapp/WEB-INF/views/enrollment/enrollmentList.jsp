@@ -29,8 +29,8 @@
 
 	<script type="text/javascript">
         var dataGrid = null;
-        jQuery(document).ready(function () {
-            dataGrid = jQuery("#list").jqGrid({
+        $(document).ready(function () {
+            dataGrid = $("#list").jqGrid({
                 url: "${ctx}/enrollment/loadEnrollmentList",
                 datatype: "json",
                 mtype: "POST",
@@ -316,10 +316,6 @@
 
 	</script>
 	<style>
-		.input-group-sm {
-			margin-bottom: 10px;
-		}
-
 		.input-group-sm label {
 			width: 100%;
 		}

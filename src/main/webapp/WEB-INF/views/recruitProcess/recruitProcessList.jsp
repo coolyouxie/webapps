@@ -159,11 +159,31 @@
             $("#talkerNameForExport").val($("#talkerName").val());
             $("#enrollTimeStartForExport").val($("#enrollTimeStart").val());
             $("#enrollTimeEndForExport").val($("#enrollTimeEnd").val());
-            $("#unTalkForExport").val($("#unTalk").val());
-            $("#isTalkedForExport").val($("#isTalked").val());
-            $("#entryStateForExport").val($("#entryState").val());
-            $("#partExpireStateForExport").val($("#partExpireState").val());
-            $("#allExpireStateForExport").val($("#allExpireState").val());
+            if($("#unTalk").is(':checked')){
+                $("#unTalkForExport").val($("#unTalk").val());
+            }else{
+                $("#unTalkForExport").val(0);
+            }
+            if($("#isTalked").is(':checked')){
+                $("#isTalkedForExport").val($("#isTalked").val());
+            }else{
+                $("#isTalkedForExport").val(0);
+            }
+            if($("#entryState").is(':checked')){
+                $("#entryStateForExport").val($("#entryState").val());
+            }else{
+                $("#entryStateForExport").val(0);
+            }
+            if($("#partExpireState").is(':checked')){
+                $("#partExpireStateForExport").val($("#partExpireState").val());
+            }else{
+                $("#partExpireStateForExport").val(0);
+            }
+            if($("#allExpireState").is(':checked')){
+                $("#allExpireStateForExport").val($("#allExpireState").val());
+            }else{
+                $("#allExpireStateForExport").val(0);
+            }
             $("#list").setGridParam({
                 url: "${ctx}/recruitProcess/loadRecruitProcessList?" + encodeURI($("#searchForm").serialize())
             }).trigger('reloadGrid');
@@ -204,29 +224,11 @@
                 alert("无数据可导出");
                 return ;
             }
-            var userName = $("#userNameForExport").val();
-            var userMobile = $("#userMobileForExport").val();
-            var companyName = $("#companyNameForExport").val();
-            var intentionCityId = $("#intentionCityIdForExport").val();
-            var talkerName = $("#talkerNameForExport").val();
-            var enrollTimeStart = $("#enrollTimeStartForExport").val();
-            var enrollTimeEnd = $("#enrollTimeEndForExport").val();
-            var unTalk = $("#unTalkForExport").val();
-            var isTalked = $("#isTalkedForExport").val();
-            var entryState = $("#entryStateForExport").val();
-            var partExpireState = $("#partExpireStateForExport").val();
-            var allExpireState = $("#allExpireStateForExport").val();
-            $("#exportExcel").attr("href","${ctx}/recruitProcess/exportRecruitProcess?userName="+userName+
-		            "&userMobile="+userMobile+"&companyName="+companyName+"&intentionCityId="+intentionCityId+
-		            "&talkerName="+talkerName+"&enrollTimeStart="+enrollTimeStart+"&enrollTimeEnd="+enrollTimeEnd+
-		            "&unTalk="+unTalk+"&isTalked="+isTalked+"&entryState="+entryState+"&partExpireState="+partExpireState+
-		            "&allExpireState="+allExpireState
-            );
+	        $("#exportForm").submit();
         }
 
 	</script>
 	<style>
-
 		.input-group-sm label {
 			width: 100%;
 		}
@@ -272,18 +274,20 @@
 </div>
 
 <div class="container-fluid" style="padding-right: 15px;">
-	<input type="hidden" id="userNameForExport" name="userNameForExport">
-	<input type="hidden" id="userMobileForExport" name="userMobileForExport">
-	<input type="hidden" id="companyNameForExport" name="companyNameForExport">
-	<input type="hidden" id="intentionCityIdForExport" name="intentionCityIdForExport" value="0">
-	<input type="hidden" id="talkerNameForExport" name="talkerNameForExport">
-	<input type="hidden" id="enrollTimeStartForExport" name="enrollTimeStartForExport">
-	<input type="hidden" id="enrollTimeEndForExport" name="enrollTimeEndForExport">
-	<input type="hidden" id="unTalkForExport" name="unTalkForExport" value="0">
-	<input type="hidden" id="isTalkedForExport" name="isTalkedForExport" value="0">
-	<input type="hidden" id="entryStateForExport" name="entryStateForExport" value="0">
-	<input type="hidden" id="partExpireStateForExport" name="partExpireStateForExport" value="0">
-	<input type="hidden" id="allExpireStateForExport" name="allExpireStateForExport" value="0">
+	<form id="exportForm" method="post" action="${ctx}/recruitProcess/exportRecruitProcess">
+		<input type="hidden" id="userNameForExport" name="userNameForExport">
+		<input type="hidden" id="userMobileForExport" name="userMobileForExport">
+		<input type="hidden" id="companyNameForExport" name="companyNameForExport">
+		<input type="hidden" id="intentionCityIdForExport" name="intentionCityIdForExport" value="0">
+		<input type="hidden" id="talkerNameForExport" name="talkerNameForExport">
+		<input type="hidden" id="enrollTimeStartForExport" name="enrollTimeStartForExport">
+		<input type="hidden" id="enrollTimeEndForExport" name="enrollTimeEndForExport">
+		<input type="hidden" id="unTalkForExport" name="unTalkForExport" value="0">
+		<input type="hidden" id="isTalkedForExport" name="isTalkedForExport" value="0">
+		<input type="hidden" id="entryStateForExport" name="entryStateForExport" value="0">
+		<input type="hidden" id="partExpireStateForExport" name="partExpireStateForExport" value="0">
+		<input type="hidden" id="allExpireStateForExport" name="allExpireStateForExport" value="0">
+	</form>
 	<form id="searchForm">
 		<table>
 			<tr>
@@ -326,7 +330,7 @@
 				</td>
 				<td>
 					<select id="intentionCityId" name="intentionCityId">
-						<option value="">全部</option>
+						<option value="0">全部</option>
 						<c:forEach var="item" items="${intentionCities}">
 							<option value="${item.id}">${item.city}</option>
 						</c:forEach>
@@ -350,11 +354,11 @@
 			</tr>
 			<tr>
 				<td colspan="3">
-					<input type="checkbox" name="unTalk" value="1">未沟通
-					<input type="checkbox" name="isTalked" value="1">已沟通
-					<input type="checkbox" name="entryState" value="1">已入职
-					<input type="checkbox" name="partExpireState" value="1">阶段期满
-					<input type="checkbox" name="allExpireState" value="1">全部期满
+					<input type="checkbox" id="unTalk" name="unTalk" value="1">未沟通
+					<input type="checkbox" id="isTalked" name="isTalked" value="1">已沟通
+					<input type="checkbox" id="entryState" name="entryState" value="1">已入职
+					<input type="checkbox" id="partExpireState" name="partExpireState" value="1">阶段期满
+					<input type="checkbox" id="allExpireState" name="allExpireState" value="1">全部期满
 				</td>
 				<td>
 				</td>
@@ -364,7 +368,7 @@
 				</td>
 				<td align="right">
 					<a id="exportExcel" href="#">
-						<button onclick="exportExcel()" type="button" class="btn btn-primary" >
+						<button onclick="exportExcel()" type="button" class="btn btn-primary btn-sm" >
 							导出
 						</button>
 					</a>

@@ -1,12 +1,12 @@
 package com.webapps.controller;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.webapps.common.entity.*;
+import com.webapps.common.utils.DateUtil;
+import com.webapps.service.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -25,24 +25,6 @@ import com.webapps.common.bean.Page;
 import com.webapps.common.bean.ResultDto;
 import com.webapps.common.dto.AppConfigDTO;
 import com.webapps.common.dto.UserAwardListDTO;
-import com.webapps.common.entity.AliSmsMsg;
-import com.webapps.common.entity.ApplyExpenditure;
-import com.webapps.common.entity.BannerConfig;
-import com.webapps.common.entity.BillRecord;
-import com.webapps.common.entity.Company;
-import com.webapps.common.entity.EnrollApproval;
-import com.webapps.common.entity.Enrollment;
-import com.webapps.common.entity.EnrollmentExtra;
-import com.webapps.common.entity.FeeConfig;
-import com.webapps.common.entity.GroupUser;
-import com.webapps.common.entity.MessageConfig;
-import com.webapps.common.entity.ParamConfig;
-import com.webapps.common.entity.Picture;
-import com.webapps.common.entity.Recommend;
-import com.webapps.common.entity.Recruitment;
-import com.webapps.common.entity.User;
-import com.webapps.common.entity.UserReward;
-import com.webapps.common.entity.UserWallet;
 import com.webapps.common.form.ApplyExpenditureRequestForm;
 import com.webapps.common.form.BannerConfigRequestForm;
 import com.webapps.common.form.BillRecordRequestForm;
@@ -53,24 +35,6 @@ import com.webapps.common.utils.DataUtil;
 import com.webapps.common.utils.JSONUtil;
 import com.webapps.common.utils.PropertiesUtil;
 import com.webapps.mapper.IEnrollmentExtraMapper;
-import com.webapps.service.IAliSmsMsgService;
-import com.webapps.service.IApplyExpenditureService;
-import com.webapps.service.IBannerConfigService;
-import com.webapps.service.IBillRecordService;
-import com.webapps.service.ICompanyService;
-import com.webapps.service.IEnrollApprovalService;
-import com.webapps.service.IEnrollmentService;
-import com.webapps.service.IFeeConfigService;
-import com.webapps.service.IGroupUserService;
-import com.webapps.service.IMessageConfigService;
-import com.webapps.service.IParamConfigService;
-import com.webapps.service.IPictureService;
-import com.webapps.service.IRecommendService;
-import com.webapps.service.IRecruitmentService;
-import com.webapps.service.IUserAwardService;
-import com.webapps.service.IUserRewardService;
-import com.webapps.service.IUserService;
-import com.webapps.service.IUserWalletService;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -136,6 +100,10 @@ public class AppController {
 	@Autowired private IUserAwardService iUserAwardService;
 	
 	@Autowired private IParamConfigService iParamConfigService;
+
+	@Autowired private IUserAwardExchangeService iUserAwardExchangeService;
+
+	@Autowired private IAwardConfigService iAwardConfigService;
 
 	/**
 	 * app端登录接口
@@ -1524,6 +1492,79 @@ public class AppController {
         model.addAttribute("androidVersion",androidVersion);
         model.addAttribute("iosUrl",iosUrl);
 		return "/common/appDownload";
+	}
+
+	/**
+	 * 查询转盘抽奖奖品配置信息
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/getAwardConfig",produces ="text/html;charset=UTF-8")
+	public String getAwardConfig(){
+		ResultDto<List<AwardConfig>> dto = new ResultDto<>();
+		try {
+			List<AwardConfig> list = iAwardConfigService.queryAllAwardConfig();
+			dto.setResult("S");
+			dto.setData(list);
+			return JSONUtil.toJSONString(JSONObject.fromObject(dto));
+		} catch (Exception e) {
+			logger.error("查询奖品配置信息异常");
+			dto.setResult("F");
+			dto.setErrorMsg("查询奖品配置信息异常");
+			e.printStackTrace();
+		}
+		return JSONUtil.toJSONString(JSONObject.fromObject(dto));
+	}
+
+	/**
+	 * 转盘抽奖接口
+	 * @param params
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value="/lotteryDraw",produces ="text/html;charset=UTF-8")
+	public String lotteryDraw(@RequestBody String params){
+		ResultDto<UserAwardExchange> dto = null;
+		String deadtimeStr = (String)PropertiesUtil.getProperty("lotteryDeadtime");
+		long nowTime = new Date().getTime();
+		long deadtime = DateUtil.parseDateByStr(deadtimeStr,DateUtil.FULL_PATTERN).getTime();
+		if(deadtime-nowTime<0){
+			dto = new ResultDto<>();
+			dto.setErrorMsg("抽奖活动已结束");
+			dto.setResult("F");
+			return JSONUtil.toJSONString(JSONObject.fromObject(dto));
+		}
+		boolean flag = false;
+		if(StringUtils.isNotBlank(params)){
+			if(params.contains("encryptData")){
+				flag = true;
+			}
+		}
+		if(flag){
+			params = DataUtil.decryptData(params);
+		}
+		JSONObject jsonObject = JSONObject.fromObject(params);
+		Integer userId = jsonObject.getInt("userId");
+		String userName = jsonObject.getString("userName");
+		String userMobile = jsonObject.getString("userMobile");
+		String enrollTimeStr = jsonObject.getString("enrollTime");
+		Date enrollTime = DateUtil.parseDateByStr(enrollTimeStr,DateUtil.FULL_PATTERN);
+		UserAwardExchange uae = new UserAwardExchange();
+		uae.setEnrollTime(enrollTime);
+		uae.setUserId(userId);
+		uae.setUserMobile(userMobile);
+		uae.setUserName(userName);
+		try {
+			dto = iUserAwardExchangeService.saveUserAwardExchange(uae);
+			return JSONUtil.toJSONString(JSONObject.fromObject(dto));
+		} catch (Exception e) {
+			logger.error("抽奖时异常");
+			dto = new ResultDto<>();
+			dto.setResult("F");
+			dto.setErrorMsg("抽奖时异常");
+			e.printStackTrace();
+		}
+		return JSONUtil.toJSONString(JSONObject.fromObject(dto));
 	}
 
 	public static void main(String[] args){

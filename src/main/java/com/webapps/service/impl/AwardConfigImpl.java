@@ -50,4 +50,10 @@ public class AwardConfigImpl implements IAwardConfigService{
         dto.setErrorMsg("删除奖品配置信息失败，请稍后重试");
         return dto;
     }
+
+    @Override
+    public List<AwardConfig> queryAllAwardConfig() throws Exception {
+        List<AwardConfig> list = iAwardConfigMapper.queryAll();
+        return list;
+    }
 }
