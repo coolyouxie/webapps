@@ -16,6 +16,10 @@ public class PromotionConfigRequestForm extends PromotionConfig implements Reque
 
     private String expiryDateEnd;
 
+    private String effectiveDateStr;
+
+    private String expiryDateStr;
+
     public String getEffectiveDateStart() {
         return effectiveDateStart;
     }
@@ -46,5 +50,21 @@ public class PromotionConfigRequestForm extends PromotionConfig implements Reque
 
     public void setExpiryDateEnd(String expiryDateEnd) {
         this.expiryDateEnd = expiryDateEnd;
+    }
+
+    public String getEffectiveDateStr() {
+        return effectiveDateStr;
+    }
+
+    public void setEffectiveDateStr(String effectiveDateStr) {
+        this.effectiveDateStr = effectiveDateStr;
+    }
+
+    public String getExpiryDateStr() {
+        return expiryDateStr;
+    }
+
+    public void setExpiryDateStr(String expiryDateStr) {
+        this.expiryDateStr = expiryDateStr;
     }
 }

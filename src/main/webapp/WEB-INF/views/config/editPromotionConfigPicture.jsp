@@ -5,7 +5,7 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	<title>新增活动信息</title>
+	<title>更新活动发布图片</title>
 	<!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
 	<link rel="stylesheet" href="${ctx}/js/common/bootstrap/bootstrap-3.3.7/dist/css/bootstrap.min.css"
 	      type="text/css"/>
@@ -23,6 +23,7 @@
 	<script src="${ctx}/js/common/jquery/jqGrid/js/grid.common.js"></script>
 	<script src="${ctx}/js/common/jquery/jqGrid/js/i18n/grid.locale-cn.js"></script>
 	<script src="${ctx}/js/common/jquery/jqGrid/js/jquery.jqGrid.js"></script>
+	<script src="${ctx}/js/common/common.js"></script>
 	
 	<style>
 		col-md-2, span {
@@ -37,7 +38,7 @@
         function search() {
             $("#list").jqGrid("setGridParam", {
                 datatype: 'json',
-                postData: {"types":$("#types").val(),"fkId":$("#id").val()}
+                postData: {"types":"${types}","fkId":$("#id").val()}
             }).trigger("reloadGrid");
         }
 
@@ -117,6 +118,7 @@
                 sortorder: "desc",
                 caption: "图片列表"
             });
+            search();
         });
 
         function next() {
@@ -174,7 +176,7 @@
 	<div class="row">
 		<div class="col-md-4 col-md-offset-2">
 			<h4>
-				添加活动发布图片
+				更新活动发布图片
 			</h4>
 		</div>
 	</div>

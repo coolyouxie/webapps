@@ -5,6 +5,7 @@ import com.webapps.common.bean.ResultDto;
 import com.webapps.common.entity.PromotionConfig;
 import com.webapps.common.form.PromotionConfigRequestForm;
 
+import java.rmi.server.ExportException;
 import java.util.List;
 
 public interface IPromotionConfigService {
@@ -26,5 +27,10 @@ public interface IPromotionConfigService {
 	List<PromotionConfig> queryAllPromotionConfig() throws Exception;
 
 	ResultDto<String> updateStatusById(Integer id,int status)throws Exception;
-	
+
+	ResultDto<String> updatePromotionConfig(PromotionConfigRequestForm form)throws Exception;
+
+	PromotionConfig getById(Integer id)throws Exception;
+
+	ResultDto<String> updateStatusDate(PromotionConfigRequestForm form)throws Exception;
 }

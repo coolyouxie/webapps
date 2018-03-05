@@ -12,4 +12,6 @@ import org.springframework.stereotype.Repository;
 public interface IPromotionConfigMapper extends IBaseMapper<PromotionConfig>,IPageMapper<PromotionConfig,PromotionConfigRequestForm>{
 
     int updateStatusById(@Param("id")Integer id, @Param("status")int status)throws Exception;
+
+    int updateStatusDate(@Param("obj")PromotionConfigRequestForm form)throws Exception;
 }

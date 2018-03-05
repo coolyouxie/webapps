@@ -49,13 +49,40 @@
 	   </foreach>
 		and fk_id=#{fkId} and data_state = 1
 	</select>
+
+	<select id="queryCountByFkIdTypes" resultType="java.lang.Integer">
+		SELECT count(1) FROM t_picture
+		<trim prefix="WHERE" prefixOverrides="AND">
+			data_state = 1 and type in
+			<foreach collection="types" item="item" open="(" separator=","
+					 close=")">
+				#{item}
+			</foreach>
+			<if test="fkId != null and fkId != ''">
+				and fk_id = #{fkId,jdbcType=DECIMAL}
+			</if>
+		</trim>
+	</select>
+
+	<select id="queryPageByFkIdTypes" resultMap="resultMap">
+		<include refid="ORACLE.paginationStart" />
+		select <include refid="select_columns" />
+		from t_picture
+		where type in
+		<foreach collection="types" item="item" open="(" separator=","
+				 close=")">
+			#{item}
+		</foreach>
+		and fk_id=#{fkId} and data_state = 1
+		<include refid="ORACLE.paginationEnd" />
+	</select>
 	
 	<select id="queryListByFkId" resultMap="resultMap">
 		select <include refid="select_columns" /> from t_picture where fk_id = #{fk_id} and data_state = 1
 	</select>
 	
 	<select id="queryListByFkIdAndType" resultMap="resultMap">
-		select <include refid="select_columns" /> from t_picture 
+		select <include refid="select_columns" /> from t_picture
 		where fk_id = #{fkId} and data_state = 1 and type = #{type}
 		order by create_time desc
 	</select>

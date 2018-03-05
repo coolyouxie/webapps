@@ -132,6 +132,12 @@
 	<update id="updateStatusById" >
 		update t_promotion_config
 		set status = #{status},
+		<if test="status!=null and status!='' and status==1">
+			effective_date = now(),
+		</if>
+		<if test="status!=null and status!='' and status==2">
+			expiry_date = now(),
+		</if>
 		update_time = now()
 		where id = #{id}
 	</update>
@@ -141,5 +147,18 @@
 		set data_state = 0,
 		update_time = now()
 		where id = #{id}
+	</update>
+
+	<update id="updateStatusDate">
+		update t_promotion_config
+		set
+		<if test="obj.effectiveDate!=null and obj.effectiveDate!=''">
+			effective_date = #{obj.effectiveDate},
+		</if>
+		<if test="obj.expiryDate!=null and obj.expiryDate!=''">
+			expiry_date = #{obj.expiryDate},
+		</if>
+		update_time = now()
+		where id = #{obj.id}
 	</update>
 </mapper>

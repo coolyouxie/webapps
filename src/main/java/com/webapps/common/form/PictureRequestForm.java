@@ -19,6 +19,8 @@ public class PictureRequestForm extends Picture implements RequestForm,Serializa
 	
 	private String picUrl2;
 
+	private Integer[] types;
+
 	public String getKeyWords() {
 		return keyWords;
 	}
@@ -51,4 +53,11 @@ public class PictureRequestForm extends Picture implements RequestForm,Serializa
 		this.picUrl2 = picUrl2;
 	}
 
+	public Integer[] getTypes() {
+		return types;
+	}
+
+	public void setTypes(Integer[] types) {
+		this.types = types;
+	}
 }

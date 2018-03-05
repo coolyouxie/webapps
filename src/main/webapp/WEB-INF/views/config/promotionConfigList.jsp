@@ -54,13 +54,13 @@
                     align: 'center',
                     sortable: false
                 }, {
-                    label: 'effectiveDateStr',
-                    name: 'effectiveDateStr',
+                    label: 'effectiveDateSimpleStr',
+                    name: 'effectiveDateSimpleStr',
                     align: 'center',
                     sortable: false
                 }, {
-                    label: 'expiryDateStr',
-                    name: 'expiryDateStr',
+                    label: 'expiryDateSimpleStr',
+                    name: 'expiryDateSimpleStr',
                     align: 'center',
                     sortable: false
                 }, {
@@ -86,7 +86,7 @@
                     align: 'center',
                     sortable: false,
                     formatter: function (cellValue, options, rowObject) {
-                        var editInfo = "<a class='btn btn-sm' href='${ctx}/promotionConfig/getById?id='"+rowObject.id+"'  style='color:blue'>编辑</a>";
+                        var editInfo = "<a class='btn btn-sm' href='${ctx}/promotionConfig/toEditPromotionConfig?id="+rowObject.id+"'  style='color:blue'>编辑</a>";
                         var editStatus = null;
                         if(rowObject.status==1){
                             editStatus = "&nbsp;&nbsp;<a class='btn btn-sm' onclick='editStatus("+rowObject.id+",2)'  style='color:blue'>失效</a>";
@@ -112,7 +112,7 @@
             }).trigger("reloadGrid");
         }
 
-		function editStatus(id,status) {
+		function editStatus1(id,status) {
             $.ajax({
                 url: "${ctx}/promotionConfig/updateStatusById",
                 type: "POST",
@@ -123,7 +123,7 @@
                 },
                 success: function (response) {
                     if(response.result=="S"){
-                        alert("删除成功");
+                        alert("更新成功");
                         dataGrid.trigger("reloadGrid");
                     }else{
                         alert(response.errorMsg);
@@ -131,6 +131,34 @@
                 }
             });
 		}
+
+		function updateStatusDate() {
+			var status = $("#configStatus").val();
+			$.ajax({
+				url:"${ctx}/promotionConfig/updateStatusDate",
+				type:"POST",
+				dataType:"JSON",
+				data:{
+				    id:$("#configId").val(),
+					status:status,
+					effectiveDateStart:$("#effectiveDateStr").val(),
+					expiryDateStart:$("#expireDateStr").val()
+                },
+				success:function (response) {
+					if(response){
+					    if(response.result=="S"){
+					        alert("更新成功");
+                            $("#msgModal").modal("hide");
+                            search();
+                        }else{
+					        alert(response.errorMsg);
+                        }
+                    }else{
+					    alert("更新失败");
+                    }
+                }
+			});
+        }
 
         function deleteById(id) {
             $.ajax({
@@ -150,6 +178,21 @@
                 }
             });
         }
+
+        function editStatus(id,status){
+            $("#msgModal").modal("show");
+            $("#configId").val(id);
+            $("#configStatus").val(status);
+            if(status==1){
+                $("#expiry").hide();
+                $("#effect").show();
+            }else{
+                $("#effect").hide();
+                $("#expiry").show();
+            }
+        }
+
+
 
 	</script>
 	<style>
@@ -172,6 +215,36 @@
 <body>
 <div class="container-fluid">
 	<form id="searchForm">
+		<input type="hidden" id="configId" >
+		<input type="hidden" id="configStatus">
+		<div class="modal fade" id="msgModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-dialog modal-md" style="width: 580px;height:300px;">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+							&times;
+						</button>
+						<h4 class="modal-title" id="myModalLabel">
+							选择时间
+						</h4>
+					</div>
+					<div class="modal-body">
+						<div id="effect">
+							生效日期：
+							<input type="text" id="effectiveDateStr" name="effectiveDateStr" onClick="WdatePicker({isShowWeek:true,minDate:'${tomorrow}'})"/>
+						</div>
+						<div id="expiry">
+							失效日期：
+							<input type="text" id="expireDateStr" name="expireDateStr" onClick="WdatePicker({isShowWeek:true,minDate:'${tomorrow}'})"/>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" onclick="updateStatusDate()">保存</button>
+						<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+					</div>
+				</div>
+			</div>
+		</div>
 		<table>
 			<tr>
 				<th width="70px;"></th>

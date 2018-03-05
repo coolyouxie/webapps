@@ -1,15 +1,13 @@
 package com.webapps.service;
 
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-
-import org.springframework.web.multipart.MultipartFile;
-
 import com.webapps.common.bean.Page;
 import com.webapps.common.bean.ResultDto;
 import com.webapps.common.entity.Picture;
 import com.webapps.common.form.PictureRequestForm;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 public interface IPictureService {
 	
@@ -41,5 +39,9 @@ public interface IPictureService {
 	ResultDto<List<Picture>> queryUserPictures(Integer userId);
 
 	ResultDto<String> deleteById(Integer id);
+
+	Page queryPageByFkIdTypes(Page page,PictureRequestForm form)throws Exception;
+
+	Page queryPagePromotionPics(Page page,Integer fkId)throws Exception;
 	
 }

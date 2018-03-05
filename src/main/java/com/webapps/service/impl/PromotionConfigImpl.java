@@ -25,7 +25,7 @@ public class PromotionConfigImpl implements IPromotionConfigService{
         int startRow = page.getStartRow();
         int total = iPromotionConfigMapper.queryCount(form);
         List<PromotionConfig> list = iPromotionConfigMapper.queryPage(startRow,offset,form);
-        page.setRecords(total);
+        page.countRecords(total);
         page.setResultList(list);
         return page;
     }
@@ -62,6 +62,28 @@ public class PromotionConfigImpl implements IPromotionConfigService{
     public ResultDto<String> updateStatusById(Integer id,int status) throws Exception {
         ResultDto<String> dto = new ResultDto<>();
         iPromotionConfigMapper.updateStatusById(id,status);
+        dto.setResult("S");
+        return dto;
+    }
+
+    @Override
+    public ResultDto<String> updatePromotionConfig(PromotionConfigRequestForm form) throws Exception {
+        ResultDto<String> dto = new ResultDto<String>();
+        iPromotionConfigMapper.updateById(form.getId(),form);
+        dto.setResult("S");
+        return dto;
+    }
+
+    @Override
+    public PromotionConfig getById(Integer id) throws Exception {
+        PromotionConfig pc = iPromotionConfigMapper.getById(id);
+        return pc;
+    }
+
+    @Override
+    public ResultDto<String> updateStatusDate(PromotionConfigRequestForm form) throws Exception {
+        iPromotionConfigMapper.updateStatusDate(form);
+        ResultDto<String> dto = new ResultDto<>();
         dto.setResult("S");
         return dto;
     }

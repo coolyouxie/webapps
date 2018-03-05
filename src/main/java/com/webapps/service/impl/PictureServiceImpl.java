@@ -268,6 +268,28 @@ public class PictureServiceImpl implements IPictureService {
 		}
 	}
 
+	@Override
+	public Page queryPageByFkIdTypes(Page page, PictureRequestForm form) throws Exception {
+		int startRow = page.getStartRow();
+		int offset = page.getRows();
+		int total = iPictureMapper.queryCountByFkIdTypes(form.getFkId(),form.getTypes());
+		List<Picture> list = iPictureMapper.queryPageByFkIdTypes(startRow,offset,form.getFkId(),form.getTypes());
+		page.countRecords(total);
+		page.setResultList(list);
+		return page;
+	}
+
+	@Override
+	public Page queryPagePromotionPics(Page page, Integer fkId) throws Exception {
+		int startRow = page.getStartRow();
+		int offset = page.getRows();
+		int total = iPictureMapper.queryCountByFkIdTypes(fkId,new Integer[]{8});
+		List<Picture> list = iPictureMapper.queryPageByFkIdTypes(startRow,offset,fkId,new Integer[]{8});
+		page.countRecords(total);
+		page.setResultList(list);
+		return page;
+	}
+
 	private ResultDto<String> saveBankAndIdCardPic(String picUrl,String fileName,String type,String userId)throws Exception{
 		ResultDto<String> dto = new ResultDto<String>();
 		Integer uId = Integer.valueOf(userId);
