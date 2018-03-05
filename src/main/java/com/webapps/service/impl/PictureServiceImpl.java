@@ -149,9 +149,12 @@ public class PictureServiceImpl implements IPictureService {
 	}
 
 	@Override
-	public ResultDto<Picture> savePicture(PictureRequestForm form) {
-		
-		return null;
+	public ResultDto<Picture> savePicture(Picture pic) {
+		ResultDto<Picture> dto = new ResultDto<>();
+		iPictureMapper.insert(pic);
+		dto.setResult("S");
+		dto.setData(pic);
+		return dto;
 	}
 
 	@Override

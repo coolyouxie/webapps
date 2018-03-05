@@ -11,12 +11,19 @@
 	      type="text/css"/>
 	<link rel="stylesheet" href="${ctx}/js/common/bootstrap/bootstrap-fileinput-master/css/fileinput.css"
 	      type="text/css"/>
+	<link rel="stylesheet" href="${ctx}/js/common/jquery/jquery-ui-1.12.1/jquery-ui.css" type="text/css"/>
+	<link rel="stylesheet" href="${ctx}/js/common/jquery/jqGrid/css/ui.jqgrid.css" type="text/css"/>
 	<script src="${ctx}/js/jquery/jQuery-1.12.4.0.js"></script>
 	<!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
 	<script src="${ctx}/js/common/bootstrap/bootstrap-3.3.7/dist/js/bootstrap.min.js"></script>
 	<script src="${ctx}/js/common/bootstrap/bootstrap-fileinput-master/js/fileinput.js"></script>
 	<script src="${ctx}/js/common/bootstrap/bootstrap-fileinput-master/js/locales/zh.js"></script>
 
+	<script src="${ctx}/js/common/jquery/jqGrid/js/grid.base.js"></script>
+	<script src="${ctx}/js/common/jquery/jqGrid/js/grid.common.js"></script>
+	<script src="${ctx}/js/common/jquery/jqGrid/js/i18n/grid.locale-cn.js"></script>
+	<script src="${ctx}/js/common/jquery/jqGrid/js/jquery.jqGrid.js"></script>
+	
 	<style>
 		col-md-2, span {
 			display: -moz-inline-box;
@@ -40,11 +47,13 @@
             var projectfileoptions = {
                 uploadUrl: "${ctx}/picture/uploadPicture",
                 language: 'zh',
-                maxFileCount: 3,
+                maxFileCount: 1,
                 maxFileSize: 2000,
-                autoReplace: false,
+                autoReplace: true,
                 validateInitialCount: true,
                 overwriteInitial: false,
+                autoReplace:true,
+                showUpload:false,
                 allowedFileExtensions: ["jpg", "png", "gif"],
                 uploadExtraData: {"sourceType": "promotionConfig", "id": $("#id").val()}
             };
@@ -58,7 +67,9 @@
                     }, projectfileoptions);
                     $(this).fileinput(op);
                 } else {
-                    $(this).fileinput(projectfileoptions).on("fileuploaded", function (event, data, previewId, index) {
+                	$(this).fileinput(projectfileoptions).on("filebatchselected",function(event,files){
+                		$(this).fileinput("upload");
+                	}).on("fileuploaded", function (event, data, previewId, index) {
                         var response = data.response;
                         if (response && response.result == "S") {
                             $("#newPicUrl").val(response.data);
@@ -67,12 +78,12 @@
                 }
             });
 
-            dataGrid = jQuery("#list").jqGrid({
-                url: "${ctx}/picture/loadPromotionPicList",
+            dataGrid = $("#list").jqGrid({
+                url: "${ctx}/picture/loadCompanyPicList",
                 datatype: "local",
                 mtype: "POST",
-                height: 480,
-                width: 950,
+                height: 'auto',
+                width: 'auto',
                 jsonReader: {
                     root: "resultList", // json中代表实际模型数据的入口
                     page: "page.page", // json中代表当前页码的数据
@@ -155,7 +166,6 @@
                         search();
                     } else {
                         alert("删除失败，请稍后再试");
-
                     }
                 }
             });
@@ -192,6 +202,9 @@
 			</label>
 		</div>
 	</form>
+	
+	<table id="list"></table>
+	<div id="pager"></div>
 </div>
 </body>
 </html>

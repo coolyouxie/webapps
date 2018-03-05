@@ -28,7 +28,7 @@ public interface IPictureService {
 	 */
     ResultDto<String> uploadCompanyPicture(HttpServletRequest request);
 	
-	ResultDto<Picture> savePicture(PictureRequestForm form);
+	ResultDto<Picture> savePicture(Picture pic) throws Exception;
 	
 	ResultDto<Picture> saveCompanyPicture(PictureRequestForm form);
 	

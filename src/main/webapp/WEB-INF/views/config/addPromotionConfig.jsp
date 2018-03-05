@@ -42,7 +42,7 @@
 			</div>
 		</div>
 		<div class="form-group">
-			<label class="col-md-2 control-label" for="brief">中奖率：</label>
+			<label class="col-md-2 control-label" for="brief">活动内容：</label>
 			<div class="col-md-4">
 				<textarea name="brief" id="brief" cols="30" rows="10"></textarea>
 			</div>
