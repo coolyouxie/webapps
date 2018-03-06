@@ -1,25 +1,19 @@
 package com.webapps.controller;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
-import com.sun.xml.internal.rngom.digested.DDataPattern;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.webapps.common.bean.Page;
 import com.webapps.common.bean.ResultDto;
-import com.webapps.common.entity.Company;
-import com.webapps.common.form.CompanyRequestForm;
 import com.webapps.common.form.PictureRequestForm;
 import com.webapps.common.utils.JSONUtil;
-import com.webapps.service.ICompanyService;
 import com.webapps.service.IPictureService;
 
 import net.sf.json.JSONObject;
