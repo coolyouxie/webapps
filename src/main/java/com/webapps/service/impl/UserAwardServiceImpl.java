@@ -127,7 +127,7 @@ public class UserAwardServiceImpl implements IUserAwardService {
 		User user = this.iUserService.getById(ua.getUserId());
 		if(null != ua) {
 			//判断红包金额是否正确，如果不正确，抛出错误，避免钱包金额异常
-			if(null != ua.getPrice() && ua.getPrice().compareTo(BigDecimal.ZERO)==1){
+			if(null != ua.getPrice() && ua.getPrice().compareTo(BigDecimal.ZERO)==1&&ua.getStat()==1){
 				//设置状态，并保存
 				ua.setStat(2);//已经领取
 				//获取邀请人的钱包

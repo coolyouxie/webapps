@@ -29,6 +29,7 @@ import com.webapps.common.form.ApplyExpenditureRequestForm;
 import com.webapps.common.form.BannerConfigRequestForm;
 import com.webapps.common.form.BillRecordRequestForm;
 import com.webapps.common.form.MessageConfigRequestForm;
+import com.webapps.common.form.PromotionConfigRequestForm;
 import com.webapps.common.form.RecruitmentRequestForm;
 import com.webapps.common.form.UserSendInviteCode;
 import com.webapps.common.utils.DataUtil;
@@ -104,6 +105,8 @@ public class AppController {
 	@Autowired private IUserAwardExchangeService iUserAwardExchangeService;
 
 	@Autowired private IAwardConfigService iAwardConfigService;
+	
+	@Autowired private IPromotionConfigService iPromotionConfigService;
 
 	/**
 	 * app端登录接口
@@ -1566,6 +1569,27 @@ public class AppController {
 		}
 		return JSONUtil.toJSONString(JSONObject.fromObject(dto));
 	}
+	
+	@ResponseBody
+	@RequestMapping(value="/getPromotionConfig",produces ="text/html;charset=UTF-8")
+	public String getPromotionConfig(@RequestBody String params){
+		PromotionConfigRequestForm form = new PromotionConfigRequestForm();
+		List<PromotionConfig> list;
+		ResultDto<List<PromotionConfig>> dto = new ResultDto<>();
+		try {
+			list = iPromotionConfigService.queryPromotionConfig(form);
+			dto.setData(list);
+			dto.setResult("S");
+		} catch (Exception e) {
+			logger.error("查询活动发布信息异常");
+			dto.setResult("F");
+			dto.setErrorMsg("查询活动发布信息异常");
+			e.printStackTrace();
+		}
+		
+		return JSONUtil.toJSONString(JSONObject.fromObject(dto));
+	}
+	
 
 	public static void main(String[] args){
 		GroupUser user = new GroupUser();

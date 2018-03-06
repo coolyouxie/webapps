@@ -88,5 +88,10 @@ public class PromotionConfigImpl implements IPromotionConfigService{
         return dto;
     }
 
+	@Override
+	public List<PromotionConfig> queryPromotionConfig(PromotionConfigRequestForm form) throws Exception {
+		List<PromotionConfig> list = iPromotionConfigMapper.queryListByCondition(form);
+		return list;
+	}
 
 }

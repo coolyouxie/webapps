@@ -33,4 +33,7 @@ public interface IPromotionConfigService {
 	PromotionConfig getById(Integer id)throws Exception;
 
 	ResultDto<String> updateStatusDate(PromotionConfigRequestForm form)throws Exception;
+	
+	List<PromotionConfig> queryPromotionConfig(PromotionConfigRequestForm form)throws Exception;
+	
 }

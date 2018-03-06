@@ -88,6 +88,33 @@
 		order by name
 		<include refid="ORACLE.paginationEnd" />
 	</select>
+	
+	<select id="queryListByCondition" resultMap="resultMap">
+		select 
+			<include refid="select_columns" /> 
+		from t_promotion_config
+		<trim prefix="WHERE" prefixOverrides="AND">
+			data_state = 1
+			<if test="obj.name !=null and obj.name != ''">
+				AND name like concat('%',#{obj.name},'%')
+			</if>
+			<if test="obj.status !=null and obj.status != '' and obj.status!=-1">
+				AND status = #{obj.status}
+			</if>
+			<if test="obj.effectiveDateStart !=null and obj.effectiveDateStart != ''">
+				AND effective_Date >= #{obj.effectiveDateStart}
+			</if>
+			<if test="obj.effectiveDateEnd !=null and obj.effectiveDateEnd != ''">
+				AND #{obj.effectiveDateEnd}>=effective_Date
+			</if>
+			<if test="obj.expiryDateStart !=null and obj.expiryDateStart != ''">
+				AND expiry_date >= #{obj.expiryDateStart}
+			</if>
+			<if test="obj.expiryDateEnd !=null and obj.expiryDateEnd != ''">
+				AND #{obj.expiryDateEnd}>=expiry_date
+			</if>
+		</trim>
+	</select>
 
 	<update id="batchDeleteInLogic" >
 		<foreach collection="list" item="item" index="index" open="" close="" separator=";">
