@@ -7,6 +7,7 @@ import com.webapps.common.form.UserAwardExchangeRequestForm;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 public interface IUserAwardExchangeService {
 	
@@ -19,5 +20,7 @@ public interface IUserAwardExchangeService {
 	ResultDto<String> deleteUserAwardExchangeById(Integer id) throws Exception;
 
 	void exportExcel(HttpSession session, HttpServletResponse response,UserAwardExchangeRequestForm form)throws Exception;
+
+	List<UserAwardExchange> queryUserAwardExchangeByUserId(Integer userId)throws Exception;
 
 }

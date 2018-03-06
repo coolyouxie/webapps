@@ -116,4 +116,12 @@ public class UserAwardExchangeImpl implements IUserAwardExchangeService {
             FileUtil.downloadFile(response, filePath);
         }
     }
+
+    @Override
+    public List<UserAwardExchange> queryUserAwardExchangeByUserId(Integer userId) throws Exception {
+        UserAwardExchangeRequestForm form = new UserAwardExchangeRequestForm();
+        form.setUserId(userId);
+        List<UserAwardExchange> list = iUserAwardExchangeMapper.queryUserAwardExchangeForExport(form);
+        return list;
+    }
 }

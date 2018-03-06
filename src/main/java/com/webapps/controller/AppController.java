@@ -1591,6 +1591,35 @@ public class AppController {
 	}
 	
 
+	@ResponseBody
+	@RequestMapping(value = "/getUserAwardExchange",produces = "text/html;charset=UTF-8",method = RequestMethod.POST)
+	public String getUserAwardExchange(@RequestBody String params){
+		boolean flag = false;
+		if(StringUtils.isNotBlank(params)){
+			if(params.contains("encryptData")){
+				flag = true;
+			}
+		}
+		if(flag){
+			params = DataUtil.decryptData(params);
+		}
+		JSONObject obj = JSONObject.fromObject(params);
+		Integer userId = obj.getInt("userId");
+		ResultDto<List<UserAwardExchange>> dto = new ResultDto<>();
+		try {
+			List<UserAwardExchange> list = iUserAwardExchangeService.queryUserAwardExchangeByUserId(userId);
+			dto.setResult("S");
+			dto.setData(list);
+		} catch (Exception e) {
+			dto.setResult("F");
+			dto.setErrorMsg("查询用户抽奖奖品信息异常");
+			logger.error("查询用户抽奖奖品信息异常");
+			e.printStackTrace();
+		}
+		return JSONUtil.toJSONString(JSONObject.fromObject(dto));
+	}
+
+
 	public static void main(String[] args){
 		GroupUser user = new GroupUser();
 		user.setUserName("test");
