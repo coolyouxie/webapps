@@ -159,12 +159,6 @@
 	<update id="updateStatusById" >
 		update t_promotion_config
 		set status = #{status},
-		<if test="status!=null and status!='' and status==1">
-			effective_date = now(),
-		</if>
-		<if test="status!=null and status!='' and status==2">
-			expiry_date = now(),
-		</if>
 		update_time = now()
 		where id = #{id}
 	</update>

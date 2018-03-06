@@ -71,8 +71,10 @@
                     formatter:function (cellValue,options,rowObject) {
                         if(cellValue==1){
                             return "生效";
-                        }else{
+                        }else if(cellValue==2){
                             return "失效";
+                        }else{
+                        	return "初始状态";
                         }
                     }
                 }, {
@@ -87,13 +89,16 @@
                     sortable: false,
                     formatter: function (cellValue, options, rowObject) {
                         var editInfo = "<a class='btn btn-sm' href='${ctx}/promotionConfig/toEditPromotionConfig?id="+rowObject.id+"'  style='color:blue'>编辑</a>";
-                        var editStatus = null;
+                        var effect = "&nbsp;&nbsp;<a class='btn btn-sm' onclick='editStatus("+rowObject.id+",2)'  style='color:blue'>失效</a>";
+                        var expiry = "&nbsp;&nbsp;<a class='btn btn-sm' onclick='editStatus("+rowObject.id+",1)'  style='color:blue'>生效</a>";
                         if(rowObject.status==1){
-                            editStatus = "&nbsp;&nbsp;<a class='btn btn-sm' onclick='editStatus("+rowObject.id+",2)'  style='color:blue'>失效</a>";
+                        	editInfo += effect;
+                        }else if(rowObject.status==2){
+                        	editInfo +=expiry;
                         }else{
-                            editStatus = "&nbsp;&nbsp;<a class='btn btn-sm' onclick='editStatus("+rowObject.id+",1)'  style='color:blue'>生效</a>";
+                        	editInfo+=effect+expiry;
                         }
-                        return editInfo+editStatus;
+                        return editInfo;
                     }
                 }],
                 pager: '#pager',
@@ -112,7 +117,7 @@
             }).trigger("reloadGrid");
         }
 
-		function editStatus1(id,status) {
+		function editStatus(id,status) {
             $.ajax({
                 url: "${ctx}/promotionConfig/updateStatusById",
                 type: "POST",
@@ -179,7 +184,7 @@
             });
         }
 
-        function editStatus(id,status){
+        function editStatus1(id,status){
             $("#msgModal").modal("show");
             $("#configId").val(id);
             $("#configStatus").val(status);

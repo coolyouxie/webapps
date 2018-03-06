@@ -133,7 +133,7 @@ public class UserAwardServiceImpl implements IUserAwardService {
 				//获取邀请人的钱包
 				UserWallet userWallet = iUserWalletService.getUserWalletByUserId(ua.getUserId());
 				//邀请人的钱包，余额增加红包的金额
-				userWallet.setFee( userWallet.getFee().add(ua.getPrice()) );
+				userWallet.setFee( userWallet.getFee().add(ua.getPrice()));
 				userWallet.setUpdateTime(new Date());
 				//增加推荐费下发记录 - 类型指定：2、红包收入
 				iBillRecordService.addBillRecord(userWallet.getId(), ua.getPrice(), 2, user, null);
