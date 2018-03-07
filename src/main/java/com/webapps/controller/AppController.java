@@ -1567,6 +1567,9 @@ public class AppController {
 			dto.setErrorMsg("抽奖时异常");
 			e.printStackTrace();
 		}
+		if(flag){
+			return DataUtil.encryptData(JSONUtil.toJSONString(JSONUtil.toJSONObject(dto)));
+		}
 		return JSONUtil.toJSONString(JSONObject.fromObject(dto));
 	}
 	
@@ -1586,8 +1589,7 @@ public class AppController {
 			dto.setErrorMsg("查询活动发布信息异常");
 			e.printStackTrace();
 		}
-		
-		return JSONUtil.toJSONString(JSONObject.fromObject(dto));
+		return DataUtil.encryptData(JSONUtil.toJSONString(JSONUtil.toJSONObject(dto)));
 	}
 	
 
@@ -1615,6 +1617,9 @@ public class AppController {
 			dto.setErrorMsg("查询用户抽奖奖品信息异常");
 			logger.error("查询用户抽奖奖品信息异常");
 			e.printStackTrace();
+		}
+		if(flag){
+			return DataUtil.encryptData(JSONUtil.toJSONString(JSONUtil.toJSONObject(dto)));
 		}
 		return JSONUtil.toJSONString(JSONObject.fromObject(dto));
 	}
