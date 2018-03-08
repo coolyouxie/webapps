@@ -1616,6 +1616,23 @@ public class AppController {
 			logger.error("查询用户抽奖奖品信息异常");
 			e.printStackTrace();
 		}
+		return DataUtil.encryptData(JSONUtil.toJSONString(JSONObject.fromObject(dto)));
+	}
+
+	@ResponseBody
+	@RequestMapping(value="/getAllUserLottery",produces = "text/html;charset=UTF-8",method = RequestMethod.POST)
+	public String getLotteryUser(@RequestBody String params){
+		ResultDto<List<UserAwardExchange>> dto = new ResultDto<>();
+		try {
+			List<UserAwardExchange> list = iUserAwardExchangeService.queryAllUserLottery();
+			dto.setData(list);
+			dto.setResult("S");
+		} catch (Exception e) {
+			logger.error("查询中奖用信息异常");
+			e.printStackTrace();
+			dto.setResult("F");
+			dto.setErrorMsg("查询中奖用信息异常");
+		}
 		return JSONUtil.toJSONString(JSONObject.fromObject(dto));
 	}
 

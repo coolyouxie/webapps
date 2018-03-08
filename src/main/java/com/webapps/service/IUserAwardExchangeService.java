@@ -23,4 +23,6 @@ public interface IUserAwardExchangeService {
 
 	List<UserAwardExchange> queryUserAwardExchangeByUserId(Integer userId)throws Exception;
 
+	List<UserAwardExchange> queryAllUserLottery()throws Exception;
+
 }

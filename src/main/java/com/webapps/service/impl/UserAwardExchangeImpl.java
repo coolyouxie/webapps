@@ -124,4 +124,10 @@ public class UserAwardExchangeImpl implements IUserAwardExchangeService {
         List<UserAwardExchange> list = iUserAwardExchangeMapper.queryUserAwardExchangeForExport(form);
         return list;
     }
+
+    @Override
+    public List<UserAwardExchange> queryAllUserLottery() throws Exception {
+        List<UserAwardExchange> list = iUserAwardExchangeMapper.queryAll();
+        return list;
+    }
 }
