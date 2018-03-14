@@ -34,5 +34,14 @@ public interface IUserPermissionMapper extends IBaseMapper<UserPermission>{
     int deleteByUserId(int userId);
 
     int deleteByFkIds(int permissionRelationId,int userId);
+    
+    int deleteByUserIdAndPerIdNotIn(@Param("userId")Integer userId,@Param("ids")int[] ids)throws Exception;
+    
+    List<UserPermission> queryListByUserIdAndPerIdNotIn(@Param("userId")Integer userId,
+    		@Param("ids")int[] ids)throws Exception;
+    
+    int batchInsert(@Param("list")List<UserPermission> list)throws Exception;
+    
+    int batchDeleteByUserIdAndPerIds(@Param("userId")Integer userId,@Param("ids")int ids[])throws Exception;
 
 }

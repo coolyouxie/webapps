@@ -81,6 +81,13 @@
             </if>
         </trim>
     </select>
+    
+    <select id="queryListByUserIdAndPerIdNotIn" resultMap="resultMap">
+    	select * from t_user_permission and user_id = #{userId} and permission_relation_id not in 
+    	<foreach collection="ids" index="index" item="item" open="(" separator="," close=")">
+            ${item}
+        </foreach>
+    </select>
 
     <update id="batchDeleteInLogic">
         <foreach collection="list" item="item" index="index" open="" close="" separator=";">
@@ -109,10 +116,10 @@
         INSERT INTO t_user_permission (<include refid="insert_columns"/>)
         VALUES
         <foreach collection="list" item="item" index="index" separator=",">
-            (#{obj.permissionRelationId},
-            #{obj.userId},
+            (#{item.permissionRelationId},
+            #{item.userId},
             1,
-            #{obj.createTime})
+            #{item.createTime})
         </foreach>
     </insert>
 
@@ -157,5 +164,21 @@
                 and user_id = #{userId}
             </if>
         </trim>
+    </delete>
+    
+    <delete id="deleteByUserIdAndPerIdNotIn">
+    	delete from t_user_permission 
+    	where user_id = #{userId} and permission_relation_id not in 
+    	<foreach collection="ids" index="index" item="item" open="(" separator="," close=")">
+            ${item}
+        </foreach>
+    </delete>
+    
+    <delete id="batchDeleteByUserIdAndPerIds">
+    	delete from t_user_permission 
+    	where user_id = #{userId} and permission_relation_id in 
+    	<foreach collection="ids" index="index" item="item" open="(" separator="," close=")">
+            ${item}
+        </foreach>
     </delete>
 </mapper>

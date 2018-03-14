@@ -298,8 +298,16 @@ public class PermissionServiceImpl implements IPermissionService {
         condition.setDataState(1);
         condition.setUserId(userId);
         try {
+        	//先删除用户之前拥有但是现在被取消勾选的菜单权限。
+//        	iUserPermissionMapper.deleteByUserIdAndPerIdNotIn(userId, permissionRelationId);
+        	List<UserPermission> delList = iUserPermissionMapper.queryListByUserIdAndPerIdNotIn(userId, permissionRelationId);
+        	if(CollectionUtils.isNotEmpty(delList)){
+        		iUserPermissionMapper.batchDelete(delList);
+        	}
+        	//再查询用户当前已经拥有的权限
             List<UserPermission> list = iUserPermissionMapper.queryByConditions(condition);
             //如果该用户还没有可用权限，则直接插入权限
+            List<UserPermission> newPermissions = new ArrayList<>();
             if(CollectionUtils.isEmpty(list)){
                 if(permissionRelationId!=null&&permissionRelationId.length>0){
                     for(int i=0;i<permissionRelationId.length;i++){
@@ -308,44 +316,31 @@ public class PermissionServiceImpl implements IPermissionService {
                         up.setUserId(userId);
                         up.setCreateTime(new Date());
                         up.setDataState(1);
-                        iUserPermissionMapper.insert(up);
+                        newPermissions.add(up);
+                    }
+                    iUserPermissionMapper.batchInsert(newPermissions);
+                }
+            }else{
+            	for(int i=0;i<permissionRelationId.length;i++){
+                    boolean insertFlag = false;
+                    for(UserPermission temp:list){
+                        if(temp.getId().equals(permissionRelationId[i])){
+                            insertFlag = true;
+                            break;
+                        }
+                    }
+                    //如果页面传入的权限关系ID不在该用户对应的用户权限关系中，则插入数据库
+                    if(!insertFlag){
+                        UserPermission up = new UserPermission();
+                        up.setDataState(1);
+                        up.setCreateTime(new Date());
+                        up.setPermissionRelationId(permissionRelationId[i]);
+                        up.setUserId(userId);
+                        newPermissions.add(up);
                     }
                 }
-                return;
-            }
-            List<UserPermission> deleteList = new ArrayList<>();
-            for(UserPermission temp:list){
-                boolean delFlag = false;
-                for(int i=0;i<permissionRelationId.length;i++){
-                    if(temp.getPermissionRelationId().equals(permissionRelationId[i])){
-                        delFlag = true;
-                        break;
-                    }
-                }
-                if(!delFlag){
-                    deleteList.add(temp);
-                }
-            }
-            if(CollectionUtils.isNotEmpty(deleteList)){
-                //物理删除数据
-                iUserPermissionMapper.batchDelete(deleteList);
-            }
-            for(int i=0;i<permissionRelationId.length;i++){
-                boolean insertFlag = false;
-                for(UserPermission temp:list){
-                    if(temp.getId().equals(permissionRelationId[i])){
-                        insertFlag = true;
-                        break;
-                    }
-                }
-                //如果页面传入的权限关系ID不在该用户对应的用户权限关系中，则插入数据库
-                if(!insertFlag){
-                    UserPermission up = new UserPermission();
-                    up.setDataState(1);
-                    up.setCreateTime(new Date());
-                    up.setPermissionRelationId(permissionRelationId[i]);
-                    up.setUserId(userId);
-                    iUserPermissionMapper.insert(up);
+                if(CollectionUtils.isNotEmpty(newPermissions)){
+                	iUserPermissionMapper.batchInsert(newPermissions);
                 }
             }
         } catch (Exception e) {
