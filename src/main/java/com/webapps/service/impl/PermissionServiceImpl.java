@@ -300,7 +300,7 @@ public class PermissionServiceImpl implements IPermissionService {
         try {
         	//先删除用户之前拥有但是现在被取消勾选的菜单权限。
 //        	iUserPermissionMapper.deleteByUserIdAndPerIdNotIn(userId, permissionRelationId);
-        	List<UserPermission> delList = iUserPermissionMapper.queryListByUserIdAndPerIdNotIn(userId, permissionRelationId);
+        	List<UserPermission> delList = iUserPermissionMapper.queryListByUserIdLevelAndPerIdNotIn(userId, permissionRelationId,level);
         	if(CollectionUtils.isNotEmpty(delList)){
         		iUserPermissionMapper.batchDelete(delList);
         	}

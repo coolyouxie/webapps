@@ -82,11 +82,19 @@
         </trim>
     </select>
     
-    <select id="queryListByUserIdAndPerIdNotIn" resultMap="resultMap">
-    	select * from t_user_permission and user_id = #{userId} and permission_relation_id not in 
-    	<foreach collection="ids" index="index" item="item" open="(" separator="," close=")">
-            ${item}
-        </foreach>
+    <select id="queryListByUserIdLevelAndPerIdNotIn" resultMap="resultMap">
+    	select
+    		tup.*
+    	from t_user_permission tup 
+    		inner join t_permission_relation tpr on tup.permission_relation_id = tpr.id
+    		inner join t_permission tp on tp.id = tpr.permission_id
+    	where 
+    		user_id = #{userId} 
+    		and tp.level = #{level}
+    		and permission_relation_id not in 
+	    	<foreach collection="ids" index="index" item="item" open="(" separator="," close=")">
+	            ${item}
+	        </foreach>
     </select>
 
     <update id="batchDeleteInLogic">
