@@ -25,4 +25,6 @@ public interface IUserAwardExchangeService {
 
 	List<UserAwardExchange> queryAllUserLottery()throws Exception;
 
+	ResultDto<String> updateExchangeStatusById(int exId)throws Exception;
+
 }

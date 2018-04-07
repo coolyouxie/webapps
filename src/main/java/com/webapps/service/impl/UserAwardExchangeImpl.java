@@ -130,4 +130,15 @@ public class UserAwardExchangeImpl implements IUserAwardExchangeService {
         List<UserAwardExchange> list = iUserAwardExchangeMapper.queryAll();
         return list;
     }
+
+    @Override
+    public ResultDto<String> updateExchangeStatusById(int exId) throws Exception {
+        UserAwardExchange uaEx = iUserAwardExchangeMapper.getById(exId);
+        uaEx.setStatus(1);
+        uaEx.setUpdateTime(new Date());
+        iUserAwardExchangeMapper.updateById(exId,uaEx);
+        ResultDto<String> dto = new ResultDto<>();
+        dto.setResult("S");
+        return dto;
+    }
 }

@@ -40,6 +40,9 @@
 		SELECT count(1) from t_user_award_exchange
 		<trim prefix="WHERE" prefixOverrides="AND">
 			data_state = 1
+			<if test="obj.userId != null and obj.userId != ''">
+				and user_id = (#{obj.userId}
+			</if>
 			<if test="obj.userName != null and obj.userName != ''">
 				and user_name like concat('%', #{obj.userName},'%')
 			</if>
@@ -69,6 +72,9 @@
 		from t_user_award_exchange
 		<trim prefix="WHERE" prefixOverrides="AND">
 			data_state = 1
+			<if test="obj.userId != null and obj.userId != ''">
+				and user_id = (#{obj.userId}
+			</if>
 			<if test="obj.userName != null and obj.userName != ''">
 				and user_name like concat('%', #{obj.userName},'%')
 			</if>

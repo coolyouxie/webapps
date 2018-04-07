@@ -51,7 +51,7 @@ public class ProvinceServiceImpl implements IProvinceService {
 
 	@Override
 	public ResultDto<List<Province>> queryProvinceByParentId(Integer parentId) {
-		ResultDto<List<Province>> dto = new ResultDto<List<Province>>();
+		ResultDto<List<Province>> dto = new ResultDto<>();
 		List<Province> list = null;
 		try {
 			list = iProvinceMapper.queryByParentId(parentId);

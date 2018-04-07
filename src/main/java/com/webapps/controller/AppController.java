@@ -5,6 +5,7 @@ import java.util.*;
 import javax.servlet.http.HttpServletRequest;
 
 import com.webapps.common.entity.*;
+import com.webapps.common.form.*;
 import com.webapps.common.utils.DateUtil;
 import com.webapps.service.*;
 import org.apache.commons.collections.CollectionUtils;
@@ -25,13 +26,6 @@ import com.webapps.common.bean.Page;
 import com.webapps.common.bean.ResultDto;
 import com.webapps.common.dto.AppConfigDTO;
 import com.webapps.common.dto.UserAwardListDTO;
-import com.webapps.common.form.ApplyExpenditureRequestForm;
-import com.webapps.common.form.BannerConfigRequestForm;
-import com.webapps.common.form.BillRecordRequestForm;
-import com.webapps.common.form.MessageConfigRequestForm;
-import com.webapps.common.form.PromotionConfigRequestForm;
-import com.webapps.common.form.RecruitmentRequestForm;
-import com.webapps.common.form.UserSendInviteCode;
 import com.webapps.common.utils.DataUtil;
 import com.webapps.common.utils.JSONUtil;
 import com.webapps.common.utils.PropertiesUtil;
@@ -1606,7 +1600,15 @@ public class AppController {
 		JSONObject obj = JSONObject.fromObject(params);
 		Integer userId = obj.getInt("userId");
 		ResultDto<List<UserAwardExchange>> dto = new ResultDto<>();
+		int pageSize = obj.getInt("pageSize");
+		int pageNum = obj.getInt("pageNum");
+		Page page = new Page();
+		page.setPage(pageNum);
+		page.setRows(pageNum);
+		UserAwardExchangeRequestForm form = new UserAwardExchangeRequestForm();
+		form.setUserId(userId);
 		try {
+			page = iUserAwardExchangeService.loadUserAwardExchangeList(page,form);
 			List<UserAwardExchange> list = iUserAwardExchangeService.queryUserAwardExchangeByUserId(userId);
 			dto.setResult("S");
 			dto.setData(list);
@@ -1634,6 +1636,32 @@ public class AppController {
 			dto.setErrorMsg("查询中奖用信息异常");
 		}
 		return JSONUtil.toJSONString(JSONObject.fromObject(dto));
+	}
+
+	@ResponseBody
+	@RequestMapping(value = "/userExchange",produces = "text/html;charset=UTF-8",method = RequestMethod.POST)
+	public String userExchange(@RequestBody String params){
+		boolean flag = false;
+		if(StringUtils.isNotBlank(params)){
+			if(params.contains("encryptData")){
+				flag = true;
+			}
+		}
+		if(flag){
+			params = DataUtil.decryptData(params);
+		}
+		JSONObject obj = JSONObject.fromObject(params);
+		int exId = obj.getInt("exId");
+		ResultDto<String> dto = null;
+		try {
+			dto = iUserAwardExchangeService.updateExchangeStatusById(exId);
+		} catch (Exception e) {
+			dto = new ResultDto<>();
+			dto.setResult("F");
+			dto.setErrorMsg("保存用户兑奖信息时异常");
+			e.printStackTrace();
+		}
+		return DataUtil.encryptData(JSONUtil.toJSONString(JSONObject.fromObject(dto)));
 	}
 
 
