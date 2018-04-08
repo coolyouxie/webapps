@@ -14,6 +14,7 @@
 <script src="${ctx}/js/common/bootstrap/bootstrap-3.3.7/dist/js/bootstrap.min.js"></script>
 <script src="${ctx}/js/common/bootstrap/bootstrap-fileinput-master/js/fileinput.js"></script>
 <script src="${ctx}/js/common/bootstrap/bootstrap-fileinput-master/js/locales/zh.js"></script>
+<script src="${ctx}/js/common/common.js"></script>
 
 <style>
 	 col-md-2, span{
@@ -25,202 +26,153 @@
 
 <script type="text/javascript">
 	$(function(){
-
+		//loadDistrict('${ctx}',"province");
+		loadDistrictByParentId('${ctx}',$("#tmpProvince").val(),"city");
+		loadDistrictByParentId('${ctx}',$("#tmpCity").val(),"area");
 	});
 	
-	function showModal(){
-		$("#msgModal").modal("show");
-	}
+	function save() {
+        var name = $.trim($("#name").val());
+        if (!name) {
+            alert("请输入门店名称");
+            return;
+        }
+        var contactName = $.trim($("#contactName").val());
+        if (!contactName) {
+            alert("请输入联系人");
+            return;
+        }
+        var contactMobile = $.trim($("#contactMobile").val());
+        if (!contactMobile) {
+            alert("请输入联系人手机号");
+            return;
+        }
+        var provinceName = $("#province").find("option:selected").text();
+        if (!provinceName || provinceName == '-请选择-') {
+            alert("请选择省份");
+            return;
+        }
+        $("#provinceName").val(provinceName);
+        var cityName = $("#city").find("option:selected").text();
+        if (!cityName || cityName == '-请选择-') {
+            alert("请选择城市");
+            return;
+        }
+        $("#cityName").val(cityName);
+        var areaName = $("#area").find("option:selected").text();
+        if (!areaName || areaName == '-请选择-') {
+            alert("请选择区域");
+            return;
+        }
+        $("#areaName").val(areaName);
+        var address = $.trim($("#address").val());
+        if (!address) {
+            alert("请填写详细地址");
+            return;
+        }
+        // $("#saveForm").submit();
+        $.ajax({
+            url: '${ctx}/agency/saveAgency',
+            type: "POST",
+            dataType: "JSON",
+            data: {
+            	id:$("#id").val(),
+                name: name,
+                contactName: contactName,
+                contactMobile: contactMobile,
+                provinceId: $("#province").val(),
+                provinceName: provinceName,
+                cityId: $("#city").val(),
+                cityName: cityName,
+                areaId: $("#area").val(),
+                areaName: areaName,
+                address: address
+            },
+            success: function (response) {
+                if (response && response.result == "S") {
+                    alert("更新成功");
+                    window.location.href = "${ctx}/agency/toAgencyListPage";
+                } else {
+                    alert("门店信息更新失败");
+                    return;
+                }
+            }
+        });
+    }
 	
-	function next(){
-		$("#handleType").val("edit_next");
-		$("#saveForm").submit();
-	}
-	
-	function loadDistrict(type){
-		var parentId = 0;
-		var tmpProvince = $("#tmpProvince").val();
-		var tmpCity = $("#tmpCity").val();
-		var tmpArea = $("#tmpArea").val();
-		if(type!="province"){
-			if(type=="city"){
-				parentId = $("#province").val();
-			}else if(type=="area"){
-				parentId = $("#city").val();
-			}
-		}
-		if(type=="city"){
-			if($("#province").val()==-1){
-				$("#city").empty();
-				$("#city").append("<option value='-1'>-请选择-</option>");
-				$("#area").empty();
-				$("#area").append("<option value='-1'>-请选择-</option>");
-				return ;
-			}
-		}
-		if(type=="area"){
-			if($("#city").val()==-1){
-				$("#area").empty();
-				$("#area").append("<option value='-1'>-请选择-</option>");
-				return ;
-			}
-		}
-		$.ajax({
-			url:"${ctx}/province/queryProvinceByParentId",
-			type:"POST",
-			dataType:"JSON",
-			data:{
-				parentId:parentId
-			},
-			success:function(response){
-				if(response&&response.result=="S"){
-					var provinces = response.data;
-					$("#"+type).empty();
-					$("#"+type).append("<option value='-1'>-请选择-</option>");
-					for(var i=0;i<provinces.length;i++){
-						if(tmpProvince==provinces[i].id){
-							$("#"+type).append("<option value='"+provinces[i].id+"' selected='selected'>"+provinces[i].name+"</option>");
-						}else if(tmpCity==provinces[i].id){
-							$("#"+type).append("<option value='"+provinces[i].id+"' selected='selected'>"+provinces[i].name+"</option>");
-						}else if(tmpArea==provinces[i].id){
-							$("#"+type).append("<option value='"+provinces[i].id+"' selected='selected'>"+provinces[i].name+"</option>");
-						}else{
-							$("#"+type).append("<option value='"+provinces[i].id+"'>"+provinces[i].name+"</option>");
-						}
-					}
-				}
-			}
-		})
-	}
 </script>
 </head>
 <body>
-	<form id="picForm" enctype="multipart/form-data" method="post" >
-		<div class="modal fade" id="msgModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-			<div class="modal-dialog modal-md" style="width: 580px;height:300px;">
-				<div class="modal-content">
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-							&times;
-						</button>
-						<h4 class="modal-title" id="myModalLabel">
-							添加图片
-						</h4>
-					</div>
-					<div class="modal-body">
-						<input type="file" id="image" name="image" class="projectfile" multiple value="" />
-						<p class="help-block">支持jpg、jpeg、png、gif格式，大小不超过2.0M</p>
-					</div>
-					<div class="modal-footer">
-						<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-					</div>
-				</div>
+	<div class="container-fluid">
+		<div class="row">
+		<div class="col-md-4 col-md-offset-2">
+			<h4>
+				添加门店信息
+			</h4>
+		</div>
+	</div>
+	<form id="saveForm" class="form-horizontal" action="${ctx}/agency/saveAgency" method="post">
+		<input type="hidden" id="handleType" name="handleType" value="add">
+		<input type="hidden" id="id" name="id" value="${agency.id}"}>
+		<input type="hidden" id="tmpProvince" name="tmpProvince" value="${agency.provinceId}">
+		<input type="hidden" id="tmpCity" name="tmpCity" value="${agency.cityId}">
+		<input type="hidden" id="tmpArea" name="tmpArea" value="${agency.areaId}">
+		<input type="hidden" id="provinceName" name="provinceName" value="">
+		<input type="hidden" id="cityName" name="cityName" value="">
+		<input type="hidden" id="areaName" name="areaName" value="">
+		<div class="form-group">
+			<label class="col-md-2 control-label" for="name">门店名称：</label>
+			<div class="col-md-4">
+				<input type="text" id="name" name="name" class="form-control" value="${agency.name}">
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label class="col-md-2 control-label" for="contactName">联系人：</label>
+			<div class="col-md-4">
+				<input type="text" id="contactName" name="contactName" class="form-control" value="${agency.contactName}">
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label class="col-md-2 control-label" for="contactMobile">联系人电话：</label>
+			<div class="col-md-4">
+				<input type="text" id="contactMobile" name="contactMobile" class="form-control" value="${agency.contactMobile}">
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label class="col-md-2 control-label" for="address">所属区域：</label>
+			<div class="col-md-4">
+				<select id="province" name="provinceId" onchange="loadDistrict('${ctx}','city')">
+					<option>-请选择-</option>
+					<c:forEach var="item" items="${provinces}">
+						<option value="${item.id}" <c:if test="${agency.provinceId==item.id}">selected="selected"</c:if>>${item.name}</option>
+					</c:forEach>
+				</select>
+				<select id="city" name="cityId" onchange="loadDistrict('${ctx}','area')">
+					<option value="-1">-请选择-</option>
+				</select>
+				<select id="area" name="areaId">
+					<option value="-1">-请选择-</option>
+				</select>
+				<input type="text" id="address" name="address" class="form-control" value="${agency.address}">
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label class="col-md-4 control-label"></label>
+			<div class="col-md-4">
+				<a href="javascript:void(0)" onclick="save()" class="btn btn-primary">
+					保存
+				</a>
+				&nbsp;&nbsp;&nbsp;&nbsp;
+				<a href="javascript:void(0)" onclick="goBack()" class="btn btn-primary">
+					返回
+				</a>
 			</div>
 		</div>
 	</form>
-	<div class="container-fluid">
-		<div class="row">
-			<div class="col-md-3 col-md-offset-2">
-				<h4>
-					编辑公司信息
-				</h4>
-			</div>
-		</div>
-		<form id="saveForm" class="form-horizontal" action="${ctx}/company/saveCompany" method="post">
-			<input type="hidden" id="id" name="id" value="${company.id}">
-			<input type="hidden" id="picUrl" name="bannerConfig.picUrl" value="${company.bannerConfig.picUrl }">
-			<input type="hidden" id="handleType" name="handleType" value="edit_save">
-			<input type="hidden" id="tmpProvince" name="tmpProvince" value="${company.province.id}">
-			<input type="hidden" id="tmpCity" name="tmpCity" value="${company.city.id}">
-			<input type="hidden" id="tmpArea" name="tmpArea" value="${company.area.id}">
-			<div class="form-group">
-				<label class="col-md-2 control-label" for="name">公司名称：</label>
-				<div class="col-md-4" >
-					<input type="text" id="name" name="name" class="form-control" placeholder="请输入公司名称" value="${company.name }">
-				</div>
-			</div>
-			
-			<div class="form-group">
-				<label class="col-md-2 control-label" for="address">公司地址：</label>
-				<div class="col-md-4" >
-					<select id="province" name="province.id" onchange="loadDistrict('city')" >
-					</select>
-					<select id="city" name="city.id" onchange="loadDistrict('area')" >
-						<option value="-1">-请选择-</option>
-					</select>
-					<select id="area" name="area.id" >
-						<option value="-1">-请选择-</option>
-					</select>
-					<input type="text" id="address" name="address" class="form-control" placeholder="请输入详细地址" value="${company.address}">
-				</div>
-			</div>
-			
-			<div class="form-group">
-				<label class="col-md-2 control-label" for="type">公司性质：</label>
-				<div class="col-md-4" >
-					<input type="text" id="type" name="type" class="form-control" placeholder="请输入公司性质" value="${company.type}">
-				</div>
-			</div>
-			
-			<div class="form-group">
-				<label class="col-md-2 control-label" for="companySize">公司规模：</label>
-				<div class="col-md-4" >
-					<input type="text" id="companySize" name="companySize" class="form-control" placeholder="请输入公司规模" value="${company.companySize}">
-				</div>
-			</div>
-			
-			<div class="form-group">
-				<label class="col-md-2 control-label" for="contactName">联系人：</label>
-				<div class="col-md-4" >
-					<input type="text" id="contactName" name="contactName" class="form-control" placeholder="联系人" value="${company.contactName }">
-				</div>
-			</div>
-			
-			<div class="form-group">
-				<label class="col-md-2 control-label" for="telephone">联系电话：</label>
-				<div class="col-md-4" >
-					<input type="text" id="telephone" name="telephone" class="form-control" placeholder="请输入联系电话" value="${company.telephone }">
-				</div>
-			</div>
-			
-			<div class="form-group">
-				<label class="col-md-2 control-label" for="mobile">手机号：</label>
-				<div class="col-md-4" >
-					<input type="mobile" id="mobile" name="mobile" class="form-control" placeholder="请输入手机号" value="${company.mobile }">
-				</div>
-			</div>
-			
-			<div class="form-group">
-				<label class="col-md-2 control-label" for="email">email：</label>
-				<div class="col-md-4" >
-					<input type="email" id="email" name="email" class="form-control" placeholder="请输入email" value="${company.email }">
-				</div>
-			</div>
-			
-			<div class="form-group">
-				<label class="col-md-2 control-label" for="briefs">公司简介：</label>
-				<div class="col-md-4" >
-					<textarea class ="form-control" id="briefs" name="briefs" rows="5" >${company.briefs}</textarea>
-				</div>
-			</div>
-			
-			<div class="form-group">
-				<label class="col-md-2 control-label" for="environment">公司环境：</label>
-				<div class="col-md-4" >
-					<textarea class ="form-control" id="environment" name="environment" rows="5" >${company.environment }</textarea>
-				</div>
-			</div>
-			<div class="form-group">
-				<div class="col-md-3" >
-				</div>
-				<button type="button" class="btn btn-primary" onclick="next()">
-					下一步
-				</button>
-				<button type="submit" class="btn btn-primary" >
-					保存
-				</button>
-			</div>
-		</form>
-	</div>
+</div>
 </body>
 </html>

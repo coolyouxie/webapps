@@ -49,6 +49,7 @@ public class AgencyServiceImpl implements IAgencyService {
 				dto.setErrorMsg("更新门信息失败");
 				return dto;
 			}
+			dto.setResult("S");
 			return dto;
 		}else{
 			try {

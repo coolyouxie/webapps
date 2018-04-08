@@ -5,7 +5,7 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	<title>新增或修改门店信息</title>
+	<title>新增门店信息</title>
 	<!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
 	<link rel="stylesheet" href="${ctx}/js/common/bootstrap/bootstrap-3.3.7/dist/css/bootstrap.min.css"
 	      type="text/css"/>
@@ -75,11 +75,11 @@
                     name: name,
                     contactName: contactName,
                     contactMobile: contactMobile,
-                    provinceId: $("#provinceId").val(),
+                    provinceId: $("#province").val(),
                     provinceName: provinceName,
-                    cityId: $("#cityId").val(),
+                    cityId: $("#city").val(),
                     cityName: cityName,
-                    areaId: $("#areaId").val(),
+                    areaId: $("#area").val(),
                     areaName: areaName,
                     address: address
                 },
@@ -112,7 +112,7 @@
 		<input type="hidden" id="cityName" name="cityName" value="">
 		<input type="hidden" id="areaName" name="areaName" value="">
 		<div class="form-group">
-			<label class="col-md-2 control-label" for="name">公司名称：</label>
+			<label class="col-md-2 control-label" for="name">门店名称：</label>
 			<div class="col-md-4">
 				<input type="text" id="name" name="name" class="form-control" placeholder="请输入门店名称">
 			</div>
@@ -136,7 +136,7 @@
 			<label class="col-md-2 control-label" for="address">所属区域：</label>
 			<div class="col-md-4">
 				<select id="province" name="provinceId" onchange="loadDistrict('${ctx}','city')">
-					<option>-请选择—</option>
+					<option>-请选择-</option>
 					<c:forEach var="item" items="${provinces}">
 						<option value="${item.id}">${item.name}</option>
 					</c:forEach>

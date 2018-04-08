@@ -27,7 +27,6 @@
         var dataGrid = null;
         CONTEXT_PATH = '${ctx}';
         jQuery(document).ready(function () {
-
             dataGrid = jQuery("#list").jqGrid({
                 url: "${ctx}/agency/loadAgencyList",
                 datatype: "json",
@@ -47,10 +46,10 @@
                     label: 'name',
                     name: 'name',
                     align: 'center',
-                    sortable: false,
-                    formatter: function (cellvalue, options, rowObject) {
+                    sortable: false
+                    /* formatter: function (cellvalue, options, rowObject) {
                         return '<a href="${ctx}/agency/getById?id=' + rowObject.id + '" style="color:blue">' + cellvalue + '</a>';
-                    }
+                    } */
                 }, {
                     label: 'contactName',
                     name: 'contactName',
@@ -87,7 +86,7 @@
                     for (var i = 0; i < ids.length; i++) {
                         var id = ids[i];
                         var rowData = $('#list').jqGrid('getRowData', id);
-                        operateClick = '<a href="${ctx}/agency/toEditAgencyPage?id=' + id + '" style="color:blue">编辑</a> ' +
+                        operateClick = '<a href="${ctx}/agency/toAgencyInfoPage?type=edit&id=' + id + '" style="color:blue">编辑</a> ' +
 	                        '<a href="#" style="color:blue" onclick="confirmDel(' + id + ')" >删除</a>';
                         jQuery("#list").jqGrid('setRowData', id, {
                             operate: operateClick
