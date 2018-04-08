@@ -70,7 +70,6 @@
             alert("请填写详细地址");
             return;
         }
-        // $("#saveForm").submit();
         $.ajax({
             url: '${ctx}/agency/saveAgency',
             type: "POST",

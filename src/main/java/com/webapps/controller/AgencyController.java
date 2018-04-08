@@ -5,7 +5,9 @@ import com.webapps.common.bean.ResultDto;
 import com.webapps.common.entity.Agency;
 import com.webapps.common.entity.Province;
 import com.webapps.common.form.AgencyRequestForm;
+import com.webapps.common.utils.HttpUtil;
 import com.webapps.common.utils.JSONUtil;
+import com.webapps.common.utils.PropertiesUtil;
 import com.webapps.service.IAgencyService;
 import com.webapps.service.IProvinceService;
 import net.sf.json.JSONObject;
@@ -34,6 +36,17 @@ public class AgencyController {
 
     @Autowired
     private IProvinceService iProvinceService;
+    
+    private static com.alibaba.fastjson.JSONObject mapParam = new com.alibaba.fastjson.JSONObject();
+    
+    private final String mapUrl = (String)PropertiesUtil.getProperty("map_api_url");
+    
+    static{
+    	mapParam.put("output", "json");
+    	String ak = (String) PropertiesUtil.getProperty("map_api_ak");
+    	mapParam.put("ak", ak);
+    	mapParam.put("callback", "showLocation");
+    }
 
     @RequestMapping("/toAgencyListPage")
     public String toAgencyListPage(Model model) {
@@ -87,8 +100,12 @@ public class AgencyController {
     @ResponseBody
     @RequestMapping("/saveAgency")
     public String saveAgency(Model model, AgencyRequestForm agency, HttpServletRequest request, HttpServletResponse response) {
-        if (null != agency) {
+    	if (null != agency) {
             ResultDto<String> dto = null;
+            com.alibaba.fastjson.JSONObject result = HttpUtil.doGet(mapUrl, mapParam);
+            if(result!=null){
+            	
+            }
             try {
                 dto = iAgencyService.saveAgency(agency);
                 return JSONUtil.toJSONString(JSONObject.fromObject(dto));
