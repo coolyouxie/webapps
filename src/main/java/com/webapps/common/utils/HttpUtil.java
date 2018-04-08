@@ -71,7 +71,7 @@ public class HttpUtil {
 		String result = response.getString("response");
 		result = result.substring(result.lastIndexOf("(")+1,result.length()-1);
 		JSONObject obj = JSONObject.parseObject(result);
-		System.out.println(response.toString());
+		System.out.println(obj.getJSONObject("result").getJSONObject("location").getString("lat"));
 	}
 
 }

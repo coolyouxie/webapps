@@ -102,9 +102,22 @@ public class AgencyController {
     public String saveAgency(Model model, AgencyRequestForm agency, HttpServletRequest request, HttpServletResponse response) {
     	if (null != agency) {
             ResultDto<String> dto = null;
+            mapParam.put("address",agency.getProvinceName()+agency.getCityName()+agency.getAreaName()+agency.getAddress());
             com.alibaba.fastjson.JSONObject result = HttpUtil.doGet(mapUrl, mapParam);
             if(result!=null){
-            	
+                String responseStr = result.getString("response");
+                responseStr = responseStr.substring(responseStr.lastIndexOf("(")+1,responseStr.length()-1);
+                if(StringUtils.isNotBlank(responseStr)){
+                    com.alibaba.fastjson.JSONObject responseObj = com.alibaba.fastjson.JSONObject.parseObject(responseStr);
+                    if(responseObj!=null){
+                        com.alibaba.fastjson.JSONObject resultObj = responseObj.getJSONObject("result");
+                        if(resultObj!=null){
+                            com.alibaba.fastjson.JSONObject location = resultObj.getJSONObject("location");
+                            agency.setLongitude(Double.valueOf(location.getString("lng")));
+                            agency.setLatitude(Double.valueOf(location.getString("lat")));
+                        }
+                    }
+                }
             }
             try {
                 dto = iAgencyService.saveAgency(agency);
