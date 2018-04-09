@@ -8,8 +8,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import com.webapps.common.utils.PropertiesUtil;
-import com.webapps.service.IUserService;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,15 +16,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.alibaba.fastjson.JSONObject;
 import com.webapps.common.bean.Page;
 import com.webapps.common.bean.ResultDto;
 import com.webapps.common.entity.Enrollment;
 import com.webapps.common.entity.User;
 import com.webapps.common.form.EnrollmentRequestForm;
 import com.webapps.common.utils.JSONUtil;
+import com.webapps.common.utils.PropertiesUtil;
 import com.webapps.service.IEnrollmentService;
-
-import net.sf.json.JSONObject;
 
 @Controller
 @RequestMapping("enrollment")
@@ -78,7 +76,7 @@ public class EnrollmentController {
 				form.setTalkerId(user.getId());
 			}
 			page = iEnrollmentService.loadEnrollmentList(page, form);
-			return JSONUtil.toJSONString(JSONObject.fromObject(page));
+			return JSONObject.toJSONString(page);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

@@ -1,9 +1,10 @@
 package com.webapps.controller;
 
+import java.net.URLDecoder;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.webapps.common.utils.JSONUtil;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -11,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.alibaba.fastjson.JSON;
 import com.webapps.common.bean.Page;
 import com.webapps.common.bean.ResultDto;
 import com.webapps.common.entity.Company;
@@ -19,11 +21,6 @@ import com.webapps.common.form.CompanyRequestForm;
 import com.webapps.common.form.PictureRequestForm;
 import com.webapps.service.ICompanyService;
 import com.webapps.service.IPictureService;
-
-import net.sf.json.JSONObject;
-import net.sf.json.util.JSONUtils;
-
-import java.net.URLDecoder;
 
 @Controller
 @RequestMapping("company")
@@ -48,7 +45,7 @@ public class CompanyController {
 				form.setName(URLDecoder.decode(form.getName(),"UTF-8"));
 			}
 			page = iCompanyService.loadCompanyList(page, form);
-			return JSONUtil.toJSONString(JSONObject.fromObject(page));
+			return JSON.toJSONString(page);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -150,13 +147,13 @@ public class CompanyController {
 	public String deleteCompanyById(Model model,Integer id,HttpServletRequest request,HttpServletResponse response){
 		try {
 			ResultDto<Company> dto = iCompanyService.deleteCompanyById(id);
-			return JSONUtils.valueToString(JSONObject.fromObject(dto));
+			return JSON.toJSONString(dto);
 		} catch (Exception e) {
 			e.printStackTrace();
 			ResultDto<Company> dto = new ResultDto<Company>();
 			dto.setErrorMsg("删除公司信息时异常，请稍后再试");
 			dto.setResult("F");
-			return JSONUtils.valueToString(JSONObject.fromObject(dto));
+			return JSON.toJSONString(dto);
 		}
 	}
 	
@@ -175,7 +172,7 @@ public class CompanyController {
 	@RequestMapping(value="/addCompanyPicture")
 	public String addCompanyPicture(Model model,PictureRequestForm form){
 		ResultDto<Picture> dto = iPictureService.saveCompanyPicture(form);
-		return JSONUtils.valueToString(JSONObject.fromObject(dto));
+		return JSON.toJSONString(dto);
 	}
 	
 	

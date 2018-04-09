@@ -1,5 +1,21 @@
 package com.webapps.controller;
 
+import java.net.URLDecoder;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.alibaba.druid.support.json.JSONUtils;
+import com.alibaba.fastjson.JSONObject;
 import com.webapps.common.bean.Page;
 import com.webapps.common.bean.ResultDto;
 import com.webapps.common.entity.Agency;
@@ -10,20 +26,6 @@ import com.webapps.common.utils.JSONUtil;
 import com.webapps.common.utils.PropertiesUtil;
 import com.webapps.service.IAgencyService;
 import com.webapps.service.IProvinceService;
-import net.sf.json.JSONObject;
-import net.sf.json.util.JSONUtils;
-import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.net.URLDecoder;
-import java.util.List;
 
 @Controller
 @RequestMapping("agency")
@@ -69,7 +71,7 @@ public class AgencyController {
                 form.setName(URLDecoder.decode(form.getName(), "UTF-8"));
             }
             page = iAgencyService.loadAgencyList(page, form);
-            return JSONUtil.toJSONString(JSONObject.fromObject(page));
+            return JSONObject.toJSONString(page);
         } catch (Exception e) {
             logger.error("加载门店信息列表异常");
             e.printStackTrace();
@@ -121,14 +123,14 @@ public class AgencyController {
             }
             try {
                 dto = iAgencyService.saveAgency(agency);
-                return JSONUtil.toJSONString(JSONObject.fromObject(dto));
+                return JSONObject.toJSONString(dto);
             } catch (Exception e) {
                 logger.error("保存门店信息时异常");
                 e.printStackTrace();
                 dto = new ResultDto<>();
                 dto.setErrorMsg("保存门店信息异常");
                 dto.setResult("F");
-                return JSONUtil.toJSONString(JSONObject.fromObject(dto));
+                return JSONObject.toJSONString(dto);
             }
         }
         return null;
@@ -140,14 +142,14 @@ public class AgencyController {
         ResultDto<String> dto = null;
         try {
             dto = iAgencyService.deleteAgencyById(id);
-            return JSONUtils.valueToString(JSONObject.fromObject(dto));
+            return JSONObject.toJSONString(dto);
         } catch (Exception e) {
             logger.error("删除门店信息时异常，请稍后再试");
             e.printStackTrace();
             dto = new ResultDto<>();
             dto.setErrorMsg("删除门店信息时异常，请稍后再试");
             dto.setResult("F");
-            return JSONUtils.valueToString(JSONObject.fromObject(dto));
+            return JSONObject.toJSONString(dto);
         }
     }
 
@@ -160,6 +162,19 @@ public class AgencyController {
             e.printStackTrace();
         }
         return null;
+    }
+    
+    @ResponseBody
+    @RequestMapping(value="/loadAgencyByDistrictId")
+    public String loadAgencyByDistrictId(Model model,AgencyRequestForm agency){
+		try {
+			ResultDto<List<Agency>> list = iAgencyService.queryAllAgencyBy(agency);
+			return com.alibaba.fastjson.JSONObject.toJSONString(list);
+		} catch (Exception e) {
+			logger.error("加载门店信息异常");
+			e.printStackTrace();
+		}
+    	return null;
     }
 
 }

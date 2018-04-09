@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.alibaba.fastjson.JSON;
 import com.webapps.common.bean.Page;
 import com.webapps.common.bean.ResultDto;
 import com.webapps.common.dto.EnrollApprovalInfoDto;
@@ -25,8 +26,6 @@ import com.webapps.service.IEnrollApprovalService;
 import com.webapps.service.IEnrollmentService;
 import com.webapps.service.IRecruitmentService;
 import com.webapps.service.IUserService;
-
-import net.sf.json.JSONObject;
 
 @Controller
 @RequestMapping("entryApproval")
@@ -58,7 +57,7 @@ public class EntryApprovalController {
 		User user = (User)session.getAttribute("user");
 		form = ExpireApprovalController.getEnrollApprovalRequestForm(form, user);
 		Page page1 = iEnrollApprovalService.getUserApprovalPage(page, form);
-		if (page1 != null) return JSONUtil.toJSONString(JSONObject.fromObject(page));
+		if (page1 != null) return JSON.toJSONString(page);
 		return null;
 	}
 

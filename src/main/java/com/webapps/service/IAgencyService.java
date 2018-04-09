@@ -1,5 +1,7 @@
 package com.webapps.service;
 
+import java.util.List;
+
 import com.webapps.common.bean.Page;
 import com.webapps.common.bean.ResultDto;
 import com.webapps.common.entity.Agency;
@@ -14,5 +16,7 @@ public interface IAgencyService {
 	ResultDto<String> saveAgency(Agency agency) throws Exception;
 	
 	ResultDto<String> deleteAgencyById(Integer id) throws Exception;
+	
+	ResultDto<List<Agency>> queryAllAgencyBy(AgencyRequestForm agency)throws Exception;
 
 }

@@ -1,11 +1,12 @@
 package com.webapps.common.utils;
 
-import com.webapps.common.utils.encrypt.AES;
-import com.webapps.common.utils.encrypt.RSA;
-import net.sf.json.JSONObject;
+import java.util.Random;
+
 import org.apache.log4j.Logger;
 
-import java.util.Random;
+import com.alibaba.fastjson.JSONObject;
+import com.webapps.common.utils.encrypt.AES;
+import com.webapps.common.utils.encrypt.RSA;
 
 public class DataUtil {
 

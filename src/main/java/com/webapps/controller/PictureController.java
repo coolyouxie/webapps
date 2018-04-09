@@ -10,13 +10,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.alibaba.fastjson.JSON;
 import com.webapps.common.bean.Page;
 import com.webapps.common.bean.ResultDto;
 import com.webapps.common.form.PictureRequestForm;
-import com.webapps.common.utils.JSONUtil;
 import com.webapps.service.IPictureService;
-
-import net.sf.json.JSONObject;
 
 
 @Controller
@@ -35,7 +33,7 @@ public class PictureController {
 		form.setFkId(fkId);
 		try {
 			page = iPictureService.loadPictureList(page, form);
-			return JSONUtil.toJSONString(JSONObject.fromObject(page));
+			return JSON.toJSONString(page);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -57,7 +55,7 @@ public class PictureController {
 		}
 		try {
 			page = iPictureService.queryPageByFkIdTypes(page,form);
-			return JSONUtil.toJSONString(JSONObject.fromObject(page));
+			return JSON.toJSONString(page);
 		} catch (Exception e) {
 			logger.error("查询图片信息异常");
 			e.printStackTrace();
@@ -69,14 +67,14 @@ public class PictureController {
 	@RequestMapping(value="/uploadPicture")
 	public String uploadPicture(Model model,HttpServletRequest request){
 		ResultDto<String> dto = iPictureService.uploadCompanyPicture(request);
-		return JSONUtil.toJSONString(JSONObject.fromObject(dto));
+		return JSON.toJSONString(dto);
 	}
 
 	@ResponseBody
 	@RequestMapping(value = "/deleteById")
 	public String deleteById(Model model,Integer id){
 		ResultDto<String> dto = iPictureService.deleteById(id);
-		return JSONUtil.toJSONString(JSONObject.fromObject(dto));
+		return JSON.toJSONString(dto);
 	}
 	
 	

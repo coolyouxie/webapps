@@ -4,11 +4,9 @@ import java.net.URLDecoder;
 import java.util.Calendar;
 import java.util.Date;
 
-import javax.jws.WebParam;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.webapps.common.utils.DateUtil;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,16 +16,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.alibaba.fastjson.JSON;
 import com.webapps.common.bean.Page;
 import com.webapps.common.bean.ResultDto;
 import com.webapps.common.entity.Picture;
 import com.webapps.common.entity.PromotionConfig;
 import com.webapps.common.form.PromotionConfigRequestForm;
-import com.webapps.common.utils.JSONUtil;
+import com.webapps.common.utils.DateUtil;
 import com.webapps.service.IPictureService;
 import com.webapps.service.IPromotionConfigService;
-
-import net.sf.json.JSONObject;
 
 @Controller
 @RequestMapping("promotionConfig")
@@ -57,7 +54,7 @@ public class PromotionConfigController {
 				form.setName(URLDecoder.decode(form.getName(),"UTF-8"));
 			}
 			page = iPromotionConfigService.loadPageList(page,form);
-			return JSONUtil.toJSONString(JSONObject.fromObject(page));
+			return JSON.toJSONString(page);
 		} catch (Exception e) {
 			logger.error("查询活动发布信息异常");
 			e.printStackTrace();
@@ -110,7 +107,7 @@ public class PromotionConfigController {
 			logger.error("更新活动信息时异常");
 			e.printStackTrace();
 		}
-		return JSONUtil.toJSONString(JSONObject.fromObject(dto));
+		return JSON.toJSONString(dto);
 	}
 
 
@@ -149,14 +146,14 @@ public class PromotionConfigController {
 		ResultDto<String> dto = new ResultDto<>();
 		try {
 			dto = iPromotionConfigService.deletePromotionConfigById(id);
-			return JSONUtil.toJSONString(JSONObject.fromObject(dto));
+			return JSON.toJSONString(dto);
 		} catch (Exception e) {
 			logger.error("删除奖品配置信息异常");
 			e.printStackTrace();
 			dto.setErrorMsg("删除奖品配置信息异常，请稍后重试");
 			dto.setResult("F");
 		}
-		return JSONUtil.toJSONString(JSONObject.fromObject(dto));
+		return JSON.toJSONString(dto);
 	}
 	
 	@ResponseBody
@@ -178,7 +175,7 @@ public class PromotionConfigController {
 			dto.setErrorMsg("保存图片信息异常");
 			dto.setResult("F");
 		}
-		return JSONUtil.toJSONString(JSONObject.fromObject(dto));
+		return JSON.toJSONString(dto);
 	}
 
 	@ResponseBody
@@ -194,7 +191,7 @@ public class PromotionConfigController {
 			logger.error("更新活动状态异常");
 			e.printStackTrace();
 		}
-		return JSONUtil.toJSONString(JSONObject.fromObject(dto));
+		return JSON.toJSONString(dto);
 	}
 
 	@ResponseBody
@@ -212,7 +209,7 @@ public class PromotionConfigController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return JSONUtil.toJSONString(JSONObject.fromObject(dto));
+		return JSON.toJSONString(dto);
 	}
 
 }

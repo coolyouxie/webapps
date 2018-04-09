@@ -1,10 +1,10 @@
 package com.webapps.controller;
 
+import java.net.URLDecoder;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.webapps.common.utils.JSONUtil;
-import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,12 +12,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.alibaba.fastjson.JSON;
 import com.webapps.common.bean.Page;
 import com.webapps.common.entity.Recommend;
 import com.webapps.common.form.RecommendRequestForm;
 import com.webapps.service.IRecommendService;
-
-import java.net.URLDecoder;
 
 @Controller
 @RequestMapping("recommend")
@@ -42,7 +41,7 @@ public class RecommendController {
 				form.getUser().setName(URLDecoder.decode(form.getUser().getName(),"UTF-8"));
 			}
 			page = iRecommendService.loadRecommendList(page, form);
-			return JSONUtil.toJSONString(JSONObject.fromObject(page));
+			return JSON.toJSONString(page);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

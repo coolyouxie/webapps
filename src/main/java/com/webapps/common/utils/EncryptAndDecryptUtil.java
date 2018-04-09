@@ -3,10 +3,9 @@ package com.webapps.common.utils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
+import com.alibaba.fastjson.JSONObject;
 import com.webapps.common.utils.encrypt.AES;
 import com.webapps.common.utils.encrypt.RSA;
-
-import net.sf.json.JSONObject;
 
 public class EncryptAndDecryptUtil {
 	

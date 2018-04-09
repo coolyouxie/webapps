@@ -1,13 +1,13 @@
 package com.webapps.controller;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.webapps.common.entity.*;
-import com.webapps.common.form.*;
-import com.webapps.common.utils.DateUtil;
-import com.webapps.service.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -21,18 +21,69 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.google.gson.Gson;
 import com.webapps.common.bean.Page;
 import com.webapps.common.bean.ResultDto;
 import com.webapps.common.dto.AppConfigDTO;
 import com.webapps.common.dto.UserAwardListDTO;
+import com.webapps.common.entity.AliSmsMsg;
+import com.webapps.common.entity.ApplyExpenditure;
+import com.webapps.common.entity.AwardConfig;
+import com.webapps.common.entity.BannerConfig;
+import com.webapps.common.entity.BillRecord;
+import com.webapps.common.entity.Company;
+import com.webapps.common.entity.EnrollApproval;
+import com.webapps.common.entity.Enrollment;
+import com.webapps.common.entity.EnrollmentExtra;
+import com.webapps.common.entity.FeeConfig;
+import com.webapps.common.entity.GroupUser;
+import com.webapps.common.entity.MessageConfig;
+import com.webapps.common.entity.ParamConfig;
+import com.webapps.common.entity.Picture;
+import com.webapps.common.entity.PromotionConfig;
+import com.webapps.common.entity.Recommend;
+import com.webapps.common.entity.Recruitment;
+import com.webapps.common.entity.User;
+import com.webapps.common.entity.UserAwardExchange;
+import com.webapps.common.entity.UserReward;
+import com.webapps.common.entity.UserWallet;
+import com.webapps.common.form.ApplyExpenditureRequestForm;
+import com.webapps.common.form.BannerConfigRequestForm;
+import com.webapps.common.form.BillRecordRequestForm;
+import com.webapps.common.form.MessageConfigRequestForm;
+import com.webapps.common.form.PromotionConfigRequestForm;
+import com.webapps.common.form.RecruitmentRequestForm;
+import com.webapps.common.form.UserAwardExchangeRequestForm;
+import com.webapps.common.form.UserSendInviteCode;
 import com.webapps.common.utils.DataUtil;
+import com.webapps.common.utils.DateUtil;
 import com.webapps.common.utils.JSONUtil;
 import com.webapps.common.utils.PropertiesUtil;
 import com.webapps.mapper.IEnrollmentExtraMapper;
-
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
+import com.webapps.service.IAliSmsMsgService;
+import com.webapps.service.IApplyExpenditureService;
+import com.webapps.service.IAwardConfigService;
+import com.webapps.service.IBannerConfigService;
+import com.webapps.service.IBillRecordService;
+import com.webapps.service.ICompanyService;
+import com.webapps.service.IEnrollApprovalService;
+import com.webapps.service.IEnrollmentService;
+import com.webapps.service.IFeeConfigService;
+import com.webapps.service.IGroupUserService;
+import com.webapps.service.IMessageConfigService;
+import com.webapps.service.IParamConfigService;
+import com.webapps.service.IPictureService;
+import com.webapps.service.IPromotionConfigService;
+import com.webapps.service.IRecommendService;
+import com.webapps.service.IRecruitmentService;
+import com.webapps.service.IUserAwardExchangeService;
+import com.webapps.service.IUserAwardService;
+import com.webapps.service.IUserRewardService;
+import com.webapps.service.IUserService;
+import com.webapps.service.IUserWalletService;
 
 
 @Controller
@@ -140,9 +191,9 @@ public class AppController {
 			dto.setResult("F");
 		}
 		if(flag){
-			return DataUtil.encryptData(JSONUtil.toJSONObjectString(JSONObject.fromObject(dto)));
+			return DataUtil.encryptData(JSONObject.toJSONString(dto));
 		}
-		return JSONUtil.toJSONObjectString(JSONObject.fromObject(dto));
+		return JSONObject.toJSONString(dto);
 	}
 	
 	/**
@@ -165,7 +216,7 @@ public class AppController {
 		User user = new User();
 		JSONObject jsonObj = JSONUtil.toJSONObject(params);
 		String smsCode = jsonObj.getString("smsCode");
-		Integer asmId = jsonObj.getInt("asmId");
+		Integer asmId = jsonObj.getInteger("asmId");
 		String password = jsonObj.getString("password");
 		String telephone = jsonObj.getString("telephone");
 		/**
@@ -247,11 +298,11 @@ public class AppController {
 		if(flag){
 			params = DataUtil.decryptData(params);
 		}
-		JSONObject obj = JSONObject.fromObject(params);
+		JSONObject obj = JSON.parseObject(params);
 		String phoneNumber = obj.getString("phoneNumber");
 		String password = obj.getString("password");
 		String smsCode = obj.getString("smsCode");
-//		Integer type = obj.getInt("type");
+//		Integer type = obj.getInteger("type");
 		ResultDto<String> dto1 = iAliSmsMsgService.validateAliSmsCode(phoneNumber, 2, smsCode);
 		ResultDto<String> dto2 = null;
 		if("S".equals(dto1.getResult())){
@@ -260,7 +311,7 @@ public class AppController {
 		if(flag){
 			return DataUtil.encryptData(JSONUtil.toJSONString(JSONUtil.toJSONObject(dto2)));
 		}
-		return JSONUtil.toJSONString(JSONObject.fromObject(dto2));
+		return JSON.toJSONString(dto2);
 	}
 	
 	/**
@@ -363,6 +414,7 @@ public class AppController {
 	 * @param params
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	@ResponseBody
 	@RequestMapping(value = "/userAwardList", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
 	public String userAwardList(@RequestBody String params) {
@@ -378,9 +430,9 @@ public class AppController {
 		}
 		logger.info("获取用户红包列表userAwardList接收参数:" + params);
 		JSONObject jsonObj = JSONUtil.toJSONObject(params);
-		Integer userId = jsonObj.getInt("userId");
-		int currentPage = jsonObj.getInt("page");
-		int rows = jsonObj.getInt("rows");
+		Integer userId = jsonObj.getInteger("userId");
+		int currentPage = jsonObj.getInteger("page");
+		int rows = jsonObj.getInteger("rows");
 		Page page = new Page();
 		page.setPage(currentPage);
 		page.setRows(rows);
@@ -425,7 +477,7 @@ public class AppController {
 		}
 		logger.info("获取用户领取红包userAwardTake接收参数:" + params);
 		JSONObject jsonObj = JSONUtil.toJSONObject(params);
-		Integer userAwardId = jsonObj.getInt("userAwardId");
+		Integer userAwardId = jsonObj.getInteger("userAwardId");
 		try {
 			dto = this.iUserAwardService.useAward(userAwardId);
 		} catch (Exception e) {
@@ -489,7 +541,7 @@ public class AppController {
 		}
 		logger.info("获取用户推荐列表getUserRecommomendList接收参数:" + params);
 		JSONObject jsonObj = JSONUtil.toJSONObject(params);
-		Integer userId = jsonObj.getInt("userId");
+		Integer userId = jsonObj.getInteger("userId");
 		ResultDto<List<Recommend>> dto = new ResultDto<List<Recommend>>();
 		try {
 			List<Recommend> list = iRecommendService.queryRecommendListByUserId(userId);
@@ -525,7 +577,7 @@ public class AppController {
 			params = DataUtil.decryptData(params);
 		}
 		JSONObject jsonObj = JSONUtil.toJSONObject(params);
-		Integer userId = jsonObj.getInt("userId");
+		Integer userId = jsonObj.getInteger("userId");
 		ResultDto<List<Enrollment>> dto = new ResultDto<List<Enrollment>>();
 		try {
 			List<Enrollment> list = iEnrollmentService.queryEnrollmentListByUserId(userId);
@@ -605,11 +657,11 @@ public class AppController {
 		}
 		ResultDto<List<Recruitment>> dto = new ResultDto<List<Recruitment>>();
 		JSONObject jsonObj = JSONUtil.toJSONObject(params);
-		int currentPage = jsonObj.getInt("page");
-		int rows = jsonObj.getInt("rows");
+		int currentPage = jsonObj.getInteger("page");
+		int rows = jsonObj.getInteger("rows");
 		RecruitmentRequestForm form = new RecruitmentRequestForm();
 		if(jsonObj.containsKey("publishType")&&StringUtils.isNotBlank(jsonObj.getString("publishType"))){
-			Integer publishType = jsonObj.getInt("publishType");
+			Integer publishType = jsonObj.getInteger("publishType");
 			if(publishType!=0){
 				form.setPublishType(publishType);
 			}
@@ -638,7 +690,7 @@ public class AppController {
 		if(flag){
 			return DataUtil.encryptData(JSONUtil.toJSONString(JSONUtil.toJSONObject(dto)));
 		}
-		String result = JSONUtil.toJSONString(JSONObject.fromObject(dto));
+		String result = JSON.toJSONString(dto);
 		return result;
 	}
 
@@ -660,7 +712,7 @@ public class AppController {
 			params = DataUtil.decryptData(params);
 		}
 		JSONObject obj = JSONUtil.toJSONObject(params);
-		Integer id = obj.getInt("id");
+		Integer id = obj.getInteger("id");
 		ResultDto<Recruitment> dto = new ResultDto<Recruitment>();
 		try {
 			Recruitment r = iRecruitmentService.getById(id);
@@ -788,9 +840,9 @@ public class AppController {
 			params = DataUtil.decryptData(params);
 		}
 		ResultDto<List<MessageConfig>> dto = new ResultDto<List<MessageConfig>>();
-		JSONObject jsonObj = JSONObject.fromObject(params);
-		Integer rows = jsonObj.getInt("rows");
-		Integer curPage = jsonObj.getInt("page");
+		JSONObject jsonObj = JSON.parseObject(params);
+		Integer rows = jsonObj.getInteger("rows");
+		Integer curPage = jsonObj.getInteger("page");
 		Page page = new Page();
 		page.setRows(rows);
 		page.setPage(curPage);
@@ -806,7 +858,7 @@ public class AppController {
 		if(flag){
 			return DataUtil.encryptData(JSONUtil.toJSONString(JSONUtil.toJSONObject(dto)));
 		}
-		return JSONUtil.toJSONString(JSONObject.fromObject(dto));
+		return JSON.toJSONString(dto);
 	}
 	
 	/**
@@ -826,8 +878,8 @@ public class AppController {
 		if(flag){
 			params = DataUtil.decryptData(params);
 		}
-		JSONObject obj = JSONObject.fromObject(params);
-		Integer userId = obj.getInt("userId");
+		JSONObject obj = JSON.parseObject(params);
+		Integer userId = obj.getInteger("userId");
 		UserWallet uw = iUserWalletService.getUserWalletByUserId(userId);
 		ResultDto<UserWallet> dto = new ResultDto<UserWallet>();
 		if(uw==null){
@@ -840,7 +892,7 @@ public class AppController {
 		if(flag){
 			return DataUtil.encryptData(JSONUtil.toJSONString(JSONUtil.toJSONObject(dto)));
 		}
-		return JSONUtil.toJSONString(JSONObject.fromObject(dto));
+		return JSON.toJSONString(dto);
 	}
 
 	/**
@@ -861,14 +913,14 @@ public class AppController {
 		if(flag){
 			params = DataUtil.decryptData(params);
 		}
-		JSONObject obj = JSONObject.fromObject(params);
-		Integer userId = obj.getInt("userId");
-		Integer walletId = obj.getInt("walletId");
+		JSONObject obj = JSON.parseObject(params);
+		Integer userId = obj.getInteger("userId");
+		Integer walletId = obj.getInteger("walletId");
 		ResultDto<String> dto = iApplyExpenditureService.applyExpenditure(userId, walletId);
 		if(flag){
 			return DataUtil.encryptData(JSONUtil.toJSONString(JSONUtil.toJSONObject(dto)));
 		}
-		return JSONUtil.toJSONString(JSONObject.fromObject(dto));
+		return JSON.toJSONString(dto);
 	}
 
 	/**
@@ -876,6 +928,7 @@ public class AppController {
 	 * @return
 	 */
 	@ResponseBody
+	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/queryBannerConfig", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
 	public String queryBannerConfig() {
 		ResultDto<List<BannerConfig>> dto = new ResultDto<List<BannerConfig>>();
@@ -892,7 +945,7 @@ public class AppController {
 			dto.setErrorMsg("获取数据异常");
 			e1.printStackTrace();
 		}
-		String result = JSONUtil.toJSONString(JSONObject.fromObject(dto));
+		String result = JSON.toJSONString(dto);
 		return result;
 	}
 
@@ -947,7 +1000,7 @@ public class AppController {
 		}
 		logger.info("获取用户信息接口getUserInfo接收参数：" + params);
 		JSONObject obj = JSONUtil.toJSONObject(params);
-		Integer id = obj.getInt("id");
+		Integer id = obj.getInteger("id");
 		ResultDto<User> dto = new ResultDto<User>();
 		try {
 			User ur = iUserService.getById(id);
@@ -982,7 +1035,7 @@ public class AppController {
 		ResultDto<EnrollApproval> dto = null;
 		logger.info("获取用户申请审核接口applyApproval接收参数：" + params);
 		JSONObject obj = JSONUtil.toJSONObject(params);
-		Integer type = obj.getInt("approvaType");
+		Integer type = obj.getInteger("approvaType");
 		try {
 			if(type==1){
 				dto = iEnrollApprovalService.applyEntryApproval(obj);
@@ -1022,7 +1075,7 @@ public class AppController {
 		ResultDto<List<ApplyExpenditure>> dto = new ResultDto<List<ApplyExpenditure>>();
 		logger.info("获取用户提现申请接口applyExpenditureList接收参数：" + params);
 		JSONObject obj = JSONUtil.toJSONObject(params);
-		Integer walletId = obj.getInt("walletId");
+		Integer walletId = obj.getInteger("walletId");
 		Page page = new Page();
 		try {
 			ApplyExpenditureRequestForm apply = new ApplyExpenditureRequestForm();
@@ -1062,7 +1115,7 @@ public class AppController {
 		logger.info("获取用户期满审核通过接口expireApprovalSuccessList接收参数：" + params);
 		ResultDto<List<EnrollApproval>> dto = new ResultDto<List<EnrollApproval>>();
 		JSONObject obj = JSONUtil.toJSONObject(params);
-		Integer userId = obj.getInt("userId");
+		Integer userId = obj.getInteger("userId");
 		try {
 			dto = iEnrollApprovalService.queryByUserIdTypeAndState(userId, 2, 1);
 			dto.setResult("S");
@@ -1103,8 +1156,8 @@ public class AppController {
 		logger.info("获取用户期满审核通过接口expireApprovalSuccessList接收参数：" + params);
 		ResultDto<List<BillRecord>> dto = new ResultDto<List<BillRecord>>();
 		JSONObject obj = JSONUtil.toJSONObject(params);
-		Integer walletId = obj.getInt("walletId");
-		Integer typeId = obj.getInt("type");
+		Integer walletId = obj.getInteger("walletId");
+		Integer typeId = obj.getInteger("type");
 		BillRecordRequestForm form = new BillRecordRequestForm();
 		form.setWalletId(walletId);
 		form.setType(typeId);
@@ -1169,7 +1222,7 @@ public class AppController {
 		logger.info("获取用户期满审核通过接口expireApprovalSuccessList接收参数：" + params);
 		ResultDto<JSONObject> dto = new ResultDto<JSONObject>();
 		JSONObject obj = JSONUtil.toJSONObject(params);
-		Integer userId = obj.getInt("userId");
+		Integer userId = obj.getInteger("userId");
 		try{
 			User user = iUserService.getById(userId);
 			List<Enrollment> list = iEnrollmentService.queryEnrollmentListByUserId(userId);
@@ -1203,7 +1256,7 @@ public class AppController {
 			if(flag){
 				return DataUtil.encryptData(JSONUtil.toJSONString(JSONUtil.toJSONObject(dto)));
 			}
-			return JSONUtil.toJSONString(JSONObject.fromObject(dto));
+			return JSON.toJSONString(dto);
 		}catch (Exception e){
 			e.printStackTrace();
 			dto.setResult("F");
@@ -1211,7 +1264,7 @@ public class AppController {
 			if(flag){
 				return DataUtil.encryptData(JSONUtil.toJSONString(JSONUtil.toJSONObject(dto)));
 			}
-			return JSONUtil.toJSONString(JSONObject.fromObject(dto));
+			return JSON.toJSONString(dto);
 		}
 	}
 	
@@ -1227,7 +1280,7 @@ public class AppController {
 			@RequestParam("userId")String userId){
 		ResultDto<String> dto = null;
 		dto = iPictureService.uploadImgForApp(files, userId);
-		return JSONUtil.toJSONString(JSONObject.fromObject(dto));
+		return JSON.toJSONString(dto);
 	}
 	
 	/**
@@ -1247,14 +1300,14 @@ public class AppController {
 		if(flag){
 			params = DataUtil.decryptData(params);
 		}
-		JSONObject obj = JSONObject.fromObject(params);
-		Integer userId = obj.getInt("userId");
+		JSONObject obj = JSON.parseObject(params);
+		Integer userId = obj.getInteger("userId");
 		ResultDto<List<Picture>> dto = null;
 		dto = iPictureService.queryUserPictures(userId);
 		if(flag){
 			return DataUtil.encryptData(JSONUtil.toJSONString(JSONUtil.toJSONObject(dto)));
 		}
-		return JSONUtil.toJSONString(JSONObject.fromObject(dto));
+		return JSON.toJSONString(dto);
 	}
 
 	@ResponseBody
@@ -1269,8 +1322,8 @@ public class AppController {
 		if(flag){
 			params = DataUtil.decryptData(params);
 		}
-		JSONObject obj = JSONObject.fromObject(params);
-		Integer emId = obj.getInt("enrollmentId");
+		JSONObject obj = JSON.parseObject(params);
+		Integer emId = obj.getInteger("enrollmentId");
 		ResultDto<List<EnrollmentExtra>> dto = new ResultDto<List<EnrollmentExtra>>();
 		try {
 			List<EnrollmentExtra> list = iEnrollmentExtraMapper.queryListByEnrollmentId(emId);
@@ -1279,7 +1332,7 @@ public class AppController {
 			if(flag){
 				return DataUtil.encryptData(JSONUtil.toJSONString(JSONUtil.toJSONObject(dto)));
 			}
-			return(JSONUtil.toJSONString(JSONObject.fromObject(dto)));
+			return JSON.toJSONString(dto);
 		} catch (Exception e) {
 			e.printStackTrace();
 			dto.setErrorMsg("报名扩展信息查询异常");
@@ -1287,7 +1340,7 @@ public class AppController {
 			if(flag){
 				return DataUtil.encryptData(JSONUtil.toJSONString(JSONUtil.toJSONObject(dto)));
 			}
-			return(JSONUtil.toJSONString(JSONObject.fromObject(dto)));
+			return JSON.toJSONString(dto);
 		}
 	}
 	
@@ -1321,7 +1374,7 @@ public class AppController {
 		obj.put("androidUpdateLog",androidUpdateLog);
 		dto.setData(obj);
 		dto.setResult("S");
-		return JSONUtil.toJSONString(JSONObject.fromObject(dto));
+		return JSON.toJSONString(dto);
 	}
 
 	@RequestMapping(value="/download")
@@ -1337,8 +1390,8 @@ public class AppController {
 	
 	@RequestMapping(value="/toPrizeDraw")
 	public String toPrizeDraw(Model model, String params){
-		JSONObject obj = JSONObject.fromObject(params);
-		Integer userId = obj.getInt("userId");
+		JSONObject obj = JSON.parseObject(params);
+		Integer userId = obj.getInteger("userId");
 		ResultDto<UserReward> dto = iUserRewardService.getUserRewardByUserIdAndType(userId, 2);
 		model.addAttribute("userReward", dto.getData());
 		model.addAttribute("result", dto.getResult());
@@ -1365,7 +1418,7 @@ public class AppController {
 			if(flag){
 				return DataUtil.encryptData(JSONUtil.toJSONString(JSONUtil.toJSONObject(dto)));
 			}
-			return JSONUtil.toJSONString(JSONObject.fromObject(dto));
+			return JSON.toJSONString(dto);
 		} catch (Exception e) {
 			e.printStackTrace();
 			dto.setResult("F");
@@ -1373,7 +1426,7 @@ public class AppController {
 			if(flag){
 				return DataUtil.encryptData(JSONUtil.toJSONString(JSONUtil.toJSONObject(dto)));
 			}
-			return JSONUtil.toJSONString(JSONObject.fromObject(dto));
+			return JSON.toJSONString(dto);
 		}
 	}
 
@@ -1391,13 +1444,13 @@ public class AppController {
 		}
 		ResultDto<String> dto = null;
 		try {
-			JSONObject object = JSONObject.fromObject(params);
-			GroupUser leader = (GroupUser) JSONObject.toBean(JSONObject.fromObject(object.getString("leader")),GroupUser.class);
+			JSONObject object = JSON.parseObject(params);
+			GroupUser leader = (GroupUser) JSONObject.parseObject(object.getString("leader"),GroupUser.class);
 			dto = iGroupUserService.batchInsert(null, leader);
 			if(flag){
 				return DataUtil.encryptData(JSONUtil.toJSONString(JSONUtil.toJSONObject(dto)));
 			}
-			return JSONUtil.toJSONString(JSONObject.fromObject(dto));
+			return JSON.toJSONString(dto);
 		} catch (Exception e) {
 			e.printStackTrace();
 			if(dto==null){
@@ -1408,7 +1461,7 @@ public class AppController {
 			if(flag){
 				return DataUtil.encryptData(JSONUtil.toJSONString(JSONUtil.toJSONObject(dto)));
 			}
-			return JSONUtil.toJSONString(JSONObject.fromObject(dto));
+			return JSON.toJSONString(dto);
 		}
 	}
 
@@ -1503,14 +1556,14 @@ public class AppController {
 			List<AwardConfig> list = iAwardConfigService.queryAllAwardConfig();
 			dto.setResult("S");
 			dto.setData(list);
-			return JSONUtil.toJSONString(JSONObject.fromObject(dto));
+			return JSON.toJSONString(dto);
 		} catch (Exception e) {
 			logger.error("查询奖品配置信息异常");
 			dto.setResult("F");
 			dto.setErrorMsg("查询奖品配置信息异常");
 			e.printStackTrace();
 		}
-		return JSONUtil.toJSONString(JSONObject.fromObject(dto));
+		return JSON.toJSONString(dto);
 	}
 
 	/**
@@ -1529,7 +1582,7 @@ public class AppController {
 			dto = new ResultDto<>();
 			dto.setErrorMsg("抽奖活动已结束");
 			dto.setResult("F");
-			return JSONUtil.toJSONString(JSONObject.fromObject(dto));
+			return JSON.toJSONString(dto);
 		}
 		boolean flag = false;
 		if(StringUtils.isNotBlank(params)){
@@ -1540,8 +1593,8 @@ public class AppController {
 		if(flag){
 			params = DataUtil.decryptData(params);
 		}
-		JSONObject jsonObject = JSONObject.fromObject(params);
-		Integer userId = jsonObject.getInt("userId");
+		JSONObject jsonObject = JSON.parseObject(params);
+		Integer userId = jsonObject.getInteger("userId");
 		String userName = jsonObject.getString("userName");
 		String userMobile = jsonObject.getString("userMobile");
 		String enrollTimeStr = jsonObject.getString("enrollTime");
@@ -1553,7 +1606,7 @@ public class AppController {
 		uae.setUserName(userName);
 		try {
 			dto = iUserAwardExchangeService.saveUserAwardExchange(uae);
-			return JSONUtil.toJSONString(JSONObject.fromObject(dto));
+			return JSON.toJSONString(dto);
 		} catch (Exception e) {
 			logger.error("抽奖时异常");
 			dto = new ResultDto<>();
@@ -1561,7 +1614,7 @@ public class AppController {
 			dto.setErrorMsg("抽奖时异常");
 			e.printStackTrace();
 		}
-		return JSONUtil.toJSONString(JSONObject.fromObject(dto));
+		return JSON.toJSONString(dto);
 	}
 	
 	@ResponseBody
@@ -1581,7 +1634,7 @@ public class AppController {
 			e.printStackTrace();
 		}
 		
-		return JSONUtil.toJSONString(JSONObject.fromObject(dto));
+		return JSON.toJSONString(dto);
 	}
 	
 
@@ -1597,14 +1650,14 @@ public class AppController {
 		if(flag){
 			params = DataUtil.decryptData(params);
 		}
-		JSONObject obj = JSONObject.fromObject(params);
-		Integer userId = obj.getInt("userId");
+		JSONObject obj = JSON.parseObject(params);
+		Integer userId = obj.getInteger("userId");
 		ResultDto<List<UserAwardExchange>> dto = new ResultDto<>();
-		int pageSize = obj.getInt("pageSize");
-		int pageNum = obj.getInt("pageNum");
+		int pageSize = obj.getInteger("pageSize");
+		int pageNum = obj.getInteger("pageNum");
 		Page page = new Page();
 		page.setPage(pageNum);
-		page.setRows(pageNum);
+		page.setRows(pageSize);
 		UserAwardExchangeRequestForm form = new UserAwardExchangeRequestForm();
 		form.setUserId(userId);
 		try {
@@ -1618,7 +1671,7 @@ public class AppController {
 			logger.error("查询用户抽奖奖品信息异常");
 			e.printStackTrace();
 		}
-		return DataUtil.encryptData(JSONUtil.toJSONString(JSONObject.fromObject(dto)));
+		return DataUtil.encryptData(JSON.toJSONString(dto));
 	}
 
 	@ResponseBody
@@ -1635,7 +1688,7 @@ public class AppController {
 			dto.setResult("F");
 			dto.setErrorMsg("查询中奖用信息异常");
 		}
-		return JSONUtil.toJSONString(JSONObject.fromObject(dto));
+		return JSON.toJSONString(dto);
 	}
 
 	@ResponseBody
@@ -1650,8 +1703,8 @@ public class AppController {
 		if(flag){
 			params = DataUtil.decryptData(params);
 		}
-		JSONObject obj = JSONObject.fromObject(params);
-		int exId = obj.getInt("exId");
+		JSONObject obj = JSON.parseObject(params);
+		int exId = obj.getInteger("exId");
 		ResultDto<String> dto = null;
 		try {
 			dto = iUserAwardExchangeService.updateExchangeStatusById(exId);
@@ -1661,7 +1714,7 @@ public class AppController {
 			dto.setErrorMsg("保存用户兑奖信息时异常");
 			e.printStackTrace();
 		}
-		return DataUtil.encryptData(JSONUtil.toJSONString(JSONObject.fromObject(dto)));
+		return DataUtil.encryptData(JSON.toJSONString(dto));
 	}
 
 
@@ -1683,8 +1736,8 @@ public class AppController {
 		map.put("users",list);
 		String jsonStr = JSONUtil.toJSONString(map);
 		System.out.println(jsonStr);
-//		JSONObject object = JSONObject.fromObject(jsonStr);
-		JSONArray array = JSONArray.fromObject(jsonStr);
+//		JSONObject object = JSON.parseObject(jsonStr);
+		JSONArray array = JSONArray.parseArray(jsonStr);
 		System.out.println();
 //		List list1 = (List)JSONArray.toCollection(array, User.class);
 //		System.out.println(((User)list1.get(0)).getMobile());

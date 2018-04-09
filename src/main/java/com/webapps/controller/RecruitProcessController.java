@@ -1,16 +1,13 @@
 package com.webapps.controller;
 
-import com.webapps.common.bean.Page;
-import com.webapps.common.entity.Company;
-import com.webapps.common.entity.User;
-import com.webapps.common.form.EnrollmentRequestForm;
-import com.webapps.common.form.RateDtoRequestForm;
-import com.webapps.common.utils.JSONUtil;
-import com.webapps.common.utils.PropertiesUtil;
-import com.webapps.service.IEnrollmentService;
-import com.webapps.service.IRateService;
-import com.webapps.service.IUserService;
-import net.sf.json.JSONObject;
+import java.net.URLDecoder;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,13 +16,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.util.ArrayList;
-import java.util.List;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.webapps.common.bean.Page;
+import com.webapps.common.entity.Company;
+import com.webapps.common.entity.User;
+import com.webapps.common.form.EnrollmentRequestForm;
+import com.webapps.common.form.RateDtoRequestForm;
+import com.webapps.common.utils.PropertiesUtil;
+import com.webapps.service.IEnrollmentService;
+import com.webapps.service.IRateService;
+import com.webapps.service.IUserService;
 
 @Controller
 @RequestMapping("recruitProcess")
@@ -76,7 +77,7 @@ public class RecruitProcessController {
                 form.getUser().setName(URLDecoder.decode(form.getUser().getName(), "UTF-8"));
             }
             page = iEnrollmentService.loadRecruitProcess(page, form);
-            return JSONUtil.toJSONString(JSONObject.fromObject(page));
+            return JSON.toJSONString(page);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -99,7 +100,7 @@ public class RecruitProcessController {
     public String loadEntryStatisticsList(Model model, Page page, RateDtoRequestForm form) {
         try {
             page = iRateService.loadEntryStatisticsList(page, form);
-            return JSONUtil.toJSONString(JSONObject.fromObject(page));
+            return JSON.toJSONString(page);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -111,7 +112,7 @@ public class RecruitProcessController {
     public String loadExpireStatisticsList(Model model, Page page, RateDtoRequestForm form) {
         try {
             page = iRateService.loadExpireStatisticsList(page, form);
-            return JSONUtil.toJSONString(JSONObject.fromObject(page));
+            return JSONObject.toJSONString(page);
         } catch (Exception e) {
             e.printStackTrace();
         }

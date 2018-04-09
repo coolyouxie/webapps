@@ -1,10 +1,11 @@
 package com.webapps.controller;
 
-import com.webapps.common.bean.Page;
-import com.webapps.common.form.UserAwardExchangeRequestForm;
-import com.webapps.common.utils.JSONUtil;
-import com.webapps.service.IUserAwardExchangeService;
-import net.sf.json.JSONObject;
+import java.net.URLDecoder;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,10 +15,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import java.net.URLDecoder;
+import com.alibaba.fastjson.JSON;
+import com.webapps.common.bean.Page;
+import com.webapps.common.form.UserAwardExchangeRequestForm;
+import com.webapps.service.IUserAwardExchangeService;
 
 @Controller
 @RequestMapping("userAwardExchange")
@@ -50,7 +51,7 @@ public class UserAwardExchangeController {
                 form.setEnrollTimeEnd(form.getEnrollTimeEnd() + " 23:59:59");
             }
             page = iUserAwardExchangeService.loadUserAwardExchangeList(page, form);
-            return JSONUtil.toJSONString(JSONObject.fromObject(page));
+            return JSON.toJSONString(page);
         } catch (Exception e) {
             logger.error("查询奖品配置信息异常");
             e.printStackTrace();

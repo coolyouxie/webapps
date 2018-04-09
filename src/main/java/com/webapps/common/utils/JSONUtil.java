@@ -6,11 +6,13 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
+import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
+
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 
 /**
  * JSON工具类
@@ -21,7 +23,7 @@ public class JSONUtil {
 	 * 将List对象序列化为JSON文本
 	 */
 	public static <T> String toJSONString(List<T> list) {
-		JSONArray jsonArray = JSONArray.fromObject(list);
+		JSONArray jsonArray = JSONArray.parseArray(JSON.toJSONString(list));
 		return jsonArray.toString();
 	}
 
@@ -29,8 +31,7 @@ public class JSONUtil {
 	 * 将对象序列化为JSON文本
 	 */
 	public static String toJSONString(Object object) {
-		JSONArray jsonArray = JSONArray.fromObject(object);
-		return jsonArray.toString();
+		return JSON.toJSONString(object);
 	}
 	
 	/***
@@ -38,7 +39,7 @@ public class JSONUtil {
 	 */
 	public static String toJSONObjectString(Object object) {
 		if (object!=null) {
-			JSONObject jsObject = JSONObject.fromObject(object);
+			JSONObject jsObject = JSONObject.parseObject(JSON.toJSONString(object));
 			if (jsObject!=null) {
 				return jsObject.toString().replace("\\", "");
 			}
@@ -66,16 +67,14 @@ public class JSONUtil {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static List toArrayList(Object object) {
 		List arrayList = new ArrayList();
-
-		JSONArray jsonArray = JSONArray.fromObject(object);
-
+		JSONArray jsonArray = JSONArray.parseArray(JSON.toJSONString(object));
 		Iterator it = jsonArray.iterator();
 		while (it.hasNext()) {
 			JSONObject jsonObject = (JSONObject) it.next();
-
-			Iterator keys = jsonObject.keys();
-			while (keys.hasNext()) {
-				Object key = keys.next();
+			Set keys = jsonObject.keySet();
+			Iterator itKeys = keys.iterator();
+			while (itKeys.hasNext()) {
+				Object key = itKeys.next();
 				Object value = jsonObject.get(key);
 				arrayList.add(value);
 			}
@@ -86,24 +85,24 @@ public class JSONUtil {
 	/***
 	 * 将对象转换为Collection对象
 	 */
-	@SuppressWarnings("rawtypes")
-	public static Collection toCollection(Object object) {
-		JSONArray jsonArray = JSONArray.fromObject(object);
-		return JSONArray.toCollection(jsonArray);
-	}
+//	@SuppressWarnings("rawtypes")
+//	public static Collection toCollection(Object object) {
+//		JSONArray jsonArray = JSONArray.parseArray(JSON.toJSONString(object));
+//		return JSONArray.(jsonArray);
+//	}
 
 	/***
 	 * 将对象转换为JSON对象数组
 	 */
 	public static JSONArray toJSONArray(Object object) {
-		return JSONArray.fromObject(object);
+		return JSONArray.parseArray(JSON.toJSONString(object));
 	}
 
 	/***
 	 * 将对象转换为JSON对象
 	 */
 	public static JSONObject toJSONObject(Object object) {
-		return JSONObject.fromObject(object);
+		return JSONObject.parseObject(JSON.toJSONString(object));
 	}
 
 	/***
@@ -112,11 +111,11 @@ public class JSONUtil {
 	@SuppressWarnings("rawtypes")
 	public static List<Map<String, Object>> toList(Object object) {
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
-		JSONArray jsonArray = JSONArray.fromObject(object);
+		JSONArray jsonArray = JSONArray.parseArray(JSON.toJSONString(object));
 		for (Object obj : jsonArray) {
 			JSONObject jsonObject = (JSONObject) obj;
 			Map<String, Object> map = new HashMap<String, Object>();
-			Iterator it = jsonObject.keys();
+			Iterator it = jsonObject.entrySet().iterator();
 			while (it.hasNext()) {
 				String key = (String) it.next();
 				Object value = jsonObject.get(key);
@@ -134,26 +133,11 @@ public class JSONUtil {
 				return true;
 			}
 			
-			JSONObject jsonObj = JSONUtil.toJSONObject(jsonSourceStr);
+			JSONObject jsonObj = JSON.parseObject(jsonSourceStr);
 			if(jsonObj.containsKey(keyStr)){
 				return true;
 			}
-//			List<String> keyList = new ArrayList<String>();
-//			Iterator<String> it = jsonObj.keys(); 
-//			while(it.hasNext()){
-//				String key = it.next();
-//				keyList.add(key);
-//			}
-//			ret = keyList.contains(keyStr);
 		}
-		
-		
-//		if(StringUtils.isNotBlank(jsonSourceStr)&&StringUtils.isNotBlank(keyStr)){
-//			ret = jsonSourceStr.contains(keyStr);
-//		}
-//		if(StringUtils.isNotBlank(jsonSourceStr)&&StringUtils.isBlank(keyStr)){
-//			ret = true;
-//		}
 		return ret;
 	}
 	
@@ -167,7 +151,7 @@ public class JSONUtil {
 		boolean ret = false;
 		if(StringUtils.isNotBlank(jsonSourceStr)){
 			if(StringUtils.isNotBlank(keyStr)){
-				JSONObject jsonObj = JSONUtil.toJSONObject(jsonSourceStr);
+				JSONObject jsonObj = JSON.parseObject(jsonSourceStr);
 				if(jsonObj.containsKey(keyStr)){
 					if(StringUtils.isNotBlank(jsonObj.getString(keyStr))){
 						return true;
@@ -191,6 +175,8 @@ public class JSONUtil {
 	
 	public static void main(String[] args) {
 		String src = "{'bankNo':8,'bankUserNo':'1','voucherNo':'530111198502218611','reqNo':'','signature':'DA53A4364DC305C049B8E14475B711ED'}";
+		JSONObject obj = JSON.parseObject(src);
+		System.out.println(obj.getString("bankNo"));
 		System.out.println(isContainsKey(src, ""));
 		System.out.println(isContainsKey(src, "bankNo"));
 		System.out.println(isContainsKey(src, "123"));

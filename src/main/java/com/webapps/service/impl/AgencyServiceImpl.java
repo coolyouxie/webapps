@@ -6,6 +6,8 @@ import com.webapps.common.entity.Agency;
 import com.webapps.common.form.AgencyRequestForm;
 import com.webapps.mapper.IAgencyMapper;
 import com.webapps.service.IAgencyService;
+
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
@@ -76,6 +78,20 @@ public class AgencyServiceImpl implements IAgencyService {
 		ResultDto<String> dto = new ResultDto<String>();
 		iAgencyMapper.deleteByIdInLogic(id);
 		dto.setResult("S");
+		return dto;
+	}
+
+	@Override
+	public ResultDto<List<Agency>> queryAllAgencyBy(AgencyRequestForm agency) throws Exception {
+		List<Agency> list = iAgencyMapper.queryAllBy(agency);
+		ResultDto<List<Agency>> dto = new ResultDto<List<Agency>>();
+		if(CollectionUtils.isNotEmpty(list)){
+			dto.setData(list);
+			dto.setResult("S");
+		}else{
+			dto.setErrorMsg("无可用门店信息");
+			dto.setResult("F");
+		}
 		return dto;
 	}
 

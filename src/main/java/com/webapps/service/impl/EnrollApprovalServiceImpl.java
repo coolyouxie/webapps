@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import com.webapps.common.form.EnrollmentRequestForm;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -17,6 +16,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
+import com.alibaba.fastjson.JSONObject;
 import com.webapps.common.bean.Page;
 import com.webapps.common.bean.ResultDto;
 import com.webapps.common.dto.EnrollApprovalInfoDto;
@@ -33,7 +33,6 @@ import com.webapps.common.entity.User;
 import com.webapps.common.entity.UserWallet;
 import com.webapps.common.form.EnrollApprovalRequestForm;
 import com.webapps.common.utils.DateUtil;
-import com.webapps.common.utils.PropertiesUtil;
 import com.webapps.mapper.IBillRecordMapper;
 import com.webapps.mapper.ICompanyMapper;
 import com.webapps.mapper.IEnrollApprovalMapper;
@@ -48,8 +47,6 @@ import com.webapps.service.IEnrollApprovalService;
 import com.webapps.service.IParamConfigService;
 import com.webapps.service.IUserAwardService;
 import com.webapps.service.impl.ParamConfigService.ParamConfigType;
-
-import net.sf.json.JSONObject;
 
 @Service
 @Transactional
@@ -302,9 +299,9 @@ public class EnrollApprovalServiceImpl implements IEnrollApprovalService {
 	@Transactional(propagation = Propagation.REQUIRED,rollbackFor={Exception.class, RuntimeException.class,MyBatisSystemException.class})
 	public ResultDto<EnrollApproval> applyEntryApproval(JSONObject params) {
 		ResultDto<EnrollApproval> dto = new ResultDto<EnrollApproval>();
-		Integer enrollmentId = params.getInt("enrollmentId");
+		Integer enrollmentId = params.getInteger("enrollmentId");
 		String entryDateStr = params.getString("entryDate");
-		Integer userId = params.getInt("userId");
+		Integer userId = params.getInteger("userId");
 		if(StringUtils.isBlank(entryDateStr)){
 			dto.setErrorMsg("入职日期未填写");
 			dto.setResult("F");
@@ -375,8 +372,8 @@ public class EnrollApprovalServiceImpl implements IEnrollApprovalService {
 	@Transactional(propagation = Propagation.REQUIRED,rollbackFor={Exception.class, RuntimeException.class,MyBatisSystemException.class})
 	public ResultDto<EnrollApproval> applyExpireApproval(JSONObject params) {
 		ResultDto<EnrollApproval> dto = new ResultDto<EnrollApproval>();
-		Integer enrollmentId = params.getInt("enrollmentId");
-		Integer userId = params.getInt("userId");
+		Integer enrollmentId = params.getInteger("enrollmentId");
+		Integer userId = params.getInteger("userId");
 		Date today = new Date();
 		try {
 			Enrollment enrollment = iEnrollmentMapper.getById(enrollmentId);
@@ -679,9 +676,9 @@ public class EnrollApprovalServiceImpl implements IEnrollApprovalService {
 	@Override
 	public ResultDto<EnrollApproval> applyExpireApprovalWithCashbackDays(JSONObject params) {
 		ResultDto<EnrollApproval> dto = new ResultDto<EnrollApproval>();
-		Integer enrollmentId = params.getInt("enrollmentId");
-		Integer userId = params.getInt("userId");
-		Integer cashbackDays = params.getInt("cashbackDays");
+		Integer enrollmentId = params.getInteger("enrollmentId");
+		Integer userId = params.getInteger("userId");
+		Integer cashbackDays = params.getInteger("cashbackDays");
 		try {
 			//先找到用户的报名信息
 			Enrollment enrollment = iEnrollmentMapper.getById(enrollmentId);

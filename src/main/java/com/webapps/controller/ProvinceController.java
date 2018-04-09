@@ -11,12 +11,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.alibaba.fastjson.JSON;
 import com.webapps.common.bean.ResultDto;
 import com.webapps.common.entity.Province;
-import com.webapps.common.utils.JSONUtil;
 import com.webapps.service.IProvinceService;
-
-import net.sf.json.JSONObject;
 
 @Controller
 @RequestMapping("/province")
@@ -48,7 +46,7 @@ public class ProvinceController {
 	public String queryProvinceByParentId(Model model,Integer parentId,HttpServletRequest request,HttpServletResponse response){
 		ResultDto<List<Province>> provinces = iProvinceService.queryProvinceByParentId(parentId);
 		model.addAttribute("response", provinces);
-		return JSONUtil.toJSONString(JSONObject.fromObject(provinces));
+		return JSON.toJSONString(provinces);
 	}
 	
 	/**

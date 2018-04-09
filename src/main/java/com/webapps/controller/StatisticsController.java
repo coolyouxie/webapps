@@ -14,13 +14,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.alibaba.fastjson.JSON;
 import com.webapps.common.bean.Page;
-import com.webapps.common.entity.User;
 import com.webapps.common.form.RateDtoRequestForm;
-import com.webapps.common.utils.JSONUtil;
 import com.webapps.service.IRateService;
-
-import net.sf.json.JSONObject;
 
 @Controller
 @RequestMapping("statistics")
@@ -42,7 +39,7 @@ public class StatisticsController {
                 form.setTalkerName(URLDecoder.decode(form.getTalkerName(), "UTF-8"));
             }
             page = iRateService.loadRateDtoList(page, form);
-            return JSONUtil.toJSONString(JSONObject.fromObject(page));
+            return JSON.toJSONString(page);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -65,7 +62,7 @@ public class StatisticsController {
     public String loadEntryStatisticsList(Model model,Page page,RateDtoRequestForm form){
         try {
             page = iRateService.loadEntryStatisticsList(page,form);
-            return JSONUtil.toJSONString(JSONObject.fromObject(page));
+            return JSON.toJSONString(page);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -77,7 +74,7 @@ public class StatisticsController {
     public String loadExpireStatisticsList(Model model,Page page,RateDtoRequestForm form){
         try {
             page = iRateService.loadExpireStatisticsList(page,form);
-            return JSONUtil.toJSONString(JSONObject.fromObject(page));
+            return JSON.toJSONString(page);
         } catch (Exception e) {
             e.printStackTrace();
         }

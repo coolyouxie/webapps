@@ -1,12 +1,11 @@
 package com.webapps.controller;
 
+import java.net.URLDecoder;
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import com.webapps.common.entity.Picture;
-import com.webapps.common.utils.JSONUtil;
-import com.webapps.common.utils.PasswordEncryptUtil;
-import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,17 +15,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.alibaba.fastjson.JSON;
 import com.webapps.common.bean.Page;
 import com.webapps.common.bean.ResultDto;
+import com.webapps.common.entity.Picture;
 import com.webapps.common.entity.User;
 import com.webapps.common.form.UserRequestForm;
-import com.webapps.service.IUserService;
 import com.webapps.service.IPictureService;
-
-import net.sf.json.util.JSONUtils;
-
-import java.net.URLDecoder;
-import java.util.List;
+import com.webapps.service.IUserService;
 
 @Controller
 @RequestMapping("user")
@@ -79,7 +75,7 @@ public class UserController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return JSONUtil.toJSONString(JSONObject.fromObject(page));
+		return JSON.toJSONString(page);
 	}
 	
 	@RequestMapping("/saveUser")
@@ -137,7 +133,7 @@ public class UserController {
 			dto = new ResultDto<User>();
 			dto.setResult("F");
 		}
-		return JSONUtils.valueToString(dto);
+		return JSON.toJSONString(dto);
 	}
 	
 	@ResponseBody
@@ -175,7 +171,7 @@ public class UserController {
 			dto.setResult("F");
 			dto.setErrorMsg("重置密码异常");
 		}
-		return JSONUtil.toJSONString(JSONObject.fromObject(dto));
+		return JSON.toJSONString(dto);
 	}
 	
 }

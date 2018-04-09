@@ -1,14 +1,11 @@
 package com.webapps.controller;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.webapps.common.entity.ApplyExpenditure;
-import com.webapps.common.form.BillRecordRequestForm;
-import com.webapps.common.form.EnrollApprovalRequestForm;
-import com.webapps.service.IBillRecordService;
-import com.webapps.service.IEnrollApprovalService;
-import com.webapps.service.IUserService;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,17 +14,20 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.webapps.common.bean.Page;
 import com.webapps.common.bean.ResultDto;
+import com.webapps.common.entity.ApplyExpenditure;
 import com.webapps.common.entity.User;
 import com.webapps.common.form.ApplyExpenditureRequestForm;
+import com.webapps.common.form.BillRecordRequestForm;
+import com.webapps.common.form.EnrollApprovalRequestForm;
 import com.webapps.common.utils.JSONUtil;
 import com.webapps.service.IApplyExpenditureService;
-
-import net.sf.json.JSONObject;
-
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
+import com.webapps.service.IBillRecordService;
+import com.webapps.service.IEnrollApprovalService;
+import com.webapps.service.IUserService;
 
 @Controller
 @RequestMapping(value="applyExpenditure")
@@ -68,7 +68,7 @@ public class ApplyExpenditureController {
 //			form.setApproverId(user.getId());
 		}
 		page = iApplyExpenditureService.loadPageList(page, form);
-		return JSONUtil.toJSONString(JSONObject.fromObject(page));
+		return JSONObject.toJSONString(page);
 	}
 	
 	@ResponseBody
@@ -76,7 +76,7 @@ public class ApplyExpenditureController {
 	public String expenditureApprovalById(Integer id,Integer state,String reason,HttpServletRequest request){
 		User user = (User) request.getSession().getAttribute("user");
 		ResultDto<String> dto = iApplyExpenditureService.approveById(id, state, user.getId(), reason);
-		return JSONUtil.toJSONString(JSONObject.fromObject(dto));
+		return JSON.toJSONString(dto);
 	}
 
 	@RequestMapping(value="/toApproveExpenditurePage")
@@ -116,7 +116,7 @@ public class ApplyExpenditureController {
 		form.setType(2);
 		form.setState(1);
 		page = iEnrollApprovalService.loadExpireApprovePage(page,form);
-		return JSONUtil.toJSONString(JSONObject.fromObject(page));
+		return JSONUtil.toJSONString(page);
 	}
 
 	@ResponseBody
@@ -124,11 +124,11 @@ public class ApplyExpenditureController {
 	public String loadBillRecordPage(Model model,Page page,BillRecordRequestForm form){
 		try {
 			page = iBillRecordService.loadPageList(page, form);
-			return JSONUtil.toJSONString(JSONObject.fromObject(page));
+			return JSONUtil.toJSONString(page);
 		} catch (Exception e) {
 			logger.error("查询红包记录异常");
 			e.printStackTrace();
-			return JSONUtil.toJSONString(JSONObject.fromObject(page));
+			return JSONUtil.toJSONString(page);
 		}
 	}
 }
