@@ -16,18 +16,18 @@ function loadDistrict(contextPath,type) {
         }
     }
     if (type == "city") {
+    	  $("#city").empty();
+          $("#city").append("<option value='-1'>-请选择-</option>");
+          $("#area").empty();
+          $("#area").append("<option value='-1'>-请选择-</option>");
         if ($("#province").val() == -1) {
-            $("#city").empty();
-            $("#city").append("<option value='-1'>-请选择-</option>");
-            $("#area").empty();
-            $("#area").append("<option value='-1'>-请选择-</option>");
             return;
         }
     }
     if (type == "area") {
+    	$("#area").empty();
+        $("#area").append("<option value='-1'>-请选择-</option>");
         if ($("#city").val() == -1) {
-            $("#area").empty();
-            $("#area").append("<option value='-1'>-请选择-</option>");
             return;
         }
     }
