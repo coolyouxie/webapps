@@ -83,16 +83,15 @@ public class AgencyServiceImpl implements IAgencyService {
 
 	@Override
 	public ResultDto<List<Agency>> queryAllAgencyBy(AgencyRequestForm agency) throws Exception {
+		ResultDto<List<Agency>> dto = new ResultDto<>();
 		List<Agency> list = iAgencyMapper.queryAllBy(agency);
-		ResultDto<List<Agency>> dto = new ResultDto<List<Agency>>();
-		if(CollectionUtils.isNotEmpty(list)){
+		if (CollectionUtils.isNotEmpty(list)) {
 			dto.setData(list);
 			dto.setResult("S");
-		}else{
+		} else {
 			dto.setErrorMsg("无可用门店信息");
 			dto.setResult("F");
 		}
 		return dto;
 	}
-
 }

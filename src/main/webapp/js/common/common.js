@@ -85,5 +85,39 @@ function loadDistrictByParentId(contextPath,parentId,type){
 				}
 			}
 		}
-	})
+	});
+}
+
+/**
+ * 根据行政区ID加载门店信息
+ * @param contextPath
+ * @param districtId
+ * @param type
+ */
+function loadAgencyByDistrictId(contextPath,districtId){
+    if(districtId==-1){
+        return;
+    }
+    $.ajax({
+        url:contextPath+"/agency/loadAgencyByDistrictId",
+        type:"POST",
+        dataType:"JSON",
+        data:{
+            areaId:districtId
+        },
+        success:function(response){
+            if(response&&response.result=="S"){
+                var agencyList = response.data;
+                $("#agency").empty();
+                $("#agency").append("<option value='-1'>-请选择-</option>");
+                for(var i=0;i<agencyList.length;i++){
+                    if($("#curAgencyId").val()==agencyList[i].id){
+                        $("#agency").append("<option value='"+agencyList[i].id+"' selected='selected'>"+agencyList[i].name+"</option>");
+                    }else{
+                        $("#agency").append("<option value='"+agencyList[i].id+"'>"+agencyList[i].name+"</option>");
+                    }
+                }
+            }
+        }
+    });
 }

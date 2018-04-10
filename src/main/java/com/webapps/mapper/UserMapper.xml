@@ -1,46 +1,50 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.webapps.mapper.IUserMapper">
-	<resultMap id="resultMap" type="com.webapps.common.entity.User">
-		<id column="ID" jdbcType="DECIMAL" property="id" />
-		<result column="NAME" jdbcType="VARCHAR" property="name" />
-		<result column="account" jdbcType="VARCHAR" property="account" />
-		<result column="password" jdbcType="VARCHAR" property="password" />
-		<result column="token" jdbcType="VARCHAR" property="token" />
-		<result column="id_Card_No" jdbcType="VARCHAR" property="idCardNo" />
-		<result column="gender" jdbcType="VARCHAR" property="gender" />
-		<result column="age" jdbcType="DECIMAL" property="age" />
-		<result column="telephone" jdbcType="VARCHAR" property="telephone" />
-		<result column="mobile" jdbcType="VARCHAR" property="mobile" />
-		<result column="qq" jdbcType="VARCHAR" property="qq" />
-		<result column="weiXin" jdbcType="VARCHAR" property="weiXin" />
-		<result column="email" jdbcType="VARCHAR" property="email" />
-		<result column="home_Address" jdbcType="VARCHAR" property="homeAddress" />
-		<result column="address" jdbcType="VARCHAR" property="address" />
-		<result column="user_type" jdbcType="DECIMAL" property="userType" />
-		<result column="login_State" jdbcType="VARCHAR" property="loginState" />
-		<result column="education_Id" jdbcType="VARCHAR" property="educationId" />
-		<result column="data_state" jdbcType="DECIMAL" property="dataState" />
-		<result column="create_time" jdbcType="VARCHAR" property="createTime" />
-		<result column="UPDATE_TIME" jdbcType="VARCHAR" property="updateTime" />
-		<result column="user_wallet_id" jdbcType="DECIMAL" property="userWallet.id" />
-		<result column="user_wallet_fee" jdbcType="DECIMAL" property="userWallet.fee" />
-		<result column="current_state" jdbcType="DECIMAL" property="currentState" />
-		<result column="is_payed_recommend_fee" jdbcType="DECIMAL" property="isPayedRecommendFee" />
-		<result column="bank_card_num" jdbcType="VARCHAR" property="bankCardNum" />
-		<result column="invite_code" jdbcType="VARCHAR" property="inviteCode" />
-		<result column="award_flag" jdbcType="VARCHAR" property="awardFlag" />
-	</resultMap>
+    <resultMap id="resultMap" type="com.webapps.common.entity.User">
+        <id column="ID" jdbcType="DECIMAL" property="id"/>
+        <result column="NAME" jdbcType="VARCHAR" property="name"/>
+        <result column="account" jdbcType="VARCHAR" property="account"/>
+        <result column="password" jdbcType="VARCHAR" property="password"/>
+        <result column="token" jdbcType="VARCHAR" property="token"/>
+        <result column="id_Card_No" jdbcType="VARCHAR" property="idCardNo"/>
+        <result column="gender" jdbcType="VARCHAR" property="gender"/>
+        <result column="age" jdbcType="DECIMAL" property="age"/>
+        <result column="telephone" jdbcType="VARCHAR" property="telephone"/>
+        <result column="mobile" jdbcType="VARCHAR" property="mobile"/>
+        <result column="qq" jdbcType="VARCHAR" property="qq"/>
+        <result column="weiXin" jdbcType="VARCHAR" property="weiXin"/>
+        <result column="email" jdbcType="VARCHAR" property="email"/>
+        <result column="home_Address" jdbcType="VARCHAR" property="homeAddress"/>
+        <result column="address" jdbcType="VARCHAR" property="address"/>
+        <result column="user_type" jdbcType="DECIMAL" property="userType"/>
+        <result column="login_State" jdbcType="VARCHAR" property="loginState"/>
+        <result column="education_Id" jdbcType="VARCHAR" property="educationId"/>
+        <result column="data_state" jdbcType="DECIMAL" property="dataState"/>
+        <result column="create_time" jdbcType="VARCHAR" property="createTime"/>
+        <result column="UPDATE_TIME" jdbcType="VARCHAR" property="updateTime"/>
+        <result column="user_wallet_id" jdbcType="DECIMAL" property="userWallet.id"/>
+        <result column="user_wallet_fee" jdbcType="DECIMAL" property="userWallet.fee"/>
+        <result column="current_state" jdbcType="DECIMAL" property="currentState"/>
+        <result column="is_payed_recommend_fee" jdbcType="DECIMAL" property="isPayedRecommendFee"/>
+        <result column="bank_card_num" jdbcType="VARCHAR" property="bankCardNum"/>
+        <result column="invite_code" jdbcType="VARCHAR" property="inviteCode"/>
+        <result column="award_flag" jdbcType="VARCHAR" property="awardFlag"/>
+        <result column="agency_id" jdbcType="DECIMAL" property="agencyId"/>
+        <result column="agency_province_id" jdbcType="DECIMAL" property="agencyProvinceId"/>
+        <result column="agency_city_id" jdbcType="DECIMAL" property="agencyCityId"/>
+        <result column="agency_area_id" jdbcType="DECIMAL" property="agencyAreaId"/>
+    </resultMap>
 
-	<sql id="select_columns">
+    <sql id="select_columns">
 		tu.ID,tu.account,tu.password,tu.token,tu.name,tu. gender,tu. age,tu. telephone,tu. mobile,
 		tu.qq,tu.weiXin,tu.email,tu.home_Address,tu.address,tu.id_card_no,tu.user_type,tu.login_State,
 		tu.education_Id,tu.data_state,tu.CREATE_TIME,tu.UPDATE_TIME,tu.current_state,tu.is_payed_recommend_fee,
-		tu.bank_card_num,invite_code,award_flag
+		tu.bank_card_num,invite_code,award_flag,agency_id,agency_province_id,agency_city_id,agency_area_id
 	</sql>
 
-	<sql id="insert_columns">
+    <sql id="insert_columns">
 		account,
 		password,
 		token,
@@ -64,181 +68,189 @@
 		is_payed_recommend_fee,
 		bank_card_num,
 		invite_code,
-		award_flag
+		award_flag,
+		agency_id,
+		agency_province_id,
+		agency_city_id,
+		agency_area_id
 	</sql>
 
-	<select id="getById" resultMap="resultMap">
+    <select id="getById" resultMap="resultMap">
 		select * from t_user where id = #{id}
 	</select>
 
-	<update id="updateById">
-		UPDATE t_user
-		<set>
-			<if test="obj.name != null and obj.name != ''">
-				name = #{obj.name,jdbcType=VARCHAR},
-			</if>
-			<if test="obj.telephone != null and obj.telephone != null and obj.telephone != ''">
-				telephone = #{obj.telephone,jdbcType=VARCHAR},
-			</if>
-			<if test="obj.idCardNo != null and obj.idCardNo != ''">
-				id_card_no = #{obj.idCardNo,jdbcType=VARCHAR},
-			</if>
-			<if test="obj.gender != null and obj.gender != '' or obj.gender == 0">
-				gender = #{obj.gender,jdbcType=DECIMAL},
-			</if>
-			<if test="obj.password != null and obj.password != '' ">
-				password = #{obj.password,jdbcType=VARCHAR},
-			</if>
-			<if test="obj.token != null and obj.token != '' ">
-				token = #{obj.token,jdbcType=VARCHAR},
-			</if>
-			<if test="obj.age != null and obj.age != ''">
-				age = #{obj.age,jdbcType=DECIMAL},
-			</if>
-			<if test="obj.currentState != null and obj.currentState != '' or obj.currentState == 0">
-				current_state = #{obj.currentState,jdbcType=DECIMAL},
-			</if>
-			<if test="obj.isPayedRecommendFee != null and obj.isPayedRecommendFee != '' or obj.isPayedRecommendFee == 0">
-				is_payed_recommend_fee = #{obj.isPayedRecommendFee,jdbcType=DECIMAL},
-			</if>
-			<if test="obj.bankCardNum != null and obj.bankCardNum != ''">
-				bank_card_num = #{obj.bankCardNum,jdbcType=VARCHAR},
-			</if>
-			<if test="obj.inviteCode != null and obj.inviteCode != ''">
-				invite_code = #{obj.inviteCode,jdbcType=VARCHAR},
-			</if>
-			<if test="obj.awardFlag != null and obj.awardFlag != ''">
-				award_flag = #{obj.awardFlag,jdbcType=VARCHAR},
-			</if>
-			weiXin = #{obj.weiXin,jdbcType=VARCHAR},
-			email = #{obj.email,jdbcType=VARCHAR},
-			home_Address = #{obj.homeAddress,jdbcType=VARCHAR},
-			address = #{obj.address,jdbcType=VARCHAR},
-			login_State = #{obj.loginState,jdbcType=DECIMAL},
-			education_Id = #{obj.educationId,jdbcType=DECIMAL},
-			qq = #{obj.qq,jdbcType=VARCHAR},
-			mobile = #{obj.mobile,jdbcType=VARCHAR},
-			update_time = #{obj.updateTime}
-		</set>
-		WHERE ID = #{id,jdbcType=DECIMAL}
-	</update>
+    <update id="updateById">
+        UPDATE t_user
+        <set>
+            <if test="obj.name != null and obj.name != ''">
+                name = #{obj.name,jdbcType=VARCHAR},
+            </if>
+            <if test="obj.telephone != null and obj.telephone != null and obj.telephone != ''">
+                telephone = #{obj.telephone,jdbcType=VARCHAR},
+            </if>
+            <if test="obj.idCardNo != null and obj.idCardNo != ''">
+                id_card_no = #{obj.idCardNo,jdbcType=VARCHAR},
+            </if>
+            <if test="obj.gender != null and obj.gender != '' or obj.gender == 0">
+                gender = #{obj.gender,jdbcType=DECIMAL},
+            </if>
+            <if test="obj.password != null and obj.password != '' ">
+                password = #{obj.password,jdbcType=VARCHAR},
+            </if>
+            <if test="obj.token != null and obj.token != '' ">
+                token = #{obj.token,jdbcType=VARCHAR},
+            </if>
+            <if test="obj.age != null and obj.age != ''">
+                age = #{obj.age,jdbcType=DECIMAL},
+            </if>
+            <if test="obj.currentState != null and obj.currentState != '' or obj.currentState == 0">
+                current_state = #{obj.currentState,jdbcType=DECIMAL},
+            </if>
+            <if test="obj.isPayedRecommendFee != null and obj.isPayedRecommendFee != '' or obj.isPayedRecommendFee == 0">
+                is_payed_recommend_fee = #{obj.isPayedRecommendFee,jdbcType=DECIMAL},
+            </if>
+            <if test="obj.bankCardNum != null and obj.bankCardNum != ''">
+                bank_card_num = #{obj.bankCardNum,jdbcType=VARCHAR},
+            </if>
+            <if test="obj.inviteCode != null and obj.inviteCode != ''">
+                invite_code = #{obj.inviteCode,jdbcType=VARCHAR},
+            </if>
+            <if test="obj.awardFlag != null and obj.awardFlag != ''">
+                award_flag = #{obj.awardFlag,jdbcType=VARCHAR},
+            </if>
+            weiXin = #{obj.weiXin,jdbcType=VARCHAR},
+            email = #{obj.email,jdbcType=VARCHAR},
+            home_Address = #{obj.homeAddress,jdbcType=VARCHAR},
+            address = #{obj.address,jdbcType=VARCHAR},
+            login_State = #{obj.loginState,jdbcType=DECIMAL},
+            education_Id = #{obj.educationId,jdbcType=DECIMAL},
+            qq = #{obj.qq,jdbcType=VARCHAR},
+            mobile = #{obj.mobile,jdbcType=VARCHAR},
+            update_time = #{obj.updateTime}
+        </set>
+        WHERE ID = #{id,jdbcType=DECIMAL}
+    </update>
 
-	<select id="queryCount" resultType="java.lang.Integer">
-		SELECT count(1) FROM t_user
-		<trim prefix="WHERE" prefixOverrides="AND">
-			data_state = 1 
-			<if test="obj.keyWords !=null and obj.keyWords != ''">
-				AND (
-					name like concat('%', #{obj.keyWords}, '%')
-					or
-					account like concat('%', #{obj.keyWords}, '%')
-					or
-					id_card_no like concat('%', #{obj.keyWords}, '%')
-					)
-				
-			</if>
-			<if test="obj.age != null and obj.age != ''">
-				and age = #{obj.age,jdbcType=DECIMAL}
-			</if>
-			<if test="obj.gender != null and obj.gender != ''">
-				and gender = #{obj.gender,jdbcType=DECIMAL}
-			</if>
-			<if test="obj.mobile != null and obj.mobile != ''">
-				and mobile = #{obj.mobile,jdbcType=VARCHAR}
-			</if>
-			<if test="obj.userType != null and obj.userType != ''">
-				and user_type = #{obj.userType,jdbcType=DECIMAL}
-			</if>
-		</trim>
-	</select>
+    <select id="queryCount" resultType="java.lang.Integer">
+        SELECT count(1) FROM t_user
+        <trim prefix="WHERE" prefixOverrides="AND">
+            data_state = 1
+            <if test="obj.keyWords !=null and obj.keyWords != ''">
+                AND (
+                name like concat('%', #{obj.keyWords}, '%')
+                or
+                account like concat('%', #{obj.keyWords}, '%')
+                or
+                id_card_no like concat('%', #{obj.keyWords}, '%')
+                )
 
-	<!-- 根据productId获取product -->
-	<select id="queryPage" resultMap="resultMap">
-		<include refid="ORACLE.paginationStart" />
-		SELECT
-		<include refid="select_columns" />,tuw.id as user_wallet_id,tuw.fee user_wallet_fee
-		FROM t_user tu left join t_user_wallet tuw on tuw.user_id = tu.id
-		<trim prefix="WHERE" prefixOverrides="AND">
-			tu.data_state = 1 
-			<if test="obj.keyWords !=null and obj.keyWords != ''">
-				AND (
-					tu.name like concat('%', #{obj.keyWords}, '%')
-					or
-					tu.account like concat('%', #{obj.keyWords}, '%')
-					or
-					tu.id_card_no like concat('%', #{obj.keyWords}, '%')
-					)
-			</if>
-			<if test="obj.name !=null and obj.name != ''">
-				AND tu.name like concat('%', #{obj.name}, '%')
-			</if>
-			<if test="obj.age != null and obj.age != ''">
-				and tu.age = #{obj.age,jdbcType=DECIMAL}
-			</if>
-			<if test="obj.gender != null and obj.gender != ''">
-				and tu.gender = #{obj.gender,jdbcType=VARCHAR}
-			</if>
-			<if test="obj.mobile != null and obj.mobile != ''">
-				and tu.mobile = #{obj.mobile,jdbcType=DECIMAL}
-			</if>
-			<if test="obj.userType != null and obj.userType != ''">
-				and tu.user_type = #{obj.userType,jdbcType=VARCHAR}
-			</if>
-		</trim>
-		order by tu.name
-		<include refid="ORACLE.paginationEnd" />
-	</select>
-	
-	<select id="queryUserByAccount" resultMap="resultMap">
+            </if>
+            <if test="obj.age != null and obj.age != ''">
+                and age = #{obj.age,jdbcType=DECIMAL}
+            </if>
+            <if test="obj.gender != null and obj.gender != ''">
+                and gender = #{obj.gender,jdbcType=DECIMAL}
+            </if>
+            <if test="obj.mobile != null and obj.mobile != ''">
+                and mobile = #{obj.mobile,jdbcType=VARCHAR}
+            </if>
+            <if test="obj.userType != null and obj.userType != ''">
+                and user_type = #{obj.userType,jdbcType=DECIMAL}
+            </if>
+        </trim>
+    </select>
+
+    <!-- 根据productId获取product -->
+    <select id="queryPage" resultMap="resultMap">
+        <include refid="ORACLE.paginationStart"/>
+        SELECT
+        <include refid="select_columns"/>,tuw.id as user_wallet_id,tuw.fee user_wallet_fee
+        FROM t_user tu left join t_user_wallet tuw on tuw.user_id = tu.id
+        <trim prefix="WHERE" prefixOverrides="AND">
+            tu.data_state = 1
+            <if test="obj.keyWords !=null and obj.keyWords != ''">
+                AND (
+                tu.name like concat('%', #{obj.keyWords}, '%')
+                or
+                tu.account like concat('%', #{obj.keyWords}, '%')
+                or
+                tu.id_card_no like concat('%', #{obj.keyWords}, '%')
+                )
+            </if>
+            <if test="obj.name !=null and obj.name != ''">
+                AND tu.name like concat('%', #{obj.name}, '%')
+            </if>
+            <if test="obj.age != null and obj.age != ''">
+                and tu.age = #{obj.age,jdbcType=DECIMAL}
+            </if>
+            <if test="obj.gender != null and obj.gender != ''">
+                and tu.gender = #{obj.gender,jdbcType=VARCHAR}
+            </if>
+            <if test="obj.mobile != null and obj.mobile != ''">
+                and tu.mobile = #{obj.mobile,jdbcType=DECIMAL}
+            </if>
+            <if test="obj.userType != null and obj.userType != ''">
+                and tu.user_type = #{obj.userType,jdbcType=VARCHAR}
+            </if>
+        </trim>
+        order by tu.name
+        <include refid="ORACLE.paginationEnd"/>
+    </select>
+
+    <select id="queryUserByAccount" resultMap="resultMap">
 		select * from t_user where data_state = 1 and account = #{account}
 	</select>
-	
-	<select id="queryByInviteCode" resultMap="resultMap">
+
+    <select id="queryByInviteCode" resultMap="resultMap">
 		select * from t_user where data_state = 1 and invite_code = #{inviteCode}
 	</select>
 
-	<select id="deleteById" resultType="java.lang.Integer">
+    <select id="deleteById" resultType="java.lang.Integer">
 		DELETE t_user where id = #{id,jdbcType=DECIMAL}
 	</select>
-	
-	<select id="queryUsersByUserType" resultMap="resultMap">
+
+    <select id="queryUsersByUserType" resultMap="resultMap">
 		select * from t_user where user_type=#{userType}
 	</select>
-	
-	<update id="deleteByIdInLogic">
+
+    <update id="deleteByIdInLogic">
 		update t_user set data_state = 0 where id = #{id,jdbcType=DECIMAL}
 	</update>
-	
-	<insert id="insert" useGeneratedKeys="true" keyProperty="obj.id">
-		insert into t_user (
-			<include refid="insert_columns" />
-		)
-		values
-		(
-			#{obj.account},
-			#{obj.password},
-			#{obj.token},
-			#{obj.name},
-			#{obj.gender},
-			#{obj.age},
-			#{obj.telephone},
-			#{obj.mobile},
-			#{obj.qq},
-			#{obj.weiXin},
-			#{obj.email},
-			#{obj.homeAddress},
-			#{obj.address},
-			#{obj.idCardNo},
-			#{obj.userType},
-			#{obj.loginState},
-			#{obj.educationId},
-			#{obj.dataState},
-			#{obj.createTime},
-			#{obj.currentState},
-			#{obj.isPayedRecommendFee},
-			#{obj.bankCardNum},
-			#{obj.inviteCode},
-			#{obj.awardFlag}
-		)
-	</insert>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="obj.id">
+        insert into t_user (
+        <include refid="insert_columns"/>
+        )
+        values
+        (
+        #{obj.account},
+        #{obj.password},
+        #{obj.token},
+        #{obj.name},
+        #{obj.gender},
+        #{obj.age},
+        #{obj.telephone},
+        #{obj.mobile},
+        #{obj.qq},
+        #{obj.weiXin},
+        #{obj.email},
+        #{obj.homeAddress},
+        #{obj.address},
+        #{obj.idCardNo},
+        #{obj.userType},
+        #{obj.loginState},
+        #{obj.educationId},
+        #{obj.dataState},
+        #{obj.createTime},
+        #{obj.currentState},
+        #{obj.isPayedRecommendFee},
+        #{obj.bankCardNum},
+        #{obj.inviteCode},
+        #{obj.awardFlag},
+        #{obj.agencyId},
+        #{obj.agencyProvinceId},
+        #{obj.agencyCityId},
+        #{obj.agencyAreaId}
+        )
+    </insert>
 </mapper>

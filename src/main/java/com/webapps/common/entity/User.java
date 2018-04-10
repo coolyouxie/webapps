@@ -58,6 +58,14 @@ public class User extends Entity{
     
     private String awardFlag;
 
+    private Integer agencyId;
+
+    private Integer agencyProvinceId;
+
+    private Integer agencyCityId;
+
+    private Integer agencyAreaId;
+
     public Integer getIsPayedRecommendFee() {
         return isPayedRecommendFee;
     }
@@ -249,4 +257,36 @@ public class User extends Entity{
 	public void setAwardFlag(String awardFlag) {
 		this.awardFlag = awardFlag;
 	}
+
+    public Integer getAgencyId() {
+        return agencyId;
+    }
+
+    public void setAgencyId(Integer agencyId) {
+        this.agencyId = agencyId;
+    }
+
+    public Integer getAgencyProvinceId() {
+        return agencyProvinceId;
+    }
+
+    public void setAgencyProvinceId(Integer agencyProvinceId) {
+        this.agencyProvinceId = agencyProvinceId;
+    }
+
+    public Integer getAgencyCityId() {
+        return agencyCityId;
+    }
+
+    public void setAgencyCityId(Integer agencyCityId) {
+        this.agencyCityId = agencyCityId;
+    }
+
+    public Integer getAgencyAreaId() {
+        return agencyAreaId;
+    }
+
+    public void setAgencyAreaId(Integer agencyAreaId) {
+        this.agencyAreaId = agencyAreaId;
+    }
 }

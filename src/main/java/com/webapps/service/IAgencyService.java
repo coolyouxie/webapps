@@ -7,6 +7,8 @@ import com.webapps.common.bean.ResultDto;
 import com.webapps.common.entity.Agency;
 import com.webapps.common.form.AgencyRequestForm;
 
+import java.util.List;
+
 public interface IAgencyService {
 	
 	Page loadAgencyList(Page page, AgencyRequestForm agency) throws Exception;

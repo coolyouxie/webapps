@@ -6,6 +6,9 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import com.webapps.common.entity.Agency;
+import com.webapps.common.entity.Province;
+import com.webapps.service.IProvinceService;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +39,9 @@ public class UserController {
 	@Autowired
 	private  IPictureService iPictureService;
 
+	@Autowired
+	private IProvinceService iProvinceService;
+
 	
 	@RequestMapping("/toUserListPage")
 	public ModelAndView toUserListPage(HttpServletRequest request){
@@ -46,6 +52,7 @@ public class UserController {
 	@RequestMapping("/toUserInfoPage")
 	public String toUserEditPage(Model model,String type,Integer id,HttpServletRequest request){
 		model.addAttribute("type", type);
+		getProvinceList(model);
 		if("add".equals(type)){
 			return "/user/adduser";
 		}
@@ -62,6 +69,13 @@ public class UserController {
 			return "/user/showuser";
 		}
 		return "/user/useredit";
+	}
+
+	private void getProvinceList(Model model) {
+		ResultDto<List<Province>> dto = iProvinceService.queryProvinceByParentId(0);
+		if(dto!=null&&"S".equals(dto.getResult())){
+			model.addAttribute("provinces",dto.getData());
+		}
 	}
 
 	@ResponseBody

@@ -13,7 +13,7 @@
 	<script src="${ctx}/js/jquery/jQuery-1.12.4.0.js"></script>
 	<!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
 	<script src="${ctx}/js/common/bootstrap/bootstrap-3.3.7/dist/js/bootstrap.min.js"></script>
-
+	<script src="${ctx}/js/common/common.js"></script>
 	<style>
 		col-md-2, span {
 			display: -moz-inline-box;
@@ -53,6 +53,7 @@
 		</div>
 	</div>
 	<form id="saveForm" class="form-horizontal" action="${pageContext.request.contextPath}/user/saveUser" method="post">
+		<input type="hidden" id="curAgencyId" value="-1">
 		<div class="form-group">
 			<label class="col-md-2 control-label" for="account">
 				账号：
@@ -113,6 +114,28 @@
 			<label class="col-md-2 control-label">用户类型：</label>
 			<div class="col-md-3">
 				<jsp:include page="../common/usertype.jsp" flush="true"/>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label class="col-md-2 control-label" for="province">所属门店：</label>
+			<div class="col-md-4">
+				<select id="province" name="agencyProvinceId" onchange="loadDistrict('${ctx}','city')">
+					<option>-请选择-</option>
+					<c:forEach var="item" items="${provinces}">
+						<option value="${item.id}">${item.name}</option>
+					</c:forEach>
+				</select>
+				<select id="city" name="agencyCityId" onchange="loadDistrict('${ctx}','area')">
+					<option value="-1">-请选择-</option>
+				</select>
+				<select id="area" name="agencyAreaId" onchange="loadAgencyByDistrictId('${ctx}',this.options[this.options.selectedIndex].value)">
+					<option value="-1">-请选择-</option>
+				</select>
+				<br/>
+				<select id="agency" name="agencyId">
+					<option value="-1">-请选择-</option>
+				</select>
 			</div>
 		</div>
 

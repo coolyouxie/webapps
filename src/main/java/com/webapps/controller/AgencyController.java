@@ -1,11 +1,15 @@
 package com.webapps.controller;
 
-import java.net.URLDecoder;
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import com.alibaba.fastjson.JSONObject;
+import com.webapps.common.bean.Page;
+import com.webapps.common.bean.ResultDto;
+import com.webapps.common.entity.Agency;
+import com.webapps.common.entity.Province;
+import com.webapps.common.form.AgencyRequestForm;
+import com.webapps.common.utils.HttpUtil;
+import com.webapps.common.utils.PropertiesUtil;
+import com.webapps.service.IAgencyService;
+import com.webapps.service.IProvinceService;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,18 +18,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.alibaba.druid.support.json.JSONUtils;
-import com.alibaba.fastjson.JSONObject;
-import com.webapps.common.bean.Page;
-import com.webapps.common.bean.ResultDto;
-import com.webapps.common.entity.Agency;
-import com.webapps.common.entity.Province;
-import com.webapps.common.form.AgencyRequestForm;
-import com.webapps.common.utils.HttpUtil;
-import com.webapps.common.utils.JSONUtil;
-import com.webapps.common.utils.PropertiesUtil;
-import com.webapps.service.IAgencyService;
-import com.webapps.service.IProvinceService;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.net.URLDecoder;
+import java.util.List;
 
 @Controller
 @RequestMapping("agency")
@@ -99,6 +95,17 @@ public class AgencyController {
         return null;
     }
 
+    private Agency getAgencyById(Integer id) {
+        try {
+            Agency agency = iAgencyService.getById(id);
+            return agency;
+        } catch (Exception e) {
+            logger.error("查询门店信息时异常");
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     @ResponseBody
     @RequestMapping("/saveAgency")
     public String saveAgency(Model model, AgencyRequestForm agency, HttpServletRequest request, HttpServletResponse response) {
@@ -153,17 +160,6 @@ public class AgencyController {
         }
     }
 
-    private Agency getAgencyById(Integer id) {
-        try {
-            Agency agency = iAgencyService.getById(id);
-            return agency;
-        } catch (Exception e) {
-            logger.error("查询门店信息时异常");
-            e.printStackTrace();
-        }
-        return null;
-    }
-    
     @ResponseBody
     @RequestMapping(value="/loadAgencyByDistrictId")
     public String loadAgencyByDistrictId(Model model,AgencyRequestForm agency){
