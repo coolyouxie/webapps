@@ -52,15 +52,13 @@
 			</h4>
 		</div>
 	</div>
-	<form id="saveForm" class="form-horizontal" action="${pageContext.request.contextPath}/user/saveUser" method="post">
-		<input type="hidden" id="curAgencyId" value="-1">
+	<form id="saveForm" class="form-horizontal" action="${ctx}/user/saveUser" method="post">
 		<div class="form-group">
 			<label class="col-md-2 control-label" for="account">
 				账号：
 			</label>
 			<div class="col-md-3">
-				<input type="text" id="account" name="account" class="form-control" value="${user.account}"
-				       placeholder="请输入账号名">
+				<input type="text" id="account" name="account" class="form-control" value="" placeholder="请输入账号名">
 			</div>
 		</div>
 
@@ -121,7 +119,7 @@
 			<label class="col-md-2 control-label" for="province">所属门店：</label>
 			<div class="col-md-4">
 				<select id="province" name="agencyProvinceId" onchange="loadDistrict('${ctx}','city')">
-					<option>-请选择-</option>
+					<option value="-1">-请选择-</option>
 					<c:forEach var="item" items="${provinces}">
 						<option value="${item.id}">${item.name}</option>
 					</c:forEach>

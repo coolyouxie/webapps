@@ -16,10 +16,10 @@ function loadDistrict(contextPath,type) {
         }
     }
     if (type == "city") {
-    	  $("#city").empty();
-          $("#city").append("<option value='-1'>-请选择-</option>");
-          $("#area").empty();
-          $("#area").append("<option value='-1'>-请选择-</option>");
+    	$("#city").empty();
+        $("#city").append("<option value='-1'>-请选择-</option>");
+        $("#area").empty();
+        $("#area").append("<option value='-1'>-请选择-</option>");
         if ($("#province").val() == -1) {
             return;
         }
@@ -62,6 +62,24 @@ function loadDistrict(contextPath,type) {
 function loadDistrictByParentId(contextPath,parentId,type){
 	var tmpCity = $("#tmpCity").val();
 	var tmpArea = $("#tmpArea").val();
+	if (type == "city") {
+		$("#city").empty();
+		$("#city").append("<option value='-1'>-请选择-</option>");
+		$("#area").empty();
+		$("#area").append("<option value='-1'>-请选择-</option>");
+		if ($("#province").val() == -1) {
+			return;
+		}
+	}
+	
+	if(type == "area") {
+		$("#area").empty();
+		$("#area").append("<option value='-1'>-请选择-</option>");
+		if ($("#city").val() == -1) {
+			return;
+		}
+	}
+	
 	$.ajax({
 		url:contextPath+"/province/queryProvinceByParentId",
 		type:"POST",

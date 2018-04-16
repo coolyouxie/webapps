@@ -13,6 +13,7 @@
 	<script src="${ctx}/js/jquery/jQuery-1.12.4.0.js"></script>
 	<!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
 	<script src="${ctx}/js/common/bootstrap/bootstrap-3.3.7/dist/js/bootstrap.min.js"></script>
+	<script src="${ctx}/js/common/common.js"></script>
 
 	<style>
 		col-md-2, span {
@@ -23,11 +24,27 @@
 	</style>
 
 	<script type="text/javascript">
-        $(function () {
+        $(function(){
+        	var basePath = '${ctx}';
             if ("${result}") {
                 alert("result");
             }
-        })
+            if($("#tmpProvince").val()&&$("#tmpProvince").val()!=-1){
+            	loadDistrictNew(basePath,$("#tmpProvince").val(),'city');
+            }
+            if($("#tmpCity").val()&&$("#tmpCity").val()!=-1){
+            	loadDistrictNew(basePath,$("#tmpCity").val(),'area');
+            }
+            if($("#curAgencyId").val()&&$("#curAreaId").val()!=-1){
+				loadAgencyByDistrictId(basePath,$("#tmpArea").val());
+            }
+        });
+        
+        function loadDistrictNew(basePath,parentId,type){
+        	loadDistrictByParentId(basePath,parentId,type);
+        	$("#agency").empty();
+            $("#agency").append("<option value='-1'>-请选择-</option>");
+        }
 	</script>
 </head>
 <body>
@@ -41,12 +58,16 @@
 	</div>
 	<form id="saveForm" class="form-horizontal" action="${pageContext.request.contextPath}/user/saveUser" method="post">
 		<input type="hidden" id="id" name="id" value="${user.id}">
+		<input type="hidden" id="tmpProvince" name="curAgencyProvinceId" value="${user.agencyProvinceId}">
+		<input type="hidden" id="tmpCity" name="curAgencyCityId" value="${user.agencyCityId}">
+		<input type="hidden" id="tmpArea" name="curAgencyAreaId" value="${user.agencyAreaId}">
+		<input type="hidden" id="curAgencyId" name="curAgencyId" value="${user.agencyId}">
 		<div class="form-group">
 			<label class="col-md-2 control-label" for="account">
 				账号：
 			</label>
 			<input type="text" id="account" name="account" class="form-group" placeholder="请输入账号名"
-			       value="${user.account}" readonly="readonly">
+				value="${user.account}" readonly="readonly">
 		</div>
 
 		<div class="form-group">
@@ -96,6 +117,28 @@
 				<%--<option value="6" <c:if test="${user.userType==6}">selected</c:if>>期满审核专员</option>--%>
 				<option value="7" <c:if test="${user.userType==7}">selected</c:if>>提现审核专员</option>
 			</select>
+		</div>
+		
+		<div class="form-group">
+			<label class="col-md-2 control-label" for="province">所属门店：</label>
+			<div class="col-md-4">
+				<select id="province" name="agencyProvinceId" onchange="loadDistrictNew('${ctx}',this.options[this.options.selectedIndex].value,'city')">
+					<option value="-1">-请选择-</option>
+					<c:forEach var="item" items="${provinces}">
+						<option value="${item.id}" <c:if test="${item.id==user.agencyProvinceId}">selected</c:if>>${item.name}</option>
+					</c:forEach>
+				</select>
+				<select id="city" name="agencyCityId" onchange="loadDistrictNew('${ctx}',this.options[this.options.selectedIndex].value,'area')">
+					<option value="-1">-请选择-</option>
+				</select>
+				<select id="area" name="agencyAreaId" onchange="loadAgencyByDistrictId('${ctx}',this.options[this.options.selectedIndex].value)">
+					<option value="-1">-请选择-</option>
+				</select>
+				<br/>
+				<select id="agency" name="agencyId">
+					<option value="-1">-请选择-</option>
+				</select>
+			</div>
 		</div>
 
 		<div class="form-group">
