@@ -26,7 +26,7 @@
 	<script type="text/javascript">
         $(function(){
         	var basePath = '${ctx}';
-            if ("${result}") {
+            if("${result}"){
                 alert("result");
             }
             if($("#tmpProvince").val()&&$("#tmpProvince").val()!=-1){
@@ -131,10 +131,10 @@
 				<select id="city" name="agencyCityId" onchange="loadDistrictNew('${ctx}',this.options[this.options.selectedIndex].value,'area')">
 					<option value="-1">-请选择-</option>
 				</select>
+				<br/>
 				<select id="area" name="agencyAreaId" onchange="loadAgencyByDistrictId('${ctx}',this.options[this.options.selectedIndex].value)">
 					<option value="-1">-请选择-</option>
 				</select>
-				<br/>
 				<select id="agency" name="agencyId">
 					<option value="-1">-请选择-</option>
 				</select>

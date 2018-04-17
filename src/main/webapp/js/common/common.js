@@ -84,8 +84,10 @@ function loadDistrictByParentId(contextPath,parentId,type){
 		url:contextPath+"/province/queryProvinceByParentId",
 		type:"POST",
 		dataType:"JSON",
+		async:false,
 		data:{
-			parentId:parentId
+			parentId:parentId,
+			random:Math.random()
 		},
 		success:function(response){
 			if(response&&response.result=="S"){
