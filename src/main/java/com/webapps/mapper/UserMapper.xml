@@ -196,6 +196,32 @@
         order by tu.name
         <include refid="ORACLE.paginationEnd"/>
     </select>
+    
+    <select id="queryByConditin" resultMap="resultMap">
+    	SELECT
+        <include refid="select_columns"/>
+        <trim prefix="WHERE" prefixOverrides="AND">
+            tu.data_state = 1
+            <if test="obj.weixin !=null and obj.weixin != ''">
+                AND tu.weixin = #{obj.weixin}
+            </if>
+            <if test="obj.name !=null and obj.name != ''">
+                AND tu.name = #{obj.name}
+            </if>
+            <if test="obj.account != null and obj.account != ''">
+                and tu.account = #{obj.account}
+            </if>
+            <if test="obj.qq != null and obj.qq != ''">
+                and tu.qq = #{obj.qq}
+            </if>
+            <if test="obj.mobile != null and obj.mobile != ''">
+                and tu.mobile = #{obj.mobile}
+            </if>
+            <if test="obj.userType != null and obj.userType != ''">
+                and tu.user_type = #{obj.userType}
+            </if>
+		</trim>
+    </select>
 
     <select id="queryUserByAccount" resultMap="resultMap">
 		select * from t_user where data_state = 1 and account = #{account}

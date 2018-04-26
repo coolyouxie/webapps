@@ -396,4 +396,19 @@ public class UserServiceImpl implements IUserService {
 		dto.setResult("S");
 		return dto;
 	}
+
+	@Override
+	public ResultDto<String> queryUserByWeixin(String weixin) throws Exception {
+		UserRequestForm form = new UserRequestForm();
+		form.setWeiXin(weixin);
+		List<User> list = iUserMapper.queryByConditin(form);
+		ResultDto<String> dto = new ResultDto<>();
+		if(CollectionUtils.isNotEmpty(list)){
+			dto.setResult("S");
+		}else{
+			dto.setErrorMsg("未找到微信账号对应会员信息");
+			dto.setResult("F");
+		}
+		return dto;
+	}
 }

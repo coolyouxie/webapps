@@ -44,5 +44,11 @@ public interface IUserService {
 
 	ResultDto<String> resetPassword(HttpSession session, Integer id, String oldPwd,
 										   String newPwd, String confirmNewPwd)throws Exception;
-	
+	/**
+	 * 根据微信号判断账户是否存在
+	 * @param weixin
+	 * @return
+	 * @throws Exception
+	 */
+	ResultDto<String> queryUserByWeixin(String weixin)throws Exception;
 }
