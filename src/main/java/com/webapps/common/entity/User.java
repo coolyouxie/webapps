@@ -25,7 +25,7 @@ public class User extends Entity{
 
     private String qq;
 
-    private String weiXin;
+    private String weixin;
 
     private String email;
 
@@ -146,12 +146,12 @@ public class User extends Entity{
         this.qq = qq;
     }
 
-    public String getWeiXin() {
-        return weiXin;
+    public String getWeixin() {
+        return weixin;
     }
 
-    public void setWeiXin(String weiXin) {
-        this.weiXin = weiXin;
+    public void setWeixin(String weixin) {
+        this.weixin = weixin;
     }
 
     public String getEmail() {

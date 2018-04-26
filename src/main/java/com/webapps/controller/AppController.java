@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
@@ -1715,6 +1716,22 @@ public class AppController {
 			e.printStackTrace();
 		}
 		return DataUtil.encryptData(JSON.toJSONString(dto));
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="/test",produces = "text/html;charset=UTF-8",method = RequestMethod.POST)
+	public String test(HttpSession session,@RequestBody String param){
+		ResultDto<String> dto = null;
+		String weixin = JSONObject.parseObject(param).getString("weixin");
+		try {
+			dto = iUserService.queryUserByWeixin(weixin);
+		} catch (Exception e) {
+			e.printStackTrace();
+			dto = new ResultDto<String>();
+			dto.setResult("F");
+			dto.setErrorMsg("查询异常");
+		}
+		return JSON.toJSONString(dto);
 	}
 
 

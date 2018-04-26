@@ -14,7 +14,7 @@
         <result column="telephone" jdbcType="VARCHAR" property="telephone"/>
         <result column="mobile" jdbcType="VARCHAR" property="mobile"/>
         <result column="qq" jdbcType="VARCHAR" property="qq"/>
-        <result column="weiXin" jdbcType="VARCHAR" property="weiXin"/>
+        <result column="weixin" jdbcType="VARCHAR" property="weixin"/>
         <result column="email" jdbcType="VARCHAR" property="email"/>
         <result column="home_Address" jdbcType="VARCHAR" property="homeAddress"/>
         <result column="address" jdbcType="VARCHAR" property="address"/>
@@ -39,7 +39,7 @@
 
     <sql id="select_columns">
 		tu.ID,tu.account,tu.password,tu.token,tu.name,tu. gender,tu. age,tu. telephone,tu. mobile,
-		tu.qq,tu.weiXin,tu.email,tu.home_Address,tu.address,tu.id_card_no,tu.user_type,tu.login_State,
+		tu.qq,tu.weixin,tu.email,tu.home_Address,tu.address,tu.id_card_no,tu.user_type,tu.login_State,
 		tu.education_Id,tu.data_state,tu.CREATE_TIME,tu.UPDATE_TIME,tu.current_state,tu.is_payed_recommend_fee,
 		tu.bank_card_num,invite_code,award_flag,agency_id,agency_province_id,agency_city_id,agency_area_id
 	</sql>
@@ -54,7 +54,7 @@
 		telephone,
 		mobile,
 		qq,
-		weiXin,
+		weixin,
 		email,
 		home_Address,
 		address,
@@ -118,7 +118,7 @@
             <if test="obj.awardFlag != null and obj.awardFlag != ''">
                 award_flag = #{obj.awardFlag,jdbcType=VARCHAR},
             </if>
-            weiXin = #{obj.weiXin,jdbcType=VARCHAR},
+            weixin = #{obj.weixin,jdbcType=VARCHAR},
             email = #{obj.email,jdbcType=VARCHAR},
             home_Address = #{obj.homeAddress,jdbcType=VARCHAR},
             address = #{obj.address,jdbcType=VARCHAR},
@@ -200,6 +200,7 @@
     <select id="queryByConditin" resultMap="resultMap">
     	SELECT
         <include refid="select_columns"/>
+        from t_user tu
         <trim prefix="WHERE" prefixOverrides="AND">
             tu.data_state = 1
             <if test="obj.weixin !=null and obj.weixin != ''">
@@ -258,7 +259,7 @@
         #{obj.telephone},
         #{obj.mobile},
         #{obj.qq},
-        #{obj.weiXin},
+        #{obj.weixin},
         #{obj.email},
         #{obj.homeAddress},
         #{obj.address},

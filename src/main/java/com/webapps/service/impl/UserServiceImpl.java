@@ -113,7 +113,7 @@ public class UserServiceImpl implements IUserService {
 				user1.setAge(user.getAge());
 				user1.setIdCardNo(user.getIdCardNo());
 				user1.setQq(user.getQq());
-				user1.setWeiXin(user.getWeiXin());
+				user1.setWeixin(user.getWeixin());
 				user1.setBankCardNum(user.getBankCardNum());
 				user1.setAwardFlag(user.getAwardFlag());
 				iUserMapper.updateById(user1.getId(), user1);
@@ -400,7 +400,7 @@ public class UserServiceImpl implements IUserService {
 	@Override
 	public ResultDto<String> queryUserByWeixin(String weixin) throws Exception {
 		UserRequestForm form = new UserRequestForm();
-		form.setWeiXin(weixin);
+		form.setWeixin(weixin);
 		List<User> list = iUserMapper.queryByConditin(form);
 		ResultDto<String> dto = new ResultDto<>();
 		if(CollectionUtils.isNotEmpty(list)){
