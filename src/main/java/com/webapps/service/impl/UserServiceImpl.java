@@ -398,11 +398,11 @@ public class UserServiceImpl implements IUserService {
 	}
 
 	@Override
-	public ResultDto<String> queryUserByWeixin(String weixin) throws Exception {
+	public ResultDto<User> queryUserByWeixin(String weixin) throws Exception {
 		UserRequestForm form = new UserRequestForm();
 		form.setWeixin(weixin);
 		List<User> list = iUserMapper.queryByConditin(form);
-		ResultDto<String> dto = new ResultDto<>();
+		ResultDto<User> dto = new ResultDto<>();
 		if(CollectionUtils.isNotEmpty(list)){
 			dto.setResult("S");
 		}else{

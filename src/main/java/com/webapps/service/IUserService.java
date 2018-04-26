@@ -50,5 +50,5 @@ public interface IUserService {
 	 * @return
 	 * @throws Exception
 	 */
-	ResultDto<String> queryUserByWeixin(String weixin)throws Exception;
+	ResultDto<User> queryUserByWeixin(String weixin)throws Exception;
 }

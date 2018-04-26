@@ -1721,13 +1721,13 @@ public class AppController {
 	@ResponseBody
 	@RequestMapping(value="/test",produces = "text/html;charset=UTF-8",method = RequestMethod.POST)
 	public String test(HttpSession session,@RequestBody String param){
-		ResultDto<String> dto = null;
+		ResultDto<User> dto = null;
 		String weixin = JSONObject.parseObject(param).getString("weixin");
 		try {
 			dto = iUserService.queryUserByWeixin(weixin);
 		} catch (Exception e) {
 			e.printStackTrace();
-			dto = new ResultDto<String>();
+			dto = new ResultDto<User>();
 			dto.setResult("F");
 			dto.setErrorMsg("查询异常");
 		}

@@ -1,7 +1,6 @@
 package com.webapps.controller;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
 
 import javax.imageio.ImageIO;
@@ -10,15 +9,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.webapps.common.bean.ResultDto;
 import com.webapps.common.entity.User;
 import com.webapps.common.utils.ValidatorCodeUtil;
 import com.webapps.service.IUserService;
@@ -32,7 +30,6 @@ public class LoginController {
 	
 	@RequestMapping(value="/toLoginPage")
 	public String toLoginPage(Model model){
-//		return "/views/login";
 		return "redirect:/login.jsp";
 	}
 
@@ -72,6 +69,23 @@ public class LoginController {
 	public String logout(Model model,@RequestParam("userId") Integer userId,HttpServletRequest request){
 		request.getSession().removeAttribute("user");
 		return "redirect:/login.jsp";
+	}
+	
+	@RequestMapping(value="/loginFromWeixin",method=RequestMethod.POST)
+	public String loginFromWeixin(Model model,@RequestParam("weixin")String weixin,
+			HttpServletRequest request){
+		try {
+			ResultDto<User> dto = iUserService.queryUserByWeixin(weixin);
+			if("S".equals(dto.getResult())){
+				request.getSession().setAttribute("user", dto.getData());
+				return "/weixin/success";
+			}else{
+				return "/weixin/fail";
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "/weixin/page";
 	}
 	
 	/*
