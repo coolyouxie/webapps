@@ -1,5 +1,6 @@
 package com.webapps.common.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import com.webapps.common.utils.DateUtil;
@@ -7,9 +8,11 @@ import com.webapps.common.utils.DateUtil;
 /**
  * Created by xieshuai on 2017-6-28.
  */
-public class Entity {
+public class Entity implements Serializable{
 
-    private Integer id;
+	private static final long serialVersionUID = 3453671128142005054L;
+
+	private Integer id;
     
     private Date createTime = new Date();
     

@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.webapps.mapper.ITempRecruitmentMapper">
+	<resultMap id="resultMap" type="com.webapps.common.entity.TempRecruitment">
+		<id column="ID" jdbcType="DECIMAL" property="id" />
+		<result column="title" jdbcType="VARCHAR" property="title" />
+		<result column="mobile" jdbcType="VARCHAR" property="mobile" />
+		<result column="contact" jdbcType="VARCHAR" property="contact" />
+		<result column="province_id" jdbcType="DECIMAL" property="provinceId" />
+		<result column="city_id" jdbcType="DECIMAL" property="cityId" />
+		<result column="area_id" jdbcType="DECIMAL" property="areaId" />
+		<result column="province_name" jdbcType="VARCHAR" property="provinceName" />
+		<result column="city_name" jdbcType="VARCHAR" property="cityName" />
+		<result column="area_name" jdbcType="VARCHAR" property="areaName" />
+		<result column="create_time" jdbcType="VARCHAR" property="createTime" />
+		<result column="update_time" jdbcType="VARCHAR" property="updateTime" />
+		<result column="data_state" jdbcType="VARCHAR" property="dataState" />
+		<result column="address" jdbcType="VARCHAR" property="address" />
+		<result column="longitude" jdbcType="VARCHAR" property="longitude" />
+		<result column="latitude" jdbcType="VARCHAR" property="latitude" />
+	</resultMap>
+
+	<sql id="select_columns">
+		id,name,contact_name,contact_mobile,province_id,city_id,area_id,province_name,city_name,area_name,create_time,update_time,data_state,address,longitude,latitude
+	</sql>
+
+	<sql id="insert_columns">
+		name,contact_name,contact_mobile,province_id,city_id,area_id,province_name,city_name,area_name,create_time,data_state,address,longitude,latitude
+	</sql>
+	
+	<select id="getById" resultMap="resultMap">
+		select <include refid="select_columns" /> from t_agency  where id = #{id}
+	</select>
+	
+	<!-- 查询所有 -->
+	<select id="queryAll" resultMap="resultMap">
+		select <include refid="select_columns" /> from t_agency  where data_state = 1
+	</select>
+	
+	<select id="queryCount" resultType="java.lang.Integer">
+		SELECT count(1) FROM t_agency
+		<trim prefix="WHERE" prefixOverrides="AND">
+			data_state = 1
+			<if test="obj.keywords != null and obj.keywords != ''">
+				and (name like concat('%',#{obj.keywords},'%')
+					or contact_name like concat('%',#{obj.keywords},'%')
+					or contact_mobile like concat('%',#{obj.keywords},'%'))
+			</if>
+			<if test="obj.provinceId != null and obj.provinceId != ''">
+				and province_id = #{obj.provinceId}
+			</if>
+			<if test="obj.cityId != null and obj.cityId != ''">
+				and city_id = #{obj.cityId}
+			</if>
+			<if test="obj.areaId != null and obj.areaId != ''">
+				and area_id = #{obj.areaId}
+			</if>
+		</trim>
+	</select>
+
+	<select id="queryPage" resultMap="resultMap">
+		<include refid="ORACLE.paginationStart" />
+		SELECT
+		<include refid="select_columns" />
+		FROM t_agency
+		<trim prefix="WHERE" prefixOverrides="AND">
+			data_state = 1
+			<if test="obj.keywords != null and obj.keywords != ''">
+				and (name like concat('%',#{obj.keywords},'%')
+				or contact_name like concat('%',#{obj.keywords},'%')
+				or contact_mobile like concat('%',#{obj.keywords},'%'))
+			</if>
+			<if test="obj.provinceId != null and obj.provinceId != '' and obj.provinceId != -1">
+				and province_id = #{obj.provinceId}
+			</if>
+			<if test="obj.cityId != null and obj.cityId != '' and obj.cityId != -1">
+				and city_id = #{obj.cityId}
+			</if>
+			<if test="obj.areaId != null and obj.areaId != '' and obj.areaId != -1">
+				and area_id = #{obj.areaId}
+			</if>
+		</trim>
+		order by create_time desc
+		<include refid="ORACLE.paginationEnd" />
+	</select>
+
+	<select id="queryAllByDistrictId" resultMap="resultMap">
+		SELECT
+		<include refid="select_columns" />
+		FROM t_agency
+		<trim prefix="WHERE" prefixOverrides="AND">
+			data_state = 1
+			<if test="obj.keywords != null and obj.keywords != ''">
+				and (name like concat('%',#{obj.keywords},'%')
+				or contact_name like concat('%',#{obj.keywords},'%')
+				or contact_mobile like concat('%',#{obj.keywords},'%'))
+			</if>
+			<if test="obj.provinceId != null and obj.provinceId != '' and obj.provinceId != -1">
+				and province_id = #{obj.provinceId}
+			</if>
+			<if test="obj.cityId != null and obj.cityId != '' and obj.cityId != -1">
+				and city_id = #{obj.cityId}
+			</if>
+			<if test="obj.areaId != null and obj.areaId != '' and obj.areaId != -1">
+				and area_id = #{obj.areaId}
+			</if>
+		</trim>
+		order by create_time desc
+	</select>
+	
+	<select id="queryAllBy" resultMap="resultMap">
+		SELECT
+		<include refid="select_columns" />
+		FROM t_agency
+		<trim prefix="WHERE" prefixOverrides="AND">
+			data_state = 1
+			<if test="obj.keywords != null and obj.keywords != ''">
+				and (name like concat('%',#{obj.keywords},'%')
+				or contact_name like concat('%',#{obj.keywords},'%')
+				or contact_mobile like concat('%',#{obj.keywords},'%'))
+			</if>
+			<if test="obj.provinceId != null and obj.provinceId != '' and obj.provinceId != -1">
+				and province_id = #{obj.provinceId}
+			</if>
+			<if test="obj.cityId != null and obj.cityId != '' and obj.cityId != -1">
+				and city_id = #{obj.cityId}
+			</if>
+			<if test="obj.areaId != null and obj.areaId != '' and obj.areaId != -1">
+				and area_id = #{obj.areaId}
+			</if>
+		</trim>
+		order by create_time desc
+	</select>
+	
+	<insert id="insert" useGeneratedKeys="true" keyProperty="obj.id" parameterType="com.webapps.common.entity.Agency">
+		insert into t_agency
+		(
+			<include refid="insert_columns" />
+		)
+		values
+		(
+			#{obj.name},
+			#{obj.contactName},
+			#{obj.contactMobile},
+			#{obj.provinceId},
+			#{obj.cityId},
+			#{obj.areaId},
+			#{obj.provinceName},
+			#{obj.cityName},
+			#{obj.areaName},
+			#{obj.createTime},
+			#{obj.dataState},
+			#{obj.address},
+			#{obj.longitude},
+			#{obj.latitude}
+		)
+	</insert>
+	
+	<update id="updateById">
+		update t_agency set 
+		name=#{obj.name},
+		contact_name=#{obj.contactName},
+		contact_mobile=#{obj.contactMobile},
+		province_id=#{obj.provinceId},
+		city_id = #{obj.cityId},
+		area_id = #{obj.areaId},
+		province_name = #{obj.provinceName},
+		city_name = #{obj.cityName},
+		area_name = #{obj.areaName},
+		update_time = #{obj.updateTime},
+		data_state = #{obj.dataState},
+		address = #{obj.address},
+		longitude = #{obj.longitude},
+		latitude = #{obj.latitude}
+		where id=#{id}
+	</update>
+	
+</mapper>
